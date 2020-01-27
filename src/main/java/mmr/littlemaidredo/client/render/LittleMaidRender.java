@@ -11,7 +11,7 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
 
     // Method
     public LittleMaidRender(EntityRendererManager manager) {
-        super(manager,0.3F);
+        super(manager, 0.4F);
 
 /*
         addLayer(new MMMLayerHeldItem(this));

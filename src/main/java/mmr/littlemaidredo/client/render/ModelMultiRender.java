@@ -91,7 +91,6 @@ public class ModelMultiRender<T extends LittleMaidEntity & IModelEntity> extends
         modelMain.setCapsValue(IModelCaps.caps_motionSitting, false);
     }
 
-    //	public void renderModelMulti(EntityLivingBase par1EntityLiving, double par2,
     public void renderModelMulti(T par1EntityLiving, double x, double y, double z, float entityYaw, float partialTicks, IModelCaps pEntityCaps) {
         setModelValues(par1EntityLiving, x, y, z, entityYaw, partialTicks, pEntityCaps);
     }

@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
-public class ModelMultiRender<T extends LittleMaidEntity & IModelEntity> extends MobRenderer<T, ModelBase<T>> {
+public class ModelMultiRender<T extends LittleMaidEntity> extends MobRenderer<T, ModelBase<T>> {
     public ModelBaseSolo modelMain;
     public ModelBaseDuo modelFATT;
     public IModelCaps fcaps;

@@ -49,7 +49,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 
-public class LittleMaidEntity extends TameableEntity implements IModelEntity {
+public class LittleMaidEntity extends TameableEntity implements IModelCaps, IModelEntity {
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.PATH, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.field_225462_q, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WORKED_AT_POI);
     private static final ImmutableList<SensorType<? extends Sensor<? super LittleMaidEntity>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.INTERACTABLE_DOORS, SensorType.NEAREST_BED, SensorType.HURT_BY, LittleSensorTypes.MAID_HOSTILES);
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<LittleMaidEntity, PointOfInterestType>> field_213774_bB = ImmutableMap.of(MemoryModuleType.HOME, (p_213769_0_, p_213769_1_) -> {
@@ -359,8 +359,67 @@ public class LittleMaidEntity extends TameableEntity implements IModelEntity {
             }
         }
 
-        super.tick();
         textureData.onUpdate();
+
+        if (getEntityWorld().isRemote) {
+
+            // クライアント側
+            boolean lupd = false;
+
+            lupd |= updateMaidContract();
+
+            lupd |= updateMaidColor();
+
+//			lupd |= updateTexturePack();
+
+            //updateTexturePack();
+            if (lupd) {
+
+                setTextureNames();
+
+            }
+/*
+            setMaidMode(dataManager.get(EntityLittleMaid.dataWatch_Mode));
+            setDominantArm(dataManager.get(EntityLittleMaid.dataWatch_DominamtArm));
+            updateMaidFlagsClient();
+            updateGotcha();
+*/
+/*
+
+            // メイド経験値
+            if (ticksExisted%10 == 0) {
+                maidExperience = dataManager.get(EntityLittleMaid.dataWatch_MaidExpValue);
+            }
+
+            // 腕の挙動関連
+            litemuse = dataManager.get(EntityLittleMaid.dataWatch_ItemUse);
+            for (int li = 0; li < mstatSwingStatus.length; li++) {
+                ItemStack lis = mstatSwingStatus[li].getItemStack(this);
+                if ((litemuse & (1 << li)) > 0 && !lis.isEmpty()) {
+                    mstatSwingStatus[li].setItemInUse(lis, lis.getMaxItemUseDuration(), this);
+                } else {
+                    mstatSwingStatus[li].stopUsingItem(this);
+                }
+
+            }
+
+
+
+            // Entity初回生成時のインベントリ更新用
+            // ClientサイドにおいてthePlayerが取得できるまでに時間がかかる？ので待機
+            // サーバーの方が先に起動するのでクライアント側が更新を受け取れない
+
+            if (firstload > 0) {
+                if (Minecraft.getMinecraft().world != null && Minecraft.getMinecraft().player != null) {
+                    syncNet(LMRMessage.EnumPacketMode.SERVER_REQUEST_MODEL, null);
+                    syncNet(LMRMessage.EnumPacketMode.REQUEST_CURRENT_ITEM, null);
+                    firstload = 0;
+                }
+            }*/
+
+        }
+
+        super.tick();
     }
 
     @Nullable
@@ -418,26 +477,40 @@ public class LittleMaidEntity extends TameableEntity implements IModelEntity {
     }
 
     @Override
+    public boolean isTamed() {
+        return isContract();
+    }
+
+    public boolean isContract() {
+        return super.isTamed();
+    }
+
+   /* public boolean isContractEX() {
+
+        return isContract() && isRemainsContract();
+    }*/
+
+    @Override
     public void setTamed(boolean par1) {
         setContract(par1);
     }
 
     @Override
     public void setContract(boolean flag) {
-
         super.setTamed(flag);
 
         textureData.setContract(flag);
     }
 
-    @Override
-    public boolean isTamed() {
-        return isContract();
-    }
+    public boolean updateMaidContract() {
+        // 同一性のチェック
+        boolean lf = isContract();
+        if (textureData.isContract() != lf) {
+            textureData.setContract(lf);
 
-    public boolean isContract() {
-//		return getEntityWorld().isRemote ? maidContract : super.isTamed();
-        return super.isTamed();
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -559,5 +632,22 @@ public class LittleMaidEntity extends TameableEntity implements IModelEntity {
     @Override
     public ModelConfigCompound getModelConfigCompound() {
         return textureData;
+    }
+
+    @Override
+    public Map<String, Integer> getModelCaps() {
+        return maidCaps.getModelCaps();
+    }
+
+
+    @Override
+    public Object getCapsValue(int pIndex, Object... pArg) {
+        return maidCaps.getCapsValue(pIndex, pArg);
+    }
+
+
+    @Override
+    public boolean setCapsValue(int pIndex, Object... pArg) {
+        return maidCaps.setCapsValue(pIndex, pArg);
     }
 }

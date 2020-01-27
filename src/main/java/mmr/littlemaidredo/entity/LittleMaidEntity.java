@@ -1,0 +1,525 @@
+package mmr.littlemaidredo.entity;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.util.Pair;
+import mmr.littlemaidredo.LittleMaidRedo;
+import mmr.littlemaidredo.client.maidmodel.*;
+import mmr.littlemaidredo.entity.tasks.MaidTasks;
+import mmr.littlemaidredo.init.LittleActivitys;
+import mmr.littlemaidredo.init.LittleSensorTypes;
+import mmr.littlemaidredo.utils.EntityCaps;
+import mmr.littlemaidredo.utils.ModelManager;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.brain.Brain;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
+import net.minecraft.entity.ai.brain.schedule.Activity;
+import net.minecraft.entity.ai.brain.schedule.Schedule;
+import net.minecraft.entity.ai.brain.sensor.Sensor;
+import net.minecraft.entity.ai.brain.sensor.SensorType;
+import net.minecraft.entity.merchant.IReputationTracking;
+import net.minecraft.entity.merchant.IReputationType;
+import net.minecraft.entity.merchant.villager.VillagerData;
+import mmr.littlemaidredo.entity.LittleMaidEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.MerchantOffers;
+import net.minecraft.item.SwordItem;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTDynamicOps;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.DebugPacketSender;
+import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.GlobalPos;
+import net.minecraft.village.PointOfInterestManager;
+import net.minecraft.village.PointOfInterestType;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
+
+public class LittleMaidEntity extends TameableEntity implements IModelEntity {
+    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.PATH, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.field_225462_q, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WORKED_AT_POI);
+    private static final ImmutableList<SensorType<? extends Sensor<? super LittleMaidEntity>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.INTERACTABLE_DOORS, SensorType.NEAREST_BED, SensorType.HURT_BY, LittleSensorTypes.MAID_HOSTILES);
+    public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<LittleMaidEntity, PointOfInterestType>> field_213774_bB = ImmutableMap.of(MemoryModuleType.HOME, (p_213769_0_, p_213769_1_) -> {
+        return p_213769_1_ == PointOfInterestType.HOME;
+    }, MemoryModuleType.MEETING_POINT, (p_213772_0_, p_213772_1_) -> {
+        return p_213772_1_ == PointOfInterestType.MEETING;
+    });
+    public ModelConfigCompound textureData;
+    public EntityCaps maidCaps;
+    protected String textureNameMain;
+    protected String textureNameArmor;
+
+
+    public LittleMaidEntity(EntityType<? extends LittleMaidEntity> p_i48575_1_, World p_i48575_2_) {
+        super(p_i48575_1_, p_i48575_2_);
+        ((GroundPathNavigator)this.getNavigator()).setBreakDoors(true);
+        this.getNavigator().setCanSwim(true);
+        this.setCanPickUpLoot(true);
+        this.brain = this.createBrain(new Dynamic<>(NBTDynamicOps.INSTANCE, new CompoundNBT()));
+
+        maidCaps = new EntityCaps(this);
+        textureData = new ModelConfigCompound(this, maidCaps);
+
+//		if (getEntityWorld().isRemote) {
+
+        // 形態形成場
+
+        textureData.setColor((byte)0xc);
+
+        TextureBox ltb[] = new TextureBox[2];
+
+        ltb[0] = ltb[1] = ModelManager.instance.getDefaultTexture(this);
+
+        setTexturePackName(ltb);
+    }
+
+    protected void registerAttributes() {
+        super.registerAttributes();
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
+        this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(30.0D);
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
+        this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+    }
+
+    public Brain<LittleMaidEntity> getBrain() {
+        return (Brain<LittleMaidEntity>) super.getBrain();
+    }
+
+    protected Brain<?> createBrain(Dynamic<?> p_213364_1_) {
+        Brain<LittleMaidEntity> brain = new Brain<>(MEMORY_TYPES, SENSOR_TYPES, p_213364_1_);
+        this.initBrain(brain);
+        return brain;
+    }
+
+    public void resetBrain(ServerWorld p_213770_1_) {
+        Brain<LittleMaidEntity> brain = this.getBrain();
+        brain.stopAllTasks(p_213770_1_, this);
+        this.brain = brain.copy();
+        this.initBrain(this.getBrain());
+    }
+
+    private void initBrain(Brain<LittleMaidEntity> p_213744_1_) {
+        float f = (float)this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue();
+
+        p_213744_1_.setSchedule(Schedule.SIMPLE);
+
+        p_213744_1_.registerActivity(Activity.CORE, MaidTasks.core(f));
+        p_213744_1_.registerActivity(Activity.REST, MaidTasks.rest(f));
+        p_213744_1_.registerActivity(Activity.PANIC, MaidTasks.panic(f));
+        p_213744_1_.registerActivity(LittleActivitys.ATTACK, MaidTasks.attack(f));
+        p_213744_1_.setDefaultActivities(ImmutableSet.of(Activity.CORE));
+        p_213744_1_.setFallbackActivity(Activity.IDLE);
+        p_213744_1_.switchTo(Activity.IDLE);
+        p_213744_1_.updateActivity(this.world.getDayTime(), this.world.getGameTime());
+    }
+
+    protected void updateAITasks() {
+        this.world.getProfiler().startSection("brain");
+        this.getBrain().tick((ServerWorld) this.world, this);
+        this.world.getProfiler().endSection();
+    }
+
+    @Nullable
+    @Override
+    public AgeableEntity createChild(AgeableEntity ageable) {
+        return null;
+    }
+
+    @Override
+    public boolean isBreedingItem(ItemStack stack) {
+        return false;
+    }
+
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
+        compound.putString("texName", textureData.getTextureName(0));
+        compound.putString("texArmor", textureData.getTextureName(1));
+
+        if(textureNameMain==null) textureNameMain = "default_Orign";
+        compound.putString("textureModelNameForClient", textureNameMain);
+
+        if(textureNameArmor==null) textureNameArmor = "default_Orign";
+        compound.putString("textureArmorNameForClient", textureNameArmor);
+    }
+
+    /**
+     * (abstract) Protected helper method to read subclass entity data from NBT.
+     */
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
+
+        textureNameMain = compound.getString("textureModelNameForClient");
+
+        if(textureNameMain.isEmpty()){
+
+            textureNameMain = "default_"+ModelManager.defaultModelName;
+
+        }
+
+        textureNameArmor = compound.getString("textureArmorNameForClient");
+
+        if(textureNameArmor.isEmpty()){
+
+            textureNameArmor = "default_"+ModelManager.defaultModelName;
+
+        }
+
+        this.setGrowingAge(Math.max(0, this.getGrowingAge()));
+
+        this.setCanPickUpLoot(true);
+        this.resetBrain((ServerWorld)this.world);
+    }
+
+    public void onDeath(DamageSource cause) {
+        Entity entity = cause.getTrueSource();
+        if (entity != null) {
+            this.func_223361_a(entity);
+        }
+
+        this.func_213742_a(MemoryModuleType.HOME);
+        this.func_213742_a(MemoryModuleType.JOB_SITE);
+        this.func_213742_a(MemoryModuleType.MEETING_POINT);
+        super.onDeath(cause);
+    }
+
+    private void func_223361_a(Entity p_223361_1_) {
+        if (this.world instanceof ServerWorld) {
+            Optional<List<LivingEntity>> optional = this.brain.getMemory(MemoryModuleType.VISIBLE_MOBS);
+            if (optional.isPresent()) {
+                ServerWorld serverworld = (ServerWorld)this.world;
+                optional.get().stream().filter((p_223349_0_) -> {
+                    return p_223349_0_ instanceof IReputationTracking;
+                }).forEach((p_223342_2_) -> {
+                    serverworld.func_217489_a(IReputationType.VILLAGER_KILLED, p_223361_1_, (IReputationTracking)p_223342_2_);
+                });
+            }
+        }
+    }
+
+    public void func_213742_a(MemoryModuleType<GlobalPos> p_213742_1_) {
+        if (this.world instanceof ServerWorld) {
+            MinecraftServer minecraftserver = ((ServerWorld)this.world).getServer();
+            this.brain.getMemory(p_213742_1_).ifPresent((p_213752_3_) -> {
+                ServerWorld serverworld = minecraftserver.getWorld(p_213752_3_.getDimension());
+                PointOfInterestManager pointofinterestmanager = serverworld.func_217443_B();
+                Optional<PointOfInterestType> optional = pointofinterestmanager.func_219148_c(p_213752_3_.getPos());
+                BiPredicate<LittleMaidEntity, PointOfInterestType> bipredicate = field_213774_bB.get(p_213742_1_);
+                if (optional.isPresent() && bipredicate.test(this, optional.get())) {
+                    pointofinterestmanager.func_219142_b(p_213752_3_.getPos());
+                    DebugPacketSender.func_218801_c(serverworld, p_213752_3_.getPos());
+                }
+
+            });
+        }
+    }
+
+    public static boolean canCombat(LittleMaidEntity entity){
+        if(entity.getHeldItem(Hand.MAIN_HAND).getItem() instanceof SwordItem || entity.getHeldItem(Hand.OFF_HAND).getItem() instanceof SwordItem){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean canDespawn(double p_213397_1_) {
+        return false;
+    }
+
+    @Override
+
+    public byte getColor() {
+
+//		return textureData.getColor();
+
+        //return dataManager.get(EntityLittleMaid.dataWatch_Color);
+return 0;
+    }
+
+
+
+    @Override
+
+    public void setColor(byte index) {
+
+        textureData.setColor(index);
+
+        //dataManager.set(EntityLittleMaid.dataWatch_Color, index);
+
+    }
+
+
+
+    public boolean updateMaidColor() {
+
+        // 同一性のチェック
+
+        byte lc = getColor();
+
+        if (textureData.getColor() != lc) {
+
+            textureData.setColor(lc);
+
+            return true;
+
+        }
+
+        return false;
+
+    }
+
+    @Override
+
+    public void setTamed(boolean par1) {
+
+        setContract(par1);
+
+    }
+
+    @Override
+
+    public void setContract(boolean flag) {
+
+        super.setTamed(flag);
+
+        textureData.setContract(flag);
+    }
+
+    @Override
+
+    public boolean isTamed() {
+
+        return isContract();
+
+    }
+
+    public boolean isContract() {
+
+//		return getEntityWorld().isRemote ? maidContract : super.isTamed();
+
+        return super.isTamed();
+
+    }
+
+    @Override
+
+    public void setTexturePackName(TextureBox[] pTextureBox) {
+
+        // Client
+
+        textureData.setTexturePackName(pTextureBox);
+
+        setTextureNames();
+
+        LittleMaidRedo.LOGGER.debug("ID:%d, TextureModel:%s", getEntityId(), textureData.getTextureName(0));
+
+        // モデルの初期化
+
+        ((TextureBox)textureData.textureBox[0]).models[0].setCapsValue(IModelCaps.caps_changeModel, maidCaps);
+
+        // スタビの付け替え
+
+//		for (Entry<String, MMM_EquippedStabilizer> le : pEntity.maidStabilizer.entrySet()) {
+
+//			if (le.getValue() != null) {
+
+//				le.getValue().updateEquippedPoint(pEntity.textureModel0);
+
+//			}
+
+//		}
+
+    }
+
+
+
+    /**
+
+     * Client用
+
+     */
+
+    public void setTextureNames() {
+
+        textureData.setTextureNames();
+
+        if (getEntityWorld().isRemote) {
+
+            textureNameMain = textureData.getTextureName(0);
+
+            textureNameArmor = textureData.getTextureName(1);
+
+        }
+
+    }
+
+
+
+    public void setNextTexturePackege(int pTargetTexture) {
+
+        textureData.setNextTexturePackege(pTargetTexture);
+
+    }
+
+
+
+    public void setPrevTexturePackege(int pTargetTexture) {
+
+        textureData.setPrevTexturePackege(pTargetTexture);
+
+    }
+
+
+
+
+
+    // textureEntity
+
+    @Override
+
+    public void setTextureBox(TextureBoxBase[] pTextureBox) {
+
+        textureData.setTextureBox(pTextureBox);
+
+    }
+
+
+
+    public String getModelNameMain() {
+
+        return textureNameMain;
+
+    }
+
+
+
+    public String getModelNameArmor() {
+
+        return textureNameArmor;
+
+    }
+
+
+
+    public void setTextureNameMain(String modelNameMain) {
+
+        this.textureNameMain = modelNameMain;
+
+        refreshModels();
+
+    }
+
+
+
+    public void setTextureNameArmor(String modelNameArmor) {
+
+        this.textureNameArmor = modelNameArmor;
+
+        refreshModels();
+
+    }
+
+
+
+    protected void refreshModels() {
+
+        String defName = ModelManager.instance.getRandomTextureString(rand);
+
+        TextureBoxBase mainModel  = modelBoxAutoSelect(textureNameMain);
+
+        if (mainModel == null) {
+
+            mainModel = modelBoxAutoSelect(defName);
+
+        }
+
+
+
+        TextureBoxBase armorModel = modelBoxAutoSelect(textureNameArmor);
+
+        if (armorModel == null) {
+
+            armorModel = modelBoxAutoSelect(defName);
+
+        }
+
+
+
+        setTextureBox(new TextureBoxBase[]{mainModel, armorModel});
+
+        setTextureNames();
+
+
+
+        getModelConfigCompound().setSize();
+
+    }
+
+
+
+    private TextureBoxBase modelBoxAutoSelect(String pName) {
+
+        return getEntityWorld().isRemote ? ModelManager.instance.getTextureBox(pName) : ModelManager.instance.getTextureBoxServer(pName);
+
+    }
+
+
+
+    @Override
+
+    public TextureBoxBase[] getTextureBox() {
+
+        return textureData.getTextureBox();
+
+    }
+
+
+
+    @Override
+
+    public void setTextures(int pIndex, ResourceLocation[] pNames) {
+
+        textureData.setTextures(pIndex, pNames);
+
+    }
+
+
+
+    @Override
+
+    public ResourceLocation[] getTextures(int pIndex) {
+
+        ResourceLocation[] r = textureData.getTextures(pIndex);
+
+        return r;
+
+    }
+
+
+
+    @Override
+
+    public ModelConfigCompound getModelConfigCompound() {
+
+        return textureData;
+
+    }
+
+}

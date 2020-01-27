@@ -8,8 +8,6 @@ import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.item.SwordItem;
-import net.minecraft.util.Hand;
 import net.minecraft.world.server.ServerWorld;
 
 public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
@@ -25,16 +23,7 @@ public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
         Brain<?> brain = entityIn.getBrain();
         if(!brain.hasActivity(LittleActivitys.ATTACK)) {
             if (func_220512_b(entityIn) || func_220513_a(entityIn)) {
-                if (!LittleMaidEntity.canCombat(entityIn)) {
-
-                    if (!brain.hasActivity(Activity.PANIC)) {
-                        brain.removeMemory(MemoryModuleType.PATH);
-                        brain.removeMemory(MemoryModuleType.WALK_TARGET);
-                        brain.removeMemory(MemoryModuleType.LOOK_TARGET);
-                        brain.removeMemory(MemoryModuleType.INTERACTION_TARGET);
-                    }
-                    brain.switchTo(Activity.PANIC);
-                } else {
+                if (LittleMaidEntity.canCombat(entityIn) && entityIn.isTamed()) {
                     if (!brain.hasActivity(LittleActivitys.ATTACK)) {
                         brain.removeMemory(MemoryModuleType.PATH);
                         brain.removeMemory(MemoryModuleType.WALK_TARGET);
@@ -42,6 +31,15 @@ public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
                         brain.removeMemory(MemoryModuleType.INTERACTION_TARGET);
                     }
                     brain.switchTo(LittleActivitys.ATTACK);
+
+                } else {
+                    if (!brain.hasActivity(Activity.PANIC)) {
+                        brain.removeMemory(MemoryModuleType.PATH);
+                        brain.removeMemory(MemoryModuleType.WALK_TARGET);
+                        brain.removeMemory(MemoryModuleType.LOOK_TARGET);
+                        brain.removeMemory(MemoryModuleType.INTERACTION_TARGET);
+                    }
+                    brain.switchTo(Activity.PANIC);
                 }
             }
         }

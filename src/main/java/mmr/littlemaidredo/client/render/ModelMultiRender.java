@@ -1,10 +1,7 @@
 package mmr.littlemaidredo.client.render;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import mmr.littlemaidredo.LittleMaidRedo;
 import mmr.littlemaidredo.client.maidmodel.*;
 import mmr.littlemaidredo.entity.LittleMaidEntity;
-import mmr.littlemaidredo.utils.EnumTextureType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -71,9 +68,9 @@ public class ModelMultiRender<T extends LittleMaidEntity & IModelEntity> extends
         modelMain.setEntityCaps(pEntityCaps);
         modelFATT.setEntityCaps(pEntityCaps);
         modelMain.setRender(this);
-        modelFATT.setRender(this);
+        // modelFATT.setRender(this);
         modelMain.showAllParts();
-        modelFATT.showAllParts();
+        //modelFATT.showAllParts();
         modelMain.isAlphablend = true;
         modelFATT.isAlphablend = true;
         modelMain.renderCount = 0;
@@ -120,28 +117,19 @@ public class ModelMultiRender<T extends LittleMaidEntity & IModelEntity> extends
     @Override
     protected void renderModel(T par1EntityLiving, float par2,
                                float par3, float par4, float par5, float par6, float par7) {
-
         boolean flag = this.isVisible(par1EntityLiving);
         boolean flag1 = !flag && !par1EntityLiving.isInvisibleToPlayer(Minecraft.getInstance().player);
         if (flag || flag1) {
-            this.bindTexture(par1EntityLiving.getModelConfigCompound().getMainTexture(EnumTextureType.MAIN));
 
-            if (par1EntityLiving.isInvisible()) {
-                GlStateManager.setProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
-            }
             if (!par1EntityLiving.isInvisible()) {
 
                 modelMain.setArmorRendering(true);
             } else {
                 modelMain.setArmorRendering(false);
             }
-            // アイテムのレンダリング位置を獲得するためrenderを呼ぶ必要がある
-            entityModel.render(par1EntityLiving, par2, par3, par4, par5, par6, par7);
-
-            if (par1EntityLiving.isInvisible()) {
-                GlStateManager.unsetProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
-            }
         }
+        super.renderModel(par1EntityLiving, par2, par3, par4, par5, par6, par7);
+
     }
 
     // TODO いらん？

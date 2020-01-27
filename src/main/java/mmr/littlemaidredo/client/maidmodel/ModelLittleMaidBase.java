@@ -311,13 +311,7 @@ public abstract class ModelLittleMaidBase extends ModelMultiMMMBase {
 
 	@Override
 	public void showAllParts() {
-		bipedHead.render(0.0625F);
-		bipedBody.render(0.0625F);
-		bipedRightArm.render(0.0625F);
-		bipedLeftArm.render(0.0625F);
-		Skirt.render(0.0625F);
-		bipedRightLeg.render(0.0625F);
-		bipedLeftLeg.render(0.0625F);
+		mainFrame.render(0.0625F);
 		// 表示制限を解除してすべての部品を表示
 		bipedHead.setVisible(true);
 		bipedBody.setVisible(true);
@@ -330,13 +324,7 @@ public abstract class ModelLittleMaidBase extends ModelMultiMMMBase {
 
 	@Override
 	public int showArmorParts(int parts, int index) {
-		bipedHead.render(0.0625F);
-		bipedBody.render(0.0625F);
-		bipedRightArm.render(0.0625F);
-		bipedLeftArm.render(0.0625F);
-		Skirt.render(0.0625F);
-		bipedRightLeg.render(0.0625F);
-		bipedLeftLeg.render(0.0625F);
+		mainFrame.render(0.0625F);
 		// 鎧の表示用
 		boolean f;
 		// 兜

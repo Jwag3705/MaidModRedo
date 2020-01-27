@@ -1,6 +1,9 @@
 LittleMaidRedo
 ===
 
+In addition to adding a maid who will accompany you,
+It is a mod that adds items and various elements that support the maid
+
 一緒についてくれるメイドさんを追加するだけでなく、
 メイドさんをサポートするアイテムや様々な要素を追加するmodです 
 [Verclene](https://github.com/Verclene)さんが作成したLittleMaidReengagedを非公式に1.14.4対応したものです。  
@@ -8,7 +11,7 @@ LittleMaidRedo
 ---
 
 ## 注意事項
-対応バージョン
+対応バージョン (Support version)
 * Minecraft 1.14.4  
 * Minecraft Forge 1.14.4-28.1.116
 

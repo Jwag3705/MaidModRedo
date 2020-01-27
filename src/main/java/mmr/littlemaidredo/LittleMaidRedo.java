@@ -5,6 +5,7 @@ import mmr.littlemaidredo.client.render.WanderMaidRender;
 import mmr.littlemaidredo.client.resource.OldZipTexturesWrapper;
 import mmr.littlemaidredo.entity.LittleMaidEntity;
 import mmr.littlemaidredo.entity.WanderMaidEntity;
+import mmr.littlemaidredo.utils.CommonHelper;
 import mmr.littlemaidredo.utils.FileList;
 import mmr.littlemaidredo.utils.ModelManager;
 import net.minecraft.client.Minecraft;
@@ -65,6 +66,13 @@ public class LittleMaidRedo
         ModelManager.instance.init();
 
         ModelManager.instance.loadTextures();
+        if (CommonHelper.isClient) {
+            debug("Localmode: InitTextureList.");
+
+            ModelManager.instance.initTextureList(true);
+        } else {
+            ModelManager.instance.loadTextureServer();
+        }
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

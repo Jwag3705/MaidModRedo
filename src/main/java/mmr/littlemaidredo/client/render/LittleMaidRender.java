@@ -4,12 +4,8 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import mmr.littlemaidredo.client.maidmodel.IModelCaps;
 import mmr.littlemaidredo.entity.LittleMaidEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-
-import java.util.Iterator;
 
 public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
 
@@ -444,8 +440,7 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
     @Override
     protected int getColorMultiplier(LittleMaidEntity par1EntityLiving, float par2, float par3) {
         //TODO
-        //return par1EntityLiving.colorMultiplier(par2, par3);
-        return 0;
+        return par1EntityLiving.colorMultiplier(par2, par3);
     }
 
 }

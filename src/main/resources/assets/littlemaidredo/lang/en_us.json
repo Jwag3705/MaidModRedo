@@ -1,6 +1,8 @@
 {
+  "item.littlemaidredo.caramel_apple": "Caramel Apple",
   "item.littlemaidredo.broom": "Broom",
-
+  "item.littlemaidredo.littlemaid_spawnegg": "LittleMaid SpawnEgg",
+  "entity.littlemaidredo.littlemaid": "LittleMaid",
   "item.littlemaidredo.wandermaid_spawnegg": "WanderMaid SpawnEgg",
   "entity.littlemaidredo.wandermaid": "WanderMaid"
 }

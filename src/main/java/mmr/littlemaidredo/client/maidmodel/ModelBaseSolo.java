@@ -1,7 +1,8 @@
 package mmr.littlemaidredo.client.maidmodel;
 
+import mmr.littlemaidredo.utils.helper.RendererHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -41,20 +42,53 @@ public class ModelBaseSolo<T extends LivingEntity> extends ModelBaseNihil<T> imp
 			isAlphablend = false;
 			return;
 		}
-		/*if (isAlphablend) {
-
+		if (isAlphablend) {
+		/*	if (LittleMaidReengaged.cfg_isModelAlphaBlend) {
 				GL11.glEnable(GL11.GL_BLEND);
 				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			*//* else {
+			} else {*/
 				GL11.glDisable(GL11.GL_BLEND);
-			}*//*
-		}*/
+			//}
+		}
 		if (textures.length > 2 && textures[2] != null) {
-			super.render(par1Entity, par2, par3, par4, par5, par6, par7);
+			// Actors用
+			model.setRotationAngles(par2, par3, par4, par5, par6, par7, entityCaps);
+			// Face
+			// TODO テクスチャのロードはなんか考える。
+			Minecraft.getInstance().getTextureManager().bindTexture(textures[2]);
+			model.setCapsValue(caps_renderFace, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+			// Body
+			Minecraft.getInstance().getTextureManager().bindTexture(textures[0]);
+			model.setCapsValue(caps_renderBody, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 		} else {
-			super.render(par1Entity, par2, par3, par4, par5, par6, par7);
+			// 通常
+			if (textures.length > 0 && textures[0] != null) {
+				Minecraft.getInstance().getTextureManager().bindTexture(textures[0]);
+			}
+			model.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 		}
 		isAlphablend = false;
+		if (textures.length > 1 && textures[1] != null && renderCount == 0) {
+			// 発光パーツ
+			Minecraft.getInstance().getTextureManager().bindTexture(textures[1]);
+			float var4 = 1.0F;
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
+			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+			GL11.glDepthFunc(GL11.GL_LEQUAL);
+
+			RendererHelper.setLightmapTextureCoords(0x00f000f0);//61680
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
+			model.render(entityCaps, par2, par3, par4, par5, par6, par7, true);
+
+			RendererHelper.setLightmapTextureCoords(lighting);
+
+//			GL11.glEnable(GL11.GL_LIGHTING);
+			GL11.glDisable(GL11.GL_BLEND);
+			//GL11.glDisable(GL11.GL_ALPHA_TEST);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glDepthMask(true);
+		}
 //		textures = blanks;
 		renderCount++;
 	}

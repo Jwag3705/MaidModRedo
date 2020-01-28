@@ -1,7 +1,9 @@
 package mmr.littlemaidredo.client.maidmodel;
 
 
-public class ModelLittleMaid_Orign extends ModelLittleMaidBase {
+import net.minecraft.entity.LivingEntity;
+
+public class ModelLittleMaid_Orign<T extends LivingEntity> extends ModelLittleMaidBase<T> {
 
 	/**
 	 * コンストラクタは全て継承させること

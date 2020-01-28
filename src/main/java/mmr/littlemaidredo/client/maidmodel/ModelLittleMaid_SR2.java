@@ -1,11 +1,12 @@
 package mmr.littlemaidredo.client.maidmodel;
 
 
+import net.minecraft.entity.LivingEntity;
 
 /**
  * 瞬き付き基本形
  */
-public class ModelLittleMaid_SR2 extends ModelLittleMaidBase {
+public class ModelLittleMaid_SR2<T extends LivingEntity> extends ModelLittleMaidBase<T> {
 
 	public MaidRendererModel eyeR;
 	public MaidRendererModel eyeL;

@@ -1,7 +1,6 @@
 package mmr.littlemaidredo.client.maidmodel;
 
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
 public class ModelBaseNihil<T extends LivingEntity> extends ModelBase<T> {
@@ -32,6 +31,10 @@ public class ModelBaseNihil<T extends LivingEntity> extends ModelBase<T> {
 	@Override
 	public void render(T par1Entity, float par2, float par3, float par4,
 			float par5, float par6, float par7) {
+		/*if(par1Entity instanceof IModelCaps) {
+			IModelCaps caps = (IModelCaps) par1Entity;
+			this.render(caps, par2, par3, par4, par5, par6, par7,true);
+		}*/
 		renderCount++;
 	}
 

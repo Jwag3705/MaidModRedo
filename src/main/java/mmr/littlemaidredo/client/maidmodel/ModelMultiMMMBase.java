@@ -51,7 +51,7 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 			float pheadYaw, float pheadPitch, float par7, boolean pIsRender) {
 		setRotationAngles(par2, par3, ticksExisted, pheadYaw, pheadPitch, par7, pEntityCaps);
 		mainFrame.render(par7);
-		//renderStabilizer(pEntityCaps, par2, par3, ticksExisted, pheadYaw, pheadPitch, par7);
+		renderStabilizer(pEntityCaps, par2, par3, ticksExisted, pheadYaw, pheadPitch, par7);
 	}
 
 
@@ -74,8 +74,8 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 	/**
 	 * スタビライザーの描画。 自動では呼ばれないのでrender内で呼ぶ必要があります。
 	 */
-	/*protected void renderStabilizer(IModelCaps pEntityCaps, float par2, float par3,
-			float ticksExisted, float pheadYaw, float pheadPitch, float par7) {
+	protected void renderStabilizer(IModelCaps pEntityCaps, float par2, float par3,
+									float ticksExisted, float pheadYaw, float pheadPitch, float par7) {
 		// スタビライザーの描画、doRenderの方がいいか？
 		if (stabiliser == null || stabiliser.isEmpty() || render == null)
 			return;
@@ -93,7 +93,7 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 			}
 		}
 		GL11.glPopMatrix();
-	}*/
+	}
 
 	/**
 	 * モデル切替時に実行されるコード

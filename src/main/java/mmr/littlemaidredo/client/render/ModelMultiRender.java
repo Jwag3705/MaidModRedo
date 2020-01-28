@@ -12,16 +12,16 @@ import org.lwjgl.opengl.GL11;
 import java.util.List;
 
 public class ModelMultiRender<T extends LittleMaidEntity> extends MobRenderer<T, ModelBase<T>> {
-    public ModelBaseSolo modelMain;
-    public ModelBaseDuo modelFATT;
+    public ModelBaseSolo<T> modelMain;
+    public ModelBaseDuo<T> modelFATT;
     public IModelCaps fcaps;
 
     public ModelMultiRender(EntityRendererManager manager, float pShadowSize) {
         super(manager, null, pShadowSize);
-        modelFATT = new ModelBaseDuo(this);
+        modelFATT = new ModelBaseDuo<>(this);
         modelFATT.isModelAlphablend = true;
         modelFATT.isRendering = true;
-        modelMain = new ModelBaseSolo(this);
+        modelMain = new ModelBaseSolo<>(this);
         modelMain.isModelAlphablend = true;
         modelMain.capsLink = modelFATT;
         entityModel = modelMain;

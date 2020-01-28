@@ -1,11 +1,12 @@
 package mmr.littlemaidredo.client.maidmodel;
 
+import net.minecraft.entity.LivingEntity;
 import org.lwjgl.opengl.GL11;
 
 /**
  * LMM用に最適化
  */
-public abstract class ModelLittleMaidBase extends ModelMultiMMMBase {
+public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelMultiMMMBase<T> {
 
 	//fields
 	public MaidRendererModel bipedTorso;

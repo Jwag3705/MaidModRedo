@@ -8,6 +8,7 @@ import mmr.littlemaidredo.entity.WanderMaidEntity;
 import mmr.littlemaidredo.utils.CommonHelper;
 import mmr.littlemaidredo.utils.FileList;
 import mmr.littlemaidredo.utils.ModelManager;
+import mmr.littlemaidredo.utils.manager.StabilizerManager;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -63,6 +64,7 @@ public class LittleMaidRedo
             }
         }
 
+        StabilizerManager.init();
         ModelManager.instance.init();
 
         ModelManager.instance.loadTextures();

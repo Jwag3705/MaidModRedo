@@ -14,8 +14,8 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = '1.14.4-0.0.1.0'
-group = 'mmr.littlemaidredo' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'littlemaidredo'
+group = 'mmr.maidmodredo' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'MaidModRedo'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 

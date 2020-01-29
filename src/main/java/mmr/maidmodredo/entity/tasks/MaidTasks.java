@@ -27,7 +27,11 @@ public class MaidTasks {
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> follow(float p_220645_0_) {
-        return ImmutableList.of(Pair.of(0, new WalkToOwner(100)), func_220646_b(), Pair.of(99, new UpdateActivityTask()));
+        return ImmutableList.of(Pair.of(0, new WalkToOwner(100)), func_220646_b());
+    }
+
+    public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> waiting(float f) {
+        return ImmutableList.of(func_220643_a());
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> panic(float p_220636_1_) {

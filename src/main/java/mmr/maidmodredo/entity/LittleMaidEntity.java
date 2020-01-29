@@ -7,10 +7,13 @@ import com.google.common.collect.Sets;
 import com.mojang.datafixers.Dynamic;
 import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.client.maidmodel.*;
+import mmr.maidmodredo.entity.data.MaidData;
+import mmr.maidmodredo.entity.data.MaidJob;
 import mmr.maidmodredo.entity.tasks.MaidTasks;
 import mmr.maidmodredo.init.LittleActivitys;
 import mmr.maidmodredo.init.LittleSchedules;
 import mmr.maidmodredo.init.LittleSensorTypes;
+import mmr.maidmodredo.init.MaidDataSerializers;
 import mmr.maidmodredo.utils.Counter;
 import mmr.maidmodredo.utils.EntityCaps;
 import mmr.maidmodredo.utils.ModelManager;
@@ -20,10 +23,9 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
-import net.minecraft.entity.merchant.IReputationTracking;
-import net.minecraft.entity.merchant.IReputationType;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTDynamicOps;
@@ -46,14 +48,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiPredicate;
 
 public class LittleMaidEntity extends TameableEntity implements IModelCaps, IModelEntity {
-    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.PATH, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.field_225462_q, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WORKED_AT_POI);
+    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.PATH, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.field_225462_q, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WORKED_AT_POI);
     private static final ImmutableList<SensorType<? extends Sensor<? super LittleMaidEntity>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.INTERACTABLE_DOORS, SensorType.NEAREST_BED, SensorType.HURT_BY, LittleSensorTypes.MAID_HOSTILES, LittleSensorTypes.DEFEND_OWNER);
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<LittleMaidEntity, PointOfInterestType>> field_213774_bB = ImmutableMap.of(MemoryModuleType.HOME, (p_213769_0_, p_213769_1_) -> {
         return p_213769_1_ == PointOfInterestType.HOME;
@@ -75,6 +76,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     protected Counter maidOverDriveTime;
     protected Counter workingCount;
 
+
+    private static final DataParameter<MaidData> MAID_DATA = EntityDataManager.createKey(LittleMaidEntity.class, MaidDataSerializers.MAID_DATA);
     protected static final DataParameter<Boolean> WAITING = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BOOLEAN);
 
     protected static final DataParameter<Byte> dataWatch_Color = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BYTE);
@@ -132,6 +135,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     @Override
     protected void registerData() {
         super.registerData();
+        this.dataManager.register(MAID_DATA, new MaidData(MaidJob.ESCORT, 1));
         this.dataManager.register(WAITING, false);
 
         this.dataManager.register(dataWatch_Color, (byte) 0xc);
@@ -162,11 +166,21 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     private void initBrain(Brain<LittleMaidEntity> p_213744_1_) {
         float f = (float) this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue();
 
+
         if (this.isTamed() && !this.isMaidWait()) {
             p_213744_1_.setSchedule(LittleSchedules.FOLLOW);
             p_213744_1_.registerActivity(LittleActivitys.FOLLOW, MaidTasks.follow(f));
+        } else if (this.isTamed() && this.isMaidWait()) {
+            p_213744_1_.setSchedule(LittleSchedules.WAITING);
+            p_213744_1_.registerActivity(LittleActivitys.WAITING, MaidTasks.waiting(f));
         } else {
-            p_213744_1_.setSchedule(LittleSchedules.WILDMAID);
+            if (getMaidData().getJob().getSchedule() != null) {
+                p_213744_1_.setSchedule(getMaidData().getJob().getSchedule());
+            }
+
+            if (getMaidData().getJob().getActivity() != null) {
+                p_213744_1_.registerActivity(getMaidData().getJob().getActivity(), getMaidData().getJob().getTasks());
+            }
         }
 
 
@@ -229,6 +243,9 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
+
+        compound.put("MaidData", this.getMaidData().serialize(NBTDynamicOps.INSTANCE));
+
         compound.putBoolean("Wait", isMaidWait());
 
         compound.putByte("ColorB", getColor());
@@ -247,6 +264,10 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
      */
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
+
+        if (compound.contains("MaidData", 10)) {
+            this.setMaidData(new MaidData(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.get("MaidData"))));
+        }
 
         setMaidWait(compound.getBoolean("Wait"));
 
@@ -280,11 +301,23 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         this.resetBrain((ServerWorld) this.world);
     }
 
+    public void setMaidData(MaidData p_213753_1_) {
+        MaidData MaidData = this.getMaidData();
+        if (MaidData.getJob() != p_213753_1_.getJob()) {
+        }
+
+        this.dataManager.set(MAID_DATA, p_213753_1_);
+    }
+
+    public MaidData getMaidData() {
+        return this.dataManager.get(MAID_DATA);
+    }
+
     public void onDeath(DamageSource cause) {
         Entity entity = cause.getTrueSource();
-        if (entity != null) {
+       /* if (entity != null) {
             this.func_223361_a(entity);
-        }
+        }*/
 
         this.func_213742_a(MemoryModuleType.HOME);
         this.func_213742_a(MemoryModuleType.JOB_SITE);
@@ -292,19 +325,6 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         super.onDeath(cause);
     }
 
-    private void func_223361_a(Entity p_223361_1_) {
-        if (this.world instanceof ServerWorld) {
-            Optional<List<LivingEntity>> optional = this.brain.getMemory(MemoryModuleType.VISIBLE_MOBS);
-            if (optional.isPresent()) {
-                ServerWorld serverworld = (ServerWorld) this.world;
-                optional.get().stream().filter((p_223349_0_) -> {
-                    return p_223349_0_ instanceof IReputationTracking;
-                }).forEach((p_223342_2_) -> {
-                    serverworld.func_217489_a(IReputationType.VILLAGER_KILLED, p_223361_1_, (IReputationTracking) p_223342_2_);
-                });
-            }
-        }
-    }
 
     public void func_213742_a(MemoryModuleType<GlobalPos> p_213742_1_) {
         if (this.world instanceof ServerWorld) {
@@ -502,7 +522,6 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
             return true;
 
         }
-
         return false;
     }
 
@@ -565,9 +584,14 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     }*/
 
     @Override
-    public void setTamed(boolean par1) {
-        setContract(par1);
-        resetBrain((ServerWorld) this.world);
+    public void setTamed(boolean tamed) {
+        setContract(tamed);
+
+        if (tamed) {
+            this.setMaidData(this.getMaidData().withJob(MaidJob.ESCORT));
+        } else {
+            this.setMaidData(this.getMaidData().withJob(MaidJob.WILD));
+        }
     }
 
     @Override
@@ -575,6 +599,18 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         super.setTamed(flag);
 
         textureData.setContract(flag);
+    }
+
+    @Override
+    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
+        super.setItemStackToSlot(slotIn, stack);
+
+        MaidJob.MAID_JOB_REGISTRY.stream().filter((p_220389_1_) -> {
+            return p_220389_1_.getRequireItem().test(stack);
+        }).findFirst().ifPresent((p_220388_2_) -> {
+            this.setMaidData(this.getMaidData().withJob(p_220388_2_));
+            this.resetBrain((ServerWorld) this.world);
+        });
     }
 
     public boolean processInteract(PlayerEntity player, Hand hand) {
@@ -590,6 +626,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                         }
 
                         this.heal((float) item.getFood().getHealing());
+                        this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1.0F, 0.7F);
                         return true;
                     }
                 } else if (item instanceof DyeItem) {
@@ -632,6 +669,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                     this.setHealth(20.0F);
                     this.playTameEffect(true);
                     this.world.setEntityState(this, (byte) 7);
+                    resetBrain((ServerWorld) this.world);
                 } else {
                     this.playTameEffect(false);
                     this.world.setEntityState(this, (byte) 6);

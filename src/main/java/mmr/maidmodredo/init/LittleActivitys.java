@@ -10,10 +10,12 @@ import net.minecraftforge.fml.common.Mod;
 public class LittleActivitys {
     public static final Activity ATTACK = new Activity("littlemaid.attack");
     public static final Activity FOLLOW = new Activity("littlemaid.follow");
+    public static final Activity WAITING = new Activity("littlemaid.waiting");
 
     @SubscribeEvent
     public static void registerActivity(RegistryEvent.Register<Activity> event) {
         event.getRegistry().register(ATTACK.setRegistryName("attack"));
         event.getRegistry().register(FOLLOW.setRegistryName("follow"));
+        event.getRegistry().register(WAITING.setRegistryName("waiting"));
     }
 }

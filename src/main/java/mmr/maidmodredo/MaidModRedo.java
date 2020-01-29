@@ -5,6 +5,7 @@ import mmr.maidmodredo.client.render.WanderMaidRender;
 import mmr.maidmodredo.client.resource.OldZipTexturesWrapper;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import mmr.maidmodredo.entity.WanderMaidEntity;
+import mmr.maidmodredo.init.MaidDataSerializers;
 import mmr.maidmodredo.utils.CommonHelper;
 import mmr.maidmodredo.utils.FileList;
 import mmr.maidmodredo.utils.ModelManager;
@@ -75,6 +76,8 @@ public class MaidModRedo
         } else {
             ModelManager.instance.loadTextureServer();
         }
+
+        MaidDataSerializers.registerData();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

@@ -26,11 +26,11 @@ public class MaidTasks {
         return ImmutableList.of(Pair.of(2, new FirstShuffledTask<>(ImmutableList.of(Pair.of(InteractWithEntityTask.func_220445_a(LittleEntitys.LITTLEMAID, 8, MemoryModuleType.INTERACTION_TARGET, p_220641_1_, 2), 2), Pair.of(InteractWithEntityTask.func_220445_a(EntityType.VILLAGER, 8, MemoryModuleType.INTERACTION_TARGET, p_220641_1_, 2), 1), Pair.of(InteractWithEntityTask.func_220445_a(EntityType.CAT, 8, MemoryModuleType.INTERACTION_TARGET, p_220641_1_, 2), 1), Pair.of(new FindWalkTargetTask(p_220641_1_), 1), Pair.of(new WalkTowardsLookTargetTask(p_220641_1_, 2), 1), Pair.of(new JumpOnBedTask(p_220641_1_), 1), Pair.of(new DummyTask(30, 60), 1)))), Pair.of(3, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)), func_220643_a(), Pair.of(99, new UpdateActivityTask()));
     }
 
-    public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> follow(float p_220645_0_) {
+    public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> follow() {
         return ImmutableList.of(Pair.of(0, new WalkToOwner(100)), func_220646_b());
     }
 
-    public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> waiting(float f) {
+    public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> waiting() {
         return ImmutableList.of(func_220643_a());
     }
 

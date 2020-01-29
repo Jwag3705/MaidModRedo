@@ -68,9 +68,9 @@ public class ModelMultiRender<T extends LittleMaidEntity> extends MobRenderer<T,
         modelMain.setEntityCaps(pEntityCaps);
         modelFATT.setEntityCaps(pEntityCaps);
         modelMain.setRender(this);
-        // modelFATT.setRender(this);
+        modelFATT.setRender(this);
         modelMain.showAllParts();
-        //modelFATT.showAllParts();
+        modelFATT.showAllParts();
         modelMain.isAlphablend = true;
         modelFATT.isAlphablend = true;
         modelMain.renderCount = 0;

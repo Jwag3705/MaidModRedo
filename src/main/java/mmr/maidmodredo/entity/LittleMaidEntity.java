@@ -25,7 +25,6 @@ import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTDynamicOps;
@@ -135,7 +134,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(MAID_DATA, new MaidData(MaidJob.ESCORT, 1));
+        this.dataManager.register(MAID_DATA, new MaidData(MaidJob.NORMAL, 1));
         this.dataManager.register(WAITING, false);
 
         this.dataManager.register(dataWatch_Color, (byte) 0xc);
@@ -169,17 +168,13 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
         if (this.isTamed() && !this.isMaidWait()) {
             p_213744_1_.setSchedule(LittleSchedules.FOLLOW);
-            p_213744_1_.registerActivity(LittleActivitys.FOLLOW, MaidTasks.follow(f));
+            p_213744_1_.registerActivity(LittleActivitys.FOLLOW, MaidTasks.follow());
         } else if (this.isTamed() && this.isMaidWait()) {
             p_213744_1_.setSchedule(LittleSchedules.WAITING);
-            p_213744_1_.registerActivity(LittleActivitys.WAITING, MaidTasks.waiting(f));
+            p_213744_1_.registerActivity(LittleActivitys.WAITING, MaidTasks.waiting());
         } else {
             if (getMaidData().getJob().getSchedule() != null) {
                 p_213744_1_.setSchedule(getMaidData().getJob().getSchedule());
-            }
-
-            if (getMaidData().getJob().getActivity() != null) {
-                p_213744_1_.registerActivity(getMaidData().getJob().getActivity(), getMaidData().getJob().getTasks());
             }
         }
 
@@ -477,6 +472,10 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
+    public boolean canCombat() {
+        return this.getHeldItem(Hand.MAIN_HAND).getItem() instanceof SwordItem;
+    }
+
 
     public void onSpawnWithEgg() {
         // テクスチャーをランダムで選択
@@ -586,12 +585,6 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     @Override
     public void setTamed(boolean tamed) {
         setContract(tamed);
-
-        if (tamed) {
-            this.setMaidData(this.getMaidData().withJob(MaidJob.ESCORT));
-        } else {
-            this.setMaidData(this.getMaidData().withJob(MaidJob.WILD));
-        }
     }
 
     @Override
@@ -599,18 +592,6 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         super.setTamed(flag);
 
         textureData.setContract(flag);
-    }
-
-    @Override
-    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
-        super.setItemStackToSlot(slotIn, stack);
-
-        MaidJob.MAID_JOB_REGISTRY.stream().filter((p_220389_1_) -> {
-            return p_220389_1_.getRequireItem().test(stack);
-        }).findFirst().ifPresent((p_220388_2_) -> {
-            this.setMaidData(this.getMaidData().withJob(p_220388_2_));
-            this.resetBrain((ServerWorld) this.world);
-        });
     }
 
     public boolean processInteract(PlayerEntity player, Hand hand) {
@@ -635,7 +616,9 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                         if (!player.abilities.isCreativeMode) {
                             itemstack.shrink(1);
                         }
-                        this.setColor((byte) (15 - dyecolor.getId()));
+                        if (!getEntityWorld().isRemote) {
+                            this.setColor((byte) (15 - dyecolor.getId()));
+                        }
 
                         return true;
                     }

@@ -2,7 +2,6 @@ package mmr.maidmodredo.entity.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import mmr.maidmodredo.entity.LittleMaidEntity;
-import mmr.maidmodredo.entity.data.MaidJob;
 import mmr.maidmodredo.init.LittleActivitys;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Brain;
@@ -24,7 +23,7 @@ public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
         Brain<?> brain = entityIn.getBrain();
         if(!brain.hasActivity(LittleActivitys.ATTACK)) {
             if (func_220512_b(entityIn) || func_220513_a(entityIn)) {
-                if (entityIn.getMaidData().getJob() == MaidJob.FENCER && entityIn.isTamed()) {
+                if (entityIn.canCombat() && entityIn.isTamed()) {
                     if (!brain.hasActivity(LittleActivitys.ATTACK)) {
                         brain.removeMemory(MemoryModuleType.PATH);
                         brain.removeMemory(MemoryModuleType.WALK_TARGET);

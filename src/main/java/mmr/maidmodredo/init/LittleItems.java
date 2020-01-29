@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = MaidModRedo.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class LittleItems {
-    public static final Item CARAMEL_APPLE = new Item((new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
+    public static final Item CARAMEL_APPLE = new Item((new Item.Properties()).food(LittleFoods.CARAMEL_APPLE).group(LittleItemGroups.LITTLEMAID));
     public static final Item BROOM = new BroomItem((new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
     public static final Item SUGARCOIN = new Item((new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
 
@@ -21,7 +21,7 @@ public class LittleItems {
     public static void onItemRegistry(final RegistryEvent.Register<Item> event) {
         event.getRegistry().register(CARAMEL_APPLE.setRegistryName("caramel_apple"));
         event.getRegistry().register(BROOM.setRegistryName("broom"));
-        event.getRegistry().register(SUGARCOIN.setRegistryName("sugarcoin"));
+        event.getRegistry().register(SUGARCOIN.setRegistryName("sugar_coin"));
         event.getRegistry().register(LITTLEMAID_SPAWNEGG.setRegistryName("littlemaid_spawnegg"));
         event.getRegistry().register(WANDERMAID_SPAWNEGG.setRegistryName("wandermaid_spawnegg"));
     }

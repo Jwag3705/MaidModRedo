@@ -8,7 +8,6 @@ import mmr.maidmodredo.utils.helper.RendererHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.IHasArm;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -25,8 +24,8 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
         super(manager, 0.4F);
 
 
-        addLayer(new MMMHeldItemLayer(this));
         addLayer(new MMMLayerArmor<>(this));
+        addLayer(new MMMHeldItemLayer<>(this));
     }
 
     /**
@@ -45,10 +44,10 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
         }
 
         public void render(T entityIn, float p_212842_2_, float p_212842_3_, float p_212842_4_, float p_212842_5_, float p_212842_6_, float p_212842_7_, float p_212842_8_) {
-            this.renderArmorLayer(entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, p_212842_8_, 1, EquipmentSlotType.CHEST);
-            this.renderArmorLayer(entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, p_212842_8_, 2, EquipmentSlotType.LEGS);
-            this.renderArmorLayer(entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, p_212842_8_, 3, EquipmentSlotType.FEET);
-            this.renderArmorLayer(entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, p_212842_8_, 0, EquipmentSlotType.HEAD);
+            this.renderArmorLayer(entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, p_212842_8_, 0, EquipmentSlotType.CHEST);
+            this.renderArmorLayer(entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, p_212842_8_, 1, EquipmentSlotType.LEGS);
+            this.renderArmorLayer(entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, p_212842_8_, 2, EquipmentSlotType.FEET);
+            this.renderArmorLayer(entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, p_212842_8_, 3, EquipmentSlotType.HEAD);
         }
 
         public void renderArmorLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, int renderParts, EquipmentSlotType slotType) {
@@ -76,7 +75,7 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
                             break INNER;
                         }
                     } else {
-//					modelFATT.modelInner.render(lmm.maidCaps, par2, par3, lmm.ticksExisted, par5, par6, renderScale, true);
+                        modelFATT.modelInner.render(entitylivingbaseIn.maidCaps, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, renderScale, true);
                     }
                 }
 
@@ -137,7 +136,7 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
                                 break OUTER;
                             }
                         } else {
-//					modelFATT.modelOuter.render(lmm.maidCaps, limbSwing, par3, lmm.ticksExisted, par5, par6, renderScale, true);
+                            modelFATT.modelOuter.render(entitylivingbaseIn.maidCaps, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, renderScale, true);
                         }
                     }
 
@@ -189,7 +188,7 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
     /**
      * 手持ちアイテムレイヤー
      */
-    public class MMMHeldItemLayer<T extends LittleMaidEntity, M extends ModelBase<T> & IHasArm> extends HeldItemLayer<T, M> {
+    public class MMMHeldItemLayer<T extends LittleMaidEntity, M extends ModelBase<T>> extends LayerRenderer<T, M> {
 
         //レイヤーと化したアイテム描画
 
@@ -208,6 +207,11 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
                 this.renderHeldItem(entityIn, itemstack, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, HandSide.LEFT);
                 GlStateManager.popMatrix();
             }
+        }
+
+        @Override
+        public boolean shouldCombineTextures() {
+            return false;
         }
 
         private void renderHeldItem(T p_188358_1_, ItemStack p_188358_2_, ItemCameraTransforms.TransformType p_188358_3_, HandSide handSide) {

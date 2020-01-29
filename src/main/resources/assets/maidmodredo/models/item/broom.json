@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "littlemaidredo:items/broom"
+    "layer0": "maidmodredo:items/broom"
   }
 }

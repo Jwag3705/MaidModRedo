@@ -40,10 +40,10 @@ public class EntityCaps extends EntityCapsLiving {
         caps.put("YOffset", caps_YOffset);
         caps.put("mountedYOffset", caps_mountedYOffset);
         caps.put("dominantArm", caps_dominantArm);
-//		caps.put("render", caps_render);
-//		caps.put("Arms", caps_Arms);
+        caps.put("render", caps_render);
+        caps.put("Arms", caps_Arms);
         caps.put("HeadMount", caps_HeadMount);
-//		caps.put("HardPoint", caps_HardPoint);
+        caps.put("HardPoint", caps_HardPoint);
         caps.put("stabiliser", caps_stabiliser);
         caps.put("Items", caps_Items);
         caps.put("Actions", caps_Actions);
@@ -51,8 +51,8 @@ public class EntityCaps extends EntityCapsLiving {
         caps.put("Ground", caps_Ground);
         caps.put("Inventory", caps_Inventory);
         caps.put("interestedAngle", caps_interestedAngle);
-//		caps.put("Entity", caps_Entity);
-//		caps.put("health", caps_health);
+        caps.put("Entity", caps_Entity);
+        caps.put("health", caps_health);
         caps.put("currentArmor", caps_currentArmor);
         caps.put("currentEquippedItem", caps_currentEquippedItem);
     }
@@ -72,13 +72,13 @@ public class EntityCaps extends EntityCapsLiving {
         int li = 0;
 
         switch (pIndex) {
-//		case caps_Entity:
-//			return owner;
-//		case caps_health:
-//			return (int)owner.getHealth();
-//		case caps_healthFloat:
-//			return owner.getHealth();
-           /* case caps_isBloodsuck:
+            case caps_Entity:
+                return owner;
+            case caps_health:
+                return (int) owner.getHealth();
+            case caps_healthFloat:
+                return owner.getHealth();
+            /*case caps_isBloodsuck:
                 return owner.isBloodsuck();
             case caps_isFreedom:
                 return owner.isFreedom();
@@ -89,17 +89,17 @@ public class EntityCaps extends EntityCapsLiving {
             case caps_isLookSuger:
                 return owner.isLookSuger();
             case caps_isBlocking:
-                return owner.isBlocking();
-            case caps_isWait:
-                return owner.isMaidWait();
-            case caps_isWaitEX:
+                return owner.isBlocking();*/
+            /*case caps_isWait:
+                return owner.isMaidWait();*/
+            /*case caps_isWaitEX:
                 return owner.isMaidWaitEx();
             case caps_isOpenInv:
-                return owner.isOpenInventory();
+                return owner.isOpenInventory();*/
             case caps_isWorking:
                 return owner.isWorking();
             case caps_isWorkingDelay:
-                return owner.isWorkingDelay();*/
+                return owner.isWorkingDelay();
             case caps_isContract:
                 return owner.isContract();
             /*case caps_isContractEX:
@@ -113,12 +113,12 @@ public class EntityCaps extends EntityCapsLiving {
             case caps_isCamouflage:
                 return owner.isCamouflage();
             case caps_isPlanter:
-                return owner.isPlanter();
+                return owner.isPlanter();*/
             case caps_isOverdrive:
                 return owner.getMaidOverDriveTime().isEnable();
             case caps_isOverdriveDelay:
                 return owner.getMaidOverDriveTime().isDelay();
-            case caps_entityIdFactor:
+            /*case caps_entityIdFactor:
                 return owner.entityIdFactor;*/
             case caps_height:
                 return owner.textureData.textureBox[0] == null ? null : owner.textureData.textureBox[0].getHeight(this);

@@ -32,7 +32,7 @@ public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
                     }
                     brain.switchTo(LittleActivitys.ATTACK);
 
-                } else {
+                } else if (func_220513_a(entityIn) && !entityIn.isTamed()) {
                     if (!brain.hasActivity(Activity.PANIC)) {
                         brain.removeMemory(MemoryModuleType.PATH);
                         brain.removeMemory(MemoryModuleType.WALK_TARGET);

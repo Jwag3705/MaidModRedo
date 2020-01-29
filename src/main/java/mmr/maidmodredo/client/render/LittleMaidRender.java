@@ -256,14 +256,14 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
 
         modelMain.setCapsValue(IModelCaps.caps_heldItemLeft, (Integer)0);
         modelMain.setCapsValue(IModelCaps.caps_heldItemRight, (Integer)0);
-//		modelMain.setCapsValue(IModelCaps.caps_onGround, renderSwingProgress(lmaid, par9));
+        //modelMain.setCapsValue(IModelCaps.caps_onGround, renderSwingProgress(lmaid, par9));
         //modelMain.setCapsValue(IModelCaps.caps_onGround,lmaid.mstatSwingStatus[0].getSwingProgress(par9),lmaid.mstatSwingStatus[1].getSwingProgress(par9));
         //modelMain.setCapsValue(IModelCaps.caps_isRiding, lmaid.isRidingRender());
         modelMain.setCapsValue(IModelCaps.caps_isSneak, lmaid.isSneaking());
-       /* modelMain.setCapsValue(IModelCaps.caps_aimedBow, lmaid.isAimebow());
-        modelMain.setCapsValue(IModelCaps.caps_isWait, lmaid.isMaidWait());*/
+        /* modelMain.setCapsValue(IModelCaps.caps_aimedBow, lmaid.isAimebow());*/
+        modelMain.setCapsValue(IModelCaps.caps_isWait, lmaid.isMaidWait());
         modelMain.setCapsValue(IModelCaps.caps_isChild, lmaid.isChild());
-        //modelMain.setCapsValue(IModelCaps.caps_entityIdFactor, lmaid.entityIdFactor);
+        modelMain.setCapsValue(IModelCaps.caps_entityIdFactor, lmaid.entityIdFactor);
         modelMain.setCapsValue(IModelCaps.caps_ticksExisted, lmaid.ticksExisted);
         //modelMain.setCapsValue(IModelCaps.caps_dominantArm, lmaid.getDominantArm());
 

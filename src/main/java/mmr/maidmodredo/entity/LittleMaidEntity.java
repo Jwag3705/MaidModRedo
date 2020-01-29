@@ -36,6 +36,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.village.PointOfInterestManager;
 import net.minecraft.village.PointOfInterestType;
@@ -53,7 +54,7 @@ import java.util.function.BiPredicate;
 
 public class LittleMaidEntity extends TameableEntity implements IModelCaps, IModelEntity {
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.PATH, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.field_225462_q, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WORKED_AT_POI);
-    private static final ImmutableList<SensorType<? extends Sensor<? super LittleMaidEntity>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.INTERACTABLE_DOORS, SensorType.NEAREST_BED, SensorType.HURT_BY, LittleSensorTypes.MAID_HOSTILES);
+    private static final ImmutableList<SensorType<? extends Sensor<? super LittleMaidEntity>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.INTERACTABLE_DOORS, SensorType.NEAREST_BED, SensorType.HURT_BY, LittleSensorTypes.MAID_HOSTILES, LittleSensorTypes.DEFEND_OWNER);
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<LittleMaidEntity, PointOfInterestType>> field_213774_bB = ImmutableMap.of(MemoryModuleType.HOME, (p_213769_0_, p_213769_1_) -> {
         return p_213769_1_ == PointOfInterestType.HOME;
     }, MemoryModuleType.MEETING_POINT, (p_213772_0_, p_213772_1_) -> {
@@ -64,6 +65,9 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
     public ModelConfigCompound textureData;
     public EntityCaps maidCaps;
+
+    public float entityIdFactor;
+
     protected String textureNameMain;
     protected String textureNameArmor;
 
@@ -71,7 +75,10 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     protected Counter maidOverDriveTime;
     protected Counter workingCount;
 
+    protected static final DataParameter<Boolean> WAITING = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BOOLEAN);
+
     protected static final DataParameter<Byte> dataWatch_Color = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BYTE);
+
     /**
      * MSB|0x0000 0000|LSB<br>
      * |    |本体のテクスチャインデックス<br>
@@ -110,6 +117,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         ltb[0] = ltb[1] = ModelManager.instance.getDefaultTexture(this);
 
         setTexturePackName(ltb);
+
+        entityIdFactor = getEntityId() * 70;
     }
 
     protected void registerAttributes() {
@@ -123,6 +132,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     @Override
     protected void registerData() {
         super.registerData();
+        this.dataManager.register(WAITING, false);
+
         this.dataManager.register(dataWatch_Color, (byte) 0xc);
         // 20:選択テクスチャインデックス
         // TODO いらん？
@@ -151,7 +162,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     private void initBrain(Brain<LittleMaidEntity> p_213744_1_) {
         float f = (float) this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue();
 
-        if (this.isTamed() && !this.isSitting()) {
+        if (this.isTamed() && !this.isMaidWait()) {
             p_213744_1_.setSchedule(LittleSchedules.FOLLOW);
             p_213744_1_.registerActivity(LittleActivitys.FOLLOW, MaidTasks.follow(f));
         } else {
@@ -218,6 +229,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
+        compound.putBoolean("Wait", isMaidWait());
+
         compound.putByte("ColorB", getColor());
         compound.putString("texName", textureData.getTextureName(0));
         compound.putString("texArmor", textureData.getTextureName(1));
@@ -234,6 +247,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
      */
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
+
+        setMaidWait(compound.getBoolean("Wait"));
 
         textureNameMain = compound.getString("textureModelNameForClient");
 
@@ -500,9 +515,49 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         return super.isTamed();
     }
 
-   /* public boolean isMaidWait(){
-        return isSitting();
-    }*/
+    public boolean isMaidWait() {
+        return this.dataManager.get(WAITING);
+    }
+
+    public boolean isMaidWaitEx() {
+
+        return isMaidWait();
+
+    }
+
+
+    public void setMaidWait(boolean pflag) {
+        this.dataManager.set(WAITING, pflag);
+        isJumping = false;
+        setAttackTarget(null);
+        setRevengeTarget(null);
+        getNavigator().clearPath();
+        if (pflag) {
+
+            //setMaidModeAITasks(null,null);
+
+            setWorking(false);
+
+            getNavigator().clearPath();
+
+            //clearTilePosAll();
+
+			/*
+
+			setHomePosAndDistance(
+
+					new BlockPos(MathHelper.floor(lastTickPosX),
+
+					MathHelper.floor(lastTickPosY),
+
+					MathHelper.floor(lastTickPosZ)), 0);
+
+					*/
+
+        }
+        this.resetBrain((ServerWorld) this.world);
+        velocityChanged = true;
+    }
 
    /* public boolean isContractEX() {
 
@@ -536,13 +591,6 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
                         this.heal((float) item.getFood().getHealing());
                         return true;
-                    } else if (item == Items.SUGAR) {
-                        if (!player.abilities.isCreativeMode) {
-                            itemstack.shrink(1);
-                        }
-
-                        this.heal(1.0F);
-                        return true;
                     }
                 } else if (item instanceof DyeItem) {
                     DyeColor dyecolor = ((DyeItem) item).getDyeColor();
@@ -557,11 +605,18 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                 }
             }
 
-            if (this.isOwner(player) && !this.world.isRemote && !this.isBreedingItem(itemstack)) {
-                this.setSitting(!this.isSitting());
+            if (this.isOwner(player) && !this.world.isRemote && item == Items.SUGAR) {
+                if (!player.abilities.isCreativeMode) {
+                    itemstack.shrink(1);
+                }
+
+                this.heal(1.0F);
+
+                this.setMaidWait(!this.isMaidWait());
                 this.isJumping = false;
                 this.navigator.clearPath();
                 this.setAttackTarget((LivingEntity) null);
+                this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
             }
         } else if (item == Items.CAKE) {
             if (!player.abilities.isCreativeMode) {
@@ -573,7 +628,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                     this.setTamedBy(player);
                     this.navigator.clearPath();
                     this.setAttackTarget((LivingEntity) null);
-                    this.setSitting(true);
+                    this.setMaidWait(true);
                     this.setHealth(20.0F);
                     this.playTameEffect(true);
                     this.world.setEntityState(this, (byte) 7);

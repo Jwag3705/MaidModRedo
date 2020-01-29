@@ -16,7 +16,26 @@ public class MaidClearAttackTask extends Task<LittleMaidEntity> {
 
     @Override
     protected boolean shouldExecute(ServerWorld worldIn, LittleMaidEntity entityIn) {
-        return !(func_220394_a(entityIn) || PanicTask.func_220513_a(entityIn) || PanicTask.func_220512_b(entityIn));
+        return !func_220394_a(entityIn) || !PanicTask.func_220513_a(entityIn) || !PanicTask.func_220512_b(entityIn) || isYourOwner(entityIn) || isYourFriend(entityIn);
+    }
+
+    private boolean isYourOwner(LittleMaidEntity entityIn) {
+        return entityIn.getBrain().getMemory(MemoryModuleType.NEAREST_HOSTILE).isPresent() && entityIn.getOwner() == entityIn.getBrain().getMemory(MemoryModuleType.NEAREST_HOSTILE).get() || entityIn.getBrain().getMemory(MemoryModuleType.HURT_BY_ENTITY).isPresent() && entityIn.getOwner() == entityIn.getBrain().getMemory(MemoryModuleType.HURT_BY_ENTITY).get();
+    }
+
+    private boolean isYourFriend(LittleMaidEntity entityIn) {
+        if (entityIn.getBrain().getMemory(MemoryModuleType.NEAREST_HOSTILE).isPresent()) {
+            if (entityIn.getBrain().getMemory(MemoryModuleType.NEAREST_HOSTILE).get() instanceof LittleMaidEntity) {
+                return true;
+            }
+        }
+
+        if (entityIn.getBrain().getMemory(MemoryModuleType.HURT_BY_ENTITY).isPresent()) {
+            if (entityIn.getBrain().getMemory(MemoryModuleType.HURT_BY_ENTITY).get() instanceof LittleMaidEntity) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {

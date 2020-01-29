@@ -90,8 +90,8 @@ public class EntityCaps extends EntityCapsLiving {
                 return owner.isLookSuger();
             case caps_isBlocking:
                 return owner.isBlocking();*/
-            /*case caps_isWait:
-                return owner.isMaidWait();*/
+            case caps_isWait:
+                return owner.isMaidWait();
             /*case caps_isWaitEX:
                 return owner.isMaidWaitEx();
             case caps_isOpenInv:
@@ -118,8 +118,8 @@ public class EntityCaps extends EntityCapsLiving {
                 return owner.getMaidOverDriveTime().isEnable();
             case caps_isOverdriveDelay:
                 return owner.getMaidOverDriveTime().isDelay();
-            /*case caps_entityIdFactor:
-                return owner.entityIdFactor;*/
+            case caps_entityIdFactor:
+                return owner.entityIdFactor;
             case caps_height:
                 return owner.textureData.textureBox[0] == null ? null : owner.textureData.textureBox[0].getHeight(this);
             case caps_width:

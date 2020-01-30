@@ -14,6 +14,7 @@ import mmr.maidmodredo.init.*;
 import mmr.maidmodredo.inventory.InventoryMaidEquipment;
 import mmr.maidmodredo.inventory.InventoryMaidMain;
 import mmr.maidmodredo.inventory.MaidInventoryContainer;
+import mmr.maidmodredo.network.MaidPacketHandler;
 import mmr.maidmodredo.utils.Counter;
 import mmr.maidmodredo.utils.EntityCaps;
 import mmr.maidmodredo.utils.ModelManager;
@@ -40,6 +41,8 @@ import net.minecraft.network.DebugPacketSender;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
@@ -55,6 +58,8 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -87,6 +92,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     protected String textureNameMain;
     protected String textureNameArmor;
 
+    public boolean isWildSaved = false;
 
     protected Counter maidOverDriveTime;
     protected Counter workingCount;
@@ -269,6 +275,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         compound.putBoolean("Freedom", isFreedom());
         compound.putBoolean("Wait", isMaidWait());
 
+        compound.putBoolean("isWildSaved", isWildSaved);
         compound.putInt("LimitCount", maidContractLimit);
 
         compound.putByte("ColorB", getColor());
@@ -329,9 +336,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         textureNameArmor = compound.getString("textureArmorNameForClient");
 
         if (textureNameArmor.isEmpty()) {
-
             textureNameArmor = "default_" + ModelManager.defaultModelName;
-
         }
 
         if (compound.contains("Color")) {
@@ -341,6 +346,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
             setColor(compound.getByte("ColorB"));
         }
         refreshModels();
+
+        isWildSaved = compound.getBoolean("isWildSaved");
 
         this.setGrowingAge(Math.max(0, this.getGrowingAge()));
 
@@ -390,11 +397,26 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         }
     }
 
-    public static boolean canCombat(LittleMaidEntity entity) {
-        if (entity.getHeldItem(Hand.MAIN_HAND).getItem() instanceof SwordItem || entity.getHeldItem(Hand.OFF_HAND).getItem() instanceof SwordItem) {
-            return true;
+
+    public float getSwingProgress(float ltime, Hand hand) {
+        if (this.swingingHand == hand) {
+            float lf = swingProgress - prevSwingProgress;
+
+            if (lf < 0.0F) {
+                ++lf;
+            }
+
+            return prevSwingProgress + lf * ltime;
         } else {
-            return false;
+            return 0.0F;
+        }
+    }
+
+    public Hand getSwingHand() {
+        if (this.swingingHand != null) {
+            return this.swingingHand;
+        } else {
+            return Hand.MAIN_HAND;
         }
     }
 
@@ -405,8 +427,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
     @Override
     public byte getColor() {
-        return textureData.getColor();
-        //return dataManager.get(LittleMaidEntity.dataWatch_Color);
+        return dataManager.get(LittleMaidEntity.dataWatch_Color);
     }
 
     @Override
@@ -654,6 +675,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
     @Override
     public void livingTick() {
+        this.updateArmSwingProgress();
         if (getHealth() < getMaxHealth() && ticksExisted % 30 == 0) {
             eatSweets(false);
         }
@@ -886,6 +908,51 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         return 6;
     }
 
+    @Override
+    public void handleStatusUpdate(byte id) {
+        // getEntityWorld().setEntityState(this, (byte))で指定されたアクションを実行
+        switch (id) {
+            case 10:
+                // 不機嫌
+                func_213718_a(ParticleTypes.SMOKE);
+                break;
+            case 11:
+                // ゴキゲン
+                double a = getContractLimitDays() / 7D;
+                double d6 = a * 0.3D;
+                double d7 = a;
+                double d8 = a * 0.3D;
+
+                getEntityWorld().addParticle(ParticleTypes.NOTE, posX, posY + getHeight() + 0.1D, posZ, d6, d7, d8);
+                break;
+            case 13:
+                // 不自由行動
+                func_213718_a(ParticleTypes.SMOKE);
+                break;
+            case 14:
+                // トレーサー
+                func_213718_a(ParticleTypes.EXPLOSION);
+                break;
+            case 17:
+                // トリガー登録
+                func_213718_a(ParticleTypes.FIREWORK);
+                break;
+            default:
+                super.handleStatusUpdate(id);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    protected void func_213718_a(IParticleData particleData) {
+        for (int i = 0; i < 5; ++i) {
+            double d0 = this.rand.nextGaussian() * 0.02D;
+            double d1 = this.rand.nextGaussian() * 0.02D;
+            double d2 = this.rand.nextGaussian() * 0.02D;
+            this.world.addParticle(particleData, this.posX + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.posY + 1.0D + (double) (this.rand.nextFloat() * this.getHeight()), this.posZ + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d0, d1, d2);
+        }
+
+    }
+
     public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         Item item = itemstack.getItem();
@@ -898,6 +965,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                     return true;
                 } else if (item == Items.CAKE) {
                     // 再契約
+                    this.setMaidData(this.getMaidData().withJob(MaidJob.NORMAL));
                     itemstack.shrink(1);
                     maidContractLimit = (24000 * 7);
                     setFreedom(false);
@@ -930,6 +998,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                             this.addContractLimit(false);
                             this.heal((float) item.getFood().getHealing());
                             this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1.0F, 0.7F);
+                            getEntityWorld().setEntityState(this, (byte) 11);
                             return true;
                         }
                     } else if (item instanceof DyeItem) {
@@ -939,7 +1008,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                                 itemstack.shrink(1);
                             }
                             if (!getEntityWorld().isRemote) {
-                                this.setColor((byte) (15 - dyecolor.getId()));
+                                this.setColor((byte) (dyecolor.getId()));
                             }
 
                             this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
@@ -962,6 +1031,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                         }
 
                         this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
+                        //getEntityWorld().setEntityState(this, (byte) 11);
                         return true;
                     }
                 }
@@ -1004,6 +1074,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                         this.navigator.clearPath();
                         this.setAttackTarget((LivingEntity) null);
                         this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
+                        getEntityWorld().setEntityState(this, (byte) 11);
                     }
                     this.addContractLimit(false);
                     return true;
@@ -1165,6 +1236,17 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     @Override
     public ModelConfigCompound getModelConfigCompound() {
         return textureData;
+    }
+
+    public boolean canChangeModel() {
+        return true;
+    }
+
+    public void syncModelNames() {
+        CompoundNBT tagCompound = new CompoundNBT();
+        tagCompound.putString("Main", getModelNameMain());
+        tagCompound.putString("Armor", getModelNameArmor());
+        MaidPacketHandler.syncModel(this, tagCompound);
     }
 
     @Override

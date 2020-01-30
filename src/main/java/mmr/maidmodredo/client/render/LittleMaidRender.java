@@ -261,7 +261,7 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
         modelMain.setCapsValue(IModelCaps.caps_heldItemLeft, (Integer)0);
         modelMain.setCapsValue(IModelCaps.caps_heldItemRight, (Integer)0);
         //modelMain.setCapsValue(IModelCaps.caps_onGround, renderSwingProgress(lmaid, par9));
-        //modelMain.setCapsValue(IModelCaps.caps_onGround,lmaid.mstatSwingStatus[0].getSwingProgress(par9),lmaid.mstatSwingStatus[1].getSwingProgress(par9));
+        modelMain.setCapsValue(IModelCaps.caps_onGround, lmaid.getSwingProgress(par9, lmaid.getSwingHand()), lmaid.getSwingProgress(par9, lmaid.getSwingHand()));
         //modelMain.setCapsValue(IModelCaps.caps_isRiding, lmaid.isRidingRender());
         modelMain.setCapsValue(IModelCaps.caps_isSneak, lmaid.isSneaking());
         /* modelMain.setCapsValue(IModelCaps.caps_aimedBow, lmaid.isAimebow());*/

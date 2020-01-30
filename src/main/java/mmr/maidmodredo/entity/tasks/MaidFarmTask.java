@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -112,6 +113,7 @@ public class MaidFarmTask extends Task<LittleMaidEntity> {
             Block block1 = worldIn.getBlockState(this.field_220422_a.down()).getBlock();
             if (block instanceof CropsBlock && ((CropsBlock) block).isMaxAge(blockstate) && this.field_220424_c) {
                 worldIn.destroyBlock(this.field_220422_a, true);
+                owner.swingArm(Hand.MAIN_HAND);
             }
 
             if (blockstate.isAir() && block1 instanceof FarmlandBlock && this.field_220423_b) {
@@ -124,20 +126,25 @@ public class MaidFarmTask extends Task<LittleMaidEntity> {
                         if (itemstack.getItem() == Items.WHEAT_SEEDS) {
                             worldIn.setBlockState(this.field_220422_a, Blocks.WHEAT.getDefaultState(), 3);
                             flag = true;
+                            owner.swingArm(Hand.MAIN_HAND);
                         } else if (itemstack.getItem() == Items.POTATO) {
                             worldIn.setBlockState(this.field_220422_a, Blocks.POTATOES.getDefaultState(), 3);
                             flag = true;
+                            owner.swingArm(Hand.MAIN_HAND);
                         } else if (itemstack.getItem() == Items.CARROT) {
                             worldIn.setBlockState(this.field_220422_a, Blocks.CARROTS.getDefaultState(), 3);
                             flag = true;
+                            owner.swingArm(Hand.MAIN_HAND);
                         } else if (itemstack.getItem() == Items.BEETROOT_SEEDS) {
                             worldIn.setBlockState(this.field_220422_a, Blocks.BEETROOTS.getDefaultState(), 3);
                             flag = true;
+                            owner.swingArm(Hand.MAIN_HAND);
                         } else if (itemstack.getItem() instanceof net.minecraftforge.common.IPlantable) {
                             if (((net.minecraftforge.common.IPlantable) itemstack.getItem()).getPlantType(worldIn, field_220422_a) == net.minecraftforge.common.PlantType.Crop) {
                                 worldIn.setBlockState(field_220422_a, ((net.minecraftforge.common.IPlantable) itemstack.getItem()).getPlant(worldIn, field_220422_a), 3);
                                 flag = true;
                             }
+                            owner.swingArm(Hand.MAIN_HAND);
                         }
                     }
 

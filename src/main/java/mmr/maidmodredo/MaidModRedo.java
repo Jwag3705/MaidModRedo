@@ -8,12 +8,14 @@ import mmr.maidmodredo.entity.WanderMaidEntity;
 import mmr.maidmodredo.init.LittleContainers;
 import mmr.maidmodredo.init.MaidDataSerializers;
 import mmr.maidmodredo.init.MaidJob;
+import mmr.maidmodredo.network.MaidPacketHandler;
 import mmr.maidmodredo.utils.CommonHelper;
 import mmr.maidmodredo.utils.FileList;
 import mmr.maidmodredo.utils.ModelManager;
 import mmr.maidmodredo.utils.manager.StabilizerManager;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -37,6 +39,7 @@ public class MaidModRedo
     public static final String MODID = "maidmodredo";
 
     public MaidModRedo() {
+        MaidPacketHandler.register();
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         // Register the enqueueIMC method for modloading
@@ -99,6 +102,28 @@ public class MaidModRedo
     {
 
     }
+
+    @SubscribeEvent
+    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+
+        if (event.getEntity() instanceof LittleMaidEntity) {
+            LittleMaidEntity maid = (LittleMaidEntity) event.getEntity();
+            if (maid.isContract() || maid.isWildSaved) return;
+            maid.onSpawnWithEgg();
+//			int c = maid.getTextureBox()[0].getWildColorBits();
+//			if(c<=0) maid.setColor(12); else for(int i=15;i>=0;i--){
+//				int x = (int) Math.pow(2, i);
+//				if((c&x)==x) maid.setColor(i);
+//			}
+            maid.isWildSaved = true;
+//			event.setResult(Result.ALLOW);
+//			NBTTagCompound t = new NBTTagCompound();
+//			maid.writeEntityToNBT(t);
+//			maid.readEntityFromNBT(t);
+            if (event.getWorld().isRemote) maid.setTextureNames();
+        }
+    }
+
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {

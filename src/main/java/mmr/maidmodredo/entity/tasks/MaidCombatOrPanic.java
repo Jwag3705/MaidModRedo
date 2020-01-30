@@ -24,7 +24,7 @@ public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
         Brain<?> brain = entityIn.getBrain();
         if(!brain.hasActivity(LittleActivitys.ATTACK)) {
             if (func_220512_b(entityIn) || func_220513_a(entityIn)) {
-                if (entityIn.getMaidData().getJob() == MaidJob.FENCER && entityIn.isTamed()) {
+                if (entityIn.getMaidData().getJob() == MaidJob.FENCER && entityIn.isTamed() && !entityIn.isMaidWait()) {
                     if (!brain.hasActivity(LittleActivitys.ATTACK)) {
                         brain.removeMemory(MemoryModuleType.PATH);
                         brain.removeMemory(MemoryModuleType.WALK_TARGET);

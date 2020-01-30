@@ -1,6 +1,5 @@
 package mmr.maidmodredo.client.render;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import mmr.maidmodredo.client.maidmodel.*;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import net.minecraft.client.Minecraft;
@@ -127,16 +126,8 @@ public class ModelMultiRender<T extends LittleMaidEntity> extends MobRenderer<T,
             } else {
                 modelMain.setArmorRendering(false);
             }
-
-            if (flag1) {
-                GlStateManager.setProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
-            }
-            this.entityModel.render(par1EntityLiving, par2, par3, par4, par5, par6, par7);
-            if (flag1) {
-                GlStateManager.unsetProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
-            }
         }
-
+        super.renderModel(par1EntityLiving, par2, par3, par4, par5, par6, par7);
     }
 
     // TODO いらん？

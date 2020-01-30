@@ -5,7 +5,9 @@ import mmr.maidmodredo.client.render.WanderMaidRender;
 import mmr.maidmodredo.client.resource.OldZipTexturesWrapper;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import mmr.maidmodredo.entity.WanderMaidEntity;
+import mmr.maidmodredo.init.LittleContainers;
 import mmr.maidmodredo.init.MaidDataSerializers;
+import mmr.maidmodredo.init.MaidJob;
 import mmr.maidmodredo.utils.CommonHelper;
 import mmr.maidmodredo.utils.FileList;
 import mmr.maidmodredo.utils.ModelManager;
@@ -78,12 +80,14 @@ public class MaidModRedo
         }
 
         MaidDataSerializers.registerData();
+        MaidJob.init();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         Minecraft.getInstance().getResourceManager().addResourcePack(new OldZipTexturesWrapper());
         RenderingRegistry.registerEntityRenderingHandler(WanderMaidEntity.class, WanderMaidRender::new);
         RenderingRegistry.registerEntityRenderingHandler(LittleMaidEntity.class, LittleMaidRender::new);
+        LittleContainers.registerScreenFactories();
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)

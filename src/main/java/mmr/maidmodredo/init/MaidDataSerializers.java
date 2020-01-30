@@ -1,7 +1,6 @@
 package mmr.maidmodredo.init;
 
 import mmr.maidmodredo.entity.data.MaidData;
-import mmr.maidmodredo.entity.data.MaidJob;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.IDataSerializer;

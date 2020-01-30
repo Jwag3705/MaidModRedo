@@ -1,7 +1,8 @@
-package mmr.maidmodredo.entity.data;
+package mmr.maidmodredo.init;
 
-import mmr.maidmodredo.init.LittleSchedules;
+import mmr.maidmodredo.MaidModRedo;
 import net.minecraft.entity.ai.brain.schedule.Schedule;
+import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.ResourceLocation;
@@ -17,12 +18,19 @@ public class MaidJob {
     public static final DefaultedRegistry<MaidJob> MAID_JOB_REGISTRY = registerDefaulted("maid_job", "normal", () -> {
         return MaidJob.NORMAL;
     });
+    public static final MaidJob WILD = new MaidJob("wild", PointOfInterestType.UNEMPLOYED, (item) -> {
+        return item == ItemStack.EMPTY;
+    }).setSchedule(LittleSchedules.FREEDOM);
     public static final MaidJob NORMAL = new MaidJob("normal", PointOfInterestType.UNEMPLOYED, (item) -> {
         return item == ItemStack.EMPTY;
-    }).setSchedule(LittleSchedules.WILDMAID);
+    }).setSchedule(LittleSchedules.FREEDOM);
     public static final MaidJob FENCER = new MaidJob("fencer", PointOfInterestType.UNEMPLOYED, (item) -> {
         return item.getItem() instanceof SwordItem;
-    });
+    }).setSchedule(LittleSchedules.LITTLEMAID_WORK);
+    public static final MaidJob FARMER = new MaidJob("farmer", PointOfInterestType.UNEMPLOYED, (item) -> {
+        return item.getItem() instanceof HoeItem;
+    }).setSchedule(LittleSchedules.LITTLEMAID_WORK);
+
 
     private final String name;
     private final PointOfInterestType pointOfInterest;
@@ -56,6 +64,12 @@ public class MaidJob {
         return schedule;
     }
 
+    public static void init() {
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "wild"), WILD);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "normal"), NORMAL);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "fencer"), FENCER);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "farmer"), FARMER);
+    }
 
     private static <T> DefaultedRegistry<T> registerDefaulted(String p_222933_0_, String p_222933_1_, Supplier<T> p_222933_2_) {
         return register(p_222933_0_, new DefaultedRegistry<>(p_222933_1_), p_222933_2_);

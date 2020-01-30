@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import mmr.maidmodredo.init.LittleEntitys;
+import mmr.maidmodredo.init.MaidJob;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -16,6 +17,10 @@ import net.minecraft.village.PointOfInterestType;
 public class MaidTasks {
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> core(float p_220638_1_) {
         return ImmutableList.of(Pair.of(0, new SwimTask(0.4F, 0.8F)), Pair.of(0, new InteractWithDoorTask()), Pair.of(0, new LookTask(45, 90)), Pair.of(0, new MaidCombatOrPanic()), Pair.of(0, new WakeUpTask()), Pair.of(1, new WalkToTargetTask(200)), Pair.of(10, new GatherPOITask(PointOfInterestType.HOME, MemoryModuleType.HOME, false)));
+    }
+
+    public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> work(MaidJob p_220639_0_, float p_220639_1_) {
+        return ImmutableList.of(func_220646_b(), Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new WorkTask(MemoryModuleType.JOB_SITE, 4), 2), Pair.of(new WalkTowardsPosTask(MemoryModuleType.JOB_SITE, 1, 10), 5), Pair.of(new MaidWalkTowardsRandomSecondaryPosTask(MemoryModuleType.SECONDARY_JOB_SITE, 0.4F, 1, 6, MemoryModuleType.JOB_SITE), 5), Pair.of(new MaidFarmTask(), p_220639_0_ == MaidJob.FARMER ? 2 : 5)))), Pair.of(10, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)), Pair.of(2, new MaidStayNearPointTask(MemoryModuleType.JOB_SITE, p_220639_1_, 9, 100, 2800)), Pair.of(99, new UpdateActivityTask()));
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> rest(float p_220635_1_) {

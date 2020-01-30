@@ -8,12 +8,11 @@ import com.mojang.datafixers.Dynamic;
 import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.client.maidmodel.*;
 import mmr.maidmodredo.entity.data.MaidData;
-import mmr.maidmodredo.entity.data.MaidJob;
 import mmr.maidmodredo.entity.tasks.MaidTasks;
-import mmr.maidmodredo.init.LittleActivitys;
-import mmr.maidmodredo.init.LittleSchedules;
-import mmr.maidmodredo.init.LittleSensorTypes;
-import mmr.maidmodredo.init.MaidDataSerializers;
+import mmr.maidmodredo.init.*;
+import mmr.maidmodredo.inventory.InventoryMaidEquipment;
+import mmr.maidmodredo.inventory.InventoryMaidMain;
+import mmr.maidmodredo.inventory.MaidInventoryContainer;
 import mmr.maidmodredo.utils.Counter;
 import mmr.maidmodredo.utils.EntityCaps;
 import mmr.maidmodredo.utils.ModelManager;
@@ -25,6 +24,12 @@ import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTDynamicOps;
@@ -39,12 +44,16 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.GlobalPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestManager;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -62,6 +71,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     });
     private static final Set<Item> SWEETITEM = Sets.newHashSet(Items.SUGAR, Items.COOKIE, Items.PUMPKIN_PIE);
 
+    private InventoryMaidMain inventoryMaidMain;
+    private InventoryMaidEquipment inventoryMaidEquipment;
 
     public ModelConfigCompound textureData;
     public EntityCaps maidCaps;
@@ -75,8 +86,9 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     protected Counter maidOverDriveTime;
     protected Counter workingCount;
 
+    protected static final DataParameter<MaidData> MAID_DATA = EntityDataManager.createKey(LittleMaidEntity.class, MaidDataSerializers.MAID_DATA);
 
-    private static final DataParameter<MaidData> MAID_DATA = EntityDataManager.createKey(LittleMaidEntity.class, MaidDataSerializers.MAID_DATA);
+    protected static final DataParameter<Boolean> FREEDOM = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> WAITING = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BOOLEAN);
 
     protected static final DataParameter<Byte> dataWatch_Color = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BYTE);
@@ -134,7 +146,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(MAID_DATA, new MaidData(MaidJob.NORMAL, 1));
+        this.dataManager.register(MAID_DATA, new MaidData(MaidJob.WILD, 1));
+        this.dataManager.register(FREEDOM, false);
         this.dataManager.register(WAITING, false);
 
         this.dataManager.register(dataWatch_Color, (byte) 0xc);
@@ -166,20 +179,21 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         float f = (float) this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue();
 
 
-        if (this.isTamed() && !this.isMaidWait()) {
+        if (this.isTamed() && !this.isMaidWait() && !isFreedom()) {
             p_213744_1_.setSchedule(LittleSchedules.FOLLOW);
             p_213744_1_.registerActivity(LittleActivitys.FOLLOW, MaidTasks.follow());
         } else if (this.isTamed() && this.isMaidWait()) {
             p_213744_1_.setSchedule(LittleSchedules.WAITING);
             p_213744_1_.registerActivity(LittleActivitys.WAITING, MaidTasks.waiting());
         } else {
-            if (getMaidData().getJob().getSchedule() != null) {
-                p_213744_1_.setSchedule(getMaidData().getJob().getSchedule());
+            if (this.getMaidData() != null) {
+                p_213744_1_.setSchedule(this.getMaidData().getJob().getSchedule());
             }
         }
 
 
         p_213744_1_.registerActivity(Activity.CORE, MaidTasks.core(f));
+        p_213744_1_.registerActivity(Activity.WORK, MaidTasks.work(getMaidData().getJob(), f));
         p_213744_1_.registerActivity(Activity.REST, MaidTasks.rest(f));
         p_213744_1_.registerActivity(Activity.IDLE, MaidTasks.idle(f));
         p_213744_1_.registerActivity(Activity.PANIC, MaidTasks.panic(f));
@@ -238,9 +252,12 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
+        compound.put("MaidInventory", this.getInventoryMaidMain().writeInventoryToNBT());
+        compound.put("MaidEquipment", this.getInventoryMaidEquipment().writeInventoryToNBT());
 
         compound.put("MaidData", this.getMaidData().serialize(NBTDynamicOps.INSTANCE));
 
+        compound.putBoolean("Freedom", isFreedom());
         compound.putBoolean("Wait", isMaidWait());
 
         compound.putByte("ColorB", getColor());
@@ -260,10 +277,14 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
 
+        this.getInventoryMaidMain().readInventoryFromNBT(compound.getList("MaidInventory", 10));
+        this.getInventoryMaidEquipment().readInventoryFromNBT(compound.getList("MaidEquipment", 10));
+
         if (compound.contains("MaidData", 10)) {
             this.setMaidData(new MaidData(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.get("MaidData"))));
         }
 
+        setFreedom(compound.getBoolean("Freedom"));
         setMaidWait(compound.getBoolean("Wait"));
 
         textureNameMain = compound.getString("textureModelNameForClient");
@@ -297,8 +318,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     }
 
     public void setMaidData(MaidData p_213753_1_) {
-        MaidData MaidData = this.getMaidData();
-        if (MaidData.getJob() != p_213753_1_.getJob()) {
+        MaidData maidData = this.getMaidData();
+        if (maidData.getJob() != p_213753_1_.getJob()) {
         }
 
         this.dataManager.set(MAID_DATA, p_213753_1_);
@@ -389,6 +410,139 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
     public Counter getMaidOverDriveTime() {
         return maidOverDriveTime;
+    }
+
+    private void eatSweets() {
+        ItemStack itemstack = findFood();
+
+        if (!itemstack.isEmpty()) {
+            if (itemstack.isFood()) {
+                Item itemfood = (Item) itemstack.getItem();
+                this.heal((float) itemfood.getFood().getHealing());
+                itemstack.shrink(1);
+                this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
+            } else if (itemstack.getItem() == Items.SUGAR) {
+                this.heal(1);
+                itemstack.shrink(1);
+                this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
+            }
+        }
+    }
+
+    public InventoryMaidMain getInventoryMaidMain() {
+        if (this.inventoryMaidMain == null) {
+            this.inventoryMaidMain = new InventoryMaidMain(this);
+        }
+
+        return this.inventoryMaidMain;
+    }
+
+    public InventoryMaidEquipment getInventoryMaidEquipment() {
+        if (this.inventoryMaidEquipment == null) {
+            this.inventoryMaidEquipment = new InventoryMaidEquipment(this);
+        }
+
+        return this.inventoryMaidEquipment;
+    }
+
+    private ItemStack findFood() {
+        ItemStack stack;
+
+        for (int i = 0; i < this.getInventoryMaidMain().getSizeInventory(); ++i) {
+            stack = getInventoryMaidMain().getStackInSlot(i);
+
+            if (SWEETITEM.contains(stack.getItem())) {
+                return stack;
+            } else {
+                stack = getInventoryMaidEquipment().getOffhandItem();
+
+                if (SWEETITEM.contains(stack.getItem())) {
+                    return stack;
+                }
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    public boolean isFarmItemInInventory() {
+        Inventory inventory = this.getInventoryMaidMain();
+        return inventory.hasAny(ImmutableSet.of(Items.WHEAT_SEEDS, Items.POTATO, Items.CARROT, Items.BEETROOT_SEEDS));
+    }
+
+    @Override
+    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
+        switch (slotIn) {
+            case CHEST:
+
+                this.getInventoryMaidEquipment().setInventorySlotContents(0, stack);
+                break;
+            case FEET:
+
+                this.getInventoryMaidEquipment().setInventorySlotContents(1, stack);
+                break;
+            case HEAD:
+
+                this.getInventoryMaidEquipment().setInventorySlotContents(2, stack);
+                break;
+            case LEGS:
+
+                this.getInventoryMaidEquipment().setInventorySlotContents(3, stack);
+                break;
+            case OFFHAND:
+
+                this.getInventoryMaidEquipment().setInventorySlotContents(4, stack);
+                break;
+            case MAINHAND:
+
+                this.getInventoryMaidEquipment().setInventorySlotContents(5, stack);
+                break;
+        }
+    }
+
+    @Override
+    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
+        ItemStack itemStack;
+
+        switch (slotIn) {
+            case CHEST:
+
+                itemStack = this.getInventoryMaidEquipment().getChestItem();
+                break;
+            case FEET:
+
+                itemStack = this.getInventoryMaidEquipment().getbootItem();
+                break;
+            case HEAD:
+
+                itemStack = this.getInventoryMaidEquipment().getheadItem();
+                break;
+            case LEGS:
+
+                itemStack = this.getInventoryMaidEquipment().getLegItem();
+                break;
+            case OFFHAND:
+
+                itemStack = this.getInventoryMaidEquipment().getOffhandItem();
+                break;
+            case MAINHAND:
+
+                itemStack = this.getInventoryMaidEquipment().getMainhandItem();
+                break;
+            default:
+
+                itemStack = ItemStack.EMPTY;
+                break;
+        }
+
+        return itemStack;
+    }
+
+    @Override
+    public void livingTick() {
+        if (getHealth() < getMaxHealth() / 1.2 && ticksExisted % 30 == 0) {
+            eatSweets();
+        }
+        super.livingTick();
     }
 
     @Override
@@ -543,6 +697,14 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
     }
 
+    public boolean isFreedom() {
+        return this.dataManager.get(FREEDOM);
+    }
+
+    public void setFreedom(boolean pflag) {
+        this.dataManager.set(FREEDOM, pflag);
+    }
+
 
     public void setMaidWait(boolean pflag) {
         this.dataManager.set(WAITING, pflag);
@@ -573,7 +735,9 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 					*/
 
         }
-        this.resetBrain((ServerWorld) this.world);
+        if (!world.isRemote()) {
+            this.resetBrain((ServerWorld) this.world);
+        }
         velocityChanged = true;
     }
 
@@ -620,9 +784,52 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                             this.setColor((byte) (15 - dyecolor.getId()));
                         }
 
+                        this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
                         return true;
                     }
+                } else if (item.getItem() == Items.FEATHER) {
+
+                    if (!player.abilities.isCreativeMode) {
+                        itemstack.shrink(1);
+                    }
+                    if (!getEntityWorld().isRemote) {
+                        this.setFreedom(!isFreedom());
+
+                        MaidJob.MAID_JOB_REGISTRY.stream().filter((job) -> {
+                            return job.getRequireItem().test(this.getHeldItem(Hand.MAIN_HAND));
+                        }).findFirst().ifPresent((p_220388_2_) -> {
+                            this.setMaidData(this.getMaidData().withJob(p_220388_2_));
+                            this.resetBrain((ServerWorld) this.world);
+                        });
+                    }
+
+
+                    this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
+                    return true;
                 }
+            }
+
+            if (this.isOwner(player) && player.isSneaking()) {
+
+                if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
+                    if (!player.world.isRemote) {
+                        ServerPlayerEntity entityPlayerMP = (ServerPlayerEntity) player;
+                        NetworkHooks.openGui(entityPlayerMP, new INamedContainerProvider() {
+                            @Override
+                            public Container createMenu(int windowId, PlayerInventory inventory, PlayerEntity player) {
+                                return new MaidInventoryContainer(windowId, inventory, (LittleMaidEntity) player.world.getEntityByID(getEntityId()));
+                            }
+
+                            @Override
+                            public ITextComponent getDisplayName() {
+                                return new TranslationTextComponent("container.redstonemecha.mecha_inventory");
+                            }
+                        }, buf -> {
+                            buf.writeInt(this.getEntityId());
+                        });
+                    }
+                }
+                return true;
             }
 
             if (this.isOwner(player) && !this.world.isRemote && item == Items.SUGAR) {
@@ -645,6 +852,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
             if (!this.world.isRemote) {
                 if (!net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
+                    this.setMaidData(this.getMaidData().withJob(MaidJob.NORMAL));
                     this.setTamedBy(player);
                     this.navigator.clearPath();
                     this.setAttackTarget((LivingEntity) null);

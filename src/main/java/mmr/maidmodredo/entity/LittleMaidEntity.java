@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.util.Pair;
 import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.client.maidmodel.*;
 import mmr.maidmodredo.entity.data.MaidData;
@@ -18,6 +19,7 @@ import mmr.maidmodredo.utils.EntityCaps;
 import mmr.maidmodredo.utils.ModelManager;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.brain.Brain;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
@@ -193,7 +195,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
 
         p_213744_1_.registerActivity(Activity.CORE, MaidTasks.core(f));
-        p_213744_1_.registerActivity(Activity.WORK, MaidTasks.work(getMaidData().getJob(), f));
+        p_213744_1_.registerActivity(Activity.WORK, MaidTasks.work(getMaidData().getJob(), f), ImmutableSet.of(Pair.of(MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT)));
         p_213744_1_.registerActivity(Activity.REST, MaidTasks.rest(f));
         p_213744_1_.registerActivity(Activity.IDLE, MaidTasks.idle(f));
         p_213744_1_.registerActivity(Activity.PANIC, MaidTasks.panic(f));

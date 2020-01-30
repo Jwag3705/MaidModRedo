@@ -7,7 +7,6 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.memory.WalkTarget;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
@@ -80,7 +79,7 @@ public class AttackTask extends Task<LittleMaidEntity> {
 
     public void setWalk(LittleMaidEntity p_220540_0_, Entity p_220540_1_, float p_220540_2_) {
         Vec3d vec3d = new Vec3d(p_220540_1_.posX, p_220540_1_.posY, p_220540_1_.posZ);
-        p_220540_0_.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(vec3d, p_220540_2_, 0));
+        p_220540_0_.getNavigator().tryMoveToEntityLiving(p_220540_1_, p_220540_2_);
         p_220540_0_.getLookController().setLookPositionWithEntity(p_220540_1_, 30.0F, 30.0F);
 
         double d0 = p_220540_0_.getDistanceSq(p_220540_1_.posX, p_220540_1_.getBoundingBox().minY, p_220540_1_.posZ);
@@ -99,6 +98,6 @@ public class AttackTask extends Task<LittleMaidEntity> {
     }
 
     protected double getAttackReachSqr(LittleMaidEntity attacker, Entity attackTarget) {
-        return (double) (attacker.getWidth() * 2.0F * attacker.getWidth() * 2.0F + attackTarget.getWidth());
+        return (double) (attacker.getWidth() * 2.05F * attacker.getWidth() * 2.05F + attackTarget.getWidth());
     }
 }

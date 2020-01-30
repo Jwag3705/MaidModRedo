@@ -4,7 +4,7 @@ import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.api.classutil.FileClassUtil;
 import mmr.maidmodredo.client.maidmodel.*;
 import mmr.maidmodredo.client.resource.OldZipTexturesWrapper;
-import net.minecraft.entity.LivingEntity;
+import mmr.maidmodredo.entity.LittleMaidEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -244,12 +244,12 @@ public class ModelManager {
         MaidModRedo.LOGGER.debug("Rebuild Texture Lists.(%d)", textures.size());
         for (TextureBox lbox : textures) {
             if(lbox.getWildColorBits()>0){
-                setDefaultTexture(LivingEntity.class, lbox);
+                setDefaultTexture(LittleMaidEntity.class, lbox);
             }
             MaidModRedo.LOGGER.debug("texture: %s(%s) - hasModel:%b", lbox.textureName, lbox.fileName, lbox.models != null);
         }
 
-        setDefaultTexture(LivingEntity.class, getTextureBox("default_" + defaultModelName));
+        setDefaultTexture(LittleMaidEntity.class, getTextureBox("default_" + defaultModelName));
 
         return false;
     }

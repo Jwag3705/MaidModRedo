@@ -3,6 +3,7 @@ package mmr.maidmodredo.init;
 import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.item.BroomItem;
 import mmr.maidmodredo.item.HouseWandItem;
+import mmr.maidmodredo.item.JobBookItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraftforge.event.RegistryEvent;
@@ -15,6 +16,8 @@ public class LittleItems {
     public static final Item BROOM = new BroomItem((new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
     public static final Item SUGARCOIN = new Item((new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
     public static final Item HOUSEWAND = new HouseWandItem((new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
+    public static final Item JOBBOOK = new JobBookItem((new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
+
 
     public static final Item LITTLEMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.LITTLEMAID, 0xe3e3e3, 0xa45131, (new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
     public static final Item WANDERMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.WANDERMAID, 4547222, 15377456, (new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
@@ -25,6 +28,7 @@ public class LittleItems {
         event.getRegistry().register(BROOM.setRegistryName("broom"));
         event.getRegistry().register(SUGARCOIN.setRegistryName("sugar_coin"));
         event.getRegistry().register(HOUSEWAND.setRegistryName("housewand"));
+        event.getRegistry().register(JOBBOOK.setRegistryName("job_book"));
         event.getRegistry().register(LITTLEMAID_SPAWNEGG.setRegistryName("littlemaid_spawnegg"));
         event.getRegistry().register(WANDERMAID_SPAWNEGG.setRegistryName("wandermaid_spawnegg"));
     }

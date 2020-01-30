@@ -24,6 +24,7 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -71,13 +72,15 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     }, MemoryModuleType.MEETING_POINT, (p_213772_0_, p_213772_1_) -> {
         return p_213772_1_ == PointOfInterestType.MEETING;
     });
-    private static final Set<Item> SWEETITEM = Sets.newHashSet(Items.SUGAR, Items.COOKIE, Items.PUMPKIN_PIE);
+    private static final Set<Item> SWEETITEM = Sets.newHashSet(Items.SUGAR, Items.COOKIE, Items.PUMPKIN_PIE, LittleItems.CARAMEL_APPLE);
 
     private InventoryMaidMain inventoryMaidMain;
     private InventoryMaidEquipment inventoryMaidEquipment;
 
     public ModelConfigCompound textureData;
     public EntityCaps maidCaps;
+
+    protected boolean mstatOpenInventory;
 
     public float entityIdFactor;
 
@@ -93,6 +96,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     protected static final DataParameter<Boolean> FREEDOM = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> WAITING = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BOOLEAN);
 
+    protected static final DataParameter<Boolean> CONTRACT = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BOOLEAN);
+
     protected static final DataParameter<Byte> dataWatch_Color = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BYTE);
 
     /**
@@ -107,6 +112,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     protected static final DataParameter<Integer> dataWatch_Parts = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.VARINT);
 
     protected Counter registerTick;
+    protected int maidContractLimit;        // 契約期間
 
     public LittleMaidEntity(EntityType<? extends LittleMaidEntity> p_i48575_1_, World p_i48575_2_) {
         super(p_i48575_1_, p_i48575_2_);
@@ -151,6 +157,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         this.dataManager.register(MAID_DATA, new MaidData(MaidJob.WILD, 1));
         this.dataManager.register(FREEDOM, false);
         this.dataManager.register(WAITING, false);
+        this.dataManager.register(CONTRACT, false);
 
         this.dataManager.register(dataWatch_Color, (byte) 0xc);
         // 20:選択テクスチャインデックス
@@ -181,10 +188,10 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         float f = (float) this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue();
 
 
-        if (this.isTamed() && !this.isMaidWait() && !isFreedom()) {
+        if (this.isTamed() && !this.isMaidWaitEx() && !isFreedom()) {
             p_213744_1_.setSchedule(LittleSchedules.FOLLOW);
             p_213744_1_.registerActivity(LittleActivitys.FOLLOW, MaidTasks.follow());
-        } else if (this.isTamed() && this.isMaidWait()) {
+        } else if (this.isTamed() && this.isMaidWaitEx()) {
             p_213744_1_.setSchedule(LittleSchedules.WAITING);
             p_213744_1_.registerActivity(LittleActivitys.WAITING, MaidTasks.waiting());
         } else {
@@ -262,6 +269,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         compound.putBoolean("Freedom", isFreedom());
         compound.putBoolean("Wait", isMaidWait());
 
+        compound.putInt("LimitCount", maidContractLimit);
+
         compound.putByte("ColorB", getColor());
         compound.putString("texName", textureData.getTextureName(0));
         compound.putString("texArmor", textureData.getTextureName(1));
@@ -288,6 +297,26 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
         setFreedom(compound.getBoolean("Freedom"));
         setMaidWait(compound.getBoolean("Wait"));
+
+        if (compound.contains("LimitCount")) {
+            maidContractLimit = compound.getInt("LimitCount");
+        } else {
+
+            long lcl = compound.getLong("Limit");
+
+            if (isContract() && lcl == 0) {
+
+                maidContractLimit = 24000;
+
+            } else {
+                maidContractLimit = (int) ((lcl - getEntityWorld().getDayTime()));
+            }
+        }
+
+        if (isContract() && maidContractLimit == 0) {
+            // 値がおかしい時は１日分
+            maidContractLimit = 24000;
+        }
 
         textureNameMain = compound.getString("textureModelNameForClient");
 
@@ -414,7 +443,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         return maidOverDriveTime;
     }
 
-    private void eatSweets() {
+    private void eatSweets(boolean recontract) {
         ItemStack itemstack = findFood();
 
         if (!itemstack.isEmpty()) {
@@ -422,13 +451,73 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                 Item itemfood = (Item) itemstack.getItem();
                 this.heal((float) itemfood.getFood().getHealing());
                 itemstack.shrink(1);
+
+                addContractLimit(recontract);
+
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
             } else if (itemstack.getItem() == Items.SUGAR) {
                 this.heal(1);
                 itemstack.shrink(1);
+                addContractLimit(recontract);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
             }
         }
+    }
+
+    private void addContractLimit(boolean recontract) {
+        if (recontract) {
+            // 契約期間の延長
+            maidContractLimit += 24000;
+
+            if (maidContractLimit > 168000) {
+                maidContractLimit = 168000;    // 24000 * 7
+            }
+        }
+    }
+
+    public void clearMaidContractLimit() {
+        maidContractLimit = 0;
+    }
+
+    protected void updateRemainsContract() {
+        boolean lflag = false;
+
+        if (maidContractLimit > 0) {
+            maidContractLimit--;
+
+            lflag = true;
+        }
+
+        if (this.dataManager.get(CONTRACT) != lflag) {
+            this.dataManager.set(CONTRACT, lflag);
+        }
+    }
+
+    public boolean isRemainsContract() {
+
+        return this.dataManager.get(CONTRACT);
+    }
+
+    @Override
+    public boolean isTamed() {
+        return isContract();
+    }
+
+    public boolean isContract() {
+        return super.isTamed();
+    }
+
+    public boolean isContractEX() {
+        return isContract() && isRemainsContract();
+    }
+
+    public float getContractLimitDays() {
+        return maidContractLimit > 0 ? (maidContractLimit / 24000F) : -1F;
+    }
+
+    @Override
+    public void setTamed(boolean tamed) {
+        setContract(tamed);
     }
 
     public InventoryMaidMain getInventoryMaidMain() {
@@ -464,6 +553,30 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
             }
         }
         return ItemStack.EMPTY;
+    }
+
+    @Override
+    protected void updateEquipmentIfNeeded(ItemEntity itemEntity) {
+        ItemStack stack = itemEntity.getItem();
+
+        if (!stack.isEmpty()) {
+            stack = onItemStackPickup(stack);
+
+
+            this.onItemPickup(itemEntity, stack.getCount());
+            if (stack.isEmpty()) {
+                itemEntity.remove();
+            } else {
+                itemEntity.setItem(stack);
+            }
+
+        }
+    }
+
+    public ItemStack onItemStackPickup(ItemStack stack) {
+
+        return getInventoryMaidMain().addItem(stack);
+
     }
 
     public boolean isFarmItemInInventory() {
@@ -541,10 +654,18 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
     @Override
     public void livingTick() {
-        if (getHealth() < getMaxHealth() / 1.2 && ticksExisted % 30 == 0) {
-            eatSweets();
+        if (getHealth() < getMaxHealth() && ticksExisted % 30 == 0) {
+            eatSweets(false);
         }
         super.livingTick();
+
+        if (isContractEX()) {
+            float f = getContractLimitDays();
+            if (f <= 6) {
+                // 契約更新
+                eatSweets(true);
+            }
+        }
     }
 
     @Override
@@ -615,6 +736,17 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                 }
             }*/
 
+        } else {
+            updateRemainsContract();
+            // 拗ねる
+
+            if (!isRemainsContract() && !isFreedom()) {
+                setFreedom(true);
+                setMaidWait(false);
+                if (!this.world.isRemote()) {
+                    this.resetBrain((ServerWorld) this.world);
+                }
+            }
         }
 
         super.tick();
@@ -681,12 +813,10 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     }
 
     @Override
-    public boolean isTamed() {
-        return isContract();
-    }
+    public void setContract(boolean flag) {
+        super.setTamed(flag);
 
-    public boolean isContract() {
-        return super.isTamed();
+        textureData.setContract(flag);
     }
 
     public boolean isMaidWait() {
@@ -694,9 +824,18 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     }
 
     public boolean isMaidWaitEx() {
+        return isMaidWait() || isOpenInventory();
+    }
 
-        return isMaidWait();
+    public void setOpenInventory(boolean flag) {
+        mstatOpenInventory = flag;
+        if (!this.world.isRemote()) {
+            this.resetBrain((ServerWorld) this.world);
+        }
+    }
 
+    public boolean isOpenInventory() {
+        return mstatOpenInventory;
     }
 
     public boolean isFreedom() {
@@ -743,114 +882,139 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         velocityChanged = true;
     }
 
-   /* public boolean isContractEX() {
-
-        return isContract() && isRemainsContract();
-    }*/
-
-    @Override
-    public void setTamed(boolean tamed) {
-        setContract(tamed);
-    }
-
-    @Override
-    public void setContract(boolean flag) {
-        super.setTamed(flag);
-
-        textureData.setContract(flag);
+    public int getSwingSpeedModifier() {
+        return 6;
     }
 
     public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         Item item = itemstack.getItem();
-        if (this.isTamed()) {
-            if (!itemstack.isEmpty()) {
+        if (this.isContract()) {
+            if (!isRemainsContract() && !itemstack.isEmpty()) {
+                // ストライキ
+                if (item == Items.SUGAR) {
+                    // 受取拒否
+                    getEntityWorld().setEntityState(this, (byte) 10);
+                    return true;
+                } else if (item == Items.CAKE) {
+                    // 再契約
+                    itemstack.shrink(1);
+                    maidContractLimit = (24000 * 7);
+                    setFreedom(false);
+                    setMaidWait(false);
+                    if (!isOwner(player)) {
+                        // あんなご主人なんか捨てて、僕のもとへおいで(洗脳)
+                        this.setTamedBy(player);
+                        //playLittleMaidSound(EnumSound.getCake, true);
+                        getEntityWorld().setEntityState(this, (byte) 7);
+                        maidContractLimit = (24000 * 7);
+                        //maidAnniversary = getEntityWorld().getTotalWorldTime();
+                    } else {
+                        // ごめんねメイドちゃん
+                        getEntityWorld().setEntityState(this, (byte) 11);
+                        //playLittleMaidSound(EnumSound.Recontract, true);
 
-                if (SWEETITEM.contains(item) && this.getHealth() < this.getMaxHealth()) {
-                    if (item.isFood()) {
-                        if (!player.abilities.isCreativeMode) {
-                            itemstack.shrink(1);
-                        }
-
-                        this.heal((float) item.getFood().getHealing());
-                        this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1.0F, 0.7F);
-                        return true;
                     }
-                } else if (item instanceof DyeItem) {
-                    DyeColor dyecolor = ((DyeItem) item).getDyeColor();
-                    if (dyecolor.getId() != 15 - this.getColor()) {
+                    return true;
+                }
+            } else {
+
+                if (!itemstack.isEmpty()) {
+
+                    if (SWEETITEM.contains(item) && this.getHealth() < this.getMaxHealth()) {
+                        if (item.isFood()) {
+                            if (!player.abilities.isCreativeMode) {
+                                itemstack.shrink(1);
+                            }
+
+                            this.addContractLimit(false);
+                            this.heal((float) item.getFood().getHealing());
+                            this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1.0F, 0.7F);
+                            return true;
+                        }
+                    } else if (item instanceof DyeItem) {
+                        DyeColor dyecolor = ((DyeItem) item).getDyeColor();
+                        if (dyecolor.getId() != 15 - this.getColor()) {
+                            if (!player.abilities.isCreativeMode) {
+                                itemstack.shrink(1);
+                            }
+                            if (!getEntityWorld().isRemote) {
+                                this.setColor((byte) (15 - dyecolor.getId()));
+                            }
+
+                            this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
+                            return true;
+                        }
+                    } else if (item.getItem() == Items.FEATHER) {
+
                         if (!player.abilities.isCreativeMode) {
                             itemstack.shrink(1);
                         }
                         if (!getEntityWorld().isRemote) {
-                            this.setColor((byte) (15 - dyecolor.getId()));
+                            this.setFreedom(!isFreedom());
+
+                            MaidJob.MAID_JOB_REGISTRY.stream().filter((job) -> {
+                                return job.getRequireItem().test(this.getHeldItem(Hand.MAIN_HAND));
+                            }).findFirst().ifPresent((p_220388_2_) -> {
+                                this.setMaidData(this.getMaidData().withJob(p_220388_2_));
+                                this.resetBrain((ServerWorld) this.world);
+                            });
                         }
 
                         this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
                         return true;
                     }
-                } else if (item.getItem() == Items.FEATHER) {
+                }
 
-                    if (!player.abilities.isCreativeMode) {
-                        itemstack.shrink(1);
+                if (this.isOwner(player) && player.isSneaking()) {
+
+                    if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
+                        if (!player.world.isRemote) {
+                            ServerPlayerEntity entityPlayerMP = (ServerPlayerEntity) player;
+                            NetworkHooks.openGui(entityPlayerMP, new INamedContainerProvider() {
+                                @Override
+                                public Container createMenu(int windowId, PlayerInventory inventory, PlayerEntity player) {
+                                    return new MaidInventoryContainer(windowId, inventory, (LittleMaidEntity) player.world.getEntityByID(getEntityId()));
+                                }
+
+                                @Override
+                                public ITextComponent getDisplayName() {
+                                    return new TranslationTextComponent("container.maidmobredo.maid_inventory");
+                                }
+                            }, buf -> {
+                                buf.writeInt(this.getEntityId());
+                            });
+                        }
                     }
-                    if (!getEntityWorld().isRemote) {
-                        this.setFreedom(!isFreedom());
-
-                        MaidJob.MAID_JOB_REGISTRY.stream().filter((job) -> {
-                            return job.getRequireItem().test(this.getHeldItem(Hand.MAIN_HAND));
-                        }).findFirst().ifPresent((p_220388_2_) -> {
-                            this.setMaidData(this.getMaidData().withJob(p_220388_2_));
-                            this.resetBrain((ServerWorld) this.world);
-                        });
-                    }
-
-
-                    this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
                     return true;
                 }
-            }
 
-            if (this.isOwner(player) && player.isSneaking()) {
+                if (this.isOwner(player) && item == Items.SUGAR) {
+                    if (!this.world.isRemote) {
+                        if (!player.abilities.isCreativeMode) {
+                            itemstack.shrink(1);
+                        }
 
-                if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
-                    if (!player.world.isRemote) {
-                        ServerPlayerEntity entityPlayerMP = (ServerPlayerEntity) player;
-                        NetworkHooks.openGui(entityPlayerMP, new INamedContainerProvider() {
-                            @Override
-                            public Container createMenu(int windowId, PlayerInventory inventory, PlayerEntity player) {
-                                return new MaidInventoryContainer(windowId, inventory, (LittleMaidEntity) player.world.getEntityByID(getEntityId()));
-                            }
+                        this.heal(1.0F);
 
-                            @Override
-                            public ITextComponent getDisplayName() {
-                                return new TranslationTextComponent("container.redstonemecha.mecha_inventory");
-                            }
-                        }, buf -> {
-                            buf.writeInt(this.getEntityId());
-                        });
+                        this.maidContractLimit += 3000;
+
+                        this.setMaidWait(!this.isMaidWait());
+                        this.isJumping = false;
+                        this.navigator.clearPath();
+                        this.setAttackTarget((LivingEntity) null);
+                        this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
                     }
+                    this.addContractLimit(false);
+                    return true;
                 }
-                return true;
-            }
-
-            if (this.isOwner(player) && !this.world.isRemote && item == Items.SUGAR) {
-                if (!player.abilities.isCreativeMode) {
-                    itemstack.shrink(1);
-                }
-
-                this.heal(1.0F);
-
-                this.setMaidWait(!this.isMaidWait());
-                this.isJumping = false;
-                this.navigator.clearPath();
-                this.setAttackTarget((LivingEntity) null);
-                this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
             }
         } else if (item == Items.CAKE) {
             if (!player.abilities.isCreativeMode) {
                 itemstack.shrink(1);
             }
+
+            maidContractLimit = 24000;
 
             if (!this.world.isRemote) {
                 if (!net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {

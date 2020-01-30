@@ -1,5 +1,6 @@
 package mmr.maidmodredo.item;
 
+import com.google.common.collect.Lists;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
@@ -15,8 +16,10 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 
-public class HouseWandItem extends Item {
-    public HouseWandItem(Properties group) {
+import java.util.List;
+
+public class JobBookItem extends Item {
+    public JobBookItem(Properties group) {
         super(group);
     }
 
@@ -29,12 +32,12 @@ public class HouseWandItem extends Item {
             world.playSound(playerentity, blockpos, SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.BLOCKS, 1.0F, 1.0F);
             CompoundNBT compoundNBT = context.getItem().getOrCreateTag();
 
-            compoundNBT.putInt("BedDimension", context.getWorld().dimension.getType().getId());
-            compoundNBT.putInt("BedPosX", context.getPos().getX());
-            compoundNBT.putInt("BedPosY", context.getPos().getY());
-            compoundNBT.putInt("BedPosZ", context.getPos().getZ());
+            compoundNBT.putInt("JobDimension", context.getWorld().dimension.getType().getId());
+            compoundNBT.putInt("JobPosX", context.getPos().getX());
+            compoundNBT.putInt("JobPosY", context.getPos().getY());
+            compoundNBT.putInt("JobPosZ", context.getPos().getZ());
 
-            playerentity.sendStatusMessage(new TranslationTextComponent("item.maidmodredo.setbed", context.getPos().getX(), context.getPos().getY(), context.getPos().getZ()), true);
+            playerentity.sendStatusMessage(new TranslationTextComponent("item.maidmodredo.set_jobpostion", context.getPos().getX(), context.getPos().getY(), context.getPos().getZ()), true);
 
             return ActionResultType.SUCCESS;
 
@@ -50,9 +53,13 @@ public class HouseWandItem extends Item {
         if (target instanceof LittleMaidEntity) {
             if (((LittleMaidEntity) target).isTamed() && ((LittleMaidEntity) target).isOwner(playerIn)) {
                 CompoundNBT compound = stack.getTag();
-                if (compound != null && DimensionType.getById(compound.getInt("BedDimension")) != null && compound.contains("BedDimension") && compound.contains("BedPosX", 99) && compound.contains("BedPosY", 99) && compound.contains("BedPosZ", 99)) {
-                    target.getBrain().setMemory(MemoryModuleType.HOME, GlobalPos.of(DimensionType.getById(compound.getInt("BedDimension")), new BlockPos(compound.getInt("BedPosX"), compound.getInt("BedPosY"), compound.getInt("BedPosZ"))));
-                    playerIn.sendStatusMessage(new TranslationTextComponent("item.maidmodredo.setmaidbed", compound.getInt("BedPosX"), compound.getInt("BedPosY"), compound.getInt("BedPosZ")), true);
+                List<GlobalPos> list = Lists.newArrayList();
+                if (compound != null && DimensionType.getById(compound.getInt("JobDimension")) != null && compound.contains("JobDimension") && compound.contains("JobPosX", 99) && compound.contains("JobPosY", 99) && compound.contains("JobPosZ", 99)) {
+                    playerIn.world.playSound(playerIn, playerIn.getPosition(), SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    list.add(GlobalPos.of(DimensionType.getById(compound.getInt("JobDimension")), new BlockPos(compound.getInt("JobPosX"), compound.getInt("JobPosY"), compound.getInt("JobPosZ"))));
+                    target.getBrain().setMemory(MemoryModuleType.JOB_SITE, GlobalPos.of(DimensionType.getById(compound.getInt("JobDimension")), new BlockPos(compound.getInt("JobPosX"), compound.getInt("JobPosY"), compound.getInt("JobPosZ"))));
+                    target.getBrain().setMemory(MemoryModuleType.SECONDARY_JOB_SITE, list);
+                    playerIn.sendStatusMessage(new TranslationTextComponent("item.maidmodredo.setmaid_jobpostion", compound.getInt("JobPosX"), compound.getInt("JobPosY"), compound.getInt("JobPosZ")), true);
                 }
 
                 return true;

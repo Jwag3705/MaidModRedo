@@ -67,9 +67,17 @@ public class InventoryMaid extends Inventory implements INamedContainerProvider 
 
     @Override
     public Container createMenu(int windowId, PlayerInventory inventory, PlayerEntity player) {
-
         return new MaidInventoryContainer(windowId, inventory, this.entityLittleMaid);
+    }
 
+    @Override
+    public void openInventory(PlayerEntity player) {
+        entityLittleMaid.setOpenInventory(true);
+    }
+
+    @Override
+    public void closeInventory(PlayerEntity player) {
+        entityLittleMaid.setOpenInventory(false);
     }
 
     @Override

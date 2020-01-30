@@ -2,11 +2,14 @@
   "item.maidmodredo.caramel_apple": "Caramel Apple",
   "item.maidmodredo.broom": "Broom",
   "item.maidmodredo.sugar_coin": "Sugar Coin",
-  "item.maidmodredo.housewand": "HouseWand",
+  "item.maidmodredo.housewand": "House Wand",
+  "item.maidmodredo.job_book": "Job Book",
   "item.maidmodredo.littlemaid_spawnegg": "LittleMaid SpawnEgg",
   "entity.maidmodredo.littlemaid": "LittleMaid",
   "item.maidmodredo.wandermaid_spawnegg": "WanderMaid SpawnEgg",
   "entity.maidmodredo.wandermaid": "WanderMaid",
   "item.maidmodredo.setbed": "Selected BedPostion: %s, %s, %s",
-  "item.maidmodredo.setmaidbed": "Successed Setting Maid's BedPostion: %s, %s, %s"
+  "item.maidmodredo.setmaidbed": "Successed Setting Maid's BedPostion: %s, %s, %s",
+  "item.maidmodredo.set_jobpostion": "Selected JobPostion: %s, %s, %s",
+  "item.maidmodredo.setmaid_jobpostion": "Successed Setting Maid's JobPostion: %s, %s, %s"
 }

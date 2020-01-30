@@ -79,10 +79,10 @@ public class EntityCaps extends EntityCapsLiving {
             case caps_healthFloat:
                 return owner.getHealth();
             /*case caps_isBloodsuck:
-                return owner.isBloodsuck();
+                return owner.isBloodsuck();*/
             case caps_isFreedom:
                 return owner.isFreedom();
-            case caps_isTracer:
+            /*case caps_isTracer:
                 return owner.isTracer();
             case caps_isPlaying:
                 return owner.isPlaying();

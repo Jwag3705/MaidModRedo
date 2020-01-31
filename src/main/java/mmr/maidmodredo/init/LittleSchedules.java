@@ -15,6 +15,10 @@ public class LittleSchedules {
     public static final Schedule WAITING = new ScheduleBuilder(new Schedule()).add(0, LittleActivitys.WAITING).build();
     public static final Schedule LITTLEMAID_WORK = new ScheduleBuilder(new Schedule()).add(10, Activity.IDLE).add(2000, Activity.WORK).add(11000, Activity.IDLE).add(12000, Activity.REST).build();
 
+    /*
+     * manage the maid schedule here
+     * performs a certain activity at a certain time
+     */
 
     @SubscribeEvent
     public static void registerSchedule(RegistryEvent.Register<Schedule> event) {

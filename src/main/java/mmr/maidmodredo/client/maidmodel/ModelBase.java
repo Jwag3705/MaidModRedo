@@ -26,6 +26,8 @@ public abstract class ModelBase<T extends LivingEntity> extends AbstractModelBas
 	//カスタム設定
 	public boolean motionSitting = false;
 
+    public MaidModelAnimator animator = MaidModelAnimator.create();
+
 
 	// ModelBase互換関数群
 

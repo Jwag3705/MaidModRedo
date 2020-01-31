@@ -35,7 +35,7 @@ public class MaidJob {
     private final String name;
     private final PointOfInterestType pointOfInterest;
     private final Predicate<ItemStack> field_221168_r;
-    private Schedule schedule;
+    private Schedule schedule = LittleSchedules.LITTLEMAID_WORK;
 
     public MaidJob(String nameIn, PointOfInterestType pointOfInterestIn, Predicate<ItemStack> p_i50179_3_) {
         this.name = nameIn;
@@ -64,6 +64,10 @@ public class MaidJob {
         return schedule;
     }
 
+    /*
+     * manage the maid job here
+     * Change the schedule according to the job (or status (?))
+     */
     public static void init() {
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "wild"), WILD);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "normal"), NORMAL);

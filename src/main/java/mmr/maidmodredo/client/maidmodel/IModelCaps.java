@@ -156,6 +156,7 @@ public interface IModelCaps {
 	//カスタム追加分
 	//お座りモーション
 	public static final int caps_motionSitting      = 0x0401;
+    public static final int caps_animation = 0x0402;
 
 	/**
 	 * モデルが実装している機能をリストに入れて返す。

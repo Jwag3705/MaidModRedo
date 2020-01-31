@@ -7,6 +7,8 @@ import com.google.common.collect.Sets;
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.util.Pair;
 import mmr.maidmodredo.MaidModRedo;
+import mmr.maidmodredo.api.IMaidAnimation;
+import mmr.maidmodredo.api.MaidAnimation;
 import mmr.maidmodredo.client.maidmodel.*;
 import mmr.maidmodredo.entity.data.MaidData;
 import mmr.maidmodredo.entity.tasks.MaidTasks;
@@ -45,10 +47,7 @@ import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -69,7 +68,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiPredicate;
 
-public class LittleMaidEntity extends TameableEntity implements IModelCaps, IModelEntity {
+public class LittleMaidEntity extends TameableEntity implements IModelCaps, IModelEntity, IMaidAnimation {
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.PATH, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.field_225462_q, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WORKED_AT_POI);
     private static final ImmutableList<SensorType<? extends Sensor<? super LittleMaidEntity>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.INTERACTABLE_DOORS, SensorType.NEAREST_BED, SensorType.HURT_BY, LittleSensorTypes.MAID_HOSTILES, LittleSensorTypes.DEFEND_OWNER);
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<LittleMaidEntity, PointOfInterestType>> field_213774_bB = ImmutableMap.of(MemoryModuleType.HOME, (p_213769_0_, p_213769_1_) -> {
@@ -81,6 +80,15 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
     private InventoryMaidMain inventoryMaidMain;
     private InventoryMaidEquipment inventoryMaidEquipment;
+
+    private int animationTick;
+    private MaidAnimation animation = NO_ANIMATION;
+
+    public static final MaidAnimation TALK_ANIMATION = MaidAnimation.create(100);
+
+    private static final MaidAnimation[] ANIMATIONS = {
+            TALK_ANIMATION
+    };
 
     public ModelConfigCompound textureData;
     public EntityCaps maidCaps;
@@ -201,6 +209,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
             p_213744_1_.setSchedule(LittleSchedules.WAITING);
             p_213744_1_.registerActivity(LittleActivitys.WAITING, MaidTasks.waiting());
         } else {
+            //If it is not a specific action, set the schedule set in job
             if (this.getMaidData() != null) {
                 p_213744_1_.setSchedule(this.getMaidData().getJob().getSchedule());
             }
@@ -702,6 +711,16 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
         textureData.onUpdate();
 
+        if (this.getAnimation() != IMaidAnimation.NO_ANIMATION) {
+            if (this.getAnimationTick() == 0) {
+            }
+            this.setAnimationTick(this.getAnimationTick() + 1);
+            if (this.getAnimationTick() >= this.getAnimation().getDuration()) {
+                this.onAnimationFinish(this.getAnimation());
+                this.resetPlayingAnimationToDefault();
+            }
+        }
+
         if (getEntityWorld().isRemote) {
 
             // クライアント側
@@ -1075,6 +1094,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                         this.setAttackTarget((LivingEntity) null);
                         this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
                         getEntityWorld().setEntityState(this, (byte) 11);
+                        //MaidPacketHandler.animationModel(this, TALK_ANIMATION);
                     }
                     this.addContractLimit(false);
                     return true;
@@ -1108,6 +1128,12 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         }
 
         return super.processInteract(player, hand);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return super.getAmbientSound();
     }
 
     public boolean updateMaidContract() {
@@ -1264,5 +1290,42 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     @Override
     public boolean setCapsValue(int pIndex, Object... pArg) {
         return maidCaps.setCapsValue(pIndex, pArg);
+    }
+
+    public void resetPlayingAnimationToDefault() {
+        this.setAnimation(IMaidAnimation.NO_ANIMATION);
+    }
+
+    protected void onAnimationFinish(MaidAnimation animation) {
+    }
+
+    @Override
+    public int getAnimationTick() {
+        return this.animationTick;
+    }
+
+    @Override
+    public void setAnimationTick(int tick) {
+        this.animationTick = tick;
+    }
+
+    @Override
+    public MaidAnimation getAnimation() {
+        return this.animation;
+    }
+
+    @Override
+    public void setAnimation(MaidAnimation animation) {
+        if (animation == NO_ANIMATION) {
+            onAnimationFinish(this.animation);
+        }
+        this.animation = animation;
+
+        setAnimationTick(0);
+    }
+
+    @Override
+    public MaidAnimation[] getAnimations() {
+        return ANIMATIONS;
     }
 }

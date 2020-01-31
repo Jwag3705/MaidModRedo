@@ -41,6 +41,7 @@ public class EntityCaps extends EntityCapsLiving {
         caps.put("mountedYOffset", caps_mountedYOffset);
         caps.put("dominantArm", caps_dominantArm);
         caps.put("render", caps_render);
+        caps.put("animation", caps_animation);
         caps.put("Arms", caps_Arms);
         caps.put("HeadMount", caps_HeadMount);
         caps.put("HardPoint", caps_HardPoint);
@@ -133,6 +134,8 @@ public class EntityCaps extends EntityCapsLiving {
 //		case caps_mountedYOffset:
 //			return owner.textureModel0 == null ? null : owner.textureModel0.getHeight();
 //		case caps_render:
+            case caps_animation:
+                return owner.getAnimation();
 //		case caps_Arms:
           /*  case caps_HeadMount:
                 // TODO 従来HeadMountとか使ってた部分は全部削除した方がすっきりすると思う．

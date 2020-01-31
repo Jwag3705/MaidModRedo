@@ -114,7 +114,7 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
         int ii = mouseX - guiLeft;
         int jj = mouseY - guiTop;
 
-        if (maidinventory.getLittleMaidEntity().canChangeModel() && ii > 7 && ii < 96 && jj > 7 && jj < 60) {
+        if (maidinventory.getLittleMaidEntity().canChangeModel() && ii > 7 && ii < 96 && jj > 7 && jj < 70) {
             // ボタンの表示
             txbutton[0].visible = true;
             txbutton[1].visible = true;

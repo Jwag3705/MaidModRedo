@@ -129,8 +129,8 @@ public class EntityCaps extends EntityCapsLiving {
                 return owner.textureData.textureBox[0] == null ? null : owner.textureData.textureBox[0].getYOffset(this);
             case caps_mountedYOffset:
                 return owner.textureData.textureBox[0] == null ? null : owner.textureData.textureBox[0].getMountedYOffset(this);
-            /*case caps_dominantArm:
-                return owner.getDominantArm();*/
+            case caps_dominantArm:
+                return owner.getPrimaryHand().ordinal();
 //		case caps_mountedYOffset:
 //			return owner.textureModel0 == null ? null : owner.textureModel0.getHeight();
 //		case caps_render:

@@ -14,6 +14,8 @@ import mmr.maidmodredo.utils.FileList;
 import mmr.maidmodredo.utils.ModelManager;
 import mmr.maidmodredo.utils.manager.StabilizerManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -105,6 +107,10 @@ public class MaidModRedo
 
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+
+        if (event.getEntity() instanceof AbstractIllagerEntity) {
+            ((AbstractIllagerEntity) event.getEntity()).targetSelector.addGoal(1, new NearestAttackableTargetGoal(((AbstractIllagerEntity) event.getEntity()), LittleMaidEntity.class, true));
+        }
 
         if (event.getEntity() instanceof LittleMaidEntity) {
             LittleMaidEntity maid = (LittleMaidEntity) event.getEntity();

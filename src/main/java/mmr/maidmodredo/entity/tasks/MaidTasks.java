@@ -45,8 +45,13 @@ public class MaidTasks {
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> attack(float p_220636_1_) {
-        float f = p_220636_1_ * 1.5F;
-        return ImmutableList.of(Pair.of(0, new MaidClearAttackTask()), Pair.of(1, new AttackTask(MemoryModuleType.NEAREST_HOSTILE, f)), Pair.of(1, new AttackTask(MemoryModuleType.HURT_BY_ENTITY, f)), func_220646_b());
+        float f = p_220636_1_ * 1.25F;
+        return ImmutableList.of(Pair.of(0, new MaidClearAttackTask()), Pair.of(1, new AttackTask(MemoryModuleType.HURT_BY_ENTITY, f)), Pair.of(2, new AttackTask(MemoryModuleType.NEAREST_HOSTILE, f)), func_220646_b());
+    }
+
+    public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> shot(float p_220636_1_) {
+        float f = p_220636_1_ * 1.2F;
+        return ImmutableList.of(Pair.of(0, new MaidClearAttackTask()), Pair.of(1, new BowShootTask(MemoryModuleType.HURT_BY_ENTITY, f)), Pair.of(2, new BowShootTask(MemoryModuleType.NEAREST_HOSTILE, f)), func_220646_b());
     }
 
     private static Pair<Integer, Task<LivingEntity>> func_220643_a() {

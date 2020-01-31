@@ -22,7 +22,7 @@ public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
 
     protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
         Brain<?> brain = entityIn.getBrain();
-        if(!brain.hasActivity(LittleActivitys.ATTACK)) {
+        if (!brain.hasActivity(LittleActivitys.ATTACK) || !brain.hasActivity(LittleActivitys.SHOT)) {
             if (func_220512_b(entityIn) || func_220513_a(entityIn)) {
                 if (entityIn.getMaidData().getJob() == MaidJob.FENCER && entityIn.isTamed() && !entityIn.isMaidWait()) {
                     if (!brain.hasActivity(LittleActivitys.ATTACK)) {
@@ -32,6 +32,15 @@ public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
                         brain.removeMemory(MemoryModuleType.INTERACTION_TARGET);
                     }
                     brain.switchTo(LittleActivitys.ATTACK);
+
+                } else if (entityIn.getMaidData().getJob() == MaidJob.ARCHER && entityIn.isTamed() && !entityIn.isMaidWait()) {
+                    if (!brain.hasActivity(LittleActivitys.SHOT)) {
+                        brain.removeMemory(MemoryModuleType.PATH);
+                        brain.removeMemory(MemoryModuleType.WALK_TARGET);
+                        brain.removeMemory(MemoryModuleType.LOOK_TARGET);
+                        brain.removeMemory(MemoryModuleType.INTERACTION_TARGET);
+                    }
+                    brain.switchTo(LittleActivitys.SHOT);
 
                 } else if (func_220513_a(entityIn) && !entityIn.isTamed()) {
                     if (!brain.hasActivity(Activity.PANIC)) {

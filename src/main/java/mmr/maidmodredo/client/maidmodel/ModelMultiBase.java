@@ -3,6 +3,8 @@ package mmr.maidmodredo.client.maidmodel;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,11 +67,12 @@ public abstract class ModelMultiBase<T extends LivingEntity> extends ModelBase<T
 
 //			LittleMaidReengaged.Debug("ModelMulti.InitClient");
         // ハードポイント
-        Arms = new RendererModel[2];
-        HeadMount = new RendererModel(this, "HeadMount");
-        HeadTop = new RendererModel(this, "HeadTop");
-
-        initModel(pSizeAdjust, pYOffset);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            Arms = new RendererModel[2];
+            HeadMount = new RendererModel(this, "HeadMount");
+            HeadTop = new RendererModel(this, "HeadTop");
+            initModel(pSizeAdjust, pYOffset);
+        }
 
     }
 

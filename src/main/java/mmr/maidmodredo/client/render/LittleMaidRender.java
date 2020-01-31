@@ -227,7 +227,7 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
                 }
 
                 // Forge: moved this call down, fixes incorrect offset while sneaking.
-                modelMain.model.Arms[i].postRender(0.0625F);
+                modelMain.model.Arms[i].render(0.0625F);
 
                 GlStateManager.rotatef(-90.0F, 1.0F, 0.0F, 0.0F);
                 GlStateManager.rotatef(180.0F, 0.0F, 1.0F, 0.0F);
@@ -269,15 +269,13 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
         modelMain.setCapsValue(IModelCaps.caps_isChild, lmaid.isChild());
         modelMain.setCapsValue(IModelCaps.caps_entityIdFactor, lmaid.entityIdFactor);
         modelMain.setCapsValue(IModelCaps.caps_ticksExisted, lmaid.ticksExisted);
-        //modelMain.setCapsValue(IModelCaps.caps_dominantArm, lmaid.getDominantArm());
+        modelMain.setCapsValue(IModelCaps.caps_dominantArm, lmaid.getPrimaryHand().ordinal());
 
         //カスタム設定
         //modelMain.setCapsValue(IModelCaps.caps_motionSitting, lmaid.isMotionSitting());
 
         modelFATT.setModelAttributes(entityModel);
         modelMain.setModelAttributes(entityModel);
-
-        entityModel = modelMain;
         // だが無意味だ
 //		plittleMaid.textureModel0.isChild = plittleMaid.textureModel1.isChild = plittleMaid.textureModel2.isChild = plittleMaid.isChild();
     }

@@ -5,10 +5,12 @@ import mmr.maidmodredo.entity.LittleMaidEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.server.ServerWorld;
 
@@ -18,7 +20,7 @@ public class AttackTask extends Task<LittleMaidEntity> {
     protected int attackTick;
 
     public AttackTask(MemoryModuleType<? extends Entity> p_i50346_1_, float p_i50346_2_) {
-        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT, p_i50346_1_, MemoryModuleStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.VALUE_ABSENT, p_i50346_1_, MemoryModuleStatus.VALUE_PRESENT));
         this.field_220541_a = p_i50346_1_;
         this.field_220542_b = p_i50346_2_;
     }
@@ -27,7 +29,7 @@ public class AttackTask extends Task<LittleMaidEntity> {
         Entity entity = owner.getBrain().getMemory(this.field_220541_a).get();
         double d0 = getTargetDistance(owner);
 
-        return !isYourFriend(owner) && !isYourOwner(owner) && owner.getDistanceSq(entity) < d0;
+        return !isYourFriend(owner) && !isYourOwner(owner) && owner.getDistanceSq(entity) < d0 * d0;
     }
 
     private boolean isYourOwner(LittleMaidEntity entityIn) {
@@ -48,7 +50,7 @@ public class AttackTask extends Task<LittleMaidEntity> {
             Entity entity = entityIn.getBrain().getMemory(this.field_220541_a).get();
             if (entityIn.isAlive() && entity != null) {
                 double d0 = getTargetDistance(entityIn);
-                return entity.getDistanceSq(entity) < d0 * 1.15f;
+                return entityIn.getDistanceSq(entity) < d0 * d0 * 1.15f;
             } else {
                 return false;
             }
@@ -65,8 +67,16 @@ public class AttackTask extends Task<LittleMaidEntity> {
     protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
         Entity entity = entityIn.getBrain().getMemory(this.field_220541_a).get();
         setWalk(entityIn, entity, this.field_220542_b);
+        Brain<?> brain = entityIn.getBrain();
+        brain.setMemory(MemoryModuleType.LOOK_TARGET, new EntityPosWrapper(entity));
     }
 
+    @Override
+    protected void resetTask(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+        super.resetTask(worldIn, entityIn, gameTimeIn);
+        Brain<?> brain = entityIn.getBrain();
+        brain.removeMemory(MemoryModuleType.LOOK_TARGET);
+    }
 
     @Override
     protected void updateTask(ServerWorld worldIn, LittleMaidEntity owner, long gameTime) {

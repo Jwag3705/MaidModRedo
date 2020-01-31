@@ -2,6 +2,7 @@ package mmr.maidmodredo.init;
 
 import mmr.maidmodredo.MaidModRedo;
 import net.minecraft.entity.ai.brain.schedule.Schedule;
+import net.minecraft.item.BowItem;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
@@ -26,6 +27,9 @@ public class MaidJob {
     }).setSchedule(LittleSchedules.FREEDOM);
     public static final MaidJob FENCER = new MaidJob("fencer", PointOfInterestType.UNEMPLOYED, (item) -> {
         return item.getItem() instanceof SwordItem;
+    }).setSchedule(LittleSchedules.LITTLEMAID_WORK);
+    public static final MaidJob ARCHER = new MaidJob("archer", PointOfInterestType.UNEMPLOYED, (item) -> {
+        return item.getItem() instanceof BowItem;
     }).setSchedule(LittleSchedules.LITTLEMAID_WORK);
     public static final MaidJob FARMER = new MaidJob("farmer", PointOfInterestType.UNEMPLOYED, (item) -> {
         return item.getItem() instanceof HoeItem;
@@ -72,6 +76,7 @@ public class MaidJob {
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "wild"), WILD);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "normal"), NORMAL);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "fencer"), FENCER);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "archer"), ARCHER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "farmer"), FARMER);
     }
 

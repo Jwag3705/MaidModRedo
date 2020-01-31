@@ -1,6 +1,9 @@
 package mmr.maidmodredo.client.render;
 
-import mmr.maidmodredo.client.maidmodel.*;
+import mmr.maidmodredo.client.maidmodel.IModelCaps;
+import mmr.maidmodredo.client.maidmodel.ModelBase;
+import mmr.maidmodredo.client.maidmodel.ModelBaseDuo;
+import mmr.maidmodredo.client.maidmodel.ModelBaseSolo;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -55,10 +58,10 @@ public class ModelMultiRender<T extends LittleMaidEntity> extends MobRenderer<T,
         modelMain.model = par1EntityLiving.getModelConfigCompound().textureModel[0];
         modelFATT.modelInner = par1EntityLiving.getModelConfigCompound().textureModel[1];
         modelFATT.modelOuter = par1EntityLiving.getModelConfigCompound().textureModel[2];
-        modelMain.model = ((TextureBox) par1EntityLiving.getTextureBox()[0]).models[0];
+        //modelMain.model = ((TextureBox) par1EntityLiving.getTextureBox()[0]).models[0];
         modelMain.textures = par1EntityLiving.getTextures(0);
-        modelFATT.modelInner = ((TextureBox) par1EntityLiving.getTextureBox()[1]).models[1];
-        modelFATT.modelOuter = ((TextureBox) par1EntityLiving.getTextureBox()[1]).models[2];
+        //modelFATT.modelInner = ((TextureBox) par1EntityLiving.getTextureBox()[1]).models[1];
+        //modelFATT.modelOuter = ((TextureBox) par1EntityLiving.getTextureBox()[1]).models[2];
         modelFATT.textureInner = par1EntityLiving.getTextures(1);
         modelFATT.textureOuter = par1EntityLiving.getTextures(2);
         modelFATT.textureInnerLight = par1EntityLiving.getTextures(3);

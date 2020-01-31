@@ -16,7 +16,7 @@ public class MaidClearAttackTask extends Task<LittleMaidEntity> {
 
     @Override
     protected boolean shouldExecute(ServerWorld worldIn, LittleMaidEntity entityIn) {
-        return !func_220394_a(entityIn) || !PanicTask.func_220513_a(entityIn) || !PanicTask.func_220512_b(entityIn) || isYourOwner(entityIn) || isYourFriend(entityIn);
+        return !hasNearestMemory(entityIn) && !func_220394_a(entityIn) || !PanicTask.func_220513_a(entityIn) && !PanicTask.func_220512_b(entityIn) || isYourOwner(entityIn) || isYourFriend(entityIn);
     }
 
     private boolean isYourOwner(LittleMaidEntity entityIn) {
@@ -39,7 +39,7 @@ public class MaidClearAttackTask extends Task<LittleMaidEntity> {
     }
 
     protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
-
+        entityIn.getBrain().removeMemory(MemoryModuleType.NEAREST_HOSTILE);
         entityIn.getBrain().removeMemory(MemoryModuleType.HURT_BY);
         entityIn.getBrain().removeMemory(MemoryModuleType.HURT_BY_ENTITY);
         entityIn.getBrain().updateActivity(worldIn.getDayTime(), worldIn.getGameTime());
@@ -48,6 +48,14 @@ public class MaidClearAttackTask extends Task<LittleMaidEntity> {
     private boolean func_220394_a(LittleMaidEntity p_220394_0_) {
         double d0 = getTargetDistance(p_220394_0_) * 1.15F;
         return p_220394_0_.getBrain().getMemory(MemoryModuleType.HURT_BY_ENTITY).filter((p_223523_1_) -> {
+
+            return p_223523_1_.getDistanceSq(p_220394_0_) <= d0 * d0;
+        }).isPresent();
+    }
+
+    private boolean hasNearestMemory(LittleMaidEntity p_220394_0_) {
+        double d0 = getTargetDistance(p_220394_0_) * 1.15F;
+        return p_220394_0_.getBrain().getMemory(MemoryModuleType.NEAREST_HOSTILE).filter((p_223523_1_) -> {
 
             return p_223523_1_.getDistanceSq(p_220394_0_) <= d0 * d0;
         }).isPresent();

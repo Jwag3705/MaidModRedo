@@ -1,15 +1,17 @@
 package mmr.maidmodredo.client.maidmodel;
 
 import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.model.IHasArm;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class ModelBase<T extends LivingEntity> extends AbstractModelBase<T> {
+public abstract class ModelBase<T extends LivingEntity> extends AbstractModelBase<T> implements IHasArm {
 	
 	public static final float PI = (float)Math.PI;
 
@@ -101,4 +103,8 @@ public abstract class ModelBase<T extends LivingEntity> extends AbstractModelBas
 		return MathHelper.getInt(random, i, j);
 	}*/
 
+    @Override
+    public void postRenderArm(float scale, HandSide side) {
+
+    }
 }

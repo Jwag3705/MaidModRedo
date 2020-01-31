@@ -5,6 +5,8 @@ import com.google.common.collect.ImmutableSet;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.monster.IMob;
@@ -61,8 +63,13 @@ public class MaidHostilesSensor extends Sensor<LittleMaidEntity> {
         return p_220987_2_.getDistanceSq(p_220987_1_) <= (double)(f * f);
     }
 
+    protected double getTargetDistance(LittleMaidEntity entity) {
+        IAttributeInstance iattributeinstance = entity.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
+        return iattributeinstance == null ? 16.0D : iattributeinstance.getValue();
+    }
+
     private boolean attackMobDistance(LittleMaidEntity p_220987_1_, LivingEntity p_220987_2_) {
-        float f = 15;
+        double f = getTargetDistance(p_220987_1_);
         return p_220987_2_.getDistanceSq(p_220987_1_) <= (double) (f * f);
     }
 

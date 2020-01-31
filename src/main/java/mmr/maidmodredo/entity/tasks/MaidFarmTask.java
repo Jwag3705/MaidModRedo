@@ -91,6 +91,11 @@ public class MaidFarmTask extends Task<LittleMaidEntity> {
         return block instanceof CropsBlock && ((CropsBlock) block).isMaxAge(blockstate) && this.field_220424_c || blockstate.isAir() && block1 instanceof FarmlandBlock && this.field_220423_b;
     }
 
+    @Override
+    protected boolean isTimedOut(long gameTime) {
+        return false;
+    }
+
     protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
         if (gameTimeIn > this.field_220425_d && this.field_220422_a != null) {
             entityIn.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new BlockPosWrapper(this.field_220422_a));

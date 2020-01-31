@@ -326,20 +326,6 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
                 animator.endKeyframe();
                 animator.setStaticKeyframe(45);
                 animator.resetKeyframe(10);
-            } else if (((IMaidAnimation) entity).getAnimation() == LittleMaidEntity.SHOOT_ANIMATION) {
-
-                animator.setAnimation(LittleMaidEntity.SHOOT_ANIMATION);
-                animator.startKeyframe(5);
-
-                this.bipedRightArm.setRotateAngleZ(0.0F);
-                this.bipedLeftArm.setRotateAngleZ(0.0F);
-
-                animator.rotate(this.bipedRightArm, -1.4F, 0, 0);
-                animator.rotate(this.bipedLeftArm, -1.4F, 0, 0);
-                animator.endKeyframe();
-
-                animator.setStaticKeyframe(5);
-                animator.resetKeyframe(5);
             }
         }
     }

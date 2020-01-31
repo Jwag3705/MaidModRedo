@@ -73,7 +73,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public class LittleMaidEntity extends TameableEntity implements IModelCaps, IModelEntity, IMaidAnimation {
-    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.PATH, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.field_225462_q, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WORKED_AT_POI);
+    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.PATH, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.field_225462_q, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MaidMemoryModuleType.TARGET_HOSTILES, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WORKED_AT_POI);
     private static final ImmutableList<SensorType<? extends Sensor<? super LittleMaidEntity>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.INTERACTABLE_DOORS, SensorType.NEAREST_BED, SensorType.HURT_BY, LittleSensorTypes.MAID_HOSTILES, LittleSensorTypes.DEFEND_OWNER);
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<LittleMaidEntity, PointOfInterestType>> field_213774_bB = ImmutableMap.of(MemoryModuleType.HOME, (p_213769_0_, p_213769_1_) -> {
         return p_213769_1_ == PointOfInterestType.HOME;
@@ -89,11 +89,9 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     private MaidAnimation animation = NO_ANIMATION;
 
     public static final MaidAnimation TALK_ANIMATION = MaidAnimation.create(100);
-    public static final MaidAnimation SHOOT_ANIMATION = MaidAnimation.create(100);
 
     private static final MaidAnimation[] ANIMATIONS = {
-            TALK_ANIMATION,
-            SHOOT_ANIMATION
+            TALK_ANIMATION
     };
 
     public ModelConfigCompound textureData;
@@ -720,11 +718,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         textureData.onUpdate();
 
         if (this.getAnimation() != IMaidAnimation.NO_ANIMATION) {
-            if (this.getAnimation() == SHOOT_ANIMATION && this.isAggressive() && this.getAnimationTick() <= 5) {
+            this.setAnimationTick(this.getAnimationTick() + 1);
 
-            } else {
-                this.setAnimationTick(this.getAnimationTick() + 1);
-            }
             if (this.getAnimationTick() >= this.getAnimation().getDuration()) {
                 this.onAnimationFinish(this.getAnimation());
                 this.resetPlayingAnimationToDefault();
@@ -801,6 +796,10 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         }
 
         super.tick();
+    }
+
+    public boolean isShooting() {
+        return isAggressive() && getHeldItem(Hand.MAIN_HAND).getItem() instanceof BowItem;
     }
 
     @Nullable
@@ -1350,7 +1349,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         double d1 = target.getBoundingBox().minY + (double) (target.getHeight() / 3.0F) - abstractarrowentity.posY;
         double d2 = target.posZ - this.posZ;
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-        abstractarrowentity.shoot(d0, d1 + d3 * (double) 0.2F, d2, distanceFactor, (float) (1.0F));
+        abstractarrowentity.shoot(d0, d1 + d3 * (double) 0.2F, d2, distanceFactor * 1.52F, (float) (1.0F));
         itemstack.shrink(1);
         this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
         this.world.addEntity(abstractarrowentity);
@@ -1365,7 +1364,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
             if (!itemstack.isEmpty()) {
                 return itemstack;
             } else {
-
+                predicate = ((ShootableItem) shootable.getItem()).getInventoryAmmoPredicate();
                 for (int i = 0; i < this.getInventoryMaidMain().getSizeInventory(); ++i) {
                     ItemStack itemstack1 = this.getInventoryMaidMain().getStackInSlot(i);
                     if (predicate.test(itemstack1)) {

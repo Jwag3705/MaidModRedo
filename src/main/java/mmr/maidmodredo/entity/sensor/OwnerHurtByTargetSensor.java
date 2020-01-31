@@ -1,9 +1,7 @@
 package mmr.maidmodredo.entity.sensor;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import mmr.maidmodredo.entity.LittleMaidEntity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
@@ -13,8 +11,6 @@ import java.util.Optional;
 import java.util.Set;
 
 public class OwnerHurtByTargetSensor extends Sensor<LittleMaidEntity> {
-    private static final ImmutableMap<EntityType<?>, Float> field_220991_b = ImmutableMap.<EntityType<?>, Float>builder().put(EntityType.DROWNED, 8.0F).put(EntityType.EVOKER, 12.0F).put(EntityType.HUSK, 8.0F).put(EntityType.ILLUSIONER, 12.0F).put(EntityType.PILLAGER, 15.0F).put(EntityType.RAVAGER, 12.0F).put(EntityType.VEX, 8.0F).put(EntityType.VINDICATOR, 10.0F).put(EntityType.ZOMBIE, 8.0F).put(EntityType.ZOMBIE_VILLAGER, 8.0F).build();
-
     public Set<MemoryModuleType<?>> getUsedMemories() {
         return ImmutableSet.of(MemoryModuleType.NEAREST_HOSTILE);
     }

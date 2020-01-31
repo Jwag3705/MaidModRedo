@@ -42,6 +42,7 @@ public class EntityCaps extends EntityCapsLiving {
         caps.put("dominantArm", caps_dominantArm);
         caps.put("render", caps_render);
         caps.put("animation", caps_animation);
+        caps.put("isShooting", caps_aimedBow);
         caps.put("Arms", caps_Arms);
         caps.put("HeadMount", caps_HeadMount);
         caps.put("HardPoint", caps_HardPoint);
@@ -136,6 +137,8 @@ public class EntityCaps extends EntityCapsLiving {
 //		case caps_render:
             case caps_animation:
                 return owner.getAnimation();
+            case caps_aimedBow:
+                return owner.isShooting();
 //		case caps_Arms:
           /*  case caps_HeadMount:
                 // TODO 従来HeadMountとか使ってた部分は全部削除した方がすっきりすると思う．

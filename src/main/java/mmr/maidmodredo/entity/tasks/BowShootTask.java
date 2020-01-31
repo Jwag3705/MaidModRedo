@@ -2,7 +2,6 @@ package mmr.maidmodredo.entity.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import mmr.maidmodredo.entity.LittleMaidEntity;
-import mmr.maidmodredo.network.MaidPacketHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -14,8 +13,9 @@ import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.item.BowItem;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.world.server.ServerWorld;
+
+import java.util.Optional;
 
 public class BowShootTask extends Task<LittleMaidEntity> {
     private final MemoryModuleType<? extends Entity> field_220541_a;
@@ -27,7 +27,7 @@ public class BowShootTask extends Task<LittleMaidEntity> {
     private int strafingTime = -1;
 
     public BowShootTask(MemoryModuleType<? extends Entity> p_i50346_1_, float p_i50346_2_) {
-        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.VALUE_ABSENT, p_i50346_1_, MemoryModuleStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(p_i50346_1_, MemoryModuleStatus.VALUE_PRESENT));
         this.field_220541_a = p_i50346_1_;
         this.field_220542_b = p_i50346_2_;
     }
@@ -52,10 +52,15 @@ public class BowShootTask extends Task<LittleMaidEntity> {
         return false;
     }
 
+    @Override
+    protected boolean isTimedOut(long gameTime) {
+        return false;
+    }
+
     protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
         if (entityIn.getBrain().getMemory(this.field_220541_a).isPresent()) {
             Entity entity = entityIn.getBrain().getMemory(this.field_220541_a).get();
-            if (entityIn.isAlive() && entity != null) {
+            if (entity != null && entity.isAlive()) {
                 double d0 = getTargetDistance(entityIn) * getTargetDistance(entityIn);
                 return entityIn.getDistanceSq(entity) < d0 * 1.2f && entityIn.getHeldItem(Hand.MAIN_HAND).getItem() instanceof BowItem && !entityIn.findAmmo(entityIn.getHeldItem(Hand.MAIN_HAND)).isEmpty();
             } else {
@@ -74,7 +79,8 @@ public class BowShootTask extends Task<LittleMaidEntity> {
         entityIn.setAggroed(false);
         entityIn.resetActiveHand();
         Brain<?> brain = entityIn.getBrain();
-        brain.removeMemory(MemoryModuleType.LOOK_TARGET);
+        entityIn.getBrain().removeMemory(this.field_220541_a);
+        brain.updateActivity(worldIn.getDayTime(), worldIn.getGameTime());
     }
 
     protected double getTargetDistance(LittleMaidEntity entity) {
@@ -83,12 +89,8 @@ public class BowShootTask extends Task<LittleMaidEntity> {
     }
 
     protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
-        Entity entity = entityIn.getBrain().getMemory(this.field_220541_a).get();
 
-        MaidPacketHandler.animationModel(entityIn, LittleMaidEntity.SHOOT_ANIMATION);
         entityIn.setAggroed(true);
-        Brain<?> brain = entityIn.getBrain();
-        brain.setMemory(MemoryModuleType.LOOK_TARGET, new EntityPosWrapper(entity));
     }
 
 
@@ -98,15 +100,18 @@ public class BowShootTask extends Task<LittleMaidEntity> {
         if (entity != null && entity instanceof LivingEntity) {
             double d0 = owner.getDistanceSq(entity.posX, entity.getBoundingBox().minY, entity.posZ);
 
-
-            Brain<?> brain = owner.getBrain();
-
-            boolean flag = brain.getMemory(MemoryModuleType.VISIBLE_MOBS).filter((p_220517_2_) -> {
-                return owner.getDistanceSq(entity) <= (double) getTargetDistance(owner) * getTargetDistance(owner);
-            }).isPresent();
-
+            boolean flag = owner.getEntitySenses().canSee(entity);
 
             boolean flag1 = this.seeTime > 0;
+
+            Brain<?> brain = owner.getBrain();
+            boolean flag2 = owner.getNavigator().getPath() != null && owner.getNavigator().getPath().func_224771_h();
+            if (flag) {
+                brain.setMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, Optional.empty());
+            } else if (!brain.hasMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE)) {
+                brain.setMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, worldIn.getGameTime());
+            }
+
             if (flag != flag1) {
                 this.seeTime = 0;
             }
@@ -117,34 +122,44 @@ public class BowShootTask extends Task<LittleMaidEntity> {
                 --this.seeTime;
             }
 
-            if (!(d0 > (double) getTargetDistance(owner) * getTargetDistance(owner)) && this.seeTime >= 20) {
-                owner.getNavigator().clearPath();
-                ++this.strafingTime;
+            if (!flag2) {
+                if (!(d0 > (double) getTargetDistance(owner) * getTargetDistance(owner)) && this.seeTime >= 20) {
+                    owner.getNavigator().clearPath();
+                    ++this.strafingTime;
+                } else {
+                    owner.getNavigator().tryMoveToEntityLiving(entity, this.field_220542_b);
+                    this.strafingTime = -1;
+                }
+
+                if (this.strafingTime >= 20) {
+                    if ((double) owner.getRNG().nextFloat() < 0.3D) {
+                        this.strafingClockwise = !this.strafingClockwise;
+                    }
+
+                    if ((double) owner.getRNG().nextFloat() < 0.3D) {
+                        this.strafingBackwards = !this.strafingBackwards;
+                    }
+
+                    this.strafingTime = 0;
+                }
+
+                if (this.strafingTime > -1) {
+                    if (d0 > (double) (getTargetDistance(owner) * getTargetDistance(owner) * 0.9F)) {
+                        this.strafingBackwards = false;
+                    } else if (d0 < (double) (getTargetDistance(owner) * getTargetDistance(owner) * 0.75F)) {
+                        this.strafingBackwards = true;
+                    }
+
+                    owner.getMoveHelper().strafe(this.strafingBackwards ? -0.45F : 0.45F, this.strafingClockwise ? 0.45F : -0.45F);
+                    owner.faceEntity(entity, 40.0F, 40.0F);
+                } else {
+                    owner.getLookController().setLookPositionWithEntity(entity, 40.0F, 40.0F);
+                }
             } else {
-                owner.getNavigator().tryMoveToEntityLiving(entity, this.field_220542_b);
+                owner.getLookController().setLookPositionWithEntity(entity, 40.0F, 40.0F);
                 this.strafingTime = -1;
             }
 
-            if (this.strafingTime >= 20) {
-                if ((double) owner.getRNG().nextFloat() < 0.3D) {
-                    this.strafingClockwise = !this.strafingClockwise;
-                }
-
-                if ((double) owner.getRNG().nextFloat() < 0.3D) {
-                    this.strafingBackwards = !this.strafingBackwards;
-                }
-
-                this.strafingTime = 0;
-            }
-
-            if (this.strafingTime > -1) {
-                if (d0 > (double) (getTargetDistance(owner) * getTargetDistance(owner) * 0.85F)) {
-                    this.strafingBackwards = false;
-                } else if (d0 < (double) (getTargetDistance(owner) * getTargetDistance(owner) * 0.6F)) {
-                    this.strafingBackwards = true;
-                }
-                owner.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
-            }
 
             if (owner.isHandActive()) {
                 if (!flag && this.seeTime < -60) {
@@ -154,7 +169,7 @@ public class BowShootTask extends Task<LittleMaidEntity> {
                     if (i >= 20) {
                         owner.resetActiveHand();
                         owner.attackEntityWithRangedAttack((LivingEntity) entity, BowItem.getArrowVelocity(i));
-                        this.attackTick = 60;
+                        this.attackTick = 40;
                     }
                 }
             } else if (--this.attackTick <= 0 && this.seeTime >= -60) {

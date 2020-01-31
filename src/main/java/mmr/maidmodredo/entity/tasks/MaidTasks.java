@@ -6,6 +6,7 @@ import com.mojang.datafixers.util.Pair;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import mmr.maidmodredo.init.LittleEntitys;
 import mmr.maidmodredo.init.MaidJob;
+import mmr.maidmodredo.init.MaidMemoryModuleType;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -46,12 +47,12 @@ public class MaidTasks {
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> attack(float p_220636_1_) {
         float f = p_220636_1_ * 1.25F;
-        return ImmutableList.of(Pair.of(0, new MaidClearAttackTask()), Pair.of(1, new AttackTask(MemoryModuleType.HURT_BY_ENTITY, f)), Pair.of(2, new AttackTask(MemoryModuleType.NEAREST_HOSTILE, f)), func_220646_b());
+        return ImmutableList.of(Pair.of(1, new AttackTask(MaidMemoryModuleType.TARGET_HOSTILES, f)));
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> shot(float p_220636_1_) {
         float f = p_220636_1_ * 1.2F;
-        return ImmutableList.of(Pair.of(0, new MaidClearAttackTask()), Pair.of(1, new BowShootTask(MemoryModuleType.HURT_BY_ENTITY, f)), Pair.of(2, new BowShootTask(MemoryModuleType.NEAREST_HOSTILE, f)), func_220646_b());
+        return ImmutableList.of(Pair.of(1, new BowShootTask(MaidMemoryModuleType.TARGET_HOSTILES, f)));
     }
 
     private static Pair<Integer, Task<LivingEntity>> func_220643_a() {

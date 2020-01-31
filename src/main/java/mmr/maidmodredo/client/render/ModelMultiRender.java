@@ -85,7 +85,7 @@ public class ModelMultiRender<T extends LittleMaidEntity> extends MobRenderer<T,
         modelMain.setCapsValue(IModelCaps.caps_onGround, getSwingProgress(par1EntityLiving, partialTicks));
         modelMain.setCapsValue(IModelCaps.caps_isRiding, par1EntityLiving.isPassenger());
         modelMain.setCapsValue(IModelCaps.caps_isSneak, par1EntityLiving.isSneaking());
-        modelMain.setCapsValue(IModelCaps.caps_aimedBow, false);
+        modelMain.setCapsValue(IModelCaps.caps_aimedBow, par1EntityLiving.isShooting());
         modelMain.setCapsValue(IModelCaps.caps_isWait, false);
         modelMain.setCapsValue(IModelCaps.caps_isChild, par1EntityLiving.isChild());
         modelMain.setCapsValue(IModelCaps.caps_entityIdFactor, 0F);

@@ -3,6 +3,7 @@ package mmr.maidmodredo.client.render;
 import com.mojang.blaze3d.platform.GlStateManager;
 import mmr.maidmodredo.client.maidmodel.IModelCaps;
 import mmr.maidmodredo.client.maidmodel.ModelBase;
+import mmr.maidmodredo.client.maidmodel.ModelLittleMaidBase;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import mmr.maidmodredo.utils.helper.RendererHelper;
 import net.minecraft.client.Minecraft;
@@ -226,8 +227,17 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
                     GlStateManager.translatef(0.0F, 0.2F, 0.0F);
                 }
 
+                GlStateManager.translatef(0.0F, 0.3F, 0.0F);
+
                 // Forge: moved this call down, fixes incorrect offset while sneaking.
-                modelMain.model.Arms[i].render(0.0625F);
+                //Force render(?)
+                if (modelMain.model instanceof ModelLittleMaidBase) {
+                    if (flag) {
+                        ((ModelLittleMaidBase) modelMain.model).bipedLeftArm.postRender(0.0625F);
+                    } else {
+                        ((ModelLittleMaidBase) modelMain.model).bipedRightArm.postRender(0.0625F);
+                    }
+                }
 
                 GlStateManager.rotatef(-90.0F, 1.0F, 0.0F, 0.0F);
                 GlStateManager.rotatef(180.0F, 0.0F, 1.0F, 0.0F);

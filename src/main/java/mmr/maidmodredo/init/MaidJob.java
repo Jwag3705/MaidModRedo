@@ -1,6 +1,7 @@
 package mmr.maidmodredo.init;
 
 import mmr.maidmodredo.MaidModRedo;
+import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.schedule.Schedule;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.HoeItem;
@@ -10,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.DefaultedRegistry;
 import net.minecraft.util.registry.MutableRegistry;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.village.PointOfInterestType;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -19,36 +19,40 @@ public class MaidJob {
     public static final DefaultedRegistry<MaidJob> MAID_JOB_REGISTRY = registerDefaulted("maid_job", "normal", () -> {
         return MaidJob.NORMAL;
     });
-    public static final MaidJob WILD = new MaidJob("wild", PointOfInterestType.UNEMPLOYED, (item) -> {
+    public static final MaidJob WILD = new MaidJob("wild", (item) -> {
         return item == ItemStack.EMPTY;
     }).setSchedule(LittleSchedules.FREEDOM);
-    public static final MaidJob NORMAL = new MaidJob("normal", PointOfInterestType.UNEMPLOYED, (item) -> {
+    public static final MaidJob NORMAL = new MaidJob("normal", (item) -> {
         return item == ItemStack.EMPTY;
     }).setSchedule(LittleSchedules.FREEDOM);
-    public static final MaidJob FENCER = new MaidJob("fencer", PointOfInterestType.UNEMPLOYED, (item) -> {
+    public static final MaidJob FENCER = new MaidJob("fencer", (item) -> {
         return item.getItem() instanceof SwordItem;
-    }).setSchedule(LittleSchedules.LITTLEMAID_WORK);
-    public static final MaidJob ARCHER = new MaidJob("archer", PointOfInterestType.UNEMPLOYED, (item) -> {
+    }).setSchedule(LittleSchedules.LITTLEMAID_WORK).setSubActivity(LittleActivitys.ATTACK);
+    public static final MaidJob ARCHER = new MaidJob("archer", (item) -> {
         return item.getItem() instanceof BowItem;
-    }).setSchedule(LittleSchedules.LITTLEMAID_WORK);
-    public static final MaidJob FARMER = new MaidJob("farmer", PointOfInterestType.UNEMPLOYED, (item) -> {
+    }).setSchedule(LittleSchedules.LITTLEMAID_WORK).setSubActivity(LittleActivitys.SHOT);
+    public static final MaidJob FARMER = new MaidJob("farmer", (item) -> {
         return item.getItem() instanceof HoeItem;
     }).setSchedule(LittleSchedules.LITTLEMAID_WORK);
 
 
     private final String name;
-    private final PointOfInterestType pointOfInterest;
+    private Activity activity;
     private final Predicate<ItemStack> field_221168_r;
     private Schedule schedule = LittleSchedules.LITTLEMAID_WORK;
 
-    public MaidJob(String nameIn, PointOfInterestType pointOfInterestIn, Predicate<ItemStack> p_i50179_3_) {
+    public MaidJob(String nameIn, Predicate<ItemStack> p_i50179_3_) {
         this.name = nameIn;
-        this.pointOfInterest = pointOfInterestIn;
         this.field_221168_r = p_i50179_3_;
     }
 
-    public PointOfInterestType getPointOfInterest() {
-        return this.pointOfInterest;
+    public Activity getSubActivity() {
+        return this.activity;
+    }
+
+    public MaidJob setSubActivity(Activity activity) {
+        this.activity = activity;
+        return this;
     }
 
     public Predicate<ItemStack> getRequireItem() {

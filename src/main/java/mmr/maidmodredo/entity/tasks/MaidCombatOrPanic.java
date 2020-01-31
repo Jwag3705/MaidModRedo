@@ -3,7 +3,6 @@ package mmr.maidmodredo.entity.tasks;
 import com.google.common.collect.ImmutableMap;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import mmr.maidmodredo.init.LittleActivitys;
-import mmr.maidmodredo.init.MaidJob;
 import mmr.maidmodredo.init.MaidMemoryModuleType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Brain;
@@ -25,8 +24,8 @@ public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
         Brain<?> brain = entityIn.getBrain();
         if (!brain.hasActivity(LittleActivitys.ATTACK) && !brain.hasActivity(LittleActivitys.SHOT) && !isSetupTarget(entityIn)) {
             if (func_220512_b(entityIn) || func_220513_a(entityIn)) {
-                if (entityIn.getMaidData().getJob() == MaidJob.FENCER && entityIn.isTamed() && !entityIn.isMaidWait()) {
-                    if (!brain.hasActivity(LittleActivitys.ATTACK) && (entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY) || func_220513_a(entityIn))) {
+                if (entityIn.isTamed() && !entityIn.isMaidWait() && entityIn.getMaidData().getJob().getSubActivity() != null) {
+                    if (!brain.hasActivity(entityIn.getMaidData().getJob().getSubActivity()) && (entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY) || func_220513_a(entityIn))) {
                         brain.removeMemory(MemoryModuleType.PATH);
                         brain.removeMemory(MemoryModuleType.WALK_TARGET);
                         brain.removeMemory(MemoryModuleType.LOOK_TARGET);
@@ -37,28 +36,9 @@ public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
                         } else if (func_220513_a(entityIn)) {
                             entityIn.getBrain().setMemory(MaidMemoryModuleType.TARGET_HOSTILES, entityIn.getBrain().getMemory(MemoryModuleType.NEAREST_HOSTILE).get());
                         }
-                        brain.switchTo(LittleActivitys.ATTACK);
+                        brain.switchTo(entityIn.getMaidData().getJob().getSubActivity());
                     }
-
-
-                } else if (entityIn.getMaidData().getJob() == MaidJob.ARCHER && entityIn.isTamed() && !entityIn.isMaidWait()) {
-                    if (!brain.hasActivity(LittleActivitys.SHOT) && (entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY) || func_220513_a(entityIn))) {
-                        brain.removeMemory(MemoryModuleType.PATH);
-                        brain.removeMemory(MemoryModuleType.WALK_TARGET);
-                        brain.removeMemory(MemoryModuleType.LOOK_TARGET);
-                        brain.removeMemory(MemoryModuleType.INTERACTION_TARGET);
-
-                        if (entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY)) {
-                            entityIn.getBrain().setMemory(MaidMemoryModuleType.TARGET_HOSTILES, entityIn.getBrain().getMemory(MemoryModuleType.HURT_BY_ENTITY).get());
-                        } else if (func_220513_a(entityIn)) {
-                            entityIn.getBrain().setMemory(MaidMemoryModuleType.TARGET_HOSTILES, entityIn.getBrain().getMemory(MemoryModuleType.NEAREST_HOSTILE).get());
-                        }
-
-                        brain.switchTo(LittleActivitys.SHOT);
-                    }
-
-
-                } else if (!entityIn.isTamed()) {
+                } else if (!entityIn.isTamed() || func_220512_b(entityIn) && entityIn.isTamed()) {
                     if (!brain.hasActivity(Activity.PANIC)) {
                         brain.removeMemory(MemoryModuleType.PATH);
                         brain.removeMemory(MemoryModuleType.WALK_TARGET);

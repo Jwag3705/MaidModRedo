@@ -122,7 +122,7 @@ public class BowShootTask extends Task<LittleMaidEntity> {
                 --this.seeTime;
             }
 
-            if (!flag2) {
+            if (flag2) {
                 if (!(d0 > (double) getTargetDistance(owner) * getTargetDistance(owner)) && this.seeTime >= 20) {
                     owner.getNavigator().clearPath();
                     ++this.strafingTime;

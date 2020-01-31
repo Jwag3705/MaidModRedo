@@ -3,6 +3,7 @@ package mmr.maidmodredo.entity.tasks;
 import com.google.common.collect.ImmutableMap;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ICrossbowUser;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -11,7 +12,7 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.item.BowItem;
+import net.minecraft.item.*;
 import net.minecraft.util.Hand;
 import net.minecraft.world.server.ServerWorld;
 
@@ -25,6 +26,8 @@ public class BowShootTask extends Task<LittleMaidEntity> {
     private boolean strafingClockwise;
     private boolean strafingBackwards;
     private int strafingTime = -1;
+    private CrossbowState field_220749_b = CrossbowState.UNCHARGED;
+    private int field_220753_f;
 
     public BowShootTask(MemoryModuleType<? extends Entity> p_i50346_1_, float p_i50346_2_) {
         super(ImmutableMap.of(p_i50346_1_, MemoryModuleStatus.VALUE_PRESENT));
@@ -36,7 +39,7 @@ public class BowShootTask extends Task<LittleMaidEntity> {
         Entity entity = owner.getBrain().getMemory(this.field_220541_a).get();
         double d0 = getTargetDistance(owner);
 
-        return !isYourFriend(owner) && !isYourOwner(owner) && owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof BowItem && !owner.findAmmo(owner.getHeldItem(Hand.MAIN_HAND)).isEmpty() && owner.getDistanceSq(entity) < d0 * d0;
+        return !isYourFriend(owner) && !isYourOwner(owner) && owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof ShootableItem && !owner.findAmmo(owner.getHeldItem(Hand.MAIN_HAND)).isEmpty() && owner.getDistanceSq(entity) < d0 * d0;
     }
 
     private boolean isYourOwner(LittleMaidEntity entityIn) {
@@ -62,7 +65,7 @@ public class BowShootTask extends Task<LittleMaidEntity> {
             Entity entity = entityIn.getBrain().getMemory(this.field_220541_a).get();
             if (entity != null && entity.isAlive()) {
                 double d0 = getTargetDistance(entityIn) * getTargetDistance(entityIn);
-                return entityIn.getDistanceSq(entity) < d0 * 1.2f && entityIn.getHeldItem(Hand.MAIN_HAND).getItem() instanceof BowItem && !entityIn.findAmmo(entityIn.getHeldItem(Hand.MAIN_HAND)).isEmpty();
+                return entityIn.getDistanceSq(entity) < d0 * 1.2f && entityIn.getHeldItem(Hand.MAIN_HAND).getItem() instanceof ShootableItem && !entityIn.findAmmo(entityIn.getHeldItem(Hand.MAIN_HAND)).isEmpty();
             } else {
                 return false;
             }
@@ -77,7 +80,13 @@ public class BowShootTask extends Task<LittleMaidEntity> {
         this.seeTime = 0;
         this.attackTick = -1;
         entityIn.setAggroed(false);
-        entityIn.resetActiveHand();
+
+        if (entityIn.isHandActive()) {
+            entityIn.resetActiveHand();
+            ((ICrossbowUser) entityIn).setCharging(false);
+            CrossbowItem.setCharged(entityIn.getActiveItemStack(), false);
+        }
+
         Brain<?> brain = entityIn.getBrain();
         entityIn.getBrain().removeMemory(this.field_220541_a);
         brain.updateActivity(worldIn.getDayTime(), worldIn.getGameTime());
@@ -89,7 +98,10 @@ public class BowShootTask extends Task<LittleMaidEntity> {
     }
 
     protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
-
+        Entity entity = entityIn.getBrain().getMemory(this.field_220541_a).get();
+        if (entity != null && entity instanceof LivingEntity) {
+            entityIn.setAttackTarget((LivingEntity) entity);
+        }
         entityIn.setAggroed(true);
     }
 
@@ -122,12 +134,17 @@ public class BowShootTask extends Task<LittleMaidEntity> {
                 --this.seeTime;
             }
 
+            boolean flag3 = (d0 > (double) 18 * 18 || this.seeTime < 5) && field_220753_f == 0;
+
+
             if (flag2) {
-                if (!(d0 > (double) getTargetDistance(owner) * getTargetDistance(owner)) && this.seeTime >= 20) {
+                if (!(d0 > (double) getTargetDistance(owner) * getTargetDistance(owner)) && this.seeTime >= 20 && this.field_220753_f == 0) {
                     owner.getNavigator().clearPath();
                     ++this.strafingTime;
-                } else {
+                } else if (this.field_220753_f == 0) {
                     owner.getNavigator().tryMoveToEntityLiving(entity, this.field_220542_b);
+                    this.strafingTime = -1;
+                } else {
                     this.strafingTime = -1;
                 }
 
@@ -156,26 +173,69 @@ public class BowShootTask extends Task<LittleMaidEntity> {
                     owner.getLookController().setLookPositionWithEntity(entity, 40.0F, 40.0F);
                 }
             } else {
+                if (owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof CrossbowItem && flag3) {
+                    owner.getNavigator().tryMoveToEntityLiving(entity, this.field_220542_b);
+                } else {
+                    owner.getNavigator().clearPath();
+                }
+
                 owner.getLookController().setLookPositionWithEntity(entity, 40.0F, 40.0F);
                 this.strafingTime = -1;
             }
 
+            int i = owner.getItemInUseMaxCount();
 
-            if (owner.isHandActive()) {
+            if (owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof CrossbowItem) {
+                ItemStack itemstack = owner.getActiveItemStack();
+                if (this.field_220749_b == CrossbowState.UNCHARGED) {
+
+                    owner.setActiveHand(ProjectileHelper.getHandWith(owner, Items.CROSSBOW));
+                    this.field_220749_b = CrossbowState.CHARGING;
+                    ((ICrossbowUser) owner).setCharging(true);
+
+                } else if (this.field_220749_b == CrossbowState.CHARGING) {
+                    if (!owner.isHandActive()) {
+                        this.field_220749_b = CrossbowState.UNCHARGED;
+                    }
+
+                    if (i >= CrossbowItem.getChargeTime(itemstack)) {
+                        owner.stopActiveHand();
+                        this.field_220749_b = CrossbowState.CHARGED;
+                        this.field_220753_f = 20 + owner.getRNG().nextInt(15);
+                        ((ICrossbowUser) owner).setCharging(false);
+                    }
+                } else if (this.field_220749_b == CrossbowState.CHARGED) {
+                    --this.field_220753_f;
+                    if (this.field_220753_f == 0) {
+                        this.field_220749_b = CrossbowState.READY_TO_ATTACK;
+                    }
+                } else if (this.field_220749_b == CrossbowState.READY_TO_ATTACK && flag) {
+                    owner.attackEntityWithRangedAttack((LivingEntity) entity, BowItem.getArrowVelocity(i));
+                    ItemStack itemstack1 = owner.getHeldItem(ProjectileHelper.getHandWith(owner, Items.CROSSBOW));
+                    CrossbowItem.setCharged(itemstack1, false);
+                    this.field_220749_b = CrossbowState.UNCHARGED;
+                }
+            } else if (owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof BowItem && owner.isHandActive()) {
                 if (!flag && this.seeTime < -60) {
                     owner.resetActiveHand();
                 } else if (flag) {
-                    int i = owner.getItemInUseMaxCount();
                     if (i >= 20) {
                         owner.resetActiveHand();
                         owner.attackEntityWithRangedAttack((LivingEntity) entity, BowItem.getArrowVelocity(i));
-                        this.attackTick = 40;
+                        this.attackTick = 20;
                     }
                 }
+
             } else if (--this.attackTick <= 0 && this.seeTime >= -60) {
                 owner.setActiveHand(ProjectileHelper.getHandWith(owner, owner.getHeldItem(Hand.MAIN_HAND).getItem()));
             }
         }
     }
 
+    static enum CrossbowState {
+        UNCHARGED,
+        CHARGING,
+        CHARGED,
+        READY_TO_ATTACK;
+    }
 }

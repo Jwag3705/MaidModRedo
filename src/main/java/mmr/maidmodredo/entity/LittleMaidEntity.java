@@ -20,6 +20,8 @@ import mmr.maidmodredo.network.MaidPacketHandler;
 import mmr.maidmodredo.utils.Counter;
 import mmr.maidmodredo.utils.EntityCaps;
 import mmr.maidmodredo.utils.ModelManager;
+import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
@@ -52,6 +54,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestManager;
@@ -72,7 +75,7 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-public class LittleMaidEntity extends TameableEntity implements IModelCaps, IModelEntity, IMaidAnimation {
+public class LittleMaidEntity extends TameableEntity implements IModelCaps, IModelEntity, IMaidAnimation, ICrossbowUser {
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.PATH, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.field_225462_q, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MaidMemoryModuleType.TARGET_HOSTILES, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WORKED_AT_POI);
     private static final ImmutableList<SensorType<? extends Sensor<? super LittleMaidEntity>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.INTERACTABLE_DOORS, SensorType.NEAREST_BED, SensorType.HURT_BY, LittleSensorTypes.MAID_HOSTILES, LittleSensorTypes.DEFEND_OWNER);
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<LittleMaidEntity, PointOfInterestType>> field_213774_bB = ImmutableMap.of(MemoryModuleType.HOME, (p_213769_0_, p_213769_1_) -> {
@@ -115,6 +118,10 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     protected static final DataParameter<Boolean> WAITING = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BOOLEAN);
 
     protected static final DataParameter<Boolean> CONTRACT = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BOOLEAN);
+
+
+    private static final DataParameter<Boolean> DATA_CHARGING_STATE = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BOOLEAN);
+
 
     protected static final DataParameter<Byte> dataWatch_Color = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BYTE);
 
@@ -176,6 +183,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         this.dataManager.register(FREEDOM, false);
         this.dataManager.register(WAITING, false);
         this.dataManager.register(CONTRACT, false);
+
+        this.dataManager.register(DATA_CHARGING_STATE, false);
 
         this.dataManager.register(dataWatch_Color, (byte) 0xc);
         // 20:選択テクスチャインデックス
@@ -1340,20 +1349,64 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     }
 
     public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor) {
-        ItemStack itemstack = this.findAmmo(this.getHeldItem(ProjectileHelper.getHandWith(this, Items.BOW)));
-        ArrowItem arrowitem = (ArrowItem) (itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
-        AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(world, itemstack, this);
-        if (this.getHeldItemMainhand().getItem() instanceof net.minecraft.item.BowItem)
-            abstractarrowentity = ((net.minecraft.item.BowItem) this.getHeldItemMainhand().getItem()).customeArrow(abstractarrowentity);
-        double d0 = target.posX - this.posX;
-        double d1 = target.getBoundingBox().minY + (double) (target.getHeight() / 3.0F) - abstractarrowentity.posY;
-        double d2 = target.posZ - this.posZ;
-        double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-        abstractarrowentity.shoot(d0, d1 + d3 * (double) 0.2F, d2, distanceFactor * 1.52F, (float) (1.0F));
-        itemstack.shrink(1);
-        this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-        this.world.addEntity(abstractarrowentity);
+        ItemStack itemstack = this.findAmmo(this.getHeldItem(ProjectileHelper.getHandWith(this, this.getHeldItem(Hand.MAIN_HAND).getItem())));
+
+        Hand hand = ProjectileHelper.getHandWith(this, Items.CROSSBOW);
+        ItemStack itemstack2 = this.getHeldItem(hand);
+        if (this.isHolding(Items.CROSSBOW)) {
+            CrossbowItem.fireProjectiles(this.world, this, Hand.MAIN_HAND, itemstack2, 1.6F, (float) (1.0F));
+        } else {
+            ArrowItem arrowitem = (ArrowItem) (itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
+            AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(world, itemstack, this);
+            if (this.getHeldItemMainhand().getItem() instanceof net.minecraft.item.BowItem)
+                abstractarrowentity = ((net.minecraft.item.BowItem) this.getHeldItemMainhand().getItem()).customeArrow(abstractarrowentity);
+            double d0 = target.posX - this.posX;
+            double d1 = target.getBoundingBox().minY + (double) (target.getHeight() / 3.0F) - abstractarrowentity.posY;
+            double d2 = target.posZ - this.posZ;
+            double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+            abstractarrowentity.shoot(d0, d1 + d3 * (double) 0.2F, d2, distanceFactor * 1.52F, (float) (1.0F));
+            itemstack.shrink(1);
+            this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+            this.world.addEntity(abstractarrowentity);
+        }
     }
+
+    @OnlyIn(Dist.CLIENT)
+    public boolean isCharging() {
+        return this.dataManager.get(DATA_CHARGING_STATE);
+    }
+
+    public void setCharging(boolean p_213671_1_) {
+        this.dataManager.set(DATA_CHARGING_STATE, p_213671_1_);
+    }
+
+    public void shoot(LivingEntity p_213670_1_, ItemStack p_213670_2_, IProjectile p_213670_3_, float p_213670_4_) {
+        Entity entity = (Entity) p_213670_3_;
+        double d0 = p_213670_1_.posX - this.posX;
+        double d1 = p_213670_1_.posZ - this.posZ;
+        double d2 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1);
+        double d3 = p_213670_1_.getBoundingBox().minY + (double) (p_213670_1_.getHeight() / 3.0F) - entity.posY + d2 * (double) 0.2F;
+        Vector3f vector3f = this.func_213673_a(new Vec3d(d0, d3, d1), p_213670_4_);
+        p_213670_3_.shoot((double) vector3f.getX(), (double) vector3f.getY(), (double) vector3f.getZ(), 1.6F, (float) (14 - this.world.getDifficulty().getId() * 4));
+        this.playSound(SoundEvents.ITEM_CROSSBOW_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+    }
+
+    private Vector3f func_213673_a(Vec3d p_213673_1_, float p_213673_2_) {
+        Vec3d vec3d = p_213673_1_.normalize();
+        Vec3d vec3d1 = vec3d.crossProduct(new Vec3d(0.0D, 1.0D, 0.0D));
+        if (vec3d1.lengthSquared() <= 1.0E-7D) {
+            vec3d1 = vec3d.crossProduct(this.func_213286_i(1.0F));
+        }
+
+        Quaternion quaternion = new Quaternion(new Vector3f(vec3d1), 90.0F, true);
+        Vector3f vector3f = new Vector3f(vec3d);
+        vector3f.func_214905_a(quaternion);
+        Quaternion quaternion1 = new Quaternion(vector3f, p_213673_2_, true);
+        Vector3f vector3f1 = new Vector3f(vec3d);
+        vector3f1.func_214905_a(quaternion1);
+        return vector3f1;
+    }
+
 
     public ItemStack findAmmo(ItemStack shootable) {
         if (!(shootable.getItem() instanceof ShootableItem)) {

@@ -3,9 +3,9 @@ package mmr.maidmodredo.init;
 import mmr.maidmodredo.MaidModRedo;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.schedule.Schedule;
-import net.minecraft.item.BowItem;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShootableItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.DefaultedRegistry;
@@ -29,7 +29,7 @@ public class MaidJob {
         return item.getItem() instanceof SwordItem;
     }).setSchedule(LittleSchedules.LITTLEMAID_WORK).setSubActivity(LittleActivitys.ATTACK);
     public static final MaidJob ARCHER = new MaidJob("archer", (item) -> {
-        return item.getItem() instanceof BowItem;
+        return item.getItem() instanceof ShootableItem;
     }).setSchedule(LittleSchedules.LITTLEMAID_WORK).setSubActivity(LittleActivitys.SHOT);
     public static final MaidJob FARMER = new MaidJob("farmer", (item) -> {
         return item.getItem() instanceof HoeItem;
@@ -50,6 +50,9 @@ public class MaidJob {
         return this.activity;
     }
 
+    /*
+     * add sub activity(like Combat Job)
+     */
     public MaidJob setSubActivity(Activity activity) {
         this.activity = activity;
         return this;
@@ -63,6 +66,9 @@ public class MaidJob {
         return this.name;
     }
 
+    /*
+     * add default jobs schedule
+     */
     public MaidJob setSchedule(Schedule schedule) {
         this.schedule = schedule;
         return this;

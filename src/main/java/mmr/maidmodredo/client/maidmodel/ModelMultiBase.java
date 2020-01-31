@@ -44,6 +44,7 @@ public abstract class ModelMultiBase<T extends LivingEntity> extends ModelBase<T
         put("heldItemLeft", caps_heldItemLeft);
         put("heldItemRight", caps_heldItemRight);
         put("aimedBow", caps_aimedBow);
+        put("CrossBow", caps_crossbow);
         put("ScaleFactor", caps_ScaleFactor);
         put("entityIdFactor", caps_entityIdFactor);
         put("dominantArm", caps_dominantArm);
@@ -233,6 +234,8 @@ public abstract class ModelMultiBase<T extends LivingEntity> extends ModelBase<T
                 return heldItem[0];
             case caps_aimedBow:
                 return aimedBow;
+            case caps_crossbow:
+                return aimedBow;
             case caps_entityIdFactor:
                 return entityIdFactor;
             case caps_ticksExisted:
@@ -279,6 +282,9 @@ public abstract class ModelMultiBase<T extends LivingEntity> extends ModelBase<T
                 heldItem[0] = (Integer) pArg[0];
                 return true;
             case caps_aimedBow:
+                aimedBow = (Boolean) pArg[0];
+                return true;
+            case caps_crossbow:
                 aimedBow = (Boolean) pArg[0];
                 return true;
             case caps_entityIdFactor:

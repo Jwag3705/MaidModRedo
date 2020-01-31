@@ -5,6 +5,8 @@ import mmr.maidmodredo.entity.LittleMaidEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Items;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -255,25 +257,44 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
             bipedLeftArm.setRotateAngle(lx, 0.0F, 0.4F);
         } else {
             float la, lb, lc;
+
+            LittleMaidEntity entity = (LittleMaidEntity) pEntityCaps.getCapsValue(IModelCaps.caps_Entity);
+
             if (aimedBow) {
-                // 弓構え
-                float lonGround = onGrounds[dominantArm];
-                float f6 = mh_sin(lonGround * 3.141593F);
-                float f7 = mh_sin((1.0F - (1.0F - lonGround) * (1.0F - lonGround)) * 3.141593F);
-                la = 0.1F - f6 * 0.6F;
-                bipedRightArm.setRotateAngle(-1.470796F, -la, 0.0F);
-                bipedLeftArm.setRotateAngle(-1.470796F, la, 0.0F);
-                la = bipedHead.rotateAngleX;
-                lb = mh_sin(pTicksExisted * 0.067F) * 0.05F;
-                lc = f6 * 1.2F - f7 * 0.4F;
-                bipedRightArm.addRotateAngleX(la + lb - lc);
-                bipedLeftArm.addRotateAngleX(la - lb - lc);
-                la = bipedHead.rotateAngleY;
-                bipedRightArm.addRotateAngleY(la);
-                bipedLeftArm.addRotateAngleY(la);
-                la = mh_cos(pTicksExisted * 0.09F) * 0.05F + 0.05F;
-                bipedRightArm.addRotateAngleZ(la);
-                bipedLeftArm.addRotateAngleZ(-la);
+                Boolean isCharging = (Boolean) pEntityCaps.getCapsValue(IModelCaps.caps_crossbow);
+
+                if (isCharging) {
+                    this.bipedRightArm.rotateAngleY = -0.8F;
+                    this.bipedRightArm.rotateAngleX = -0.97079635F;
+                    this.bipedLeftArm.rotateAngleX = -0.97079635F;
+                    float f2 = MathHelper.clamp(entity.getItemInUseMaxCount(), 0.0F, 25.0F);
+                    this.bipedLeftArm.rotateAngleY = MathHelper.lerp(f2 / 25.0F, 0.4F, 0.85F);
+                    this.bipedLeftArm.rotateAngleX = MathHelper.lerp(f2 / 25.0F, this.bipedLeftArm.rotateAngleX, (-(float) Math.PI / 2F));
+                } else {
+                    // 弓構え
+                    float lonGround = onGrounds[dominantArm];
+                    float f6 = mh_sin(lonGround * 3.141593F);
+                    float f7 = mh_sin((1.0F - (1.0F - lonGround) * (1.0F - lonGround)) * 3.141593F);
+                    la = 0.1F - f6 * 0.6F;
+                    bipedRightArm.setRotateAngle(-1.470796F, -la, 0.0F);
+                    bipedLeftArm.setRotateAngle(-1.470796F, la, 0.0F);
+                    la = bipedHead.rotateAngleX;
+                    lb = mh_sin(pTicksExisted * 0.067F) * 0.05F;
+                    lc = f6 * 1.2F - f7 * 0.4F;
+                    bipedRightArm.addRotateAngleX(la + lb - lc);
+                    bipedLeftArm.addRotateAngleX(la - lb - lc);
+                    la = bipedHead.rotateAngleY;
+                    bipedRightArm.addRotateAngleY(la);
+                    bipedLeftArm.addRotateAngleY(la);
+                    la = mh_cos(pTicksExisted * 0.09F) * 0.05F + 0.05F;
+                    bipedRightArm.addRotateAngleZ(la);
+                    bipedLeftArm.addRotateAngleZ(-la);
+                }
+            } else if (entity.isHolding(Items.CROSSBOW)) {
+                this.bipedRightArm.rotateAngleY = -0.3F + this.bipedHead.rotateAngleY;
+                this.bipedLeftArm.rotateAngleY = 0.6F + this.bipedHead.rotateAngleY;
+                this.bipedRightArm.rotateAngleX = (-(float) Math.PI / 2F) + this.bipedHead.rotateAngleX + 0.1F;
+                this.bipedLeftArm.rotateAngleX = -1.5F + this.bipedHead.rotateAngleX;
             } else {
                 // 通常
                 la = mh_sin(pTicksExisted * 0.067F) * 0.05F;

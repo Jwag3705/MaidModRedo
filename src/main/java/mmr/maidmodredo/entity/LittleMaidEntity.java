@@ -38,6 +38,7 @@ import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.*;
@@ -92,9 +93,11 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     private MaidAnimation animation = NO_ANIMATION;
 
     public static final MaidAnimation TALK_ANIMATION = MaidAnimation.create(100);
+    public static final MaidAnimation PET_ANIMATION = MaidAnimation.create(100);
 
     private static final MaidAnimation[] ANIMATIONS = {
-            TALK_ANIMATION
+            TALK_ANIMATION,
+            PET_ANIMATION
     };
 
     public ModelConfigCompound textureData;
@@ -223,7 +226,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
             p_213744_1_.registerActivity(LittleActivitys.WAITING, MaidTasks.waiting());
         } else {
             //If it is not a specific action, set the schedule set in job
-            if (this.getMaidData() != null) {
+            if (this.getMaidData().getJob() != null) {
                 p_213744_1_.setSchedule(this.getMaidData().getJob().getSchedule());
             }
         }
@@ -399,6 +402,10 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         this.func_213742_a(MemoryModuleType.HOME);
         this.func_213742_a(MemoryModuleType.JOB_SITE);
         this.func_213742_a(MemoryModuleType.MEETING_POINT);
+
+        InventoryHelper.dropInventoryItems(world, this, this.getInventoryMaidMain());
+        InventoryHelper.dropInventoryItems(world, this, this.getInventoryMaidEquipment());
+
         super.onDeath(cause);
     }
 
@@ -697,6 +704,10 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         return itemStack;
     }
 
+    protected void damageArmor(float damage) {
+        this.getInventoryMaidEquipment().damageArmor(damage);
+    }
+
     @Override
     public void livingTick() {
         this.updateArmSwingProgress();
@@ -888,20 +899,16 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
     public void setOpenInventory(boolean flag) {
         mstatOpenInventory = flag;
-        if (flag) {
-            if (!this.world.isRemote()) {
+
+        if (!this.world.isRemote()) {
+            MaidJob.MAID_JOB_REGISTRY.stream().filter((job) -> {
+                return job.getRequireItem().test(this.getHeldItem(Hand.MAIN_HAND));
+            }).findFirst().ifPresent((p_220388_2_) -> {
+                this.setMaidData(this.getMaidData().withJob(p_220388_2_));
                 this.resetBrain((ServerWorld) this.world);
-            }
-        } else {
-            if (!getEntityWorld().isRemote) {
-                MaidJob.MAID_JOB_REGISTRY.stream().filter((job) -> {
-                    return job.getRequireItem().test(this.getHeldItem(Hand.MAIN_HAND));
-                }).findFirst().ifPresent((p_220388_2_) -> {
-                    this.setMaidData(this.getMaidData().withJob(p_220388_2_));
-                    this.resetBrain((ServerWorld) this.world);
-                });
-            }
+            });
         }
+
     }
 
     public boolean isOpenInventory() {
@@ -1074,29 +1081,6 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                     }
                 }
 
-                if (this.isOwner(player) && player.isSneaking()) {
-
-                    if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
-                        if (!player.world.isRemote) {
-                            ServerPlayerEntity entityPlayerMP = (ServerPlayerEntity) player;
-                            NetworkHooks.openGui(entityPlayerMP, new INamedContainerProvider() {
-                                @Override
-                                public Container createMenu(int windowId, PlayerInventory inventory, PlayerEntity player) {
-                                    return new MaidInventoryContainer(windowId, inventory, (LittleMaidEntity) player.world.getEntityByID(getEntityId()));
-                                }
-
-                                @Override
-                                public ITextComponent getDisplayName() {
-                                    return new TranslationTextComponent("container.maidmobredo.maid_inventory");
-                                }
-                            }, buf -> {
-                                buf.writeInt(this.getEntityId());
-                            });
-                        }
-                    }
-                    return true;
-                }
-
                 if (this.isOwner(player) && item == Items.SUGAR) {
                     if (!this.world.isRemote) {
                         if (!player.abilities.isCreativeMode) {
@@ -1115,6 +1099,33 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                         getEntityWorld().setEntityState(this, (byte) 11);
                     }
                     this.addContractLimit(false);
+                    return true;
+                }
+
+                if (this.isOwner(player) && player.isSneaking() && itemstack.isEmpty()) {
+                    MaidPacketHandler.animationModel(this, PET_ANIMATION);
+
+                    return true;
+                } else if (this.isOwner(player) && !SWEETITEM.contains(item) && item != Items.FEATHER) {
+                    if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
+                        if (!player.world.isRemote) {
+                            ServerPlayerEntity entityPlayerMP = (ServerPlayerEntity) player;
+                            NetworkHooks.openGui(entityPlayerMP, new INamedContainerProvider() {
+                                @Override
+                                public Container createMenu(int windowId, PlayerInventory inventory, PlayerEntity player) {
+                                    return new MaidInventoryContainer(windowId, inventory, (LittleMaidEntity) player.world.getEntityByID(getEntityId()));
+                                }
+
+                                @Override
+                                public ITextComponent getDisplayName() {
+                                    return new TranslationTextComponent("container.maidmobredo.maid_inventory");
+                                }
+                            }, buf -> {
+                                buf.writeInt(this.getEntityId());
+                            });
+                        }
+                    }
+
                     return true;
                 }
             }
@@ -1354,7 +1365,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         Hand hand = ProjectileHelper.getHandWith(this, Items.CROSSBOW);
         ItemStack itemstack2 = this.getHeldItem(hand);
         if (this.isHolding(Items.CROSSBOW)) {
-            CrossbowItem.fireProjectiles(this.world, this, Hand.MAIN_HAND, itemstack2, 1.6F, (float) (1.0F));
+            CrossbowItem.fireProjectiles(this.world, this, Hand.MAIN_HAND, itemstack2, 1.9F, (float) (1.0F));
         } else {
             ArrowItem arrowitem = (ArrowItem) (itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
             AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(world, itemstack, this);
@@ -1364,10 +1375,13 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
             double d1 = target.getBoundingBox().minY + (double) (target.getHeight() / 3.0F) - abstractarrowentity.posY;
             double d2 = target.posZ - this.posZ;
             double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-            abstractarrowentity.shoot(d0, d1 + d3 * (double) 0.2F, d2, distanceFactor * 1.52F, (float) (1.0F));
-            itemstack.shrink(1);
+            abstractarrowentity.shoot(d0, d1 + d3 * (double) 0.2F, d2, distanceFactor * 1.75F, (float) (1.0F));
             this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
             this.world.addEntity(abstractarrowentity);
+            itemstack.shrink(1);
+            this.getHeldItem(ProjectileHelper.getHandWith(this, this.getHeldItem(Hand.MAIN_HAND).getItem())).damageItem(1, this, (p_213625_1_) -> {
+                p_213625_1_.sendBreakAnimation(hand);
+            });
         }
     }
 

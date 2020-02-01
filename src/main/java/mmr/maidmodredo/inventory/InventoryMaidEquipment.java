@@ -1,6 +1,8 @@
 package mmr.maidmodredo.inventory;
 
 import mmr.maidmodredo.entity.LittleMaidEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 
 public class InventoryMaidEquipment extends InventoryMaid {
@@ -34,4 +36,23 @@ public class InventoryMaidEquipment extends InventoryMaid {
         return this.getStackInSlot(5);
     }
 
+    public void damageArmor(float damage) {
+        if (!(damage <= 0.0F)) {
+            damage = damage / 4.0F;
+            if (damage < 1.0F) {
+                damage = 1.0F;
+            }
+
+            for (int i = 0; i < 6; ++i) {
+                ItemStack itemstack = this.getStackInSlot(i);
+                if (itemstack.getItem() instanceof ArmorItem) {
+                    int i_f = i;
+                    itemstack.damageItem((int) damage, this.getContainerLittleMaid(), (p_214023_1_) -> {
+                        p_214023_1_.sendBreakAnimation(EquipmentSlotType.func_220318_a(EquipmentSlotType.Group.ARMOR, i_f));
+                    });
+                }
+            }
+
+        }
+    }
 }

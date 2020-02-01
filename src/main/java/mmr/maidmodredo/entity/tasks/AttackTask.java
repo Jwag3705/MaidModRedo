@@ -31,6 +31,14 @@ public class AttackTask extends Task<LittleMaidEntity> {
         return !isYourFriend(owner) && !isYourOwner(owner) && owner.getDistanceSq(entity) < d0 * d0;
     }
 
+    private boolean func_220394_a(LittleMaidEntity p_220394_0_, float scale) {
+        double d0 = getTargetDistance(p_220394_0_) * getTargetDistance(p_220394_0_) * scale;
+        return p_220394_0_.getBrain().getMemory(MemoryModuleType.HURT_BY_ENTITY).filter((p_223523_1_) -> {
+
+            return p_223523_1_.getDistanceSq(p_220394_0_) <= d0 * d0;
+        }).isPresent();
+    }
+
     private boolean isYourOwner(LittleMaidEntity entityIn) {
         return entityIn.getBrain().getMemory(this.field_220541_a).isPresent() && entityIn.getOwner() == entityIn.getBrain().getMemory(this.field_220541_a).get();
     }

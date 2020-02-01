@@ -2,7 +2,6 @@ package mmr.maidmodredo.entity.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import mmr.maidmodredo.entity.LittleMaidEntity;
-import mmr.maidmodredo.init.LittleActivitys;
 import mmr.maidmodredo.init.MaidMemoryModuleType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Brain;
@@ -17,13 +16,12 @@ public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
     }
 
     protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
-        return func_220512_b(entityIn) || func_220513_a(entityIn);
+        return func_220512_b(entityIn) || func_220513_a(entityIn) || entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY);
     }
 
     protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
         Brain<?> brain = entityIn.getBrain();
-        if (!brain.hasActivity(LittleActivitys.ATTACK) && !brain.hasActivity(LittleActivitys.SHOT) && !isSetupTarget(entityIn)) {
-            if (func_220512_b(entityIn) || func_220513_a(entityIn)) {
+        if (func_220512_b(entityIn) || func_220513_a(entityIn) || (entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY))) {
                 if (entityIn.isTamed() && !entityIn.isMaidWait() && entityIn.getMaidData().getJob().getSubActivity() != null) {
                     if (!brain.hasActivity(entityIn.getMaidData().getJob().getSubActivity()) && (entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY) || func_220513_a(entityIn))) {
                         brain.removeMemory(MemoryModuleType.PATH);
@@ -36,6 +34,11 @@ public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
                         } else if (func_220513_a(entityIn)) {
                             entityIn.getBrain().setMemory(MaidMemoryModuleType.TARGET_HOSTILES, entityIn.getBrain().getMemory(MemoryModuleType.NEAREST_HOSTILE).get());
                         }
+
+                        brain.removeMemory(MemoryModuleType.HURT_BY);
+                        brain.removeMemory(MemoryModuleType.HURT_BY_ENTITY);
+                        brain.removeMemory(MemoryModuleType.NEAREST_HOSTILE);
+
                         brain.switchTo(entityIn.getMaidData().getJob().getSubActivity());
                     }
                 } else if (!entityIn.isTamed() || func_220512_b(entityIn) && entityIn.isTamed()) {
@@ -49,8 +52,6 @@ public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
                     }
                 }
             }
-        }
-
     }
 
 

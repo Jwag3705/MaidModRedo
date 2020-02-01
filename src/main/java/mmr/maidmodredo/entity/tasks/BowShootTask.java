@@ -16,8 +16,6 @@ import net.minecraft.item.*;
 import net.minecraft.util.Hand;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.Optional;
-
 public class BowShootTask extends Task<LittleMaidEntity> {
     private final MemoryModuleType<? extends Entity> field_220541_a;
     private final float field_220542_b;
@@ -81,8 +79,8 @@ public class BowShootTask extends Task<LittleMaidEntity> {
         this.attackTick = -1;
         entityIn.setAggroed(false);
 
+        entityIn.resetActiveHand();
         if (entityIn.isHandActive()) {
-            entityIn.resetActiveHand();
             ((ICrossbowUser) entityIn).setCharging(false);
             CrossbowItem.setCharged(entityIn.getActiveItemStack(), false);
         }
@@ -115,15 +113,6 @@ public class BowShootTask extends Task<LittleMaidEntity> {
             boolean flag = owner.getEntitySenses().canSee(entity);
 
             boolean flag1 = this.seeTime > 0;
-
-            Brain<?> brain = owner.getBrain();
-            boolean flag2 = owner.getNavigator().getPath() != null && owner.getNavigator().getPath().func_224771_h();
-            if (flag) {
-                brain.setMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, Optional.empty());
-            } else if (!brain.hasMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE)) {
-                brain.setMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, worldIn.getGameTime());
-            }
-
             if (flag != flag1) {
                 this.seeTime = 0;
             }
@@ -135,10 +124,11 @@ public class BowShootTask extends Task<LittleMaidEntity> {
             }
 
             boolean flag3 = (d0 > (double) 18 * 18 || this.seeTime < 5) && field_220753_f == 0;
-
-
-            if (flag2) {
-                if (!(d0 > (double) getTargetDistance(owner) * getTargetDistance(owner)) && this.seeTime >= 20 && this.field_220753_f == 0) {
+            if (owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof CrossbowItem && flag3) {
+                owner.getNavigator().tryMoveToEntityLiving(entity, this.field_220542_b);
+            } else if (owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof CrossbowItem && !flag3) {
+                owner.getNavigator().clearPath();
+            } else if (!(d0 > (double) getTargetDistance(owner) * getTargetDistance(owner)) && this.seeTime >= 20 && this.field_220753_f == 0) {
                     owner.getNavigator().clearPath();
                     ++this.strafingTime;
                 } else if (this.field_220753_f == 0) {
@@ -172,16 +162,6 @@ public class BowShootTask extends Task<LittleMaidEntity> {
                 } else {
                     owner.getLookController().setLookPositionWithEntity(entity, 40.0F, 40.0F);
                 }
-            } else {
-                if (owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof CrossbowItem && flag3) {
-                    owner.getNavigator().tryMoveToEntityLiving(entity, this.field_220542_b);
-                } else {
-                    owner.getNavigator().clearPath();
-                }
-
-                owner.getLookController().setLookPositionWithEntity(entity, 40.0F, 40.0F);
-                this.strafingTime = -1;
-            }
 
             int i = owner.getItemInUseMaxCount();
 
@@ -215,19 +195,20 @@ public class BowShootTask extends Task<LittleMaidEntity> {
                     CrossbowItem.setCharged(itemstack1, false);
                     this.field_220749_b = CrossbowState.UNCHARGED;
                 }
-            } else if (owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof BowItem && owner.isHandActive()) {
-                if (!flag && this.seeTime < -60) {
-                    owner.resetActiveHand();
-                } else if (flag) {
-                    if (i >= 20) {
+            } else if (owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof BowItem) {
+                if (owner.isHandActive()) {
+                    if (!flag && this.seeTime < -60) {
                         owner.resetActiveHand();
-                        owner.attackEntityWithRangedAttack((LivingEntity) entity, BowItem.getArrowVelocity(i));
-                        this.attackTick = 20;
+                    } else if (flag) {
+                        if (i >= 20) {
+                            owner.resetActiveHand();
+                            owner.attackEntityWithRangedAttack((LivingEntity) entity, BowItem.getArrowVelocity(i));
+                            this.attackTick = 20;
+                        }
                     }
+                } else if (--this.attackTick <= 0 && this.seeTime >= -60) {
+                    owner.setActiveHand(ProjectileHelper.getHandWith(owner, owner.getHeldItem(Hand.MAIN_HAND).getItem()));
                 }
-
-            } else if (--this.attackTick <= 0 && this.seeTime >= -60) {
-                owner.setActiveHand(ProjectileHelper.getHandWith(owner, owner.getHeldItem(Hand.MAIN_HAND).getItem()));
             }
         }
     }

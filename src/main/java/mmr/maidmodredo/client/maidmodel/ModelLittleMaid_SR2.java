@@ -1,6 +1,9 @@
 package mmr.maidmodredo.client.maidmodel;
 
 
+import mmr.maidmodredo.api.IMaidAnimation;
+import mmr.maidmodredo.entity.LittleMaidEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
 /**
@@ -44,8 +47,14 @@ public class ModelLittleMaid_SR2<T extends LivingEntity> extends ModelLittleMaid
 		super.setLivingAnimations(pEntityCaps, par2, par3, pRenderPartialTicks);
 		
 		float f3 = entityTicksExisted + pRenderPartialTicks + entityIdFactor;
+
+        Entity entity = (Entity) pEntityCaps.getCapsValue(IModelCaps.caps_Entity);
+
 		// 目パチ
-		if( 0 > mh_sin(f3 * 0.05F) + mh_sin(f3 * 0.13F) + mh_sin(f3 * 0.7F) + 2.55F) { 
+        if (entity instanceof LivingEntity && ((LivingEntity) entity).isSleeping()) {
+            eyeR.setVisible(true);
+            eyeL.setVisible(true);
+        } else if (0 > mh_sin(f3 * 0.05F) + mh_sin(f3 * 0.13F) + mh_sin(f3 * 0.7F) + 2.55F) {
 			eyeR.setVisible(true);
 			eyeL.setVisible(true);
 		} else { 
@@ -66,6 +75,15 @@ public class ModelLittleMaid_SR2<T extends LivingEntity> extends ModelLittleMaid
 			}
 		}
 	}
+
+    @Override
+    public void setAnimations(float par1, float par2, float pTicksExisted, float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps, IMaidAnimation animation) {
+        super.setAnimations(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps, animation);
+
+        if (animation.getAnimation() == LittleMaidEntity.PET_ANIMATION) {
+
+        }
+    }
 
 	@Override
 	public String getUsingTexture() {

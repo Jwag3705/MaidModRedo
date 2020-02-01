@@ -47,12 +47,12 @@ public class MaidTasks {
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> attack(float p_220636_1_) {
         float f = p_220636_1_ * 1.25F;
-        return ImmutableList.of(Pair.of(1, new AttackTask(MaidMemoryModuleType.TARGET_HOSTILES, f)));
+        return ImmutableList.of(Pair.of(0, new AttackTask(MaidMemoryModuleType.TARGET_HOSTILES, f)));
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> shot(float p_220636_1_) {
         float f = p_220636_1_ * 1.2F;
-        return ImmutableList.of(Pair.of(1, new BowShootTask(MaidMemoryModuleType.TARGET_HOSTILES, f)));
+        return ImmutableList.of(Pair.of(0, new BowShootTask(MaidMemoryModuleType.TARGET_HOSTILES, f)));
     }
 
     private static Pair<Integer, Task<LivingEntity>> func_220643_a() {

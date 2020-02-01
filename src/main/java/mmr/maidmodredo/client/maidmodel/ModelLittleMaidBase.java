@@ -306,48 +306,88 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
             }
         }
 
-        setAnimations(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps);
-    }
-
-    private void setAnimations(float par1, float par2, float pTicksExisted, float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps) {
         Entity entity = (Entity) pEntityCaps.getCapsValue(IModelCaps.caps_Entity);
 
         if (entity instanceof IMaidAnimation) {
-            animator.update((IMaidAnimation) entity);
-            if (((IMaidAnimation) entity).getAnimation() == LittleMaidEntity.TALK_ANIMATION) {
+            setAnimations(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps, ((IMaidAnimation) entity));
+        }
+    }
 
-                animator.setAnimation(LittleMaidEntity.TALK_ANIMATION);
-                animator.startKeyframe(5);
+    public void setAnimations(float par1, float par2, float pTicksExisted, float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps, IMaidAnimation animation) {
 
-                this.bipedRightArm.setRotateAngleZ(0.0F);
-                this.bipedLeftArm.setRotateAngleZ(0.0F);
 
-                animator.rotate(this.bipedRightArm, -1.2F, 0, 0);
-                animator.rotate(this.bipedLeftArm, -1.2F, 0, 0);
-                animator.endKeyframe();
+        animator.update(animation);
+        if (animation.getAnimation() == LittleMaidEntity.TALK_ANIMATION) {
 
-                animator.startKeyframe(10);
-                animator.rotate(this.bipedRightArm, 0.2F, 0, 0);
-                animator.rotate(this.bipedLeftArm, 0.2F, 0, 0);
-                animator.endKeyframe();
+            animator.setAnimation(LittleMaidEntity.TALK_ANIMATION);
+            animator.startKeyframe(5);
 
-                animator.startKeyframe(10);
-                animator.rotate(this.bipedRightArm, -0.2F, 0, 0);
-                animator.rotate(this.bipedLeftArm, -0.2F, 0, 0);
-                animator.endKeyframe();
+            this.bipedRightArm.setRotateAngleZ(0.0F);
+            this.bipedLeftArm.setRotateAngleZ(0.0F);
 
-                animator.startKeyframe(10);
-                animator.rotate(this.bipedRightArm, 0.2F, 0, 0);
-                animator.rotate(this.bipedLeftArm, 0.2F, 0, 0);
-                animator.endKeyframe();
+            animator.rotate(this.bipedRightArm, -1.2F, 0, 0);
+            animator.rotate(this.bipedLeftArm, -1.2F, 0, 0);
+            animator.endKeyframe();
 
-                animator.startKeyframe(10);
-                animator.rotate(this.bipedRightArm, -0.2F, 0, 0);
-                animator.rotate(this.bipedLeftArm, -0.2F, 0, 0);
-                animator.endKeyframe();
-                animator.setStaticKeyframe(45);
-                animator.resetKeyframe(10);
-            }
+            animator.startKeyframe(10);
+            animator.rotate(this.bipedRightArm, 0.2F, 0, 0);
+            animator.rotate(this.bipedLeftArm, 0.2F, 0, 0);
+            animator.endKeyframe();
+
+            animator.startKeyframe(10);
+            animator.rotate(this.bipedRightArm, -0.2F, 0, 0);
+            animator.rotate(this.bipedLeftArm, -0.2F, 0, 0);
+            animator.endKeyframe();
+
+            animator.startKeyframe(10);
+            animator.rotate(this.bipedRightArm, 0.2F, 0, 0);
+            animator.rotate(this.bipedLeftArm, 0.2F, 0, 0);
+            animator.endKeyframe();
+
+            animator.startKeyframe(10);
+            animator.rotate(this.bipedRightArm, -0.2F, 0, 0);
+            animator.rotate(this.bipedLeftArm, -0.2F, 0, 0);
+            animator.endKeyframe();
+            animator.setStaticKeyframe(45);
+            animator.resetKeyframe(10);
+        }
+
+        if (animation.getAnimation() == LittleMaidEntity.PET_ANIMATION) {
+            animator.setAnimation(LittleMaidEntity.PET_ANIMATION);
+            animator.startKeyframe(10);
+            animator.rotate(this.bipedHead, 0.4F, -0.2F, 0.0F);
+            animator.endKeyframe();
+
+            animator.startKeyframe(10);
+            animator.rotate(this.bipedHead, 0.4F, 0.2F, 0.0F);
+            animator.endKeyframe();
+
+            animator.startKeyframe(10);
+            animator.rotate(this.bipedHead, 0.4F, -0.2F, 0.0F);
+            animator.endKeyframe();
+
+            animator.startKeyframe(10);
+            animator.rotate(this.bipedHead, 0.4F, 0.2F, 0.0F);
+            animator.endKeyframe();
+
+            animator.startKeyframe(10);
+            animator.rotate(this.bipedHead, 0.4F, -0.2F, 0.0F);
+            animator.endKeyframe();
+
+            animator.startKeyframe(10);
+            animator.rotate(this.bipedHead, 0.4F, 0.2F, 0.0F);
+            animator.endKeyframe();
+
+            animator.startKeyframe(10);
+            animator.rotate(this.bipedHead, 0.4F, -0.2F, 0.0F);
+            animator.endKeyframe();
+
+            animator.startKeyframe(10);
+            animator.rotate(this.bipedHead, 0.4F, 0.2F, 0.0F);
+            animator.endKeyframe();
+
+            animator.setStaticKeyframe(10);
+            animator.resetKeyframe(10);
         }
     }
 

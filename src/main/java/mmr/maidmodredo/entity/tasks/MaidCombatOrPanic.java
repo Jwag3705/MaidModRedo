@@ -23,15 +23,15 @@ public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
         Brain<?> brain = entityIn.getBrain();
         if (func_220512_b(entityIn) || func_220513_a(entityIn) || (entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY))) {
                 if (entityIn.isTamed() && !entityIn.isMaidWait() && entityIn.getMaidData().getJob().getSubActivity() != null) {
-                    if (!brain.hasActivity(entityIn.getMaidData().getJob().getSubActivity()) && (entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY) || func_220513_a(entityIn))) {
+                    if (!isSetupTarget(entityIn) && func_220513_a(entityIn) || !isSetupTarget(entityIn) && entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY)) {
                         brain.removeMemory(MemoryModuleType.PATH);
                         brain.removeMemory(MemoryModuleType.WALK_TARGET);
                         brain.removeMemory(MemoryModuleType.LOOK_TARGET);
                         brain.removeMemory(MemoryModuleType.INTERACTION_TARGET);
 
-                        if (entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY)) {
+                        if (entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY) && entityIn.getBrain().getMemory(MemoryModuleType.HURT_BY_ENTITY).get().isAlive()) {
                             entityIn.getBrain().setMemory(MaidMemoryModuleType.TARGET_HOSTILES, entityIn.getBrain().getMemory(MemoryModuleType.HURT_BY_ENTITY).get());
-                        } else if (func_220513_a(entityIn)) {
+                        } else if (func_220513_a(entityIn) && entityIn.getBrain().getMemory(MemoryModuleType.NEAREST_HOSTILE).get().isAlive()) {
                             entityIn.getBrain().setMemory(MaidMemoryModuleType.TARGET_HOSTILES, entityIn.getBrain().getMemory(MemoryModuleType.NEAREST_HOSTILE).get());
                         }
 
@@ -41,7 +41,7 @@ public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
 
                         brain.switchTo(entityIn.getMaidData().getJob().getSubActivity());
                     }
-                } else if (!entityIn.isTamed() || func_220512_b(entityIn) && entityIn.isTamed()) {
+                } else if (!entityIn.isTamed() || func_220512_b(entityIn) && entityIn.isTamed() && !entityIn.isMaidWait()) {
                     if (!brain.hasActivity(Activity.PANIC)) {
                         brain.removeMemory(MemoryModuleType.PATH);
                         brain.removeMemory(MemoryModuleType.WALK_TARGET);

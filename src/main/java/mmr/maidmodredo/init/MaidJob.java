@@ -3,10 +3,7 @@ package mmr.maidmodredo.init;
 import mmr.maidmodredo.MaidModRedo;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.schedule.Schedule;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShootableItem;
-import net.minecraft.item.SwordItem;
+import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.DefaultedRegistry;
 import net.minecraft.util.registry.MutableRegistry;
@@ -25,25 +22,52 @@ public class MaidJob {
     public static final MaidJob NORMAL = new MaidJob("normal", (item) -> {
         return item == ItemStack.EMPTY;
     }).setSchedule(LittleSchedules.FREEDOM);
-    public static final MaidJob FENCER = new MaidJob("fencer", (item) -> {
-        return item.getItem() instanceof SwordItem;
-    }).setSchedule(LittleSchedules.LITTLEMAID_WORK).setSubActivity(LittleActivitys.ATTACK);
-    public static final MaidJob ARCHER = new MaidJob("archer", (item) -> {
-        return item.getItem() instanceof ShootableItem;
-    }).setSchedule(LittleSchedules.LITTLEMAID_WORK).setSubActivity(LittleActivitys.SHOT);
     public static final MaidJob FARMER = new MaidJob("farmer", (item) -> {
         return item.getItem() instanceof HoeItem;
-    }).setSchedule(LittleSchedules.LITTLEMAID_WORK);
+    });
 
+    public static final MaidJob FENCER = new MaidJob("fencer", (item) -> {
+        return item.getItem() instanceof SwordItem;
+    }).setSubActivity(LittleActivitys.ATTACK).setLockJob();
+    public static final MaidJob GUARD = new MaidJob("guard", (item) -> {
+        return item.getItem() instanceof SwordItem;
+    }).setSubRequireItem((item) -> {
+        return item.getItem() instanceof ShieldItem;
+    }).setSubActivity(LittleActivitys.ATTACK).setLockJob().setNeedLevel(10);
+    public static final MaidJob ARCHER = new MaidJob("archer", (item) -> {
+        return item.getItem() instanceof ShootableItem;
+    }).setSubActivity(LittleActivitys.SHOT).setLockJob().setNeedLevel(10);
 
     private final String name;
     private Activity activity;
-    private final Predicate<ItemStack> field_221168_r;
+    private final Predicate<ItemStack> requireItem;
+    private Predicate<ItemStack> subRequireItem;
     private Schedule schedule = LittleSchedules.LITTLEMAID_WORK;
+    private boolean lockJob;
+    private int needLevel;
 
     public MaidJob(String nameIn, Predicate<ItemStack> p_i50179_3_) {
         this.name = nameIn;
-        this.field_221168_r = p_i50179_3_;
+        this.requireItem = p_i50179_3_;
+        this.needLevel = 0;
+    }
+
+    public MaidJob setLockJob() {
+        this.lockJob = true;
+        return this;
+    }
+
+    public boolean isLockJob() {
+        return lockJob;
+    }
+
+    public MaidJob setNeedLevel(int needLevel) {
+        this.needLevel = needLevel;
+        return this;
+    }
+
+    public int getNeedLevel() {
+        return needLevel;
     }
 
     public Activity getSubActivity() {
@@ -58,8 +82,17 @@ public class MaidJob {
         return this;
     }
 
+    public Predicate<ItemStack> getSubRequireItem() {
+        return this.subRequireItem;
+    }
+
+    public MaidJob setSubRequireItem(Predicate<ItemStack> subRequireItem) {
+        this.subRequireItem = subRequireItem;
+        return this;
+    }
+
     public Predicate<ItemStack> getRequireItem() {
-        return this.field_221168_r;
+        return this.requireItem;
     }
 
     public String toString() {
@@ -86,6 +119,7 @@ public class MaidJob {
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "wild"), WILD);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "normal"), NORMAL);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "fencer"), FENCER);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "guard"), GUARD);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "archer"), ARCHER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "farmer"), FARMER);
     }

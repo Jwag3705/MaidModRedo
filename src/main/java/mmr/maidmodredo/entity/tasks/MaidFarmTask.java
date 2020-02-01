@@ -119,6 +119,7 @@ public class MaidFarmTask extends Task<LittleMaidEntity> {
             if (block instanceof CropsBlock && ((CropsBlock) block).isMaxAge(blockstate) && this.field_220424_c) {
                 worldIn.destroyBlock(this.field_220422_a, true);
                 owner.swingArm(Hand.MAIN_HAND);
+                owner.giveExperiencePoints(1 + owner.getRNG().nextInt(1));
             }
 
             if (blockstate.isAir() && block1 instanceof FarmlandBlock && this.field_220423_b) {
@@ -132,24 +133,29 @@ public class MaidFarmTask extends Task<LittleMaidEntity> {
                             worldIn.setBlockState(this.field_220422_a, Blocks.WHEAT.getDefaultState(), 3);
                             flag = true;
                             owner.swingArm(Hand.MAIN_HAND);
+                            owner.giveExperiencePoints(1);
                         } else if (itemstack.getItem() == Items.POTATO) {
                             worldIn.setBlockState(this.field_220422_a, Blocks.POTATOES.getDefaultState(), 3);
                             flag = true;
                             owner.swingArm(Hand.MAIN_HAND);
+                            owner.giveExperiencePoints(1);
                         } else if (itemstack.getItem() == Items.CARROT) {
                             worldIn.setBlockState(this.field_220422_a, Blocks.CARROTS.getDefaultState(), 3);
                             flag = true;
                             owner.swingArm(Hand.MAIN_HAND);
+                            owner.giveExperiencePoints(1);
                         } else if (itemstack.getItem() == Items.BEETROOT_SEEDS) {
                             worldIn.setBlockState(this.field_220422_a, Blocks.BEETROOTS.getDefaultState(), 3);
                             flag = true;
                             owner.swingArm(Hand.MAIN_HAND);
+                            owner.giveExperiencePoints(1);
                         } else if (itemstack.getItem() instanceof net.minecraftforge.common.IPlantable) {
                             if (((net.minecraftforge.common.IPlantable) itemstack.getItem()).getPlantType(worldIn, field_220422_a) == net.minecraftforge.common.PlantType.Crop) {
                                 worldIn.setBlockState(field_220422_a, ((net.minecraftforge.common.IPlantable) itemstack.getItem()).getPlant(worldIn, field_220422_a), 3);
                                 flag = true;
                             }
                             owner.swingArm(Hand.MAIN_HAND);
+                            owner.giveExperiencePoints(1);
                         }
                     }
 

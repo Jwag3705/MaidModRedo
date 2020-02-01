@@ -115,6 +115,10 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     protected Counter maidOverDriveTime;
     protected Counter workingCount;
 
+    public int experienceLevel;
+    public int experienceTotal;
+    public float experience;
+
     protected static final DataParameter<MaidData> MAID_DATA = EntityDataManager.createKey(LittleMaidEntity.class, MaidDataSerializers.MAID_DATA);
 
     protected static final DataParameter<Boolean> FREEDOM = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.BOOLEAN);
@@ -182,7 +186,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(MAID_DATA, new MaidData(MaidJob.WILD, 1));
+        this.dataManager.register(MAID_DATA, new MaidData(MaidJob.WILD, 0));
         this.dataManager.register(FREEDOM, false);
         this.dataManager.register(WAITING, false);
         this.dataManager.register(CONTRACT, false);
@@ -298,6 +302,10 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
         compound.put("MaidData", this.getMaidData().serialize(NBTDynamicOps.INSTANCE));
 
+        this.experience = compound.getFloat("XpP");
+        this.experienceLevel = compound.getInt("XpLevel");
+        this.experienceTotal = compound.getInt("XpTotal");
+
         compound.putBoolean("Freedom", isFreedom());
         compound.putBoolean("Wait", isMaidWait());
 
@@ -327,6 +335,10 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         if (compound.contains("MaidData", 10)) {
             this.setMaidData(new MaidData(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.get("MaidData"))));
         }
+
+        compound.putFloat("XpP", this.experience);
+        compound.putInt("XpLevel", this.experienceLevel);
+        compound.putInt("XpTotal", this.experienceTotal);
 
         setFreedom(compound.getBoolean("Freedom"));
         setMaidWait(compound.getBoolean("Wait"));
@@ -379,6 +391,69 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
         this.setCanPickUpLoot(true);
         this.resetBrain((ServerWorld) this.world);
+    }
+
+
+    public void giveExperiencePoints(int p_195068_1_) {
+
+        this.experience += (float) p_195068_1_ / (float) this.xpBarCap();
+        this.experienceTotal = MathHelper.clamp(this.experienceTotal + p_195068_1_, 0, Integer.MAX_VALUE);
+
+        while (this.experience < 0.0F) {
+            float f = this.experience * (float) this.xpBarCap();
+            if (this.experienceLevel > 0) {
+                this.addExperienceLevel(-1);
+                this.experience = 1.0F + f / (float) this.xpBarCap();
+            } else {
+                this.addExperienceLevel(-1);
+                this.experience = 0.0F;
+            }
+        }
+
+        while (this.experience >= 1.0F) {
+            this.experience = (this.experience - 1.0F) * (float) this.xpBarCap();
+            this.addExperienceLevel(1);
+            this.experience /= (float) this.xpBarCap();
+        }
+
+        this.getMaidData().withLevel(this.experienceLevel);
+    }
+
+    /**
+     * Add experience levels to this maid.(Vannila)
+     */
+    public void addExperienceLevel(int levels) {
+
+        this.experienceLevel += levels;
+        if (this.experienceLevel < 0) {
+            this.experienceLevel = 0;
+            this.experience = 0.0F;
+            this.experienceTotal = 0;
+        }
+
+        /*if (levels > 0 && this.experienceLevel % 5 == 0 && (float)this.lastXPSound < (float)this.ticksExisted - 100.0F) {
+            float f = this.experienceLevel > 30 ? 1.0F : (float)this.experienceLevel / 30.0F;
+            this.world.playSound((PlayerEntity)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_PLAYER_LEVELUP, this.getSoundCategory(), f * 0.75F, 1.0F);
+            this.lastXPSound = this.ticksExisted;
+        }*/
+
+    }
+
+    /**
+     * This method returns the cap amount of experience that the experience bar can hold. With each level, the experience
+     * cap on the maid's experience bar is raised by 10.(Vannila)
+     */
+    public int xpBarCap() {
+        if (this.experienceLevel >= 30) {
+            return 112 + (this.experienceLevel - 30) * 9;
+        } else {
+            return this.experienceLevel >= 15 ? 37 + (this.experienceLevel - 15) * 5 : 7 + this.experienceLevel * 2;
+        }
+    }
+
+    protected int getExperiencePoints(PlayerEntity player) {
+        int i = this.experienceLevel * 7;
+        return i > 100 ? 100 : i;
     }
 
     public void setMaidData(MaidData p_213753_1_) {
@@ -709,6 +784,22 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     }
 
     @Override
+    public boolean attackEntityAsMob(Entity entityIn) {
+        boolean flag = super.attackEntityAsMob(entityIn);
+
+        if (flag) {
+            if (entityIn.isNonBoss()) {
+                giveExperiencePoints(1 + this.getRNG().nextInt(1));
+            } else {
+                giveExperiencePoints(2 + this.getRNG().nextInt(2));
+            }
+        }
+
+
+        return flag;
+    }
+
+    @Override
     public void livingTick() {
         this.updateArmSwingProgress();
         if (getHealth() < getMaxHealth() && ticksExisted % 30 == 0) {
@@ -900,15 +991,18 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     public void setOpenInventory(boolean flag) {
         mstatOpenInventory = flag;
 
-        if (!this.world.isRemote()) {
+        if (!this.world.isRemote() && (!this.getMaidData().getJob().isLockJob()) || this.getMaidData().getJob().isLockJob() && this.getMaidData().getLevel() == 0) {
             MaidJob.MAID_JOB_REGISTRY.stream().filter((job) -> {
-                return job.getRequireItem().test(this.getHeldItem(Hand.MAIN_HAND));
+                if (job.getSubRequireItem() != null) {
+                    return this.getMaidData().getLevel() >= job.getNeedLevel() && job.getRequireItem().test(this.getHeldItem(Hand.MAIN_HAND)) && job.getSubRequireItem().test(this.getHeldItem(Hand.OFF_HAND));
+                } else {
+                    return this.getMaidData().getLevel() >= job.getNeedLevel() && job.getRequireItem().test(this.getHeldItem(Hand.MAIN_HAND));
+                }
             }).findFirst().ifPresent((p_220388_2_) -> {
                 this.setMaidData(this.getMaidData().withJob(p_220388_2_));
                 this.resetBrain((ServerWorld) this.world);
             });
         }
-
     }
 
     public boolean isOpenInventory() {
@@ -1037,7 +1131,6 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                     return true;
                 }
             } else {
-
                 if (!itemstack.isEmpty()) {
 
                     if (SWEETITEM.contains(item) && this.getHealth() < this.getMaxHealth()) {
@@ -1102,7 +1195,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                     return true;
                 }
 
-                if (this.isOwner(player) && player.isSneaking() && itemstack.isEmpty()) {
+                if (this.isOwner(player) && player.isSneaking() && itemstack.isEmpty() && getAnimation() == PET_ANIMATION) {
                     MaidPacketHandler.animationModel(this, PET_ANIMATION);
 
                     return true;

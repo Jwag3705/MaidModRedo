@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 @OnlyIn(Dist.CLIENT)
 public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer> {
 
-    private static final ResourceLocation RES_maidS_INVENTORY = new ResourceLocation(MaidModRedo.MODID, "textures/gui/maid_inventory.png");
+    private static final ResourceLocation MAID_INVENTORY = new ResourceLocation(MaidModRedo.MODID, "textures/gui/maid_inventory.png");
     /**
      * The player inventory bound to this GUI.
      */
@@ -85,7 +85,7 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
     @Override
     protected void drawGuiContainerBackgroundLayer(float renderPartialTicks, int xMouse, int yMouse) {
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bindTexture(RES_maidS_INVENTORY);
+        this.getMinecraft().getTextureManager().bindTexture(MAID_INVENTORY);
 
         int originPosX = (this.width - this.xSize) / 2;
         int originPosY = (this.height - this.ySize) / 2;
@@ -94,6 +94,25 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
         int entityPosX = (originPosX + 51);
         int entityPosY = (originPosY + 60);
         InventoryScreen.drawEntityOnScreen(entityPosX, entityPosY, 25, (float) (entityPosX - xMouse), (float) ((entityPosY / 2) - yMouse), this.maidinventory.getLittleMaidEntity());
+    }
+
+    private void func_214130_a(int p_214130_1_, int p_214130_2_) {
+        this.minecraft.getTextureManager().bindTexture(MAID_INVENTORY);
+
+        int i = (int) this.container.getLittleMaidEntity().xpBarCap();
+
+        //XP bar
+        blit(p_214130_1_ + 180, p_214130_2_ + 26, this.blitOffset, 0.0F, 237.0F, 102, 15, 256, 256);
+        blit(p_214130_1_ + 180, p_214130_2_ + 28, this.blitOffset, 0.0F, 227.0F, 102, 5, 256, 256);
+        if (i > 0) {
+            int f = (int) (100 * (this.container.getLittleMaidEntity().experience));
+            blit(p_214130_1_ + 180, p_214130_2_ + 28, this.blitOffset, 0.0F, 232.0F, f + 1, 5, 256, 256);
+        }
+        String ls1 = maidinventory.getLittleMaidEntity().getMaidData().getJob().toString();
+
+        int ltw1 = this.minecraft.fontRenderer.getStringWidth(ls1);
+
+        drawString(this.minecraft.fontRenderer, ls1, p_214130_1_ + 120 - ltw1 / 2, p_214130_2_ + 48, -1);
     }
 
     @Override
@@ -113,6 +132,11 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
 
         int ii = mouseX - guiLeft;
         int jj = mouseY - guiTop;
+
+        GlStateManager.pushMatrix();
+        this.func_214130_a(guiLeft, guiTop);
+
+        GlStateManager.popMatrix();
 
         if (maidinventory.getLittleMaidEntity().canChangeModel() && ii > 7 && ii < 96 && jj > 7 && jj < 70) {
             // ボタンの表示

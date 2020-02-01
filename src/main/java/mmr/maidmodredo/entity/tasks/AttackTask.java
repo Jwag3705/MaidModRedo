@@ -2,6 +2,7 @@ package mmr.maidmodredo.entity.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.init.MaidJob;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -9,6 +10,7 @@ import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.server.ServerWorld;
@@ -29,14 +31,6 @@ public class AttackTask extends Task<LittleMaidEntity> {
         double d0 = getTargetDistance(owner);
 
         return !isYourFriend(owner) && !isYourOwner(owner) && owner.getDistanceSq(entity) < d0 * d0;
-    }
-
-    private boolean func_220394_a(LittleMaidEntity p_220394_0_, float scale) {
-        double d0 = getTargetDistance(p_220394_0_) * getTargetDistance(p_220394_0_) * scale;
-        return p_220394_0_.getBrain().getMemory(MemoryModuleType.HURT_BY_ENTITY).filter((p_223523_1_) -> {
-
-            return p_223523_1_.getDistanceSq(p_220394_0_) <= d0 * d0;
-        }).isPresent();
     }
 
     private boolean isYourOwner(LittleMaidEntity entityIn) {
@@ -84,6 +78,8 @@ public class AttackTask extends Task<LittleMaidEntity> {
     @Override
     protected void resetTask(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
         super.resetTask(worldIn, entityIn, gameTimeIn);
+        entityIn.resetActiveHand();
+        entityIn.getNavigator().clearPath();
         Brain<?> brain = entityIn.getBrain();
         entityIn.getBrain().removeMemory(this.field_220541_a);
         brain.updateActivity(worldIn.getDayTime(), worldIn.getGameTime());
@@ -100,6 +96,12 @@ public class AttackTask extends Task<LittleMaidEntity> {
         this.attackTick = Math.max(this.attackTick - 1, 0);
     }
 
+    private void setGuard(LittleMaidEntity owner) {
+        if (owner.getHeldItem(Hand.OFF_HAND).getItem() instanceof ShieldItem) {
+            owner.setActiveHand(Hand.OFF_HAND);
+        }
+    }
+
     public void setWalk(LittleMaidEntity p_220540_0_, Entity p_220540_1_, float p_220540_2_) {
         Vec3d vec3d = new Vec3d(p_220540_1_.posX, p_220540_1_.posY, p_220540_1_.posZ);
         p_220540_0_.getNavigator().tryMoveToEntityLiving(p_220540_1_, p_220540_2_);
@@ -114,6 +116,14 @@ public class AttackTask extends Task<LittleMaidEntity> {
             this.attackTick = 20;
             attacker.swingArm(Hand.MAIN_HAND);
             attacker.attackEntityAsMob(enemy);
+
+            if (attacker.getMaidData().getJob() == MaidJob.GUARD) {
+                attacker.resetActiveHand();
+            }
+        } else {
+            if (attacker.getMaidData().getJob() == MaidJob.GUARD) {
+                setGuard(attacker);
+            }
         }
 
     }

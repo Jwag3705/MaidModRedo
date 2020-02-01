@@ -79,6 +79,8 @@ public class BowShootTask extends Task<LittleMaidEntity> {
         this.attackTick = -1;
         entityIn.setAggroed(false);
 
+        entityIn.getNavigator().clearPath();
+
         entityIn.resetActiveHand();
         if (entityIn.isHandActive()) {
             ((ICrossbowUser) entityIn).setCharging(false);

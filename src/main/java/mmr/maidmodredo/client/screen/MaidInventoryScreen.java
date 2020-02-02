@@ -99,20 +99,28 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
     private void func_214130_a(int p_214130_1_, int p_214130_2_) {
         this.minecraft.getTextureManager().bindTexture(MAID_INVENTORY);
 
-        int i = (int) this.container.getLittleMaidEntity().experience;
+        int i = (int) this.container.getLittleMaidEntity().xpBarCap();
 
         //XP bar
         blit(p_214130_1_ + 180, p_214130_2_ + 26, this.blitOffset, 0.0F, 237.0F, 102, 15, 256, 256);
-        blit(p_214130_1_ + 180, p_214130_2_ + 28, this.blitOffset, 0.0F, 227.0F, 102, 5, 256, 256);
+        blit(p_214130_1_ + 180, p_214130_2_ + 29, this.blitOffset, 0.0F, 227.0F, 102, 5, 256, 256);
         if (i > 0) {
             int f = (int) (100 * (this.container.getLittleMaidEntity().experience));
-            blit(p_214130_1_ + 180, p_214130_2_ + 28, this.blitOffset, 0.0F, 232.0F, f + 1, 5, 256, 256);
+            blit(p_214130_1_ + 180, p_214130_2_ + 29, this.blitOffset, 0.0F, 232.0F, f + 1, 5, 256, 256);
         }
+
+        //Job and Level info
         String ls1 = maidinventory.getLittleMaidEntity().getMaidData().getJob().toString();
 
         int ltw1 = this.minecraft.fontRenderer.getStringWidth(ls1);
 
-        drawString(this.minecraft.fontRenderer, ls1, p_214130_1_ + 120 - ltw1 / 2, p_214130_2_ + 48, -1);
+        drawString(this.minecraft.fontRenderer, ls1, p_214130_1_ + 135 - ltw1 / 2, p_214130_2_ + 28, -1);
+
+        String ls2 = "Level" + maidinventory.getLittleMaidEntity().getMaidData().getLevel();
+
+        int ltw2 = this.minecraft.fontRenderer.getStringWidth(ls2);
+
+        drawString(this.minecraft.fontRenderer, ls2, p_214130_1_ + 135 - ltw2 / 2, p_214130_2_ + 38, -1);
     }
 
     @Override

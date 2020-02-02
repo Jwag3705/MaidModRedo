@@ -118,6 +118,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     public int experienceLevel;
     public int experienceTotal;
     public float experience;
+    protected static final DataParameter<Float> dataWatch_MaidExpValue = EntityDataManager.createKey(LittleMaidEntity.class, DataSerializers.FLOAT);
+
 
     protected static final DataParameter<MaidData> MAID_DATA = EntityDataManager.createKey(LittleMaidEntity.class, MaidDataSerializers.MAID_DATA);
 
@@ -186,6 +188,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     @Override
     protected void registerData() {
         super.registerData();
+        this.dataManager.register(dataWatch_MaidExpValue, Float.valueOf(0));
         this.dataManager.register(MAID_DATA, new MaidData(MaidJob.WILD, 0));
         this.dataManager.register(FREEDOM, false);
         this.dataManager.register(WAITING, false);
@@ -339,6 +342,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         this.experience = compound.getFloat("XpP");
         this.experienceLevel = compound.getInt("XpLevel");
         this.experienceTotal = compound.getInt("XpTotal");
+        this.dataManager.set(dataWatch_MaidExpValue, experience);
 
         setFreedom(compound.getBoolean("Freedom"));
         setMaidWait(compound.getBoolean("Wait"));
@@ -416,7 +420,8 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
             this.experience /= (float) this.xpBarCap();
         }
 
-        this.getMaidData().withLevel(this.experienceLevel);
+        dataManager.set(dataWatch_MaidExpValue, experience);
+        this.setMaidData(getMaidData().withLevel(this.experienceLevel));
     }
 
     /**
@@ -436,7 +441,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
             this.world.playSound((PlayerEntity)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_PLAYER_LEVELUP, this.getSoundCategory(), f * 0.75F, 1.0F);
             this.lastXPSound = this.ticksExisted;
         }*/
-        this.getMaidData().withLevel(this.experienceLevel);
+        this.setMaidData(getMaidData().withLevel(this.experienceLevel));
     }
 
     /**
@@ -449,6 +454,11 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         } else {
             return this.experienceLevel >= 15 ? 37 + (this.experienceLevel - 15) * 5 : 7 + this.experienceLevel * 2;
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public float getXp() {
+        return this.experience;
     }
 
     protected int getExperiencePoints(PlayerEntity player) {
@@ -860,13 +870,13 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
             updateMaidFlagsClient();
             updateGotcha();
 */
-/*
+
 
             // メイド経験値
-            if (ticksExisted%10 == 0) {
-                maidExperience = dataManager.get(EntityLittleMaid.dataWatch_MaidExpValue);
+            if (ticksExisted % 10 == 0) {
+                experience = dataManager.get(dataWatch_MaidExpValue);
             }
-
+/*
             // 腕の挙動関連
             litemuse = dataManager.get(EntityLittleMaid.dataWatch_ItemUse);
             for (int li = 0; li < mstatSwingStatus.length; li++) {

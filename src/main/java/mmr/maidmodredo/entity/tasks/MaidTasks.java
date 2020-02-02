@@ -23,6 +23,8 @@ public class MaidTasks {
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> work(MaidJob p_220639_0_, float p_220639_1_) {
         if (p_220639_0_ == MaidJob.FARMER) {
             return workFarmer(p_220639_0_, p_220639_1_);
+        } else if (p_220639_0_ == MaidJob.FISHER) {
+            return workFisher(p_220639_0_, p_220639_1_);
         } else {
             return ImmutableList.of(func_220646_b(), Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new WorkTask(MemoryModuleType.JOB_SITE, 4), 2), Pair.of(new WalkTowardsPosTask(MemoryModuleType.JOB_SITE, 1, 10), 5), Pair.of(new MaidWalkTowardsRandomSecondaryPosTask(MemoryModuleType.SECONDARY_JOB_SITE, 0.4F, 1, 6, MemoryModuleType.JOB_SITE), 5)))), Pair.of(10, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)), Pair.of(2, new MaidStayNearPointTask(MemoryModuleType.JOB_SITE, p_220639_1_, 9, 100, 6400)), Pair.of(99, new UpdateActivityTask()));
         }
@@ -30,6 +32,10 @@ public class MaidTasks {
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> workFarmer(MaidJob p_220639_0_, float p_220639_1_) {
         return ImmutableList.of(func_220646_b(), Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new WorkTask(MemoryModuleType.JOB_SITE, 4), 2), Pair.of(new WalkTowardsPosTask(MemoryModuleType.JOB_SITE, 1, 10), 5), Pair.of(new MaidWalkTowardsRandomSecondaryPosTask(MemoryModuleType.SECONDARY_JOB_SITE, 0.4F, 1, 6, MemoryModuleType.JOB_SITE), 5), Pair.of(new MaidFarmTask(), p_220639_0_ == MaidJob.FARMER ? 1 : 5)))), Pair.of(10, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)), Pair.of(2, new MaidStayNearPointTask(MemoryModuleType.JOB_SITE, p_220639_1_, 9, 100, 6400)), Pair.of(99, new UpdateActivityTask()));
+    }
+
+    public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> workFisher(MaidJob p_220639_0_, float p_220639_1_) {
+        return ImmutableList.of(Pair.of(p_220639_0_ == MaidJob.FISHER ? 0 : 5, new FishingTask()), func_220646_b(), Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new WorkTask(MemoryModuleType.JOB_SITE, 4), 2), Pair.of(new WalkTowardsPosTask(MemoryModuleType.JOB_SITE, 1, 10), 5), Pair.of(new MaidWalkTowardsRandomSecondaryPosTask(MemoryModuleType.SECONDARY_JOB_SITE, 0.4F, 1, 6, MemoryModuleType.JOB_SITE), 5)))), Pair.of(2, new MaidStayNearPointTask(MemoryModuleType.JOB_SITE, p_220639_1_, 9, 100, 1200)), Pair.of(99, new UpdateActivityTask()));
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidEntity>>> rest(float p_220635_1_) {

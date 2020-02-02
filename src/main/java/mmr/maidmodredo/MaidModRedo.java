@@ -1,10 +1,12 @@
 package mmr.maidmodredo;
 
 import mmr.maidmodredo.client.render.LittleMaidRender;
+import mmr.maidmodredo.client.render.MaidFishingBobberRender;
 import mmr.maidmodredo.client.render.WanderMaidRender;
 import mmr.maidmodredo.client.resource.OldZipTexturesWrapper;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import mmr.maidmodredo.entity.WanderMaidEntity;
+import mmr.maidmodredo.entity.misc.MaidFishingBobberEntity;
 import mmr.maidmodredo.init.LittleContainers;
 import mmr.maidmodredo.init.MaidDataSerializers;
 import mmr.maidmodredo.init.MaidJob;
@@ -92,6 +94,9 @@ public class MaidModRedo
         Minecraft.getInstance().getResourceManager().addResourcePack(new OldZipTexturesWrapper());
         RenderingRegistry.registerEntityRenderingHandler(WanderMaidEntity.class, WanderMaidRender::new);
         RenderingRegistry.registerEntityRenderingHandler(LittleMaidEntity.class, LittleMaidRender::new);
+
+        RenderingRegistry.registerEntityRenderingHandler(MaidFishingBobberEntity.class, MaidFishingBobberRender::new);
+
         LittleContainers.registerScreenFactories();
     }
 

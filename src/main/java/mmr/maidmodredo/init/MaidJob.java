@@ -25,6 +25,9 @@ public class MaidJob {
     public static final MaidJob FARMER = new MaidJob("farmer", (item) -> {
         return item.getItem() instanceof HoeItem;
     });
+    public static final MaidJob FISHER = new MaidJob("fisher", (item) -> {
+        return item.getItem() instanceof FishingRodItem;
+    });
 
     public static final MaidJob FENCER = new MaidJob("fencer", (item) -> {
         return item.getItem() instanceof SwordItem;
@@ -118,10 +121,11 @@ public class MaidJob {
     public static void init() {
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "wild"), WILD);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "normal"), NORMAL);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "farmer"), FARMER);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "fisher"), FISHER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "fencer"), FENCER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "guard"), GUARD);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "archer"), ARCHER);
-        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "farmer"), FARMER);
     }
 
     private static <T> DefaultedRegistry<T> registerDefaulted(String p_222933_0_, String p_222933_1_, Supplier<T> p_222933_2_) {

@@ -11,6 +11,7 @@ import mmr.maidmodredo.api.IMaidAnimation;
 import mmr.maidmodredo.api.MaidAnimation;
 import mmr.maidmodredo.client.maidmodel.*;
 import mmr.maidmodredo.entity.data.MaidData;
+import mmr.maidmodredo.entity.misc.MaidFishingBobberEntity;
 import mmr.maidmodredo.entity.tasks.MaidTasks;
 import mmr.maidmodredo.init.*;
 import mmr.maidmodredo.inventory.InventoryMaidEquipment;
@@ -147,6 +148,9 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
     protected Counter registerTick;
     protected int maidContractLimit;        // 契約期間
+
+    @Nullable
+    public MaidFishingBobberEntity fishingBobber;
 
     public LittleMaidEntity(EntityType<? extends LittleMaidEntity> p_i48575_1_, World p_i48575_2_) {
         super(p_i48575_1_, p_i48575_2_);
@@ -1008,8 +1012,13 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                 } else {
                     return this.getMaidData().getLevel() >= job.getNeedLevel() && job.getRequireItem().test(this.getHeldItem(Hand.MAIN_HAND));
                 }
-            }).findFirst().ifPresent((p_220388_2_) -> {
-                this.setMaidData(this.getMaidData().withJob(p_220388_2_));
+            }).findFirst().ifPresent((p_220388_2_) ->
+            {
+                if (p_220388_2_ == MaidJob.WILD) {
+                    this.setMaidData(this.getMaidData().withJob(MaidJob.NORMAL));
+                } else {
+                    this.setMaidData(this.getMaidData().withJob(p_220388_2_));
+                }
             });
         }
     }

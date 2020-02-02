@@ -99,7 +99,7 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
     private void func_214130_a(int p_214130_1_, int p_214130_2_) {
         this.minecraft.getTextureManager().bindTexture(MAID_INVENTORY);
 
-        int i = (int) this.container.getLittleMaidEntity().xpBarCap();
+        int i = (int) this.container.getLittleMaidEntity().experience;
 
         //XP bar
         blit(p_214130_1_ + 180, p_214130_2_ + 26, this.blitOffset, 0.0F, 237.0F, 102, 15, 256, 256);

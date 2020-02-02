@@ -302,9 +302,9 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
 
         compound.put("MaidData", this.getMaidData().serialize(NBTDynamicOps.INSTANCE));
 
-        this.experience = compound.getFloat("XpP");
-        this.experienceLevel = compound.getInt("XpLevel");
-        this.experienceTotal = compound.getInt("XpTotal");
+        compound.putFloat("XpP", this.experience);
+        compound.putInt("XpLevel", this.experienceLevel);
+        compound.putInt("XpTotal", this.experienceTotal);
 
         compound.putBoolean("Freedom", isFreedom());
         compound.putBoolean("Wait", isMaidWait());
@@ -336,9 +336,9 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
             this.setMaidData(new MaidData(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.get("MaidData"))));
         }
 
-        compound.putFloat("XpP", this.experience);
-        compound.putInt("XpLevel", this.experienceLevel);
-        compound.putInt("XpTotal", this.experienceTotal);
+        this.experience = compound.getFloat("XpP");
+        this.experienceLevel = compound.getInt("XpLevel");
+        this.experienceTotal = compound.getInt("XpTotal");
 
         setFreedom(compound.getBoolean("Freedom"));
         setMaidWait(compound.getBoolean("Wait"));
@@ -1000,7 +1000,6 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                 }
             }).findFirst().ifPresent((p_220388_2_) -> {
                 this.setMaidData(this.getMaidData().withJob(p_220388_2_));
-                this.resetBrain((ServerWorld) this.world);
             });
         }
     }
@@ -1195,10 +1194,11 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
                     return true;
                 }
 
-                if (this.isOwner(player) && player.isSneaking() && itemstack.isEmpty() && getAnimation() == PET_ANIMATION) {
+                if (this.isOwner(player) && player.isSneaking() && itemstack.isEmpty() && getAnimation() != PET_ANIMATION) {
                     MaidPacketHandler.animationModel(this, PET_ANIMATION);
 
                     return true;
+                } else if (item.itemInteractionForEntity(itemstack, player, this, hand)) {
                 } else if (this.isOwner(player) && !SWEETITEM.contains(item) && item != Items.FEATHER) {
                     if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
                         if (!player.world.isRemote) {

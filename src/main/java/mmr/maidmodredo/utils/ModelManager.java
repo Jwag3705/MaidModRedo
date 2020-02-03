@@ -103,7 +103,7 @@ public class ModelManager {
 
     //TODO you must link entity and texture
     private void setEntityTexture(String fname, TextureBox lts) {
-        if (lts.fileName.contains("littlebutler")) {
+        if (lts.fileName.contains("littlemaid")) {
             this.entityTextures.put(LittleButlerEntity.class, lts);
         } else {
             this.entityTextures.put(LittleMaidEntity.class, lts);
@@ -271,7 +271,7 @@ public class ModelManager {
     //Entityのクラスでテクスチャを分ける
     //TODO
     private void setTextureForType(TextureBox lbox) {
-        if (lbox.textureDir[1].contains("littlebutler")) {
+        if (lbox.fileName.contains("littlemaid")) {
             setDefaultTexture(LittleButlerEntity.class, lbox);
         } else {
             setDefaultTexture(LittleMaidEntity.class, lbox);

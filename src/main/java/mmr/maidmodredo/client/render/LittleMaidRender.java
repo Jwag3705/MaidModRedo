@@ -1,9 +1,11 @@
 package mmr.maidmodredo.client.render;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import mmr.maidmodredo.api.IMaidArmor;
 import mmr.maidmodredo.client.maidmodel.IModelCaps;
 import mmr.maidmodredo.client.maidmodel.ModelBase;
 import mmr.maidmodredo.client.maidmodel.ModelLittleMaidBase;
+import mmr.maidmodredo.client.maidmodel.ModelLittleMaid_Orign;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import mmr.maidmodredo.utils.helper.RendererHelper;
 import net.minecraft.client.Minecraft;
@@ -13,10 +15,13 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.IHasArm;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
 
 public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
 
@@ -26,6 +31,7 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
 
 
         addLayer(new MMMLayerArmor<>(this));
+        addLayer(new MMMLayerHeadArmor<>(this));
         addLayer(new MMMHeldItemLayer<>(this));
     }
 
@@ -268,8 +274,8 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
 //		modelMain.isAlphablend = true;
 //		modelFATT.isAlphablend = true;
 
-        modelMain.setCapsValue(IModelCaps.caps_heldItemLeft, (Integer)0);
-        modelMain.setCapsValue(IModelCaps.caps_heldItemRight, (Integer)0);
+        modelMain.setCapsValue(IModelCaps.caps_heldItemLeft, (Integer) 0);
+        modelMain.setCapsValue(IModelCaps.caps_heldItemRight, (Integer) 0);
         //modelMain.setCapsValue(IModelCaps.caps_onGround, renderSwingProgress(lmaid, par9));
         modelMain.setCapsValue(IModelCaps.caps_onGround, lmaid.getSwingProgress(par9, lmaid.getSwingHand()), lmaid.getSwingProgress(par9, lmaid.getSwingHand()));
         //modelMain.setCapsValue(IModelCaps.caps_isRiding, lmaid.isRidingRender());
@@ -379,5 +385,56 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
     protected ResourceLocation getEntityTexture(LittleMaidEntity par1EntityLiving) {
         // テクスチャリソースを返すところだけれど、基本的に使用しない。
         return par1EntityLiving.getTextures(0)[0];
+    }
+
+    private class MMMLayerHeadArmor<T extends LittleMaidEntity, M extends ModelBase<T>> extends LayerRenderer<T, M> {
+        private final ModelLittleMaid_Orign<LittleMaidEntity> hatModel = new ModelLittleMaid_Orign<>();
+
+        public MMMLayerHeadArmor(IEntityRenderer<T, M> littleMaidRender) {
+            super(littleMaidRender);
+        }
+
+        @Override
+        public void render(T entityIn, float p_212842_2_, float p_212842_3_, float p_212842_4_, float p_212842_5_, float p_212842_6_, float p_212842_7_, float p_212842_8_) {
+            if (entityIn.getInventoryMaidEquipment().getheadItem().getItem() instanceof IMaidArmor) {
+                GlStateManager.pushMatrix();
+
+                ResourceLocation resourceLocation = getArmorResource(entityIn.getInventoryMaidEquipment().getheadItem().getItem(), entityIn.getModelNameMain().toLowerCase());
+
+                GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+                this.bindTexture(resourceLocation);
+                hatModel.setLivingAnimations(entityIn, p_212842_2_, p_212842_3_, p_212842_4_);
+                hatModel.render(entityIn, p_212842_2_, p_212842_3_, p_212842_5_, p_212842_6_, p_212842_7_, p_212842_8_, false);
+
+                GlStateManager.popMatrix();
+            }
+        }
+
+        private ResourceLocation getArmorResource(Item armor, @Nullable String p_177178_3_) {
+            int index;
+            String loc = p_177178_3_;
+
+            if (p_177178_3_ != null) {
+                int _len = p_177178_3_.length();
+                index = p_177178_3_.lastIndexOf("_");
+
+                if (index != -1) {
+                    String right = "_Origin";
+                    loc.replace(right, "");
+                }
+            }
+
+            if (armor instanceof IMaidArmor) {
+                String s = "maidmodredo:textures/models/armor/" + ((IMaidArmor) armor).getMaidArmorTextureName() + ".png";
+                return new ResourceLocation(s);
+            } else {
+                return new ResourceLocation("maidmodredo:textures/models/armor/bagu_hat");
+            }
+        }
+
+        @Override
+        public boolean shouldCombineTextures() {
+            return false;
+        }
     }
 }

@@ -13,6 +13,7 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Hand;
@@ -40,6 +41,8 @@ public class FishingTask extends Task<LittleMaidEntity> {
     @Override
     protected boolean shouldExecute(ServerWorld worldIn, LittleMaidEntity owner) {
         if (owner.getMaidData().getJob() != MaidJob.FISHER) {
+            return false;
+        } else if (!(owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof FishingRodItem)) {
             return false;
         } else {
             this.isCatchFish = false;
@@ -142,6 +145,11 @@ public class FishingTask extends Task<LittleMaidEntity> {
 
     protected void resetTask(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
         entityIn.getBrain().removeMemory(MemoryModuleType.LOOK_TARGET);
+        if (!worldIn.isRemote) {
+            if (entityIn.fishingBobber != null) {
+                entityIn.fishingBobber.remove();
+            }
+        }
     }
 
     @Override

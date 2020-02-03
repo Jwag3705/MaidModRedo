@@ -85,7 +85,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
     }, MemoryModuleType.MEETING_POINT, (p_213772_0_, p_213772_1_) -> {
         return p_213772_1_ == PointOfInterestType.MEETING;
     });
-    private static final Set<Item> SWEETITEM = Sets.newHashSet(Items.SUGAR, Items.COOKIE, Items.PUMPKIN_PIE, LittleItems.CARAMEL_APPLE);
+    private static final Set<Item> SWEETITEM = Sets.newHashSet(Items.SUGAR, Items.COOKIE, Items.PUMPKIN_PIE, LittleItems.CARAMEL_APPLE, LittleItems.STRAWBERRY_CAKE, LittleItems.REDVELVET_CAKE, LittleItems.LAVENDER_CAKE, LittleItems.ICECREAM_CAKE, LittleItems.DEVILSFOOD_CAKE, LittleItems.COFFEE_CAKE, LittleItems.CHEESE_CAKE, LittleItems.CARROT_CAKE, LittleItems.BIRTHDAY_CAKE);
 
     private InventoryMaidMain inventoryMaidMain;
     private InventoryMaidEquipment inventoryMaidEquipment;
@@ -248,6 +248,7 @@ public class LittleMaidEntity extends TameableEntity implements IModelCaps, IMod
         p_213744_1_.registerActivity(Activity.REST, MaidTasks.rest(f));
         p_213744_1_.registerActivity(Activity.IDLE, MaidTasks.idle(f));
         p_213744_1_.registerActivity(Activity.PANIC, MaidTasks.panic(f));
+        p_213744_1_.registerActivity(LittleActivitys.LUMBERJACK, MaidTasks.cutWood(f));
         p_213744_1_.registerActivity(LittleActivitys.ATTACK, MaidTasks.attack(f));
         p_213744_1_.registerActivity(LittleActivitys.SHOT, MaidTasks.shot(f));
         p_213744_1_.setDefaultActivities(ImmutableSet.of(Activity.CORE));

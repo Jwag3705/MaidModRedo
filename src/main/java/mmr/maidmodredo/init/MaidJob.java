@@ -28,6 +28,9 @@ public class MaidJob {
     public static final MaidJob FISHER = new MaidJob("fisher", (item) -> {
         return item.getItem() instanceof FishingRodItem;
     });
+    public static final MaidJob LUMBERJACK = new MaidJob("lumberjack", (item) -> {
+        return item.getItem() instanceof AxeItem;
+    });
 
     public static final MaidJob FENCER = new MaidJob("fencer", (item) -> {
         return item.getItem() instanceof SwordItem;
@@ -123,6 +126,7 @@ public class MaidJob {
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "normal"), NORMAL);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "farmer"), FARMER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "fisher"), FISHER);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "lumberjack"), LUMBERJACK);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "fencer"), FENCER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "guard"), GUARD);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "archer"), ARCHER);

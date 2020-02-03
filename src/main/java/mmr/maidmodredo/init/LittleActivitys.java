@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = MaidModRedo.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class LittleActivitys {
+    public static final Activity LUMBERJACK = new Activity("littlemaid.lumberjack");
     public static final Activity ATTACK = new Activity("littlemaid.attack");
     public static final Activity SHOT = new Activity("littlemaid.shot");
     public static final Activity FOLLOW = new Activity("littlemaid.follow");
@@ -15,6 +16,7 @@ public class LittleActivitys {
 
     @SubscribeEvent
     public static void registerActivity(RegistryEvent.Register<Activity> event) {
+        event.getRegistry().register(LUMBERJACK.setRegistryName("lumberjack"));
         event.getRegistry().register(ATTACK.setRegistryName("attack"));
         event.getRegistry().register(SHOT.setRegistryName("shot"));
         event.getRegistry().register(FOLLOW.setRegistryName("follow"));

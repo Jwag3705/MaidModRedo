@@ -1,6 +1,6 @@
 package mmr.maidmodredo.inventory;
 
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -14,9 +14,9 @@ import net.minecraft.util.text.ITextComponent;
 public class InventoryMaid extends Inventory implements INamedContainerProvider {
 
     public int slot;
-    private LittleMaidEntity entityLittleMaid;
+    private LittleMaidBaseEntity entityLittleMaid;
 
-    public InventoryMaid(LittleMaidEntity entityLittleMaid, int slotCount) {
+    public InventoryMaid(LittleMaidBaseEntity entityLittleMaid, int slotCount) {
         super(slotCount);
 
         this.slot = slotCount;
@@ -31,7 +31,7 @@ public class InventoryMaid extends Inventory implements INamedContainerProvider 
 
     // TODO /* ======================================== MOD START =====================================*/
 
-    public LittleMaidEntity getContainerLittleMaid() {
+    public LittleMaidBaseEntity getContainerLittleMaid() {
         return this.entityLittleMaid;
     }
 

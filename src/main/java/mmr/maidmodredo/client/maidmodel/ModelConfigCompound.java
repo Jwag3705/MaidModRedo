@@ -1,6 +1,6 @@
 package mmr.maidmodredo.client.maidmodel;
 
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.utils.CommonHelper;
 import mmr.maidmodredo.utils.EnumArmorRenderParts;
 import mmr.maidmodredo.utils.EnumTextureType;
@@ -151,20 +151,8 @@ public class ModelConfigCompound  {
 
 		if (textureBox[0] instanceof TextureBox) {
 			int lc = (color & 0x00ff) + (contract ? 0 : ModelManager.tx_wild);
-			lbox = (TextureBox)textureBox[0];
-			if (lbox.hasColor(lc)) {
-				textures[0][0] = lbox.getTextureName(lc);
-				lc = (color & 0x00ff) + (contract ? ModelManager.tx_eyecontract : ModelManager.tx_eyewild);
-				textures[0][1] = lbox.getTextureName(lc);
-				lf = true;
-				textureModel[0] = lbox.models[0];
-			}
-			// TODO ★ 暫定処置 クライアントに存在しないテクスチャが指定された場合、デフォルトを読み出す。
-			else
-			{
-				lbox = ModelManager.instance.getDefaultTexture((IModelEntity)owner);
-				textureBox[0] = textureBox[1] = lbox;
-
+			if (ModelManager.instance.entityTextures.containsKey(owner.getClass())) {
+				lbox = (TextureBox) textureBox[0];
 				if (lbox.hasColor(lc)) {
 					textures[0][0] = lbox.getTextureName(lc);
 					lc = (color & 0x00ff) + (contract ? ModelManager.tx_eyecontract : ModelManager.tx_eyewild);
@@ -172,9 +160,20 @@ public class ModelConfigCompound  {
 					lf = true;
 					textureModel[0] = lbox.models[0];
 				}
-				else
-				{
-					// もう諦める
+				// TODO ★ 暫定処置 クライアントに存在しないテクスチャが指定された場合、デフォルトを読み出す。
+				else {
+					lbox = ModelManager.instance.getDefaultTexture((IModelEntity) owner);
+					textureBox[0] = textureBox[1] = lbox;
+
+					if (lbox.hasColor(lc)) {
+						textures[0][0] = lbox.getTextureName(lc);
+						lc = (color & 0x00ff) + (contract ? ModelManager.tx_eyecontract : ModelManager.tx_eyewild);
+						textures[0][1] = lbox.getTextureName(lc);
+						lf = true;
+						textureModel[0] = lbox.models[0];
+					} else {
+						// もう諦める
+					}
 				}
 			}
 		} else {
@@ -183,21 +182,23 @@ public class ModelConfigCompound  {
 		}
 		if (textureBox[1] instanceof TextureBox && owner != null) {
 			lbox = (TextureBox)textureBox[1];
-			for (int i = 0; i < 4; i++) {
-				EquipmentSlotType lSlot = null;
-				for (EquipmentSlotType pSlot: EquipmentSlotType.values()) {
-					if (pSlot.getSlotType() == EquipmentSlotType.Group.ARMOR && pSlot.getIndex() == i) {
-						lSlot = pSlot;
+			if (ModelManager.instance.entityTextures.containsKey(owner.getClass())) {
+				for (int i = 0; i < 4; i++) {
+					EquipmentSlotType lSlot = null;
+					for (EquipmentSlotType pSlot : EquipmentSlotType.values()) {
+						if (pSlot.getSlotType() == EquipmentSlotType.Group.ARMOR && pSlot.getIndex() == i) {
+							lSlot = pSlot;
+						}
 					}
+					ItemStack is = owner.getItemStackFromSlot(lSlot);
+					textures[1][i] = lbox.getArmorTextureName(ModelManager.tx_armor1, is);
+					textures[2][i] = lbox.getArmorTextureName(ModelManager.tx_armor2, is);
+					textures[3][i] = lbox.getArmorTextureName(ModelManager.tx_armor1light, is);
+					textures[4][i] = lbox.getArmorTextureName(ModelManager.tx_armor2light, is);
 				}
-				ItemStack is = owner.getItemStackFromSlot(lSlot);
-				textures[1][i] = lbox.getArmorTextureName(ModelManager.tx_armor1, is);
-				textures[2][i] = lbox.getArmorTextureName(ModelManager.tx_armor2, is);
-				textures[3][i] = lbox.getArmorTextureName(ModelManager.tx_armor1light, is);
-				textures[4][i] = lbox.getArmorTextureName(ModelManager.tx_armor2light, is);
+				textureModel[1] = lbox.models[1];
+				textureModel[2] = lbox.models[2];
 			}
-			textureModel[1] = lbox.models[1];
-			textureModel[2] = lbox.models[2];
 		} else {
 //			textureBox[0] = MMM_TextureManager.instance.getTextureBoxServerIndex(textureIndex[0]);
 			throw new IllegalStateException("Texture setting error. Maybe ModelBoxServer is set?");
@@ -213,36 +214,40 @@ public class ModelConfigCompound  {
 			lbox = (TextureBoxServer)textureBox[0];
 			if (lbox.localBox != null) {
 				int lc = (color & 0x00ff) + (contract ? 0 : ModelManager.tx_wild);
-				if (lbox.localBox.hasColor(lc)) {
-					if (CommonHelper.isClient) {
-						textures[0][0] = lbox.localBox.getTextureName(lc);
-						lc = (color & 0x00ff) + (contract ? ModelManager.tx_eyecontract : ModelManager.tx_eyewild);
-						textures[0][1] = lbox.localBox.getTextureName(lc);
+				if (ModelManager.instance.entityTextures.containsKey(owner.getClass())) {
+					if (lbox.localBox.hasColor(lc)) {
+						if (CommonHelper.isClient) {
+							textures[0][0] = lbox.localBox.getTextureName(lc);
+							lc = (color & 0x00ff) + (contract ? ModelManager.tx_eyecontract : ModelManager.tx_eyewild);
+							textures[0][1] = lbox.localBox.getTextureName(lc);
+						}
+						lf = true;
+						textureModel[0] = lbox.localBox.models[0];
 					}
-					lf = true;
-					textureModel[0] = lbox.localBox.models[0];
 				}
 			}
 		}
 		if (textureBox[1] instanceof TextureBoxServer && owner != null) {
 			lbox = (TextureBoxServer)textureBox[1];
 			if (lbox.localBox != null) {
-				if (CommonHelper.isClient) {
-					for (int i = 0; i < 4; i++) {
-						for (EquipmentSlotType pSlot: EquipmentSlotType.values()) {
-							if (pSlot.getSlotType() == EquipmentSlotType.Group.ARMOR && pSlot.getIndex() == i) {
-								ItemStack is = owner.getItemStackFromSlot(pSlot);
-								textures[1][i] = lbox.localBox.getArmorTextureName(ModelManager.tx_armor1, is);
-								textures[2][i] = lbox.localBox.getArmorTextureName(ModelManager.tx_armor2, is);
-								textures[3][i] = lbox.localBox.getArmorTextureName(ModelManager.tx_armor1light, is);
-								textures[4][i] = lbox.localBox.getArmorTextureName(ModelManager.tx_armor2light, is);
-								break;
+				if (ModelManager.instance.entityTextures.containsKey(owner.getClass())) {
+					if (CommonHelper.isClient) {
+						for (int i = 0; i < 4; i++) {
+							for (EquipmentSlotType pSlot : EquipmentSlotType.values()) {
+								if (pSlot.getSlotType() == EquipmentSlotType.Group.ARMOR && pSlot.getIndex() == i) {
+									ItemStack is = owner.getItemStackFromSlot(pSlot);
+									textures[1][i] = lbox.localBox.getArmorTextureName(ModelManager.tx_armor1, is);
+									textures[2][i] = lbox.localBox.getArmorTextureName(ModelManager.tx_armor2, is);
+									textures[3][i] = lbox.localBox.getArmorTextureName(ModelManager.tx_armor1light, is);
+									textures[4][i] = lbox.localBox.getArmorTextureName(ModelManager.tx_armor2light, is);
+									break;
+								}
 							}
 						}
 					}
+					textureModel[1] = lbox.localBox.models[1];
+					textureModel[2] = lbox.localBox.models[2];
 				}
-				textureModel[1] = lbox.localBox.models[1];
-				textureModel[2] = lbox.localBox.models[2];
 			}
 		}
 		return lf;
@@ -252,9 +257,10 @@ public class ModelConfigCompound  {
 		if (pTargetTexture == 0) {
 			int lc = getColor() + (isContract() ? 0 : ModelManager.tx_wild);
 			// TODO ★ 暫定処置
+
 			if(textureBox[0] instanceof TextureBox)
 			{
-				textureBox[0] = ModelManager.instance.getNextPackege((TextureBox)textureBox[0], lc);
+				textureBox[0] = ModelManager.instance.getNextPackege(owner.getClass(), (TextureBox) textureBox[0], lc);
 			}
 			else
 			{
@@ -272,21 +278,21 @@ public class ModelConfigCompound  {
 			}
 		}
 		if (pTargetTexture == 1) {
-			textureBox[1] = ModelManager.instance.getNextArmorPackege((TextureBox)textureBox[1]);
+			textureBox[1] = ModelManager.instance.getNextArmorPackege(owner.getClass(), (TextureBox) textureBox[1]);
 		}
 	}
 
 	public void setPrevTexturePackege(int pTargetTexture) {
 		if (pTargetTexture == 0) {
 			int lc = getColor() + (isContract() ? 0 : ModelManager.tx_wild);
-			textureBox[0] = ModelManager.instance.getPrevPackege((TextureBox)textureBox[0], lc);
+			textureBox[0] = ModelManager.instance.getPrevPackege(owner.getClass(), (TextureBox) textureBox[0], lc);
 			textureBox[1] = textureBox[0];
 			if (!((TextureBox)textureBox[1]).hasArmor()) {
 				pTargetTexture = 1;
 			}
 		}
 		if (pTargetTexture == 1) {
-			textureBox[1] = ModelManager.instance.getPrevArmorPackege((TextureBox)textureBox[1]);
+			textureBox[1] = ModelManager.instance.getPrevArmorPackege(owner.getClass(), (TextureBox) textureBox[1]);
 		}
 	}
 
@@ -312,7 +318,7 @@ public class ModelConfigCompound  {
 		{
 			// サイズの変更
 	//		owner.setSize(textureBox[0].getWidth(entityCaps), textureBox[0].getHeight(entityCaps));
-			if(owner instanceof LittleMaidEntity)
+			if (owner instanceof LittleMaidBaseEntity)
 			{
 				//TODO
 				//((LittleMaidEntity)owner).setSize2(textureBox[0].getWidth(entityCaps), textureBox[0].getHeight(entityCaps));

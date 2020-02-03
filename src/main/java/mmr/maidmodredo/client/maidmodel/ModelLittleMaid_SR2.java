@@ -2,7 +2,7 @@ package mmr.maidmodredo.client.maidmodel;
 
 
 import mmr.maidmodredo.api.IMaidAnimation;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
@@ -80,7 +80,7 @@ public class ModelLittleMaid_SR2<T extends LivingEntity> extends ModelLittleMaid
     public void setAnimations(float par1, float par2, float pTicksExisted, float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps, IMaidAnimation animation) {
         super.setAnimations(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps, animation);
 
-        if (animation.getAnimation() == LittleMaidEntity.PET_ANIMATION) {
+        if (animation.getAnimation() == LittleMaidBaseEntity.PET_ANIMATION) {
 
         }
     }

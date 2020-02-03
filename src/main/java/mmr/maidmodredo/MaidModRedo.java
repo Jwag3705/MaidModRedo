@@ -1,9 +1,12 @@
 package mmr.maidmodredo;
 
-import mmr.maidmodredo.client.render.LittleMaidRender;
+import mmr.maidmodredo.client.render.LittleButlerRender;
+import mmr.maidmodredo.client.render.LittleMaidBaseRender;
 import mmr.maidmodredo.client.render.MaidFishingBobberRender;
 import mmr.maidmodredo.client.render.WanderMaidRender;
 import mmr.maidmodredo.client.resource.OldZipTexturesWrapper;
+import mmr.maidmodredo.entity.LittleButlerEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import mmr.maidmodredo.entity.WanderMaidEntity;
 import mmr.maidmodredo.entity.misc.MaidFishingBobberEntity;
@@ -93,7 +96,9 @@ public class MaidModRedo
     private void doClientStuff(final FMLClientSetupEvent event) {
         Minecraft.getInstance().getResourceManager().addResourcePack(new OldZipTexturesWrapper());
         RenderingRegistry.registerEntityRenderingHandler(WanderMaidEntity.class, WanderMaidRender::new);
-        RenderingRegistry.registerEntityRenderingHandler(LittleMaidEntity.class, LittleMaidRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(LittleMaidEntity.class, LittleMaidBaseRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(LittleButlerEntity.class, LittleButlerRender::new);
+
 
         RenderingRegistry.registerEntityRenderingHandler(MaidFishingBobberEntity.class, MaidFishingBobberRender::new);
 
@@ -114,11 +119,11 @@ public class MaidModRedo
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 
         if (event.getEntity() instanceof AbstractIllagerEntity) {
-            ((AbstractIllagerEntity) event.getEntity()).targetSelector.addGoal(1, new NearestAttackableTargetGoal(((AbstractIllagerEntity) event.getEntity()), LittleMaidEntity.class, true));
+            ((AbstractIllagerEntity) event.getEntity()).targetSelector.addGoal(1, new NearestAttackableTargetGoal(((AbstractIllagerEntity) event.getEntity()), LittleMaidBaseEntity.class, true));
         }
 
-        if (event.getEntity() instanceof LittleMaidEntity) {
-            LittleMaidEntity maid = (LittleMaidEntity) event.getEntity();
+        if (event.getEntity() instanceof LittleMaidBaseEntity) {
+            LittleMaidBaseEntity maid = (LittleMaidBaseEntity) event.getEntity();
             if (maid.isContract() || maid.isWildSaved) return;
             maid.onSpawnWithEgg();
 //			int c = maid.getTextureBox()[0].getWildColorBits();

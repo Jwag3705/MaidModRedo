@@ -1,6 +1,6 @@
 package mmr.maidmodredo.utils;
 
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.Map;
 @SuppressWarnings("deprecation")
 public class EntityCaps extends EntityCapsLiving {
 
-    private LittleMaidEntity owner;
+    private LittleMaidBaseEntity owner;
     private static Map<String, Integer> caps;
 
     static {
@@ -60,7 +60,7 @@ public class EntityCaps extends EntityCapsLiving {
         caps.put("currentEquippedItem", caps_currentEquippedItem);
     }
 
-    public EntityCaps(LittleMaidEntity pOwner) {
+    public EntityCaps(LittleMaidBaseEntity pOwner) {
         super(pOwner);
         owner = pOwner;
     }

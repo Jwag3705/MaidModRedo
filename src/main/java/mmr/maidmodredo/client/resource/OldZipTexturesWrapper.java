@@ -76,7 +76,7 @@ public class OldZipTexturesWrapper implements IResourcePack {
 
         //旧式用の判定処理
         if (key.toLowerCase().startsWith("mob/modelmulti")
-                || key.toLowerCase().startsWith("mob/littlemaid")) {
+                || key.toLowerCase().startsWith("mob/littlemaid") || key.toLowerCase().startsWith("mob/littlebutler")) {
             //old type is not change
         } else {
             key = "assets/minecraft/" + key;

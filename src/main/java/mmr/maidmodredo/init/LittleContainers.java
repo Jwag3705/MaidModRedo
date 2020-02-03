@@ -2,7 +2,7 @@ package mmr.maidmodredo.init;
 
 import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.client.screen.MaidInventoryScreen;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.inventory.MaidInventoryContainer;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.entity.Entity;
@@ -19,9 +19,9 @@ public class LittleContainers {
     public static final ContainerType<MaidInventoryContainer> MAID_INVENTORY = IForgeContainerType.create((windowId, inv, data) -> {
         Entity entity = inv.player.world.getEntityByID(data.readInt());
 
-        if (entity instanceof LittleMaidEntity) {
+        if (entity instanceof LittleMaidBaseEntity) {
 
-            return new MaidInventoryContainer(windowId, inv, (LittleMaidEntity) entity);
+            return new MaidInventoryContainer(windowId, inv, (LittleMaidBaseEntity) entity);
 
         } else {
             return null;

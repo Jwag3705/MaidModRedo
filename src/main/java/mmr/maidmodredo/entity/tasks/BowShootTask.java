@@ -1,7 +1,7 @@
 package mmr.maidmodredo.entity.tasks;
 
 import com.google.common.collect.ImmutableMap;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ICrossbowUser;
 import net.minecraft.entity.LivingEntity;
@@ -16,7 +16,7 @@ import net.minecraft.item.*;
 import net.minecraft.util.Hand;
 import net.minecraft.world.server.ServerWorld;
 
-public class BowShootTask extends Task<LittleMaidEntity> {
+public class BowShootTask extends Task<LittleMaidBaseEntity> {
     private final MemoryModuleType<? extends Entity> field_220541_a;
     private final float field_220542_b;
     protected int attackTick = -1;
@@ -33,20 +33,20 @@ public class BowShootTask extends Task<LittleMaidEntity> {
         this.field_220542_b = p_i50346_2_;
     }
 
-    protected boolean shouldExecute(ServerWorld worldIn, LittleMaidEntity owner) {
+    protected boolean shouldExecute(ServerWorld worldIn, LittleMaidBaseEntity owner) {
         Entity entity = owner.getBrain().getMemory(this.field_220541_a).get();
         double d0 = getTargetDistance(owner);
 
         return !isYourFriend(owner) && !isYourOwner(owner) && owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof ShootableItem && !owner.findAmmo(owner.getHeldItem(Hand.MAIN_HAND)).isEmpty() && owner.getDistanceSq(entity) < d0 * d0;
     }
 
-    private boolean isYourOwner(LittleMaidEntity entityIn) {
+    private boolean isYourOwner(LittleMaidBaseEntity entityIn) {
         return entityIn.getBrain().getMemory(this.field_220541_a).isPresent() && entityIn.getOwner() == entityIn.getBrain().getMemory(this.field_220541_a).get();
     }
 
-    private boolean isYourFriend(LittleMaidEntity entityIn) {
+    private boolean isYourFriend(LittleMaidBaseEntity entityIn) {
         if (entityIn.getBrain().getMemory(this.field_220541_a).isPresent()) {
-            if (entityIn.getBrain().getMemory(this.field_220541_a).get() instanceof LittleMaidEntity) {
+            if (entityIn.getBrain().getMemory(this.field_220541_a).get() instanceof LittleMaidBaseEntity) {
                 return true;
             }
         }
@@ -58,7 +58,7 @@ public class BowShootTask extends Task<LittleMaidEntity> {
         return false;
     }
 
-    protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         if (entityIn.getBrain().getMemory(this.field_220541_a).isPresent()) {
             Entity entity = entityIn.getBrain().getMemory(this.field_220541_a).get();
             if (entity != null && entity.isAlive()) {
@@ -73,7 +73,7 @@ public class BowShootTask extends Task<LittleMaidEntity> {
     }
 
     @Override
-    protected void resetTask(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected void resetTask(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         super.resetTask(worldIn, entityIn, gameTimeIn);
         this.seeTime = 0;
         this.attackTick = -1;
@@ -92,12 +92,12 @@ public class BowShootTask extends Task<LittleMaidEntity> {
         brain.updateActivity(worldIn.getDayTime(), worldIn.getGameTime());
     }
 
-    protected double getTargetDistance(LittleMaidEntity entity) {
+    protected double getTargetDistance(LittleMaidBaseEntity entity) {
         IAttributeInstance iattributeinstance = entity.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
         return iattributeinstance == null ? 16.0D : iattributeinstance.getValue();
     }
 
-    protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         Entity entity = entityIn.getBrain().getMemory(this.field_220541_a).get();
         if (entity != null && entity instanceof LivingEntity) {
             entityIn.setAttackTarget((LivingEntity) entity);
@@ -107,7 +107,7 @@ public class BowShootTask extends Task<LittleMaidEntity> {
 
 
     @Override
-    protected void updateTask(ServerWorld worldIn, LittleMaidEntity owner, long gameTime) {
+    protected void updateTask(ServerWorld worldIn, LittleMaidBaseEntity owner, long gameTime) {
         Entity entity = owner.getBrain().getMemory(this.field_220541_a).get();
         if (entity != null && entity instanceof LivingEntity) {
             double d0 = owner.getDistanceSq(entity.posX, entity.getBoundingBox().minY, entity.posZ);

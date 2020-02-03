@@ -1,6 +1,7 @@
 package mmr.maidmodredo.init;
 
 import mmr.maidmodredo.MaidModRedo;
+import mmr.maidmodredo.entity.LittleButlerEntity;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import mmr.maidmodredo.entity.WanderMaidEntity;
 import mmr.maidmodredo.entity.misc.MaidFishingBobberEntity;
@@ -16,6 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class LittleEntitys {
 
     public static final EntityType<LittleMaidEntity> LITTLEMAID = EntityType.Builder.create(LittleMaidEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.6F, 1.6F).build(prefix("littlemaid"));
+    public static final EntityType<LittleButlerEntity> LITTLEBUTLER = EntityType.Builder.create(LittleButlerEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.6F, 1.6F).build(prefix("littlebutler"));
     public static final EntityType<WanderMaidEntity> WANDERMAID = EntityType.Builder.create(WanderMaidEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.6F, 1.75F).build(prefix("wandermaid"));
 
 
@@ -24,8 +26,8 @@ public class LittleEntitys {
     @SubscribeEvent
     public static void registerEntity(RegistryEvent.Register<EntityType<?>> event) {
         event.getRegistry().register(LITTLEMAID.setRegistryName("littlemaid"));
+        event.getRegistry().register(LITTLEBUTLER.setRegistryName("littlebutler"));
         event.getRegistry().register(WANDERMAID.setRegistryName("wandermaid"));
-
     }
 
     private static String prefix(String path) {

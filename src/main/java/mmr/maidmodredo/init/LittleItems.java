@@ -1,10 +1,7 @@
 package mmr.maidmodredo.init;
 
 import mmr.maidmodredo.MaidModRedo;
-import mmr.maidmodredo.item.BaguHatItem;
-import mmr.maidmodredo.item.BroomItem;
-import mmr.maidmodredo.item.HouseWandItem;
-import mmr.maidmodredo.item.JobBookItem;
+import mmr.maidmodredo.item.*;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.SpawnEggItem;
@@ -14,6 +11,8 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = MaidModRedo.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class LittleItems {
+    public static final Item APPLE_JUICE = new DrinkItem((new Item.Properties()).food(LittleFoods.APPLE_JUICE).group(LittleItemGroups.LITTLEMAID));
+
     public static final Item DEVILSFOOD_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
     public static final Item REDVELVET_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
     public static final Item CARROT_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
@@ -23,7 +22,7 @@ public class LittleItems {
     public static final Item COFFEE_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
     public static final Item STRAWBERRY_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
     public static final Item BIRTHDAY_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item BAGU_HAT = new BaguHatItem(MaidArmorMaterial.BAGU_HAT, EquipmentSlotType.HEAD, (new Item.Properties()));
+    public static final Item BAGU_HAT = new BaguHatItem(MaidArmorMaterial.BAGU_HAT, EquipmentSlotType.HEAD, (new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
 
     public static final Item CARAMEL_APPLE = new Item((new Item.Properties()).food(LittleFoods.CARAMEL_APPLE).group(LittleItemGroups.LITTLEMAID));
     public static final Item BROOM = new BroomItem((new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
@@ -37,6 +36,8 @@ public class LittleItems {
 
     @SubscribeEvent
     public static void onItemRegistry(final RegistryEvent.Register<Item> event) {
+        event.getRegistry().register(APPLE_JUICE.setRegistryName("apple_juice"));
+
         event.getRegistry().register(DEVILSFOOD_CAKE.setRegistryName("devilsfood_cake"));
         event.getRegistry().register(REDVELVET_CAKE.setRegistryName("redvelvet_cake"));
         event.getRegistry().register(CARROT_CAKE.setRegistryName("carrot_cake"));

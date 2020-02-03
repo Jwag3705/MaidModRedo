@@ -6,7 +6,7 @@ import mmr.maidmodredo.client.maidmodel.IModelCaps;
 import mmr.maidmodredo.client.maidmodel.ModelBase;
 import mmr.maidmodredo.client.maidmodel.ModelLittleMaidBase;
 import mmr.maidmodredo.client.maidmodel.ModelLittleMaid_Orign;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.utils.helper.RendererHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -23,10 +23,10 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
-public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
+public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelMultiRender<T> {
 
     // Method
-    public LittleMaidRender(EntityRendererManager manager) {
+    public LittleMaidBaseRender(EntityRendererManager manager) {
         super(manager, 0.4F);
 
 
@@ -38,7 +38,7 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
     /**
      * 防具描画レイヤー
      */
-    public class MMMLayerArmor<T extends LittleMaidEntity, M extends ModelBase<T>> extends LayerRenderer<T, M> {
+    public class MMMLayerArmor<T extends LittleMaidBaseEntity, M extends ModelBase<T>> extends LayerRenderer<T, M> {
 
         //レイヤーと化した防具描画
 
@@ -195,7 +195,7 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
     /**
      * 手持ちアイテムレイヤー
      */
-    public class MMMHeldItemLayer<T extends LittleMaidEntity, M extends ModelBase<T>> extends LayerRenderer<T, M> {
+    public class MMMHeldItemLayer<T extends LittleMaidBaseEntity, M extends ModelBase<T>> extends LayerRenderer<T, M> {
 
         //レイヤーと化したアイテム描画
 
@@ -254,18 +254,15 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
             }
         }
 
-
         protected void translateToHand(HandSide p_191361_1_) {
             ((IHasArm) this.getEntityModel()).postRenderArm(0.0625F, p_191361_1_);
         }
-
-
     }
 
     @Override
-    public void setModelValues(LittleMaidEntity par1EntityLiving, double par2,
+    public void setModelValues(T par1EntityLiving, double par2,
                                double par4, double par6, float par8, float par9, IModelCaps pEntityCaps) {
-        LittleMaidEntity lmaid = par1EntityLiving;
+        LittleMaidBaseEntity lmaid = par1EntityLiving;
         super.setModelValues(par1EntityLiving, par2, par4, par6, par8, par9, pEntityCaps);
 
 //		modelMain.setRender(this);
@@ -366,9 +363,9 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
     */
 
     @Override
-    public void doRender(LittleMaidEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+    public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
 
-        LittleMaidEntity lmm = entity;
+        LittleMaidBaseEntity lmm = entity;
 
         fcaps = lmm.maidCaps;
 //
@@ -376,19 +373,19 @@ public class LittleMaidRender extends ModelMultiRender<LittleMaidEntity> {
     }
 
     @Override
-    protected int getColorMultiplier(LittleMaidEntity par1EntityLiving, float par2, float par3) {
+    protected int getColorMultiplier(T par1EntityLiving, float par2, float par3) {
         //TODO
         return par1EntityLiving.colorMultiplier(par2, par3);
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(LittleMaidEntity par1EntityLiving) {
+    protected ResourceLocation getEntityTexture(T par1EntityLiving) {
         // テクスチャリソースを返すところだけれど、基本的に使用しない。
         return par1EntityLiving.getTextures(0)[0];
     }
 
-    private class MMMLayerHeadArmor<T extends LittleMaidEntity, M extends ModelBase<T>> extends LayerRenderer<T, M> {
-        private final ModelLittleMaid_Orign<LittleMaidEntity> hatModel = new ModelLittleMaid_Orign<>();
+    private class MMMLayerHeadArmor<T extends LittleMaidBaseEntity, M extends ModelBase<T>> extends LayerRenderer<T, M> {
+        private final ModelLittleMaid_Orign<LittleMaidBaseEntity> hatModel = new ModelLittleMaid_Orign<>();
 
         public MMMLayerHeadArmor(IEntityRenderer<T, M> littleMaidRender) {
             super(littleMaidRender);

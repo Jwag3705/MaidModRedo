@@ -1,7 +1,7 @@
 package mmr.maidmodredo.entity.tasks;
 
 import com.google.common.collect.ImmutableMap;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.memory.WalkTarget;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class MaidWalkTowardsRandomSecondaryPosTask extends Task<LittleMaidEntity> {
+public class MaidWalkTowardsRandomSecondaryPosTask extends Task<LittleMaidBaseEntity> {
     private final MemoryModuleType<List<GlobalPos>> field_220573_a;
     private final MemoryModuleType<GlobalPos> field_220574_b;
     private final float field_220575_c;
@@ -33,7 +33,7 @@ public class MaidWalkTowardsRandomSecondaryPosTask extends Task<LittleMaidEntity
         this.field_220574_b = p_i50340_5_;
     }
 
-    protected boolean shouldExecute(ServerWorld worldIn, LittleMaidEntity owner) {
+    protected boolean shouldExecute(ServerWorld worldIn, LittleMaidBaseEntity owner) {
         Optional<List<GlobalPos>> optional = owner.getBrain().getMemory(this.field_220573_a);
         Optional<GlobalPos> optional1 = owner.getBrain().getMemory(this.field_220574_b);
         if (optional.isPresent() && optional1.isPresent()) {
@@ -47,7 +47,7 @@ public class MaidWalkTowardsRandomSecondaryPosTask extends Task<LittleMaidEntity
         return false;
     }
 
-    protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         if (gameTimeIn > this.field_220578_f && this.field_220579_g != null) {
             entityIn.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(this.field_220579_g.getPos(), this.field_220575_c, this.field_220576_d));
             this.field_220578_f = gameTimeIn + 100L;

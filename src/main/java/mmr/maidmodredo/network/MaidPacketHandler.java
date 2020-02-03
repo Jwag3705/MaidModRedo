@@ -2,7 +2,7 @@ package mmr.maidmodredo.network;
 
 import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.api.MaidAnimation;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -30,11 +30,11 @@ public class MaidPacketHandler {
                 .add();
     }
 
-    public static void syncModel(LittleMaidEntity entity, CompoundNBT compoundNBT) {
+    public static void syncModel(LittleMaidBaseEntity entity, CompoundNBT compoundNBT) {
         MaidPacketHandler.CHANNEL.sendToServer(new MessageChangeModelStat(entity, compoundNBT));
     }
 
-    public static void animationModel(LittleMaidEntity entity, MaidAnimation animation) {
+    public static void animationModel(LittleMaidBaseEntity entity, MaidAnimation animation) {
         if (!entity.getEntityWorld().isRemote()) {
             entity.setAnimation(animation);
             MaidPacketHandler.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MessageAnimation(entity.getEntityId(), ArrayUtils.indexOf(entity.getAnimations(), animation)));

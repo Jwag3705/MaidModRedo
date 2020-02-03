@@ -1,7 +1,7 @@
 package mmr.maidmodredo.entity.tasks;
 
 import com.google.common.collect.ImmutableMap;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
@@ -13,7 +13,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.village.PointOfInterestManager;
 import net.minecraft.world.server.ServerWorld;
 
-public class WalkToPOIMaidTask extends Task<LittleMaidEntity> {
+public class WalkToPOIMaidTask extends Task<LittleMaidBaseEntity> {
     private final float field_225445_a;
     private final int field_225446_b;
 
@@ -23,11 +23,11 @@ public class WalkToPOIMaidTask extends Task<LittleMaidEntity> {
         this.field_225446_b = p_i51557_2_;
     }
 
-    protected boolean shouldExecute(ServerWorld worldIn, LittleMaidEntity owner) {
+    protected boolean shouldExecute(ServerWorld worldIn, LittleMaidBaseEntity owner) {
         return !worldIn.func_217483_b_(new BlockPos(owner));
     }
 
-    protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         PointOfInterestManager pointofinterestmanager = worldIn.func_217443_B();
         int i = pointofinterestmanager.func_219150_a(SectionPos.from(new BlockPos(entityIn)));
         Vec3d vec3d = null;

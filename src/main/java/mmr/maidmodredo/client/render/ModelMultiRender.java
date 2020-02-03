@@ -4,7 +4,7 @@ import mmr.maidmodredo.client.maidmodel.IModelCaps;
 import mmr.maidmodredo.client.maidmodel.ModelBase;
 import mmr.maidmodredo.client.maidmodel.ModelBaseDuo;
 import mmr.maidmodredo.client.maidmodel.ModelBaseSolo;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
-public class ModelMultiRender<T extends LittleMaidEntity> extends MobRenderer<T, ModelBase<T>> {
+public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRenderer<T, ModelBase<T>> {
     public ModelBaseSolo<T> modelMain;
     public ModelBaseDuo<T> modelFATT;
     public IModelCaps fcaps;

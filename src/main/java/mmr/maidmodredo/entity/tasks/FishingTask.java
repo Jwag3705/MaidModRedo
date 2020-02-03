@@ -2,7 +2,7 @@ package mmr.maidmodredo.entity.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.entity.misc.MaidFishingBobberEntity;
 import mmr.maidmodredo.init.MaidJob;
 import net.minecraft.block.Block;
@@ -26,7 +26,7 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class FishingTask extends Task<LittleMaidEntity> {
+public class FishingTask extends Task<LittleMaidBaseEntity> {
     private boolean isCatchFish;
     private boolean isFinishFishing;
     private boolean canFishing;
@@ -39,7 +39,7 @@ public class FishingTask extends Task<LittleMaidEntity> {
     }
 
     @Override
-    protected boolean shouldExecute(ServerWorld worldIn, LittleMaidEntity owner) {
+    protected boolean shouldExecute(ServerWorld worldIn, LittleMaidBaseEntity owner) {
         if (owner.getMaidData().getJob() != MaidJob.FISHER) {
             return false;
         } else if (!(owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof FishingRodItem)) {
@@ -93,11 +93,11 @@ public class FishingTask extends Task<LittleMaidEntity> {
     }
 
     @Override
-    protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         return !this.isFinishFishing;
     }
 
-    protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         if (this.field_220422_a != null) {
             entityIn.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new BlockPosWrapper(this.field_220422_a));
         }
@@ -120,7 +120,7 @@ public class FishingTask extends Task<LittleMaidEntity> {
     }
 
     @Override
-    protected void updateTask(ServerWorld worldIn, LittleMaidEntity owner, long gameTime) {
+    protected void updateTask(ServerWorld worldIn, LittleMaidBaseEntity owner, long gameTime) {
         if (owner.fishingBobber != null) {
             if (isCatchFish) {
                 if (!worldIn.isRemote) {
@@ -143,7 +143,7 @@ public class FishingTask extends Task<LittleMaidEntity> {
 
     }
 
-    protected void resetTask(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected void resetTask(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         entityIn.getBrain().removeMemory(MemoryModuleType.LOOK_TARGET);
         if (!worldIn.isRemote) {
             if (entityIn.fishingBobber != null) {

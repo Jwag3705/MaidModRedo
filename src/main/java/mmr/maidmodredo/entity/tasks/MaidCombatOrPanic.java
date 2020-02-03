@@ -1,7 +1,7 @@
 package mmr.maidmodredo.entity.tasks;
 
 import com.google.common.collect.ImmutableMap;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.init.MaidMemoryModuleType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Brain;
@@ -10,16 +10,16 @@ import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.world.server.ServerWorld;
 
-public class MaidCombatOrPanic extends Task<LittleMaidEntity> {
+public class MaidCombatOrPanic extends Task<LittleMaidBaseEntity> {
     public MaidCombatOrPanic() {
         super(ImmutableMap.of());
     }
 
-    protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         return func_220512_b(entityIn) || func_220513_a(entityIn) || entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY);
     }
 
-    protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         Brain<?> brain = entityIn.getBrain();
         if (func_220512_b(entityIn) || func_220513_a(entityIn) || (entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY))) {
                 if (entityIn.isTamed() && !entityIn.isMaidWait() && entityIn.getMaidData().getJob().getSubActivity() != null) {

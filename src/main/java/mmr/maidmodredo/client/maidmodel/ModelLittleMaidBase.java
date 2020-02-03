@@ -1,7 +1,7 @@
 package mmr.maidmodredo.client.maidmodel;
 
 import mmr.maidmodredo.api.IMaidAnimation;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -258,7 +258,7 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
         } else {
             float la, lb, lc;
 
-            LittleMaidEntity entity = (LittleMaidEntity) pEntityCaps.getCapsValue(IModelCaps.caps_Entity);
+            LittleMaidBaseEntity entity = (LittleMaidBaseEntity) pEntityCaps.getCapsValue(IModelCaps.caps_Entity);
 
             if (aimedBow) {
                 Boolean isCharging = (Boolean) pEntityCaps.getCapsValue(IModelCaps.caps_crossbow);
@@ -317,9 +317,9 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
 
 
         animator.update(animation);
-        if (animation.getAnimation() == LittleMaidEntity.TALK_ANIMATION) {
+        if (animation.getAnimation() == LittleMaidBaseEntity.TALK_ANIMATION) {
 
-            animator.setAnimation(LittleMaidEntity.TALK_ANIMATION);
+            animator.setAnimation(LittleMaidBaseEntity.TALK_ANIMATION);
             animator.startKeyframe(5);
 
             this.bipedRightArm.setRotateAngleZ(0.0F);
@@ -352,8 +352,8 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
             animator.resetKeyframe(10);
         }
 
-        if (animation.getAnimation() == LittleMaidEntity.PET_ANIMATION) {
-            animator.setAnimation(LittleMaidEntity.PET_ANIMATION);
+        if (animation.getAnimation() == LittleMaidBaseEntity.PET_ANIMATION) {
+            animator.setAnimation(LittleMaidBaseEntity.PET_ANIMATION);
             animator.startKeyframe(10);
             animator.rotate(this.bipedHead, 0.4F, -0.2F, 0.0F);
             animator.endKeyframe();

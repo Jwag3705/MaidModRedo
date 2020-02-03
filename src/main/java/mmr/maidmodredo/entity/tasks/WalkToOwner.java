@@ -1,7 +1,7 @@
 package mmr.maidmodredo.entity.tasks;
 
 import com.google.common.collect.ImmutableMap;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
@@ -21,7 +21,7 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class WalkToOwner extends Task<LittleMaidEntity> {
+public class WalkToOwner extends Task<LittleMaidBaseEntity> {
     @Nullable
     private Path field_220488_a;
     @Nullable
@@ -33,7 +33,7 @@ public class WalkToOwner extends Task<LittleMaidEntity> {
         super(ImmutableMap.of(MemoryModuleType.PATH, MemoryModuleStatus.VALUE_ABSENT), p_i50356_1_);
     }
 
-    protected boolean shouldExecute(ServerWorld worldIn, LittleMaidEntity owner) {
+    protected boolean shouldExecute(ServerWorld worldIn, LittleMaidBaseEntity owner) {
         Brain<?> brain = owner.getBrain();
 
         LivingEntity player = owner.getOwner();
@@ -48,7 +48,7 @@ public class WalkToOwner extends Task<LittleMaidEntity> {
         }
     }
 
-    protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         if (this.field_220488_a != null && this.field_220489_b != null) {
             PathNavigator pathnavigator = entityIn.getNavigator();
             LivingEntity player = entityIn.getOwner();
@@ -58,19 +58,19 @@ public class WalkToOwner extends Task<LittleMaidEntity> {
         }
     }
 
-    protected void resetTask(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected void resetTask(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         entityIn.getNavigator().clearPath();
         entityIn.getBrain().removeMemory(MemoryModuleType.PATH);
         this.field_220488_a = null;
     }
 
-    protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         entityIn.getBrain().setMemory(MemoryModuleType.PATH, this.field_220488_a);
         entityIn.getNavigator().setPath(this.field_220488_a, (double) this.field_220490_c);
         this.field_220491_d = worldIn.getRandom().nextInt(10);
     }
 
-    protected void updateTask(ServerWorld worldIn, LittleMaidEntity owner, long gameTime) {
+    protected void updateTask(ServerWorld worldIn, LittleMaidBaseEntity owner, long gameTime) {
         --this.field_220491_d;
         if (this.field_220491_d <= 0) {
             Path path = owner.getNavigator().getPath();
@@ -95,7 +95,7 @@ public class WalkToOwner extends Task<LittleMaidEntity> {
         }
     }
 
-    private void startTeleport(LivingEntity player, LittleMaidEntity owner) {
+    private void startTeleport(LivingEntity player, LittleMaidBaseEntity owner) {
         if (!owner.getLeashed() && !owner.isPassenger()) {
             int i = MathHelper.floor(player.posX) - 2;
             int j = MathHelper.floor(player.posZ) - 2;
@@ -112,7 +112,7 @@ public class WalkToOwner extends Task<LittleMaidEntity> {
         }
     }
 
-    private boolean func_220487_a(LittleMaidEntity p_220487_1_, LivingEntity p_220487_2_, long p_220487_3_) {
+    private boolean func_220487_a(LittleMaidBaseEntity p_220487_1_, LivingEntity p_220487_2_, long p_220487_3_) {
         BlockPos blockpos = p_220487_2_.getPosition();
         this.field_220488_a = p_220487_1_.getNavigator().getPathToPos(blockpos, 0);
         this.field_220490_c = 0.65F;
@@ -144,7 +144,7 @@ public class WalkToOwner extends Task<LittleMaidEntity> {
         return blockstate.canEntitySpawn(world, pos, entity.getType()) && world.isAirBlock(pos.up()) && world.isAirBlock(pos.up(2));
     }
 
-    private boolean hasReachedTarget(LittleMaidEntity p_220486_1_, LivingEntity p_220486_2_) {
+    private boolean hasReachedTarget(LittleMaidBaseEntity p_220486_1_, LivingEntity p_220486_2_) {
         return p_220486_2_.getPosition().manhattanDistance(new BlockPos(p_220486_1_)) <= p_220486_1_.getDistance(p_220486_2_);
     }
 }

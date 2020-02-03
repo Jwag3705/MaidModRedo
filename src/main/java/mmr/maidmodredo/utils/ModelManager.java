@@ -4,6 +4,7 @@ import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.api.classutil.FileClassUtil;
 import mmr.maidmodredo.client.maidmodel.*;
 import mmr.maidmodredo.client.resource.OldZipTexturesWrapper;
+import mmr.maidmodredo.entity.LittleButlerEntity;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -85,8 +86,7 @@ public class ModelManager {
     @SuppressWarnings("rawtypes")
     protected Map<Class, TextureBox> defaultTextures = new HashMap<Class, TextureBox>();
 
-    protected Map<IModelEntity, int[]> stackGetTexturePack = new HashMap<IModelEntity, int[]>();
-    protected Map<IModelEntity, Object[]> stackSetTexturePack = new HashMap<IModelEntity, Object[]>();
+    public Map<Class, TextureBoxBase> entityTextures = new HashMap<Class, TextureBoxBase>();
 
     protected List<String[]> searchPrefix = new ArrayList<String[]>();
 
@@ -96,8 +96,19 @@ public class ModelManager {
         addSearch("littleMaidMob", "/assets/minecraft/textures/entity/ModelMulti/", "ModelMulti_");
         addSearch("littleMaidMob", "/assets/minecraft/textures/entity/littleMaid/", "ModelMulti_");
         addSearch("littleMaidMob", "/assets/minecraft/textures/entity/littleMaid/", "ModelLittleMaid_");
+        addSearch("littleMaidMob", "/assets/minecraft/textures/entity/LittleButler/", "ModelLittleButler_");
         addSearch("littleMaidMob", "/mob/ModelMulti/", "ModelMulti_");
         addSearch("littleMaidMob", "/mob/littleMaid/", "ModelLittleMaid_");
+    }
+
+    //TODO you must link entity and texture
+    private void setEntityTexture(String fname, TextureBox lts) {
+        if (lts.fileName.contains("littlebutler")) {
+            this.entityTextures.put(LittleButlerEntity.class, lts);
+        } else {
+            this.entityTextures.put(LittleMaidEntity.class, lts);
+        }
+
     }
 
     protected String[] getSearch(String pName) {
@@ -228,13 +239,15 @@ public class ModelManager {
                         lbox = lbox.duplicate();
                         lbox.setModels(le.getKey(), null, le.getValue());
                         textures.add(lbox);
+                        setEntityTexture(lbox.fileName, lbox);
                     }
                 }
             }
         }
-        MaidModRedo.LOGGER.debug("Loaded Texture Lists.(%d)", textures.size());
+        MaidModRedo.LOGGER.debug("Loaded Texture Lists.(" + textures.size() + ")");
         for (TextureBox lbox : textures) {
-            MaidModRedo.LOGGER.debug("texture: %s(%s) - hasModel:%b", lbox.textureName, lbox.fileName, lbox.models != null);
+            setEntityTexture(lbox.fileName, lbox);
+            MaidModRedo.LOGGER.debug("texture: " + lbox.textureName + "(" + lbox.fileName + ")" + "- hasModel:" + "%b", lbox.models != null);
         }
         for (int li = textures.size() - 1; li >= 0; li--) {
             if (textures.get(li).models == null) {
@@ -243,8 +256,9 @@ public class ModelManager {
         }
         MaidModRedo.LOGGER.debug("Rebuild Texture Lists.(%d)", textures.size());
         for (TextureBox lbox : textures) {
+
             if(lbox.getWildColorBits()>0){
-                setDefaultTexture(LittleMaidEntity.class, lbox);
+                setTextureForType(lbox);
             }
             MaidModRedo.LOGGER.debug("texture: %s(%s) - hasModel:%b", lbox.textureName, lbox.fileName, lbox.models != null);
         }
@@ -252,6 +266,16 @@ public class ModelManager {
         setDefaultTexture(LittleMaidEntity.class, getTextureBox("default_" + defaultModelName));
 
         return false;
+    }
+
+    //Entityのクラスでテクスチャを分ける
+    //TODO
+    private void setTextureForType(TextureBox lbox) {
+        if (lbox.textureDir[1].contains("littlebutler")) {
+            setDefaultTexture(LittleButlerEntity.class, lbox);
+        } else {
+            setDefaultTexture(LittleMaidEntity.class, lbox);
+        }
     }
 
     private void searchFiles(File ln, String[] lst) {
@@ -439,6 +463,7 @@ public class ModelManager {
         }
     }
 
+    //TODO
     protected boolean addTextureName(String fname, String[] pSearch) {
         // パッケージにテクスチャを登録
         if (!fname.startsWith("/")) {
@@ -466,6 +491,9 @@ public class ModelManager {
                     TextureBox lts = getTextureBox(pn);
                     if (lts == null) {
                         lts = new TextureBox(pn, pSearch);
+                        //Set here to assign textures for each entity
+                        //エンティティごとにテクスチャを割り当てるために、ここで設定する
+                        setEntityTexture(fname, lts);
                         textures.add(lts);
                         MaidModRedo.LOGGER.debug("getTextureName-append-texturePack-%s", pn);
                     }
@@ -500,10 +528,12 @@ public class ModelManager {
                     } else if(zipentry.getName().endsWith(".png")){
                         String lt1 = "mob/littleMaid";
                         String lt2 = "mob/ModelMulti";
+                        String lt3 = "mob/LittleButler";
                         addTextureName(zipentry.getName(), pSearch);
                         if(FMLEnvironment.dist == Dist.CLIENT &&
                                 (zipentry.getName().startsWith(lt1)
                                         || zipentry.getName().startsWith(lt2)
+                                        || zipentry.getName().startsWith(lt3)
                                         || (!zipentry.getName().equals(zipentry.getName().toLowerCase())))) {
                             OldZipTexturesWrapper.keys.add(zipentry.getName());
                         }
@@ -545,6 +575,7 @@ public class ModelManager {
                             addTextureName(s.substring(i), pSearch);
                             String lt1 = "mob/littleMaid";
                             String lt2 = "mob/ModelMulti";
+                            String lt3 = "mob/LittleButler";
                             String loc = s.substring(i);
                             if (loc.startsWith("/")) {
                                 loc = loc.substring(1);
@@ -552,6 +583,7 @@ public class ModelManager {
                             if(FMLEnvironment.dist== Dist.CLIENT &&
                                     (loc.startsWith(lt1)
                                             || loc.startsWith(lt2)
+                                            || loc.startsWith(lt3)
                                             || (!loc.equals(loc.toLowerCase())))) {
                                 OldZipTexturesWrapper.keys.add(loc);
                             }
@@ -587,37 +619,41 @@ public class ModelManager {
         return -1;
     }
 
-    public TextureBox getNextPackege(TextureBox pNowBox, int pColor) {
+    public TextureBox getNextPackege(Class pEntityClass, TextureBox pNowBox, int pColor) {
         // 次のテクスチャパッケージの名前を返す
         boolean f = false;
         TextureBox lreturn = null;
         for (TextureBox ltb : getTextureList()) {
-            if (ltb.hasColor(pColor)) {
-                if (f) {
-                    return ltb;
+            if (ModelManager.instance.entityTextures.containsKey(pEntityClass)) {
+                if (ltb.hasColor(pColor)) {
+                    if (f) {
+                        return ltb;
+                    }
+                    if (lreturn == null) {
+                        lreturn = ltb;
+                    }
                 }
-                if (lreturn == null) {
-                    lreturn = ltb;
+                if (ltb == pNowBox) {
+                    f = true;
                 }
-            }
-            if (ltb == pNowBox) {
-                f = true;
             }
         }
         return lreturn == null ? null : lreturn;
     }
 
-    public TextureBox getPrevPackege(TextureBox pNowBox, int pColor) {
+    public TextureBox getPrevPackege(Class pEntityClass, TextureBox pNowBox, int pColor) {
         // 前のテクスチャパッケージの名前を返す
         TextureBox lreturn = null;
         for (TextureBox ltb : getTextureList()) {
-            if (ltb == pNowBox) {
-                if (lreturn != null) {
-                    break;
+            if (ModelManager.instance.entityTextures.containsKey(pEntityClass)) {
+                if (ltb == pNowBox) {
+                    if (lreturn != null) {
+                        break;
+                    }
                 }
-            }
-            if (ltb.hasColor(pColor)) {
-                lreturn = ltb;
+                if (ltb.hasColor(pColor)) {
+                    lreturn = ltb;
+                }
             }
         }
         return lreturn == null ? null : lreturn;
@@ -630,37 +666,42 @@ public class ModelManager {
         return getTextureList().size();
     }
 
-    public TextureBox getNextArmorPackege(TextureBox pNowBox) {
+    public TextureBox getNextArmorPackege(Class pEntityClass, TextureBox pNowBox) {
         // 次のテクスチャパッケージの名前を返す
         boolean f = false;
         TextureBox lreturn = null;
         for (TextureBox ltb : getTextureList()) {
-            if (ltb.hasArmor()) {
-                if (f) {
-                    return ltb;
+            if (ModelManager.instance.entityTextures.containsKey(pEntityClass)) {
+                if (ltb.hasArmor()) {
+                    if (f) {
+                        return ltb;
+                    }
+                    if (lreturn == null) {
+                        lreturn = ltb;
+                    }
                 }
-                if (lreturn == null) {
-                    lreturn = ltb;
+                if (ltb == pNowBox) {
+                    f = true;
                 }
-            }
-            if (ltb == pNowBox) {
-                f = true;
             }
         }
         return lreturn;
     }
 
-    public TextureBox getPrevArmorPackege(TextureBox pNowBox) {
+    public TextureBox getPrevArmorPackege(Class pEntityClass, TextureBox pNowBox) {
         // 前のテクスチャパッケージの名前を返す
         TextureBox lreturn = null;
         for (TextureBox ltb : getTextureList()) {
-            if (ltb == pNowBox) {
-                if (lreturn != null) {
-                    break;
+
+            if (ModelManager.instance.entityTextures.containsKey(pEntityClass)) {
+                if (ltb == pNowBox) {
+                    if (lreturn != null) {
+                        break;
+                    }
                 }
-            }
-            if (ltb.hasArmor()) {
-                lreturn = ltb;
+                if (ltb.hasArmor()) {
+                    lreturn = ltb;
+                }
             }
         }
         return lreturn;

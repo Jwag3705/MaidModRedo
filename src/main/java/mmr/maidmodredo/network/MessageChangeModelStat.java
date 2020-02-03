@@ -1,6 +1,6 @@
 package mmr.maidmodredo.network;
 
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
@@ -20,7 +20,7 @@ public class MessageChangeModelStat {
         this.tag = tag;
     }
 
-    public MessageChangeModelStat(LittleMaidEntity entityIn, CompoundNBT tag) {
+    public MessageChangeModelStat(LittleMaidBaseEntity entityIn, CompoundNBT tag) {
         this.entityID = entityIn.getEntityId();
         this.tag = tag;
     }
@@ -46,8 +46,8 @@ public class MessageChangeModelStat {
             ctx.get().enqueueWork(() -> {
 
                 Entity entity = ctx.get().getSender().getServerWorld().getEntityByID(message.entityID);
-                if (entity instanceof LittleMaidEntity) {
-                    LittleMaidEntity littlemaid = (LittleMaidEntity) entity;
+                if (entity instanceof LittleMaidBaseEntity) {
+                    LittleMaidBaseEntity littlemaid = (LittleMaidBaseEntity) entity;
 
 
                     littlemaid.setTextureNameMain(message.tag.getString("Main"));

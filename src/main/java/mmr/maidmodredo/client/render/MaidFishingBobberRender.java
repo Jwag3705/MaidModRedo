@@ -1,7 +1,7 @@
 package mmr.maidmodredo.client.render;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.entity.misc.MaidFishingBobberEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -25,7 +25,7 @@ public class MaidFishingBobberRender extends EntityRenderer<MaidFishingBobberEnt
     }
 
     public void doRender(MaidFishingBobberEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        LittleMaidEntity playerentity = entity.getAngler();
+        LittleMaidBaseEntity playerentity = entity.getAngler();
         if (playerentity != null && !this.renderOutlines) {
             GlStateManager.pushMatrix();
             GlStateManager.translatef((float) x, (float) y, (float) z);

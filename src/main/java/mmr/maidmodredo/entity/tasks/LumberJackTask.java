@@ -2,7 +2,7 @@ package mmr.maidmodredo.entity.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.init.MaidJob;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -26,7 +26,7 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class LumberJackTask extends Task<LittleMaidEntity> {
+public class LumberJackTask extends Task<LittleMaidBaseEntity> {
     private int field_220426_e;
     private boolean isCutWood;
     private boolean isFinishLumberJack;
@@ -42,7 +42,7 @@ public class LumberJackTask extends Task<LittleMaidEntity> {
     }
 
     @Override
-    protected boolean shouldExecute(ServerWorld worldIn, LittleMaidEntity owner) {
+    protected boolean shouldExecute(ServerWorld worldIn, LittleMaidBaseEntity owner) {
         if (owner.getMaidData().getJob() != MaidJob.LUMBERJACK) {
             return false;
         } else if (!(owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof AxeItem)) {
@@ -95,11 +95,11 @@ public class LumberJackTask extends Task<LittleMaidEntity> {
     }
 
     @Override
-    protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         return !this.isFinishLumberJack && !this.isCutWood || this.isCutWood && this.blockPostion.withinDistance(entityIn.getPositionVec(), 10.0D) && !worldIn.getBlockState(this.blockPostion).isAir();
     }
 
-    protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         if (this.blockPostion != null) {
             entityIn.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new BlockPosWrapper(this.blockPostion));
             entityIn.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new BlockPosWrapper(this.blockPostion), 0.5F, 1));
@@ -109,7 +109,7 @@ public class LumberJackTask extends Task<LittleMaidEntity> {
     }
 
     @Override
-    protected void updateTask(ServerWorld worldIn, LittleMaidEntity owner, long gameTime) {
+    protected void updateTask(ServerWorld worldIn, LittleMaidBaseEntity owner, long gameTime) {
         if (this.blockPostion != null) {
             BlockState blockstate = worldIn.getBlockState(this.blockPostion);
             Block block = blockstate.getBlock();
@@ -184,7 +184,7 @@ public class LumberJackTask extends Task<LittleMaidEntity> {
 
     }
 
-    protected void resetTask(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected void resetTask(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         entityIn.getBrain().removeMemory(MemoryModuleType.LOOK_TARGET);
         entityIn.getBrain().removeMemory(MemoryModuleType.WALK_TARGET);
         if (this.blockPostion != null) {

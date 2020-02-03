@@ -1,13 +1,13 @@
 package mmr.maidmodredo.inventory;
 
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 
 public class InventoryMaidEquipment extends InventoryMaid {
     //slotCountでスロットの合計を入力
-    public InventoryMaidEquipment(LittleMaidEntity maid) {
+    public InventoryMaidEquipment(LittleMaidBaseEntity maid) {
         super(maid, 6);
     }
 

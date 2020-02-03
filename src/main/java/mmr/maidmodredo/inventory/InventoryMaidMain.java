@@ -1,12 +1,12 @@
 package mmr.maidmodredo.inventory;
 
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundEvents;
 
 public class InventoryMaidMain extends InventoryMaid {
 
-    public InventoryMaidMain(LittleMaidEntity maid) {
+    public InventoryMaidMain(LittleMaidBaseEntity maid) {
         super(maid, (9 * 3));
     }
 

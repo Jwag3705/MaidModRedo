@@ -1,7 +1,7 @@
 package mmr.maidmodredo.item;
 
 import com.google.common.collect.Lists;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -50,8 +50,8 @@ public class JobBookItem extends Item {
     public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
 
 
-        if (target instanceof LittleMaidEntity) {
-            if (((LittleMaidEntity) target).isTamed() && ((LittleMaidEntity) target).isOwner(playerIn)) {
+        if (target instanceof LittleMaidBaseEntity) {
+            if (((LittleMaidBaseEntity) target).isTamed() && ((LittleMaidBaseEntity) target).isOwner(playerIn)) {
                 CompoundNBT compound = stack.getTag();
                 List<GlobalPos> list = Lists.newArrayList();
                 if (compound != null && DimensionType.getById(compound.getInt("JobDimension")) != null && compound.contains("JobDimension") && compound.contains("JobPosX", 99) && compound.contains("JobPosY", 99) && compound.contains("JobPosZ", 99)) {

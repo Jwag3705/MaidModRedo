@@ -2,7 +2,7 @@ package mmr.maidmodredo.entity.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.init.MaidJob;
 import net.minecraft.block.*;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
@@ -23,7 +23,7 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class MaidFarmTask extends Task<LittleMaidEntity> {
+public class MaidFarmTask extends Task<LittleMaidBaseEntity> {
     @Nullable
     private BlockPos field_220422_a;
     private boolean field_220423_b;
@@ -36,7 +36,7 @@ public class MaidFarmTask extends Task<LittleMaidEntity> {
         super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.VALUE_ABSENT, MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT, MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT));
     }
 
-    protected boolean shouldExecute(ServerWorld worldIn, LittleMaidEntity owner) {
+    protected boolean shouldExecute(ServerWorld worldIn, LittleMaidBaseEntity owner) {
         if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(worldIn, owner)) {
             return false;
         } else if (owner.getMaidData().getJob() != MaidJob.FARMER) {
@@ -91,7 +91,7 @@ public class MaidFarmTask extends Task<LittleMaidEntity> {
         return block instanceof CropsBlock && ((CropsBlock) block).isMaxAge(blockstate) && this.field_220424_c || blockstate.isAir() && block1 instanceof FarmlandBlock && this.field_220423_b;
     }
 
-    protected void startExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         if (gameTimeIn > this.field_220425_d && this.field_220422_a != null) {
             entityIn.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new BlockPosWrapper(this.field_220422_a));
             entityIn.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new BlockPosWrapper(this.field_220422_a), 0.5F, 1));
@@ -99,14 +99,14 @@ public class MaidFarmTask extends Task<LittleMaidEntity> {
 
     }
 
-    protected void resetTask(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected void resetTask(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         entityIn.getBrain().removeMemory(MemoryModuleType.LOOK_TARGET);
         entityIn.getBrain().removeMemory(MemoryModuleType.WALK_TARGET);
         this.field_220426_e = 0;
         this.field_220425_d = gameTimeIn + 40L;
     }
 
-    protected void updateTask(ServerWorld worldIn, LittleMaidEntity owner, long gameTime) {
+    protected void updateTask(ServerWorld worldIn, LittleMaidBaseEntity owner, long gameTime) {
         if (this.field_220422_a != null && gameTime > this.field_220425_d) {
             BlockState blockstate = worldIn.getBlockState(this.field_220422_a);
             Block block = blockstate.getBlock();
@@ -179,7 +179,7 @@ public class MaidFarmTask extends Task<LittleMaidEntity> {
         ++this.field_220426_e;
     }
 
-    protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidEntity entityIn, long gameTimeIn) {
+    protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         return this.field_220426_e < 800;
     }
 }

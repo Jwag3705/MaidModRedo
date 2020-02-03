@@ -1,6 +1,6 @@
 package mmr.maidmodredo.entity.misc;
 
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.init.LittleEntitys;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -37,7 +37,7 @@ public class MaidFishingBobberEntity extends Entity {
     private static final DataParameter<Integer> DATA_HOOKED_ENTITY = EntityDataManager.createKey(FishingBobberEntity.class, DataSerializers.VARINT);
     private boolean inGround;
     private int ticksInGround;
-    private final LittleMaidEntity angler;
+    private final LittleMaidBaseEntity angler;
     private int ticksInAir;
     private int ticksCatchable;
     private int ticksCaughtDelay;
@@ -48,7 +48,7 @@ public class MaidFishingBobberEntity extends Entity {
     private final int luck;
     private final int lureSpeed;
 
-    private MaidFishingBobberEntity(World p_i50219_1_, LittleMaidEntity p_i50219_2_, int p_i50219_3_, int p_i50219_4_) {
+    private MaidFishingBobberEntity(World p_i50219_1_, LittleMaidBaseEntity p_i50219_2_, int p_i50219_3_, int p_i50219_4_) {
         super(LittleEntitys.MAID_FISHING_BOBBER, p_i50219_1_);
         this.ignoreFrustumCheck = true;
         this.angler = p_i50219_2_;
@@ -58,7 +58,7 @@ public class MaidFishingBobberEntity extends Entity {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public MaidFishingBobberEntity(World worldIn, LittleMaidEntity p_i47290_2_, double x, double y, double z, LittleMaidEntity angler, int luck) {
+    public MaidFishingBobberEntity(World worldIn, LittleMaidBaseEntity p_i47290_2_, double x, double y, double z, LittleMaidBaseEntity angler, int luck) {
         this(worldIn, p_i47290_2_, 0, 0);
         this.setPosition(x, y, z);
         this.prevPosX = this.posX;
@@ -66,7 +66,7 @@ public class MaidFishingBobberEntity extends Entity {
         this.prevPosZ = this.posZ;
     }
 
-    public MaidFishingBobberEntity(LittleMaidEntity p_i50220_1_, World p_i50220_2_, int p_i50220_3_, int p_i50220_4_) {
+    public MaidFishingBobberEntity(LittleMaidBaseEntity p_i50220_1_, World p_i50220_2_, int p_i50220_3_, int p_i50220_4_) {
         this(p_i50220_2_, p_i50220_1_, p_i50220_3_, p_i50220_4_);
         float f = this.angler.rotationPitch;
         float f1 = this.angler.rotationYaw;
@@ -410,7 +410,7 @@ public class MaidFishingBobberEntity extends Entity {
      */
     @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
-        if (id == 31 && this.world.isRemote && this.caughtEntity instanceof LittleMaidEntity) {
+        if (id == 31 && this.world.isRemote && this.caughtEntity instanceof LittleMaidBaseEntity) {
             //this.bringInHookedEntity();
         }
 
@@ -442,7 +442,7 @@ public class MaidFishingBobberEntity extends Entity {
     }
 
     @Nullable
-    public LittleMaidEntity getAngler() {
+    public LittleMaidBaseEntity getAngler() {
         return this.angler;
     }
 

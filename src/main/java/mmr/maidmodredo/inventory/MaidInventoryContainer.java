@@ -1,6 +1,6 @@
 package mmr.maidmodredo.inventory;
 
-import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.init.LittleContainers;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -11,14 +11,14 @@ import net.minecraft.item.*;
 import net.minecraft.network.PacketBuffer;
 
 public class MaidInventoryContainer extends Container {
-    private LittleMaidEntity friendEntity;
+    private LittleMaidBaseEntity friendEntity;
     private PlayerInventory playerInventory;
 
     public MaidInventoryContainer(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
-        this(windowId, playerInventory, (LittleMaidEntity) (playerInventory.player.world.getEntityByID(extraData.readVarInt())));
+        this(windowId, playerInventory, (LittleMaidBaseEntity) (playerInventory.player.world.getEntityByID(extraData.readVarInt())));
     }
 
-    public MaidInventoryContainer(int id, PlayerInventory playerInventory, final LittleMaidEntity entityFriend) {
+    public MaidInventoryContainer(int id, PlayerInventory playerInventory, final LittleMaidBaseEntity entityFriend) {
         super(LittleContainers.MAID_INVENTORY, id);
         int column;
         int row;
@@ -124,7 +124,7 @@ public class MaidInventoryContainer extends Container {
         this.playerInventory = playerInventory;
     }
 
-    public LittleMaidEntity getLittleMaidEntity() {
+    public LittleMaidBaseEntity getLittleMaidEntity() {
         return friendEntity;
     }
 

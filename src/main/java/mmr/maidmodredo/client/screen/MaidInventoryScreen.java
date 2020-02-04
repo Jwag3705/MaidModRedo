@@ -93,7 +93,7 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
 
         int entityPosX = (originPosX + 51);
         int entityPosY = (originPosY + 60);
-        InventoryScreen.drawEntityOnScreen(entityPosX, entityPosY, 25, (float) (entityPosX - xMouse), (float) ((entityPosY / 2) - yMouse), this.maidinventory.getLittleMaidEntity());
+        InventoryScreen.func_228187_a_(entityPosX, entityPosY, 25, (float) (entityPosX - xMouse), (float) ((entityPosY / 2) - yMouse), this.maidinventory.getLittleMaidEntity());
     }
 
     private void func_214130_a(int p_214130_1_, int p_214130_2_) {
@@ -102,11 +102,11 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
         int i = (int) this.container.getLittleMaidEntity().xpBarCap();
 
         //XP bar
-        blit(p_214130_1_ + 180, p_214130_2_ + 26, this.blitOffset, 0.0F, 237.0F, 102, 15, 256, 256);
-        blit(p_214130_1_ + 180, p_214130_2_ + 29, this.blitOffset, 0.0F, 227.0F, 102, 5, 256, 256);
+        blit(p_214130_1_ + 180, p_214130_2_ + 26, this.getBlitOffset(), 0.0F, 237.0F, 102, 15, 256, 256);
+        blit(p_214130_1_ + 180, p_214130_2_ + 29, this.getBlitOffset(), 0.0F, 227.0F, 102, 5, 256, 256);
         if (i > 0) {
             int f = (int) (100 * (this.container.getLittleMaidEntity().experience));
-            blit(p_214130_1_ + 180, p_214130_2_ + 29, this.blitOffset, 0.0F, 232.0F, f + 1, 5, 256, 256);
+            blit(p_214130_1_ + 180, p_214130_2_ + 29, this.getBlitOffset(), 0.0F, 232.0F, f + 1, 5, 256, 256);
         }
 
         //Job and Level info

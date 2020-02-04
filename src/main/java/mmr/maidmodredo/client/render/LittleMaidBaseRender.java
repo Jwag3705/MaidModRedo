@@ -1,27 +1,23 @@
 package mmr.maidmodredo.client.render;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import mmr.maidmodredo.api.IMaidArmor;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mmr.maidmodredo.client.maidmodel.IModelCaps;
 import mmr.maidmodredo.client.maidmodel.ModelBase;
 import mmr.maidmodredo.client.maidmodel.ModelLittleMaidBase;
-import mmr.maidmodredo.client.maidmodel.ModelLittleMaid_Orign;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.utils.helper.RendererHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.renderer.entity.model.IHasArm;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nullable;
 
 public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelMultiRender<T> {
 
@@ -30,8 +26,8 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
         super(manager, 0.4F);
 
 
-        addLayer(new MMMLayerArmor<>(this));
-        addLayer(new MMMLayerHeadArmor<>(this));
+        //addLayer(new MMMLayerArmor<>(this));
+        //addLayer(new MMMLayerHeadArmor<>(this));
         addLayer(new MMMHeldItemLayer<>(this));
     }
 
@@ -50,14 +46,14 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
 //			this.modelArmor = mmodel;
         }
 
-        public void render(T entityIn, float p_212842_2_, float p_212842_3_, float p_212842_4_, float p_212842_5_, float p_212842_6_, float p_212842_7_, float p_212842_8_) {
-            this.renderArmorLayer(entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, p_212842_8_, 0, EquipmentSlotType.CHEST);
-            this.renderArmorLayer(entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, p_212842_8_, 1, EquipmentSlotType.LEGS);
-            this.renderArmorLayer(entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, p_212842_8_, 2, EquipmentSlotType.FEET);
-            this.renderArmorLayer(entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, p_212842_8_, 3, EquipmentSlotType.HEAD);
+        public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entityIn, float p_212842_2_, float p_212842_3_, float p_212842_4_, float p_212842_5_, float p_212842_6_, float p_212842_7_) {
+            this.renderArmorLayer(matrixStackIn, bufferIn, packedLightIn, entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, 0, EquipmentSlotType.CHEST);
+            this.renderArmorLayer(matrixStackIn, bufferIn, packedLightIn, entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, 1, EquipmentSlotType.LEGS);
+            this.renderArmorLayer(matrixStackIn, bufferIn, packedLightIn, entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, 2, EquipmentSlotType.FEET);
+            this.renderArmorLayer(matrixStackIn, bufferIn, packedLightIn, entityIn, p_212842_2_, p_212842_3_, p_212842_4_, p_212842_5_, p_212842_6_, p_212842_7_, 3, EquipmentSlotType.HEAD);
         }
 
-        public void renderArmorLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, int renderParts, EquipmentSlotType slotType) {
+        public void renderArmorLayer(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, int renderParts, EquipmentSlotType slotType) {
 //			boolean lri = (renderCount & 0x0f) == 0;
             //if (!lmm.maidInventory.armorItemInSlot(i).isEmpty()) {
             if (!entitylivingbaseIn.getItemStackFromSlot(slotType).isEmpty()) {
@@ -67,7 +63,7 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
                 //Inner
                 INNER:
                 {
-                    if (modelFATT.textureInner != null) {
+                    /*if (modelFATT.textureInner != null) {
                         ResourceLocation texInner = modelFATT.textureInner[renderParts];
                         if (texInner != null
                             //&& lmm.isArmorVisible(0)
@@ -75,15 +71,15 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
                             Minecraft.getInstance().getTextureManager().bindTexture(texInner);
                             GL11.glEnable(GL11.GL_BLEND);
                             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                            modelFATT.modelInner.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, renderScale, fcaps);
+                            modelFATT.modelInner.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, fcaps);
                             modelFATT.modelInner.setLivingAnimations(fcaps, limbSwing, limbSwingAmount, partialTicks);
-                            modelFATT.modelInner.render(fcaps, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, renderScale, true);
+                            modelFATT.modelInner.render(fcaps,matrixStackIn, bufferIn.getBuffer(RendetType), limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, renderScale, true);
                         } catch (Exception e) {
                             break INNER;
                         }
                     } else {
-                        modelFATT.modelInner.render(entitylivingbaseIn.maidCaps, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, renderScale, true);
-                    }
+                        modelFATT.modelInner.render(entitylivingbaseIn.maidCaps, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, true);
+                    }*/
                 }
 
                 // 発光Inner
@@ -111,8 +107,8 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
                                         modelFATT.textureLightColor[2],
                                         modelFATT.textureLightColor[3]);
                             }
-                            modelFATT.modelInner.render(fcaps, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, renderScale, true);
-                            RendererHelper.setLightmapTextureCoords(modelFATT.lighting);
+                            //modelFATT.modelInner.render(fcaps, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, renderScale, true);
+                            RendererHelper.setLightmapTextureCoords((int) modelFATT.lighting);
                             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                             GL11.glDisable(GL11.GL_BLEND);
                             GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -127,7 +123,7 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
 //			if(LittleMaidReengaged.cfg_isModelAlphaBlend) GL11.glEnable(GL11.GL_BLEND);
                 OUTER:
                 {
-                    if (modelFATT.textureOuter != null) {
+                    /*if (modelFATT.textureOuter != null) {
                         ResourceLocation texOuter = modelFATT.textureOuter[renderParts];
                         if (texOuter != null
                             //&& lmm.isArmorVisible(2)
@@ -145,7 +141,7 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
                         } else {
                             modelFATT.modelOuter.render(entitylivingbaseIn.maidCaps, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, renderScale, true);
                         }
-                    }
+                    }*/
 
                     // 発光Outer
                     OUTERLIGHT:
@@ -173,7 +169,7 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
                                             modelFATT.textureLightColor[3]);
                                 }
                                 //if(lmm.isArmorVisible(1)) modelFATT.modelOuter.render(fcaps, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, renderScale, true);
-                                RendererHelper.setLightmapTextureCoords(modelFATT.lighting);
+                                RendererHelper.setLightmapTextureCoords((int) modelFATT.lighting);
                                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                                 GL11.glDisable(GL11.GL_BLEND);
                                 GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -203,67 +199,58 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
             super(p_i46115_1_);
         }
 
-        public void render(T entityIn, float p_212842_2_, float p_212842_3_, float p_212842_4_, float p_212842_5_, float p_212842_6_, float p_212842_7_, float p_212842_8_) {
+        public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entityIn, float p_212842_2_, float p_212842_3_, float p_212842_4_, float p_212842_5_, float p_212842_6_, float p_212842_7_) {
             boolean flag = entityIn.getPrimaryHand() == HandSide.RIGHT;
             ItemStack itemstack = flag ? entityIn.getHeldItemOffhand() : entityIn.getHeldItemMainhand();
             ItemStack itemstack1 = flag ? entityIn.getHeldItemMainhand() : entityIn.getHeldItemOffhand();
             if (!itemstack.isEmpty() || !itemstack1.isEmpty()) {
-                GlStateManager.pushMatrix();
+                matrixStackIn.push();
 
-                this.renderHeldItem(entityIn, itemstack1, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, HandSide.RIGHT);
-                this.renderHeldItem(entityIn, itemstack, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, HandSide.LEFT);
-                GlStateManager.popMatrix();
+                this.renderHeldItem(matrixStackIn, bufferIn, packedLightIn, entityIn, itemstack1, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, HandSide.RIGHT);
+                this.renderHeldItem(matrixStackIn, bufferIn, packedLightIn, entityIn, itemstack, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, HandSide.LEFT);
+                matrixStackIn.pop();
             }
         }
 
-        @Override
-        public boolean shouldCombineTextures() {
-            return false;
-        }
-
-        private void renderHeldItem(T p_188358_1_, ItemStack p_188358_2_, ItemCameraTransforms.TransformType p_188358_3_, HandSide handSide) {
+        private void renderHeldItem(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T p_188358_1_, ItemStack p_188358_2_, ItemCameraTransforms.TransformType p_188358_3_, HandSide handSide) {
             if (!p_188358_2_.isEmpty()) {
                 boolean flag = handSide == HandSide.LEFT;
                 int i = 0;
 
                 i = flag ? 1 : 0;
 
-                GlStateManager.pushMatrix();
-                if (p_188358_1_.shouldRenderSneaking()) {
+                matrixStackIn.push();
+                /*if (p_188358_1_.shouldRenderSneaking()) {
                     GlStateManager.translatef(0.0F, 0.2F, 0.0F);
-                }
+                }*/
 
-                GlStateManager.translatef(0.0F, 0.3F, 0.0F);
+                matrixStackIn.translate(0.0F, 0.3F, 0.0F);
 
                 // Forge: moved this call down, fixes incorrect offset while sneaking.
                 //Force render(?)
                 if (modelMain.model instanceof ModelLittleMaidBase) {
                     if (flag) {
-                        ((ModelLittleMaidBase) modelMain.model).bipedLeftArm.postRender(0.0625F);
+                        ((ModelLittleMaidBase) modelMain.model).bipedLeftArm.setAnglesAndRotation(matrixStackIn);
                     } else {
-                        ((ModelLittleMaidBase) modelMain.model).bipedRightArm.postRender(0.0625F);
+                        ((ModelLittleMaidBase) modelMain.model).bipedRightArm.setAnglesAndRotation(matrixStackIn);
                     }
                 }
 
-                GlStateManager.rotatef(-90.0F, 1.0F, 0.0F, 0.0F);
-                GlStateManager.rotatef(180.0F, 0.0F, 1.0F, 0.0F);
+                matrixStackIn.rotate(Vector3f.XP.rotationDegrees(-90.0F));
+                matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F));
 
-                GlStateManager.translatef((float) (flag ? -1 : 1) / 16.0F, 0.125F, -0.625F);
-                Minecraft.getInstance().getFirstPersonRenderer().renderItemSide(p_188358_1_, p_188358_2_, p_188358_3_, flag);
-                GlStateManager.popMatrix();
+                matrixStackIn.translate((float) (flag ? -1 : 1) / 16.0F, 0.125F, -0.625F);
+                Minecraft.getInstance().getFirstPersonRenderer().renderItemSide(p_188358_1_, p_188358_2_, p_188358_3_, flag, matrixStackIn, bufferIn, packedLightIn);
+                matrixStackIn.pop();
             }
         }
 
-        protected void translateToHand(HandSide p_191361_1_) {
-            ((IHasArm) this.getEntityModel()).postRenderArm(0.0625F, p_191361_1_);
-        }
     }
 
     @Override
-    public void setModelValues(T par1EntityLiving, double par2,
-                               double par4, double par6, float par8, float par9, IModelCaps pEntityCaps) {
-        LittleMaidBaseEntity lmaid = par1EntityLiving;
-        super.setModelValues(par1EntityLiving, par2, par4, par6, par8, par9, pEntityCaps);
+    public void setModelValues(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, IModelCaps pEntityCaps) {
+        LittleMaidBaseEntity lmaid = entityIn;
+        super.setModelValues(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn, pEntityCaps);
 
 //		modelMain.setRender(this);
 //		modelMain.setEntityCaps(pEntityCaps);
@@ -274,9 +261,9 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
         modelMain.setCapsValue(IModelCaps.caps_heldItemLeft, (Integer) 0);
         modelMain.setCapsValue(IModelCaps.caps_heldItemRight, (Integer) 0);
         //modelMain.setCapsValue(IModelCaps.caps_onGround, renderSwingProgress(lmaid, par9));
-        modelMain.setCapsValue(IModelCaps.caps_onGround, lmaid.getSwingProgress(par9, lmaid.getSwingHand()), lmaid.getSwingProgress(par9, lmaid.getSwingHand()));
+        modelMain.setCapsValue(IModelCaps.caps_onGround, lmaid.getSwingProgress(partialTicks, lmaid.getSwingHand()), lmaid.getSwingProgress(partialTicks, lmaid.getSwingHand()));
         //modelMain.setCapsValue(IModelCaps.caps_isRiding, lmaid.isRidingRender());
-        modelMain.setCapsValue(IModelCaps.caps_isSneak, lmaid.isSneaking());
+        //modelMain.setCapsValue(IModelCaps.caps_isSneak, lmaid.isSneaking());
         /* modelMain.setCapsValue(IModelCaps.caps_aimedBow, lmaid.isAimebow());*/
         modelMain.setCapsValue(IModelCaps.caps_isWait, lmaid.isMaidWait());
         modelMain.setCapsValue(IModelCaps.caps_isChild, lmaid.isChild());
@@ -362,76 +349,10 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
         }
     */
 
-    @Override
-    public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-
-        LittleMaidBaseEntity lmm = entity;
-
-        fcaps = lmm.maidCaps;
-//
-        super.doRender(entity, x, y, z, entityYaw, partialTicks);
-    }
 
     @Override
-    protected int getColorMultiplier(T par1EntityLiving, float par2, float par3) {
-        //TODO
-        return par1EntityLiving.colorMultiplier(par2, par3);
-    }
-
-    @Override
-    protected ResourceLocation getEntityTexture(T par1EntityLiving) {
+    public ResourceLocation getEntityTexture(T par1EntityLiving) {
         // テクスチャリソースを返すところだけれど、基本的に使用しない。
         return par1EntityLiving.getTextures(0)[0];
-    }
-
-    private class MMMLayerHeadArmor<T extends LittleMaidBaseEntity, M extends ModelBase<T>> extends LayerRenderer<T, M> {
-        private final ModelLittleMaid_Orign<LittleMaidBaseEntity> hatModel = new ModelLittleMaid_Orign<>();
-
-        public MMMLayerHeadArmor(IEntityRenderer<T, M> littleMaidRender) {
-            super(littleMaidRender);
-        }
-
-        @Override
-        public void render(T entityIn, float p_212842_2_, float p_212842_3_, float p_212842_4_, float p_212842_5_, float p_212842_6_, float p_212842_7_, float p_212842_8_) {
-            if (entityIn.getInventoryMaidEquipment().getheadItem().getItem() instanceof IMaidArmor) {
-                GlStateManager.pushMatrix();
-
-                ResourceLocation resourceLocation = getArmorResource(entityIn.getInventoryMaidEquipment().getheadItem().getItem(), entityIn.getModelNameMain().toLowerCase());
-
-                GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-                this.bindTexture(resourceLocation);
-                hatModel.setLivingAnimations(entityIn, p_212842_2_, p_212842_3_, p_212842_4_);
-                hatModel.render(entityIn, p_212842_2_, p_212842_3_, p_212842_5_, p_212842_6_, p_212842_7_, p_212842_8_, false);
-
-                GlStateManager.popMatrix();
-            }
-        }
-
-        private ResourceLocation getArmorResource(Item armor, @Nullable String p_177178_3_) {
-            int index;
-            String loc = p_177178_3_;
-
-            if (p_177178_3_ != null) {
-                int _len = p_177178_3_.length();
-                index = p_177178_3_.lastIndexOf("_");
-
-                if (index != -1) {
-                    String right = "_Origin";
-                    loc.replace(right, "");
-                }
-            }
-
-            if (armor instanceof IMaidArmor) {
-                String s = "maidmodredo:textures/models/armor/" + ((IMaidArmor) armor).getMaidArmorTextureName() + ".png";
-                return new ResourceLocation(s);
-            } else {
-                return new ResourceLocation("maidmodredo:textures/models/armor/bagu_hat");
-            }
-        }
-
-        @Override
-        public boolean shouldCombineTextures() {
-            return false;
-        }
     }
 }

@@ -59,13 +59,13 @@ public class FishingTask extends Task<LittleMaidBaseEntity> {
                 }
             }
 
-            BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(owner.posX, owner.posY, owner.posZ);
+            BlockPos.Mutable blockpos$mutableblockpos = new BlockPos.Mutable(owner.getPosX(), owner.getPosY(), owner.getPosZ());
             this.field_223518_f.clear();
 
             for (int i1 = -1; i1 <= 1; ++i1) {
                 for (int k = -1; k <= 1; ++k) {
                     for (int l = -1; l <= 1; ++l) {
-                        blockpos$mutableblockpos.setPos(owner.posX + (double) i1, owner.posY + (double) k, owner.posZ + (double) l);
+                        blockpos$mutableblockpos.setPos(owner.getPosX() + (double) i1, owner.getPosY() + (double) k, owner.getPosZ() + (double) l);
                         if (this.func_223516_a(blockpos$mutableblockpos, worldIn)) {
                             this.field_223518_f.add(new BlockPos(blockpos$mutableblockpos));
                         }
@@ -102,7 +102,7 @@ public class FishingTask extends Task<LittleMaidBaseEntity> {
             entityIn.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new BlockPosWrapper(this.field_220422_a));
         }
 
-        worldIn.playSound((PlayerEntity) null, entityIn.posX, entityIn.posY, entityIn.posZ, SoundEvents.ENTITY_FISHING_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (entityIn.getRNG().nextFloat() * 0.4F + 0.8F));
+        worldIn.playSound((PlayerEntity) null, entityIn.getPosX(), entityIn.getPosY(), entityIn.getPosZ(), SoundEvents.ENTITY_FISHING_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (entityIn.getRNG().nextFloat() * 0.4F + 0.8F));
         if (!worldIn.isRemote) {
             if (entityIn.fishingBobber == null) {
                 int k = EnchantmentHelper.getFishingSpeedBonus(entityIn.getHeldItemMainhand());
@@ -132,7 +132,7 @@ public class FishingTask extends Task<LittleMaidBaseEntity> {
 
                 owner.giveExperiencePoints(1 + owner.getRNG().nextInt(2));
                 owner.swingArm(Hand.MAIN_HAND);
-                worldIn.playSound((PlayerEntity) null, owner.posX, owner.posY, owner.posZ, SoundEvents.ENTITY_FISHING_BOBBER_RETRIEVE, SoundCategory.NEUTRAL, 1.0F, 0.4F / (owner.getRNG().nextFloat() * 0.4F + 0.8F));
+                worldIn.playSound((PlayerEntity) null, owner.getPosX(), owner.getPosY(), owner.getPosZ(), SoundEvents.ENTITY_FISHING_BOBBER_RETRIEVE, SoundCategory.NEUTRAL, 1.0F, 0.4F / (owner.getRNG().nextFloat() * 0.4F + 0.8F));
                 isFinishFishing = true;
             } else {
                 if (owner.fishingBobber.getTicksCatchable() > 0) {

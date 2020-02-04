@@ -21,7 +21,7 @@ public class WanderMaidRender <T extends WanderMaidEntity> extends MobRenderer<T
         this.addLayer(new HeldItemLayer<>(this));
     }
 
-    protected ResourceLocation getEntityTexture(WanderMaidEntity entity) {
+    public ResourceLocation getEntityTexture(WanderMaidEntity entity) {
         return TEXTURE;
     }
 

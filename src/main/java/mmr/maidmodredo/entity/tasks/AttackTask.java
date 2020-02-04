@@ -103,9 +103,9 @@ public class AttackTask extends Task<LittleMaidBaseEntity> {
     }
 
     public void setWalk(LittleMaidBaseEntity p_220540_0_, Entity p_220540_1_, float p_220540_2_) {
-        Vec3d vec3d = new Vec3d(p_220540_1_.posX, p_220540_1_.posY, p_220540_1_.posZ);
+        Vec3d vec3d = new Vec3d(p_220540_1_.getPosX(), p_220540_1_.getPosY(), p_220540_1_.getPosZ());
         p_220540_0_.getNavigator().tryMoveToEntityLiving(p_220540_1_, p_220540_2_);
-        double d0 = p_220540_0_.getDistanceSq(p_220540_1_.posX, p_220540_1_.getBoundingBox().minY, p_220540_1_.posZ);
+        double d0 = p_220540_0_.getDistanceSq(p_220540_1_.getPosX(), p_220540_1_.getBoundingBox().minY, p_220540_1_.getPosZ());
 
         this.checkAndPerformAttack(p_220540_0_, p_220540_1_, d0);
     }

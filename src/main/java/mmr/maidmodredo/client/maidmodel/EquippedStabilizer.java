@@ -1,6 +1,6 @@
 package mmr.maidmodredo.client.maidmodel;
 
-import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 
 import java.util.Map;
 
@@ -11,7 +11,7 @@ import java.util.Map;
 public class EquippedStabilizer {
 	
 	public ModelStabilizerBase stabilizer;
-	public RendererModel equipPoint;
+    public ModelRenderer equipPoint;
 	public String equipPointName;
 	public Map<String, Object> localValues;
 	
@@ -24,11 +24,11 @@ public class EquippedStabilizer {
 	public boolean updateEquippedPoint(ModelBase pmodel) {
 		// 取り付け位置をアップデート
 		for (int li = 0; li < pmodel.boxList.size(); li++) {
-			RendererModel lmr = (RendererModel) pmodel.boxList.get(li);
-			if (lmr.boxName != null && lmr.boxName.equalsIgnoreCase(equipPointName)) {
+            ModelRenderer lmr = (ModelRenderer) pmodel.boxList.get(li);
+			/*if (lmr.boxName != null && lmr.boxName.equalsIgnoreCase(equipPointName)) {
 				equipPoint = lmr;
 				return true;
-			}
+			}*/
 		}
 		
 		equipPoint = null;

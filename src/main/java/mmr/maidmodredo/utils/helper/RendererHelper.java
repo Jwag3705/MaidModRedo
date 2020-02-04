@@ -1,7 +1,5 @@
 package mmr.maidmodredo.utils.helper;
 
-import com.mojang.blaze3d.platform.GLX;
-
 public class RendererHelper {
 
     public static void setLightmapTextureCoords(int pValue) {
@@ -14,6 +12,6 @@ public class RendererHelper {
 
         int lt = pValue >>> 16;
 
-        GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, ls, lt);
+        //GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, ls, lt);
     }
 }

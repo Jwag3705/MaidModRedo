@@ -1,13 +1,14 @@
 package mmr.maidmodredo.client.maidmodel;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public abstract class ModelBase<T extends LivingEntity> extends AbstractModelBase<T> {
 	
@@ -22,7 +23,7 @@ public abstract class ModelBase<T extends LivingEntity> extends AbstractModelBas
 	public int dominantArm = 0;
 	public boolean isRiding = false;
 	public boolean isChild = true;
-	public List<RendererModel> boxList = new ArrayList<RendererModel>();
+    public List<ModelRenderer> boxList = new ArrayList<ModelRenderer>();
 	//カスタム設定
 	public boolean motionSitting = false;
 
@@ -31,20 +32,19 @@ public abstract class ModelBase<T extends LivingEntity> extends AbstractModelBas
 
 	// ModelBase互換関数群
 
-	public void render(IModelCaps pEntityCaps, float par2, float par3,
-			float ticksExisted, float pheadYaw, float pheadPitch, float par7, boolean pIsRender) {
+    public void render(IModelCaps pEntityCaps, MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, boolean pIsRender) {
 	}
 
 	public void setRotationAngles(float par1, float par2, float pTicksExisted,
-			float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps) {
+                                  float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
 	}
 
 	public void setLivingAnimations(IModelCaps pEntityCaps, float par2, float par3, float pRenderPartialTicks) {
 	}
 
-	public RendererModel getRandomModelBox(Random par1Random) {
+	/*public ModelRenderer getRandomModelBox(Random par1Random) {
 		return super.getRandomModelBox(par1Random);
-	}
+	}*/
 
 
 	// MathHelperトンネル関数群

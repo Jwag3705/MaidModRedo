@@ -7,7 +7,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.opengl.GL11;
 
 /**
  * LMM用に最適化
@@ -15,16 +14,16 @@ import org.lwjgl.opengl.GL11;
 public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelMultiMMMBase<T> {
 
     //fields
-    public MaidRendererModel bipedTorso;
-    public MaidRendererModel bipedNeck;
-    public MaidRendererModel bipedHead;
-    public MaidRendererModel bipedRightArm;
-    public MaidRendererModel bipedLeftArm;
-    public MaidRendererModel bipedBody;
-    public MaidRendererModel bipedPelvic;
-    public MaidRendererModel bipedRightLeg;
-    public MaidRendererModel bipedLeftLeg;
-    public MaidRendererModel Skirt;
+    public MaidModelRenderer bipedTorso;
+    public MaidModelRenderer bipedNeck;
+    public MaidModelRenderer bipedHead;
+    public MaidModelRenderer bipedRightArm;
+    public MaidModelRenderer bipedLeftArm;
+    public MaidModelRenderer bipedBody;
+    public MaidModelRenderer bipedPelvic;
+    public MaidModelRenderer bipedRightLeg;
+    public MaidModelRenderer bipedLeftLeg;
+    public MaidModelRenderer Skirt;
 
     /**
      * コンストラクタは全て継承させること
@@ -52,9 +51,9 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
     public void initModel(float psize, float pyoffset) {
         // 標準型
         // 手持ち
-        Arms[0] = new MaidRendererModel(this);
+        Arms[0] = new MaidModelRenderer(this);
         Arms[0].setRotationPoint(-1F, 5F, -1F);
-        Arms[1] = new MaidRendererModel(this);
+        Arms[1] = new MaidModelRenderer(this);
         Arms[1].setRotationPoint(1F, 5F, -1F);
         //Arms[1].isInvertX = true;
 
@@ -62,7 +61,7 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
         HeadTop.setRotationPoint(0F, -13F, 0F);
 
 
-        bipedHead = new MaidRendererModel(this, 0, 0);
+        bipedHead = new MaidModelRenderer(this, 0, 0);
         bipedHead.setTextureOffset(0, 0).addBox(-4F, -8F, -4F, 8, 8, 8, psize);        // Head
         bipedHead.setTextureOffset(24, 0).addBox(-4F, 0F, 1F, 8, 4, 3, psize);            // Hire
         bipedHead.setTextureOffset(24, 18).addBox(-4.995F, -7F, 0.2F, 1, 3, 3, psize);        // ChignonR
@@ -74,36 +73,36 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
         bipedHead.setTextureOffset(58, 21).addBox(4.5F, -6.8F, 0.9F, 1, 8, 2, psize);    // SideTailL
         bipedHead.setRotationPoint(0F, 0F, 0F);
 
-        bipedRightArm = new MaidRendererModel(this, 48, 0);
+        bipedRightArm = new MaidModelRenderer(this, 48, 0);
         bipedRightArm.addBox(-2.0F, -1F, -1F, 2, 8, 2, psize);
         bipedRightArm.setRotationPoint(-3.0F, 1.5F, 0F);
 
-        bipedLeftArm = new MaidRendererModel(this, 56, 0);
+        bipedLeftArm = new MaidModelRenderer(this, 56, 0);
         bipedLeftArm.addBox(0.0F, -1F, -1F, 2, 8, 2, psize);
         bipedLeftArm.setRotationPoint(3.0F, 1.5F, 0F);
 
-        bipedRightLeg = new MaidRendererModel(this, 32, 19);
+        bipedRightLeg = new MaidModelRenderer(this, 32, 19);
         bipedRightLeg.addBox(-2F, 0F, -2F, 3, 9, 4, psize);
         bipedRightLeg.setRotationPoint(-1F, 0F, 0F);
 
-        bipedLeftLeg = new MaidRendererModel(this, 32, 19);
+        bipedLeftLeg = new MaidModelRenderer(this, 32, 19);
         bipedLeftLeg.mirror = true;
         bipedLeftLeg.addBox(-1F, 0F, -2F, 3, 9, 4, psize);
         bipedLeftLeg.setRotationPoint(1F, 0F, 0F);
 
-        Skirt = new MaidRendererModel(this, 0, 16);
+        Skirt = new MaidModelRenderer(this, 0, 16);
         Skirt.addBox(-4F, -2F, -4F, 8, 8, 8, psize);
         Skirt.setRotationPoint(0F, 0F, 0F);
 
-        bipedBody = new MaidRendererModel(this, 32, 8);
+        bipedBody = new MaidModelRenderer(this, 32, 8);
         bipedBody.addBox(-3F, 0F, -2F, 6, 7, 4, psize);
         bipedBody.setRotationPoint(0F, 0F, 0F);
 
-        bipedTorso = new MaidRendererModel(this);
-        bipedNeck = new MaidRendererModel(this);
-        bipedPelvic = new MaidRendererModel(this);
+        bipedTorso = new MaidModelRenderer(this);
+        bipedNeck = new MaidModelRenderer(this);
+        bipedPelvic = new MaidModelRenderer(this);
         bipedPelvic.setRotationPoint(0F, 7F, 0F);
-        mainFrame = new MaidRendererModel(this, 0, 0);
+        mainFrame = new MaidModelRenderer(this, 0, 0);
         mainFrame.setRotationPoint(0F, 0F + pyoffset + 8F, 0F);
         mainFrame.addChild(bipedTorso);
         bipedTorso.addChild(bipedNeck);
@@ -158,8 +157,8 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
      */
     @Override
     public void setRotationAngles(float par1, float par2, float pTicksExisted,
-                                  float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps) {
-        setDefaultPause(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps);
+                                  float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
+        setDefaultPause(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, pEntityCaps);
 
         if (isRiding) {
             // 乗り物に乗っている
@@ -309,11 +308,11 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
         Entity entity = (Entity) pEntityCaps.getCapsValue(IModelCaps.caps_Entity);
 
         if (entity instanceof IMaidAnimation) {
-            setAnimations(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps, ((IMaidAnimation) entity));
+            setAnimations(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, pEntityCaps, ((IMaidAnimation) entity));
         }
     }
 
-    public void setAnimations(float par1, float par2, float pTicksExisted, float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps, IMaidAnimation animation) {
+    public void setAnimations(float par1, float par2, float pTicksExisted, float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps, IMaidAnimation animation) {
 
 
         animator.update(animation);
@@ -401,8 +400,8 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
 
     @Override
     public void setDefaultPause(float par1, float par2, float pTicksExisted,
-                                float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps) {
-        super.setDefaultPause(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps);
+                                float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
+        super.setDefaultPause(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, pEntityCaps);
         mainFrame.setRotationPoint(0F, 8F, 0F);
         bipedTorso.setRotationPoint(0F, 0F, 0F);
         bipedTorso.setRotateAngle(0F, 0F, 0F);
@@ -494,10 +493,10 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
     @Override
     public void renderFirstPersonHand(IModelCaps pEntityCaps) {
         float var2 = 1.0F;
-        GL11.glColor3f(var2, var2, var2);
+        //GL11.glColor3f(var2, var2, var2);
         onGrounds[0] = onGrounds[1] = 0.0F;
-        setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, pEntityCaps);
-        bipedRightArm.render(0.0625F);
+        //setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, pEntityCaps);
+        //bipedRightArm.render(0.0625F);
     }
 
 }

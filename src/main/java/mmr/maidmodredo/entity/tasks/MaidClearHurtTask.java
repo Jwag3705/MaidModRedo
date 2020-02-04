@@ -13,7 +13,7 @@ public class MaidClearHurtTask extends Task<LittleMaidBaseEntity> {
     }
 
     protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
-        boolean flag = PanicTask.func_220512_b(entityIn) || PanicTask.func_220513_a(entityIn) || func_220394_a(entityIn);
+        boolean flag = PanicTask.hasBeenHurt(entityIn) || PanicTask.hostileNearby(entityIn) || func_220394_a(entityIn);
         if (!flag) {
             entityIn.getBrain().removeMemory(MemoryModuleType.NEAREST_HOSTILE);
             entityIn.getBrain().removeMemory(MemoryModuleType.HURT_BY);

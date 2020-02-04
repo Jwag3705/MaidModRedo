@@ -110,7 +110,7 @@ public class BowShootTask extends Task<LittleMaidBaseEntity> {
     protected void updateTask(ServerWorld worldIn, LittleMaidBaseEntity owner, long gameTime) {
         Entity entity = owner.getBrain().getMemory(this.field_220541_a).get();
         if (entity != null && entity instanceof LivingEntity) {
-            double d0 = owner.getDistanceSq(entity.posX, entity.getBoundingBox().minY, entity.posZ);
+            double d0 = owner.getDistanceSq(entity.getPosX(), entity.getBoundingBox().minY, entity.getPosZ());
 
             boolean flag = owner.getEntitySenses().canSee(entity);
 

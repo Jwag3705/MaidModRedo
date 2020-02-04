@@ -1,27 +1,30 @@
 package mmr.maidmodredo.client.maidmodel;
 
-import net.minecraft.client.renderer.entity.model.RendererModel;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class MMM_ModelStabilizer_WitchHat extends ModelStabilizerBase {
 
 	public static ResourceLocation ftex = new ResourceLocation("/mob/littleMaid/ALTERNATIVE/Stabilizer_MagicHat.png");
-	public RendererModel WitchHat;
-	public RendererModel WitchHat1;
-	public RendererModel WitchHat2;
-	public RendererModel WitchHat3;
+    public ModelRenderer WitchHat;
+    public ModelRenderer WitchHat1;
+    public ModelRenderer WitchHat2;
+    public ModelRenderer WitchHat3;
 
 
 	public MMM_ModelStabilizer_WitchHat() {
 		// まじょこぼう
 		textureWidth = 64;
 		textureHeight = 32;
-		
-		WitchHat = new RendererModel(this, 0, 0);
-		WitchHat1 = new RendererModel(this, 0, 0);
-		WitchHat2 = new RendererModel(this, 0, 0);
-		WitchHat3 = new RendererModel(this, 0, 0);
+
+        WitchHat = new ModelRenderer(this, 0, 0);
+        WitchHat1 = new ModelRenderer(this, 0, 0);
+        WitchHat2 = new ModelRenderer(this, 0, 0);
+        WitchHat3 = new ModelRenderer(this, 0, 0);
 		WitchHat.setTextureOffset( 0, 15).addBox(-8F, 0F, -8F, 16, 1, 16, 0.0F);
 		WitchHat.setTextureOffset( 0,  0).addBox(-4.5F, -4F, -4.5F, 9, 4, 9);
 		WitchHat1.setTextureOffset(40, 4).addBox(-3F, -3F, -3F, 6, 3, 6).setRotationPoint(0F, -4F, 0F);
@@ -32,11 +35,16 @@ public class MMM_ModelStabilizer_WitchHat extends ModelStabilizerBase {
 		WitchHat1.addChild(WitchHat2);
 		WitchHat2.addChild(WitchHat3);
 	}
-	
-//	@Override
+
+    @Override
+    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+
+    }
+
+    //	@Override
 	public void render(float f5) {
 		GL11.glTranslatef(0F, -0.1F, 0F);
-		WitchHat.render(f5);
+        //WitchHat.render(f5);
 	}
 	
 	@Override
@@ -59,5 +67,9 @@ public class MMM_ModelStabilizer_WitchHat extends ModelStabilizerBase {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
-	
+
+    @Override
+    public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+
+    }
 }

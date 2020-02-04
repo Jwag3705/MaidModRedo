@@ -1,30 +1,36 @@
 package mmr.maidmodredo.client.maidmodel;
 
+import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
 public class ModelMulti_Steve extends ModelMultiBase {
 
-	public MaidRendererModel bipedHead;
-	public MaidRendererModel bipedHeadwear;
-	public MaidRendererModel bipedBody;
-	public MaidRendererModel bipedRightArm;
-	public MaidRendererModel bipedLeftArm;
-	public MaidRendererModel bipedRightLeg;
-	public MaidRendererModel bipedLeftLeg;
-	public MaidRendererModel bipedEars;
-	public MaidRendererModel bipedCloak;
-	public MaidRendererModel bipedTorso;
-	public MaidRendererModel bipedNeck;
-	public MaidRendererModel bipedPelvic;
-	
-	public MaidRendererModel eyeR;
-	public MaidRendererModel eyeL;
+    public MaidModelRenderer bipedHead;
+    public MaidModelRenderer bipedHeadwear;
+    public MaidModelRenderer bipedBody;
+    public MaidModelRenderer bipedRightArm;
+    public MaidModelRenderer bipedLeftArm;
+    public MaidModelRenderer bipedRightLeg;
+    public MaidModelRenderer bipedLeftLeg;
+    public MaidModelRenderer bipedEars;
+    public MaidModelRenderer bipedCloak;
+    public MaidModelRenderer bipedTorso;
+    public MaidModelRenderer bipedNeck;
+    public MaidModelRenderer bipedPelvic;
+
+    public MaidModelRenderer eyeR;
+    public MaidModelRenderer eyeL;
 
 
 	public ModelMulti_Steve() {
 		super();
 	}
-	public ModelMulti_Steve(float psize) {
+
+
+    public ModelMulti_Steve(float psize) {
 		super(psize);
 	}
 	public ModelMulti_Steve(float psize, float pyoffset, int pTextureWidth, int pTextureHeight) {
@@ -33,56 +39,56 @@ public class ModelMulti_Steve extends ModelMultiBase {
 
 	@Override
 	public void initModel(float psize, float pyoffset) {
-		bipedCloak = new MaidRendererModel(this, 0, 0);
+        bipedCloak = new MaidModelRenderer(this, 0, 0);
 		bipedCloak.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, psize);
-		bipedEars = new MaidRendererModel(this, 24, 0);
+        bipedEars = new MaidModelRenderer(this, 24, 0);
 		bipedEars.addBox(-3.0F, -6.0F, -1.0F, 6, 6, 1, psize);
-		
-		bipedHead = new MaidRendererModel(this, 0, 0);
+
+        bipedHead = new MaidModelRenderer(this, 0, 0);
 		bipedHead.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, psize);
 		bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
-		bipedHeadwear = new MaidRendererModel(this, 32, 0);
+        bipedHeadwear = new MaidModelRenderer(this, 32, 0);
 		bipedHeadwear.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, psize + 0.5F);
 		bipedHeadwear.setRotationPoint(0.0F, 0.0F, 0.0F);
-		eyeL = new MaidRendererModel(this, 0, 0);
+        eyeL = new MaidModelRenderer(this, 0, 0);
 		eyeL.addBox(0.0F, -5F, -4.001F, 4, 4, 0, psize);
 		eyeL.setRotationPoint(0.0F, 0.0F, 0.0F);
-		eyeR = new MaidRendererModel(this, 0, 4);
+        eyeR = new MaidModelRenderer(this, 0, 4);
 		eyeR.addBox(-4F, -5F, -4.001F, 4, 4, 0, psize);
 		eyeR.setRotationPoint(0.0F, 0.0F, 0.0F);
-		
-		bipedBody = new MaidRendererModel(this, 16, 16);
+
+        bipedBody = new MaidModelRenderer(this, 16, 16);
 		bipedBody.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, psize);
 		bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);
 
-		bipedRightArm = new MaidRendererModel(this, 40, 16);
+        bipedRightArm = new MaidModelRenderer(this, 40, 16);
 		bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4, psize);
 		bipedRightArm.setRotationPoint(-5.0F, 2.0F, 0.0F);
-		bipedLeftArm = new MaidRendererModel(this, 40, 16);
+        bipedLeftArm = new MaidModelRenderer(this, 40, 16);
 		bipedLeftArm.mirror = true;
 		bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, psize);
 		bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);
-		
-		bipedRightLeg = new MaidRendererModel(this, 0, 16);
+
+        bipedRightLeg = new MaidModelRenderer(this, 0, 16);
 		bipedRightLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, psize);
 		bipedRightLeg.setRotationPoint(-1.9F, 12.0F, 0.0F);
-		bipedLeftLeg = new MaidRendererModel(this, 0, 16);
+        bipedLeftLeg = new MaidModelRenderer(this, 0, 16);
 		bipedLeftLeg.mirror = true;
 		bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, psize);
 		bipedLeftLeg.setRotationPoint(1.9F, 12.0F, 0.0F);
 		
 		HeadMount.setRotationPoint(0.0F, -4.0F, 0.0F);
 		HeadTop.setRotationPoint(0.0F, -12.0F, 0.0F);
-		Arms[0] = new MaidRendererModel(this);
+        Arms[0] = new MaidModelRenderer(this);
 		Arms[0].setRotationPoint(-1.5F, 7.2F, -1F);
-		Arms[1] = new MaidRendererModel(this);
+        Arms[1] = new MaidModelRenderer(this);
 		Arms[1].setRotationPoint(1.5F, 7.2F, -1F);
-		
-		bipedTorso = new MaidRendererModel(this);
-		bipedNeck = new MaidRendererModel(this);
-		bipedPelvic = new MaidRendererModel(this);
-		
-		mainFrame = new MaidRendererModel(this);
+
+        bipedTorso = new MaidModelRenderer(this);
+        bipedNeck = new MaidModelRenderer(this);
+        bipedPelvic = new MaidModelRenderer(this);
+
+        mainFrame = new MaidModelRenderer(this);
 		mainFrame.setRotationPoint(0F, pyoffset, 0F);
 		mainFrame.addChild(bipedTorso);
 		bipedTorso.addChild(bipedNeck);
@@ -109,14 +115,14 @@ public class ModelMulti_Steve extends ModelMultiBase {
 	}
 
 	@Override
-	public void render(IModelCaps pEntityCaps, float par2, float par3, float ticksExisted,
-			float pheadYaw, float pheadPitch, float par7, boolean pIsRender) {
-		setRotationAngles(par2, par3, ticksExisted, pheadYaw, pheadPitch, par7, pEntityCaps);
-		mainFrame.render(par7);
+    public void render(IModelCaps pEntityCaps, MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, boolean pIsRender) {
+        ImmutableList.of(this.mainFrame).forEach((p_228292_8_) -> {
+            p_228292_8_.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        });
 	}
 
 	public void setDefaultPause(float par1, float par2, float pTicksExisted,
-			float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps) {
+                                float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
 		// 初期姿勢
 		bipedBody.setRotationPoint2(0.0F, 0.0F, 0.0F);bipedBody.setRotateAngle(0.0F, 0.0F, 0.0F);
 		bipedHead.setRotationPoint2(0.0F, 0.0F, 0.0F);bipedHead.setRotateAngleDeg(pHeadPitch, pHeadYaw, 0.0F);
@@ -131,8 +137,8 @@ public class ModelMulti_Steve extends ModelMultiBase {
 
 	@Override
 	public void setRotationAngles(float par1, float par2, float pTicksExisted,
-			float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps) {
-		setDefaultPause(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps);
+                                  float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
+        setDefaultPause(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, pEntityCaps);
 		
 		// 腕ふり、腿上げ
 		float lf1 = mh_cos(par1 * 0.6662F);
@@ -276,8 +282,8 @@ public class ModelMulti_Steve extends ModelMultiBase {
 		float var2 = 1.0F;
 		GL11.glColor3f(var2, var2, var2);
 		onGrounds[0] = onGrounds[1] = 0.0F;
-		setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, pEntityCaps);
-		bipedRightArm.render(0.0625F);
+        setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, pEntityCaps);
+        //bipedRightArm.render(0.0625F);
 	}
 
 	@Override
@@ -315,6 +321,16 @@ public class ModelMulti_Steve extends ModelMultiBase {
 		// TODO Auto-generated method stub
 		return 0.2F;
 	}
+
+    @Override
+    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+
+    }
+
+    @Override
+    public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+
+    }
 
 	/*@Override
 	public int showArmorParts(int parts, int index) {

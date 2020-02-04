@@ -1,6 +1,8 @@
 package mmr.maidmodredo.client.maidmodel;
 
-import net.minecraft.client.renderer.entity.model.RendererModel;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
@@ -21,11 +23,11 @@ public abstract class ModelMultiBase<T extends LivingEntity> extends ModelBase<T
     public boolean isSneak;
     public boolean isWait;
 
-    public RendererModel mainFrame;
-    public RendererModel HeadMount;
-    public RendererModel HeadTop;
-    public RendererModel Arms[];
-    public RendererModel HardPoint[];
+    public ModelRenderer mainFrame;
+    public ModelRenderer HeadMount;
+    public ModelRenderer HeadTop;
+    public ModelRenderer Arms[];
+    public ModelRenderer HardPoint[];
 
     public float entityIdFactor;
     public int entityTicksExisted;
@@ -69,9 +71,9 @@ public abstract class ModelMultiBase<T extends LivingEntity> extends ModelBase<T
 //			LittleMaidReengaged.Debug("ModelMulti.InitClient");
         // ハードポイント
         if (FMLEnvironment.dist == Dist.CLIENT) {
-            Arms = new RendererModel[2];
-            HeadMount = new RendererModel(this, "HeadMount");
-            HeadTop = new RendererModel(this, "HeadTop");
+            Arms = new ModelRenderer[2];
+            HeadMount = new ModelRenderer(this);
+            HeadTop = new ModelRenderer(this);
             initModel(pSizeAdjust, pYOffset);
         }
 
@@ -308,6 +310,15 @@ public abstract class ModelMultiBase<T extends LivingEntity> extends ModelBase<T
         return false;
     }
 
+    @Override
+    public void render(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+
+    }
+
+    @Override
+    public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+
+    }
 
     public static final float mh_sqrt_float(float f) {
         return MathHelper.sqrt(f);

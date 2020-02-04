@@ -100,13 +100,6 @@ public class WanderMaidEntity extends AbstractVillagerEntity implements IRangedA
         return false;
     }
 
-    @Override
-    protected void func_213713_b(MerchantOffer p_213713_1_) {
-        if (p_213713_1_.func_222221_q()) {
-            int i = 3 + this.rand.nextInt(6);
-            this.world.addEntity(new ExperienceOrbEntity(this.world, this.posX, this.posY + 0.5D, this.posZ, i));
-        }
-    }
 
     @Override
     public void writeAdditional(CompoundNBT compound) {
@@ -135,13 +128,13 @@ public class WanderMaidEntity extends AbstractVillagerEntity implements IRangedA
     public void livingTick() {
         super.livingTick();
         if (!this.world.isRemote) {
-            this.func_222821_eh();
+            this.handleDespawn();
         }
 
     }
 
-    private void func_222821_eh() {
-        if (this.despawnDelay > 0 && !this.func_213716_dX() && --this.despawnDelay == 0) {
+    private void handleDespawn() {
+        if (this.despawnDelay > 0 && !this.hasCustomer() && --this.despawnDelay == 0) {
             this.remove();
         }
 
@@ -171,7 +164,7 @@ public class WanderMaidEntity extends AbstractVillagerEntity implements IRangedA
         if (flag) {
             itemstack.interactWithEntity(player, this, hand);
             return true;
-        } else if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.func_213716_dX() && !this.isChild()) {
+        } else if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.hasCustomer() && !this.isChild()) {
             if (hand == Hand.MAIN_HAND) {
                 player.addStat(Stats.TALKED_TO_VILLAGER);
             }
@@ -181,7 +174,7 @@ public class WanderMaidEntity extends AbstractVillagerEntity implements IRangedA
             } else {
                 if (!this.world.isRemote) {
                     this.setCustomer(player);
-                    this.func_213707_a(player, this.getDisplayName(), 1);
+                    this.openMerchantContainer(player, this.getDisplayName(), 1);
                 }
 
                 return true;
@@ -198,6 +191,13 @@ public class WanderMaidEntity extends AbstractVillagerEntity implements IRangedA
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
+    @Override
+    protected void onVillagerTrade(MerchantOffer offer) {
+        if (offer.getDoesRewardExp()) {
+            int i = 3 + this.rand.nextInt(4);
+            this.world.addEntity(new ExperienceOrbEntity(this.world, this.getPosX(), this.getPosY() + 0.5D, this.getPosZ(), i));
+        }
+    }
 
 
     @Override
@@ -227,9 +227,9 @@ public class WanderMaidEntity extends AbstractVillagerEntity implements IRangedA
         AbstractArrowEntity abstractarrowentity = this.func_213624_b(itemstack, distanceFactor);
         if (this.getHeldItemMainhand().getItem() instanceof BowItem)
             abstractarrowentity = ((BowItem)this.getHeldItemMainhand().getItem()).customeArrow(abstractarrowentity);
-        double d0 = target.posX - this.posX;
-        double d1 = target.getBoundingBox().minY + (double)(target.getHeight() / 3.0F) - abstractarrowentity.posY;
-        double d2 = target.posZ - this.posZ;
+        double d0 = target.getPosX() - this.getPosX();
+        double d1 = target.getBoundingBox().minY + (double) (target.getHeight() / 3.0F) - abstractarrowentity.getPosY();
+        double d2 = target.getPosZ() - this.getPosZ();
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
         abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.world.getDifficulty().getId() * 4));
         this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
@@ -237,7 +237,7 @@ public class WanderMaidEntity extends AbstractVillagerEntity implements IRangedA
     }
 
     protected AbstractArrowEntity func_213624_b(ItemStack p_213624_1_, float p_213624_2_) {
-        return ProjectileHelper.func_221272_a(this, p_213624_1_, p_213624_2_);
+        return ProjectileHelper.fireArrow(this, p_213624_1_, p_213624_2_);
     }
 
     protected SoundEvent func_213721_r(boolean p_213721_1_) {
@@ -288,8 +288,8 @@ public class WanderMaidEntity extends AbstractVillagerEntity implements IRangedA
             BlockPos blockpos = this.field_220847_a.func_213727_eh();
             if (blockpos != null && WanderMaidEntity.this.navigator.noPath()) {
                 if (this.func_220846_a(blockpos, 10.0D)) {
-                    Vec3d vec3d = (new Vec3d((double)blockpos.getX() - this.field_220847_a.posX, (double)blockpos.getY() - this.field_220847_a.posY, (double)blockpos.getZ() - this.field_220847_a.posZ)).normalize();
-                    Vec3d vec3d1 = vec3d.scale(10.0D).add(this.field_220847_a.posX, this.field_220847_a.posY, this.field_220847_a.posZ);
+                    Vec3d vec3d = (new Vec3d((double) blockpos.getX() - this.field_220847_a.getPosX(), (double) blockpos.getY() - this.field_220847_a.getPosY(), (double) blockpos.getZ() - this.field_220847_a.getPosZ())).normalize();
+                    Vec3d vec3d1 = vec3d.scale(10.0D).add(this.field_220847_a.getPosX(), this.field_220847_a.getPosY(), this.field_220847_a.getPosZ());
                     WanderMaidEntity.this.navigator.tryMoveToXYZ(vec3d1.x, vec3d1.y, vec3d1.z, this.field_220849_c);
                 } else {
                     WanderMaidEntity.this.navigator.tryMoveToXYZ((double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ(), this.field_220849_c);

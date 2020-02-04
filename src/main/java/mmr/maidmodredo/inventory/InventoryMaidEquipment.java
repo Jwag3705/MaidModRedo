@@ -48,7 +48,7 @@ public class InventoryMaidEquipment extends InventoryMaid {
                 if (itemstack.getItem() instanceof ArmorItem) {
                     int i_f = i;
                     itemstack.damageItem((int) damage, this.getContainerLittleMaid(), (p_214023_1_) -> {
-                        p_214023_1_.sendBreakAnimation(EquipmentSlotType.func_220318_a(EquipmentSlotType.Group.ARMOR, i_f));
+                        p_214023_1_.sendBreakAnimation(EquipmentSlotType.fromSlotTypeAndIndex(EquipmentSlotType.Group.ARMOR, i_f));
                     });
                 }
             }

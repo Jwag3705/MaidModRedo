@@ -1,5 +1,7 @@
 package mmr.maidmodredo.client.maidmodel;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
@@ -62,21 +64,21 @@ public class ModelBaseDuo<T extends LivingEntity> extends ModelBaseNihil<T> impl
 
 
 	@Override
-	public void render(T par1Entity, float par2, float par3, float par4, float par5, float par6, float par7) {
-		super.render(par1Entity, par2, par3, par4, par5, par6, par7);
+    public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        super.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 //		isAlphablend = false;
 		renderCount++;
 	}
 
 
 	@Override
-	public void setRotationAngles(T par7Entity,float par1, float par2, float par3,
-			float par4, float par5, float par6) {
+    public void render(T par7Entity, float par1, float par2, float par3,
+                       float par4, float par5) {
 		if (modelInner != null) {
-			modelInner.setRotationAngles(par1, par2, par3, par4, par5, par6, entityCaps);
+            modelInner.setRotationAngles(par1, par2, par3, par4, par5, entityCaps);
 		}
 		if (modelOuter != null) {
-			modelOuter.setRotationAngles(par1, par2, par3, par4, par5, par6, entityCaps);
+            modelOuter.setRotationAngles(par1, par2, par3, par4, par5, entityCaps);
 		}
 	}
 

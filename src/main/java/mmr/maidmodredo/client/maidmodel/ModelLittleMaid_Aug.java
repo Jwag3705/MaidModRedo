@@ -6,18 +6,18 @@ package mmr.maidmodredo.client.maidmodel;
  * サンプルとしてaddPartsを使用しています。
  */
 public class ModelLittleMaid_Aug extends ModelLittleMaid_SR2 {
-	
-	public MaidRendererModel shaggyB;
-	public MaidRendererModel shaggyR;
-	public MaidRendererModel shaggyL;
-	
-	public MaidRendererModel SideTailR;
-	public MaidRendererModel SideTailL;
 
-	public MaidRendererModel sensor1;
-	public MaidRendererModel sensor2;
-	public MaidRendererModel sensor3;
-	public MaidRendererModel sensor4;
+    public MaidModelRenderer shaggyB;
+    public MaidModelRenderer shaggyR;
+    public MaidModelRenderer shaggyL;
+
+    public MaidModelRenderer SideTailR;
+    public MaidModelRenderer SideTailL;
+
+    public MaidModelRenderer sensor1;
+    public MaidModelRenderer sensor2;
+    public MaidModelRenderer sensor3;
+    public MaidModelRenderer sensor4;
 
 	
 	public ModelLittleMaid_Aug() {
@@ -38,38 +38,38 @@ public class ModelLittleMaid_Aug extends ModelLittleMaid_SR2 {
 		//TODO
 
 		// 再構成パーツ
-		SideTailR = new MaidRendererModel(this);
+        SideTailR = new MaidModelRenderer(this);
 		SideTailR.setTextureOffset(46, 20).addBox( -1.5F, -0.5F, -1.0F, 2, 10, 2, psize);
 		SideTailR.setRotationPoint(-5F, -7.8F, 1.9F);
-		SideTailL = new MaidRendererModel(this);
+        SideTailL = new MaidModelRenderer(this);
 		SideTailL.setTextureOffset(54, 20).addBox( 0.5F, -0.5F, -1.0F, 2, 10, 2, psize);
 		SideTailL.setRotationPoint(4F, -7.8F, 1.9F);
 		
 		
 		// 増加パーツ
-		shaggyB = new MaidRendererModel(this, 24, 0);
+        shaggyB = new MaidModelRenderer(this, 24, 0);
 		shaggyB.addBox( -5.0F, 0.0F, 0.0F, 10, 4, 4, psize);
 		shaggyB.setRotationPoint(0.0F, -1.0F, 4.0F);
 		shaggyB.setRotateAngleX(0.4F);
-		shaggyR = new MaidRendererModel(this, 34, 4);
+        shaggyR = new MaidModelRenderer(this, 34, 4);
 		shaggyR.addBox( 0.0F, 0.0F, -5.0F, 10, 4, 1, psize);
 		shaggyR.setRotationPoint(4.0F, -1.0F, 0.0F);
 		shaggyR.setRotateAngleZ(-0.4F);
-		shaggyL = new MaidRendererModel(this, 24, 4);
+        shaggyL = new MaidModelRenderer(this, 24, 4);
 		shaggyL.addBox( 0.0F, 0.0F, -5.0F, 10, 4, 5, psize);
 		shaggyL.setRotationPoint(-4.0F, -1.0F, 0.0F);
 		shaggyL.setRotateAngleZ(0.4F);
-		
-		sensor1 = new MaidRendererModel(this, 0, 0);
+
+        sensor1 = new MaidModelRenderer(this, 0, 0);
 		sensor1.addBox( -8.0F, -4.0F, 0.0F, 8, 4, 0);
 		sensor1.setRotationPoint(0.0F, -8.0F + pyoffset, 0.0F);
-		sensor2 = new MaidRendererModel(this, 0, 4);
+        sensor2 = new MaidModelRenderer(this, 0, 4);
 		sensor2.addBox( 0.0F, -4.0F, 0.0F, 8, 4, 0);
 		sensor2.setRotationPoint(0.0F, -8.0F + pyoffset, 0.0F);
-		sensor3 = new MaidRendererModel(this, 44, 0);
+        sensor3 = new MaidModelRenderer(this, 44, 0);
 		sensor3.addBox( 0.0F, -7.0F, -4.0F, 4, 8, 1);
 		sensor3.setRotationPoint(0.0F, -8.0F + pyoffset, 0.0F);
-		sensor4 = new MaidRendererModel(this, 34, 0);
+        sensor4 = new MaidModelRenderer(this, 34, 0);
 		sensor4.addBox( 0.0F, -4.0F, -10.0F, 10, 4, 1);
 		sensor4.setRotationPoint(0.0F, -8.0F + pyoffset, 0.0F);
 		
@@ -122,8 +122,8 @@ public class ModelLittleMaid_Aug extends ModelLittleMaid_SR2 {
 
 	@Override
 	public void setRotationAngles(float par1, float par2, float pTicksExisted,
-			float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps) {
-		super.setRotationAngles(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps);
+                                  float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
+        super.setRotationAngles(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, pEntityCaps);
 		
 		SideTailR.setRotateAngleX(SideTailL.setRotateAngleX(bipedHead.getRotateAngleX() * -0.666666666F));
 	}

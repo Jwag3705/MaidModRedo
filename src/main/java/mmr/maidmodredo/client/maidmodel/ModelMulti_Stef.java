@@ -2,7 +2,7 @@ package mmr.maidmodredo.client.maidmodel;
 
 public class ModelMulti_Stef extends ModelMulti_Steve {
 
-	public MaidRendererModel bust;
+    public MaidModelRenderer bust;
 
 	public ModelMulti_Stef() {
 		super();
@@ -19,61 +19,61 @@ public class ModelMulti_Stef extends ModelMulti_Steve {
 
 	@Override
 	public void initModel(float psize, float pyoffset) {
-		bipedCloak = new MaidRendererModel(this, 0, 0);
+        bipedCloak = new MaidModelRenderer(this, 0, 0);
 		bipedCloak.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, psize);
-		bipedEars = new MaidRendererModel(this, 24, 0);
+        bipedEars = new MaidModelRenderer(this, 24, 0);
 		bipedEars.addBox(-3.0F, -6.0F, -1.0F, 6, 6, 1, psize);
-		
-		bipedHead = new MaidRendererModel(this, 0, 0);
+
+        bipedHead = new MaidModelRenderer(this, 0, 0);
 		bipedHead.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, psize - 0.2F);
 		bipedHead.setRotationPoint(0.0F, 1.35F, 0.0F);
-		bipedHeadwear = new MaidRendererModel(this, 32, 0);
+        bipedHeadwear = new MaidModelRenderer(this, 32, 0);
 		bipedHeadwear.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, psize + 0.3F);
 		bipedHeadwear.setRotationPoint(0.0F, 0.0F, 0.0F);
-		eyeL = new MaidRendererModel(this, 0, 0);
+        eyeL = new MaidModelRenderer(this, 0, 0);
 		eyeL.addBox(0.0F, -5F, -4.001F, 4, 4, 0, psize - 0.2F);
 		eyeL.setRotationPoint(0.0F, 0.0F, 0.0F);
-		eyeR = new MaidRendererModel(this, 0, 4);
+        eyeR = new MaidModelRenderer(this, 0, 4);
 		eyeR.addBox(-4F, -5F, -4.001F, 4, 4, 0, psize - 0.2F);
 		eyeR.setRotationPoint(0.0F, 0.0F, 0.0F);
-		
-		bipedBody = new MaidRendererModel(this, 16, 16);
+
+        bipedBody = new MaidModelRenderer(this, 16, 16);
 		bipedBody.addBox(-4.0F, 0.2F, -2.0F, 8, 12, 4, psize - 0.3F);
 		bipedBody.setRotationPoint(0.0F, 0.7F, 0.0F);
-		bust = new MaidRendererModel(this, 16, 21);
+        bust = new MaidModelRenderer(this, 16, 21);
 		bust.addBox(-4F, -2F, -2F, 8, 4, 4, psize/* - 0.3001F*/);
 		/*bust.setScale(0.9f, 0.8f, 0.8f);
 		bust.setRotationPoint(0.0F, 4.25F, -1.4F).setRotateAngleDeg(50F, 0F, 0F);
 		*/
-		bipedRightArm = new MaidRendererModel(this, 40, 16);
+        bipedRightArm = new MaidModelRenderer(this, 40, 16);
 		bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4, psize - 0.4F);
 		bipedRightArm.setRotationPoint(-4.4F, 2.85F, 0.0F);
-		bipedLeftArm = new MaidRendererModel(this, 40, 16);
+        bipedLeftArm = new MaidModelRenderer(this, 40, 16);
 		bipedLeftArm.mirror = true;
 		bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, psize - 0.4F);
 		bipedLeftArm.setRotationPoint(4.4F, 2.85F, 0.0F);
-		
-		bipedRightLeg = new MaidRendererModel(this, 0, 16);
+
+        bipedRightLeg = new MaidModelRenderer(this, 0, 16);
 		bipedRightLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, psize - 0.3F);
 		bipedRightLeg.setRotationPoint(-1.7F, 12.3F, 0.0F);
-		bipedLeftLeg = new MaidRendererModel(this, 0, 16);
+        bipedLeftLeg = new MaidModelRenderer(this, 0, 16);
 		bipedLeftLeg.mirror = true;
 		bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, psize - 0.3F);
 		bipedLeftLeg.setRotationPoint(1.7F, 12.3F, 0.0F);
 		
 		HeadMount.setRotationPoint(0.0F, -4.0F, 0.0F);
 		HeadTop.setRotationPoint(0.0F, -12.0F, 0.0F);
-		Arms[0] = new MaidRendererModel(this);
+        Arms[0] = new MaidModelRenderer(this);
 		Arms[0].setRotationPoint(-1.5F, 7.2F, -1F);
-		Arms[1] = new MaidRendererModel(this);
+        Arms[1] = new MaidModelRenderer(this);
 		Arms[1].setRotationPoint(1.5F, 7.2F, -1F);
-		
-		bipedTorso = new MaidRendererModel(this);
-		bipedNeck = new MaidRendererModel(this);
-		bipedPelvic = new MaidRendererModel(this);
 
-		
-		mainFrame = new MaidRendererModel(this);
+        bipedTorso = new MaidModelRenderer(this);
+        bipedNeck = new MaidModelRenderer(this);
+        bipedPelvic = new MaidModelRenderer(this);
+
+
+        mainFrame = new MaidModelRenderer(this);
 		mainFrame.setRotationPoint(0F, pyoffset, 0F);
 		mainFrame.addChild(bipedTorso);
 		bipedTorso.addChild(bipedNeck);
@@ -106,7 +106,7 @@ public class ModelMulti_Stef extends ModelMulti_Steve {
 	}
 
 	public void setDefaultPause(float par1, float par2, float pTicksExisted,
-			float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps) {
+                                float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
 		// 初期姿勢
 		bipedBody.setRotationPoint(0.0F, 0.7F, 0.0F);bipedBody.setRotateAngle(0.0F, 0.0F, 0.0F);
 		bipedHead.setRotationPoint(0.0F, 1.35F, 0.0F);bipedHead.setRotateAngleDeg(pHeadPitch, pHeadYaw, 0.0F);

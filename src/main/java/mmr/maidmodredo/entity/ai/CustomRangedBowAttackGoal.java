@@ -78,7 +78,7 @@ public class CustomRangedBowAttackGoal <T extends MobEntity & IRangedAttackMob> 
     public void tick() {
         LivingEntity livingentity = this.entity.getAttackTarget();
         if (livingentity != null) {
-            double d0 = this.entity.getDistanceSq(livingentity.posX, livingentity.getBoundingBox().minY, livingentity.posZ);
+            double d0 = this.entity.getDistanceSq(livingentity.getPosX(), livingentity.getBoundingBox().minY, livingentity.getPosZ());
             boolean flag = this.entity.getEntitySenses().canSee(livingentity);
             boolean flag1 = this.seeTime > 0;
             if (flag != flag1) {

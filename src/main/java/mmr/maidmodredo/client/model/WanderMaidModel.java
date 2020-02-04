@@ -1,10 +1,13 @@
 package mmr.maidmodredo.client.model;
 
+import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import mmr.maidmodredo.entity.WanderMaidEntity;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.entity.model.IHasArm;
 import net.minecraft.client.renderer.entity.model.IHasHead;
-import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
@@ -14,50 +17,50 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class WanderMaidModel <T extends WanderMaidEntity> extends EntityModel<T> implements IHasArm, IHasHead {
-    public RendererModel head;
-    public RendererModel body;
-    public RendererModel handR;
-    public RendererModel handL;
-    public RendererModel skirt;
-    public RendererModel legR;
-    public RendererModel legL;
-    public RendererModel body2;
-    public RendererModel chestR;
-    public RendererModel chestL;
+    public ModelRenderer head;
+    public ModelRenderer body;
+    public ModelRenderer handR;
+    public ModelRenderer handL;
+    public ModelRenderer skirt;
+    public ModelRenderer legR;
+    public ModelRenderer legL;
+    public ModelRenderer body2;
+    public ModelRenderer chestR;
+    public ModelRenderer chestL;
 
     public ArmPose armPose = ArmPose.EMPTY;
 
     public WanderMaidModel() {
         this.textureWidth = 128;
         this.textureHeight = 64;
-        this.body = new RendererModel(this, 32, 0);
+        this.body = new ModelRenderer(this, 32, 0);
         this.body.setRotationPoint(0.0F, 3.0F, 0.0F);
         this.body.addBox(-3.0F, 0.0F, -2.0F, 6, 9, 4, 0.0F);
-        this.head = new RendererModel(this, 0, 0);
+        this.head = new ModelRenderer(this, 0, 0);
         this.head.setRotationPoint(0.0F, 3.0F, 0.0F);
         this.head.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, 0.0F);
-        this.handR = new RendererModel(this, 60, 0);
+        this.handR = new ModelRenderer(this, 60, 0);
         this.handR.setRotationPoint(-4.0F, 3.0F, 0.0F);
         this.handR.addBox(-1.0F, 0.0F, -1.0F, 2, 8, 2, 0.0F);
-        this.handL = new RendererModel(this, 52, 0);
+        this.handL = new ModelRenderer(this, 52, 0);
         this.handL.setRotationPoint(4.0F, 3.0F, 0.0F);
         this.handL.addBox(-1.0F, 0.0F, -1.0F, 2, 8, 2, 0.0F);
-        this.chestL = new RendererModel(this, 15, 30);
+        this.chestL = new ModelRenderer(this, 15, 30);
         this.chestL.setRotationPoint(4.0F, -1.1F, 0.0F);
         this.chestL.addBox(0.0F, 0.0F, -2.5F, 1, 5, 5, 0.0F);
-        this.legL = new RendererModel(this, 68, 0);
+        this.legL = new ModelRenderer(this, 68, 0);
         this.legL.setRotationPoint(1.6F, 15.0F, 0.0F);
         this.legL.addBox(-1.5F, 0.0F, -2.0F, 3, 9, 4, 0.0F);
-        this.body2 = new RendererModel(this, 32, 13);
+        this.body2 = new ModelRenderer(this, 32, 13);
         this.body2.setRotationPoint(0.0F, 9.0F, 0.0F);
         this.body2.addBox(-3.5F, 0.0F, -2.5F, 7, 3, 5, 0.0F);
-        this.chestR = new RendererModel(this, 0, 30);
+        this.chestR = new ModelRenderer(this, 0, 30);
         this.chestR.setRotationPoint(-4.0F, -1.1F, 0.0F);
         this.chestR.addBox(-1.0F, 0.0F, -2.5F, 1, 5, 5, 0.0F);
-        this.legR = new RendererModel(this, 68, 0);
+        this.legR = new ModelRenderer(this, 68, 0);
         this.legR.setRotationPoint(-1.6F, 15.0F, 0.0F);
         this.legR.addBox(-1.5F, 0.0F, -2.0F, 3, 9, 4, 0.0F);
-        this.skirt = new RendererModel(this, 0, 16);
+        this.skirt = new ModelRenderer(this, 0, 16);
         this.skirt.setRotationPoint(0.0F, 13.0F, 0.0F);
         this.skirt.addBox(-4.0F, -2.0F, -4.0F, 8, 6, 8, 0.0F);
         this.skirt.addChild(this.chestL);
@@ -65,16 +68,12 @@ public class WanderMaidModel <T extends WanderMaidEntity> extends EntityModel<T>
         this.skirt.addChild(this.chestR);
     }
 
+
     @Override
-    public void render(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        this.setRotationAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-        this.body.render(scale);
-        this.legR.render(scale);
-        this.head.render(scale);
-        this.skirt.render(scale);
-        this.handL.render(scale);
-        this.legL.render(scale);
-        this.handR.render(scale);
+    public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        ImmutableList.of(this.body, this.legL, this.legR, this.handL, this.handR, this.head, this.skirt).forEach((p_228292_8_) -> {
+            p_228292_8_.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        });
     }
 
     public void setLivingAnimations(T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
@@ -90,7 +89,7 @@ public class WanderMaidModel <T extends WanderMaidEntity> extends EntityModel<T>
     }
 
     @Override
-    public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+    public void render(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.head.rotateAngleY = (float) Math.toRadians(netHeadYaw);
         this.head.rotateAngleX = (float) Math.toRadians(headPitch);
         this.legR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount * 0.5F;
@@ -150,24 +149,25 @@ public class WanderMaidModel <T extends WanderMaidEntity> extends EntityModel<T>
         this.handL.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
     }
 
-    @Override
-    public RendererModel func_205072_a() {
-        return this.head;
-    }
 
-    public RendererModel getArm(HandSide handSide) {
+    public ModelRenderer getArm(HandSide handSide) {
         return handSide == HandSide.LEFT ? this.handL : this.handR;
     }
 
-    @Override
-    public void postRenderArm(float scale, HandSide side) {
-        this.getArm(side).postRender(0.0625F);
-    }
-
-    public void setRotateAngle(RendererModel modelRenderer, float x, float y, float z) {
+    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
+    }
+
+    @Override
+    public void translateHand(HandSide handSide, MatrixStack matrixStack) {
+        this.getArm(handSide).setAnglesAndRotation(matrixStack);
+    }
+
+    @Override
+    public ModelRenderer getModelHead() {
+        return this.head;
     }
 
     @OnlyIn(Dist.CLIENT)

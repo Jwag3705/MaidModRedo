@@ -28,7 +28,7 @@ public class WalkToPOIMaidTask extends Task<LittleMaidBaseEntity> {
     }
 
     protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
-        PointOfInterestManager pointofinterestmanager = worldIn.func_217443_B();
+        PointOfInterestManager pointofinterestmanager = worldIn.getPointOfInterestManager();
         int i = pointofinterestmanager.func_219150_a(SectionPos.from(new BlockPos(entityIn)));
         Vec3d vec3d = null;
 

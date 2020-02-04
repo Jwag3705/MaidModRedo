@@ -60,13 +60,13 @@ public class MaidFarmTask extends Task<LittleMaidBaseEntity> {
                 }
             }
 
-            BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(owner.posX, owner.posY, owner.posZ);
+            BlockPos.Mutable blockpos$mutableblockpos = new BlockPos.Mutable(owner.getPosX(), owner.getPosY(), owner.getPosZ());
             this.field_223518_f.clear();
 
             for (int i1 = -1; i1 <= 1; ++i1) {
                 for (int k = -1; k <= 1; ++k) {
                     for (int l = -1; l <= 1; ++l) {
-                        blockpos$mutableblockpos.setPos(owner.posX + (double) i1, owner.posY + (double) k, owner.posZ + (double) l);
+                        blockpos$mutableblockpos.setPos(owner.getPosX() + (double) i1, owner.getPosY() + (double) k, owner.getPosZ() + (double) l);
                         if (this.func_223516_a(blockpos$mutableblockpos, worldIn)) {
                             this.field_223518_f.add(new BlockPos(blockpos$mutableblockpos));
                         }

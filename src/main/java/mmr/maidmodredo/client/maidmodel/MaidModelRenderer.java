@@ -1,13 +1,13 @@
 package mmr.maidmodredo.client.maidmodel;
 
-import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.Model;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.nio.FloatBuffer;
 
-public class MaidRendererModel extends RendererModel {
+public class MaidModelRenderer extends ModelRenderer {
     //	public static final float radFactor = 57.295779513082320876798154814105F;
 
     public static final float radFactor = 180F / (float)Math.PI;
@@ -17,16 +17,17 @@ public class MaidRendererModel extends RendererModel {
     public FloatBuffer matrix;
     public static final float degFactor = (float)Math.PI / 180F;
     public boolean isInvertX;
-    public MaidRendererModel(Model model, String boxNameIn) {
-        super(model, boxNameIn);
+
+    public MaidModelRenderer(Model model, String boxNameIn) {
+        super(model);
         matrix = BufferUtils.createFloatBuffer(16);
     }
 
-    public MaidRendererModel(Model model) {
+    public MaidModelRenderer(Model model) {
         super(model);
     }
 
-    public MaidRendererModel(Model model, int texOffX, int texOffY) {
+    public MaidModelRenderer(Model model, int texOffX, int texOffY) {
         super(model, texOffX, texOffY);
     }
 
@@ -102,14 +103,14 @@ public class MaidRendererModel extends RendererModel {
         return rotateAngleZ += value * degFactor;
     }
 
-    public RendererModel setRotateAngle(float x, float y, float z) {
+    public ModelRenderer setRotateAngle(float x, float y, float z) {
         rotateAngleX = x;
         rotateAngleY = y;
         rotateAngleZ = z;
         return this;
     }
 
-    public RendererModel setRotateAngleDeg(float x, float y, float z) {
+    public ModelRenderer setRotateAngleDeg(float x, float y, float z) {
         rotateAngleX = x * degFactor;
         rotateAngleY = y * degFactor;
         rotateAngleZ = z * degFactor;
@@ -156,7 +157,7 @@ public class MaidRendererModel extends RendererModel {
         return mirror;
     }
 
-    public RendererModel setMirror(boolean flag) {
+    public ModelRenderer setMirror(boolean flag) {
         mirror = flag;
         return this;
     }
@@ -169,7 +170,7 @@ public class MaidRendererModel extends RendererModel {
         showModel = flag;
     }
 
-    public RendererModel loadMatrix() {
+    public ModelRenderer loadMatrix() {
         GL11.glLoadMatrixf(matrix);
         if (isInvertX) {
             GL11.glScalef(-1F, 1F, 1F);
@@ -177,7 +178,7 @@ public class MaidRendererModel extends RendererModel {
         return this;
     }
 
-    public RendererModel setRotationPoint2(float pX, float pY, float pZ) {
+    public ModelRenderer setRotationPoint2(float pX, float pY, float pZ) {
         rotationPointX = pX;
         rotationPointY = pY;
         rotationPointZ = pZ;

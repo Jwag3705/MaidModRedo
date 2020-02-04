@@ -1,11 +1,12 @@
 package mmr.maidmodredo.client.maidmodel;
 
-import net.minecraft.client.Minecraft;
+import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.entity.LivingEntity;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * MMMの実験コードを含む部分。
@@ -47,11 +48,11 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 	 * mainFrameに全てぶら下がっているならば標準で描画する。
 	 */
 	@Override
-	public void render(IModelCaps pEntityCaps, float par2, float par3, float ticksExisted,
-			float pheadYaw, float pheadPitch, float par7, boolean pIsRender) {
-		setRotationAngles(par2, par3, ticksExisted, pheadYaw, pheadPitch, par7, pEntityCaps);
-		mainFrame.render(par7);
-		renderStabilizer(pEntityCaps, par2, par3, ticksExisted, pheadYaw, pheadPitch, par7);
+	public void render(IModelCaps pEntityCaps, MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, boolean pIsRender) {
+		ImmutableList.of(this.mainFrame).forEach((p_228292_8_) -> {
+			p_228292_8_.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+		});
+		//renderStabilizer(pEntityCaps, par2, par3, ticksExisted, pheadYaw, pheadPitch, par7);
 	}
 
 
@@ -74,7 +75,7 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 	/**
 	 * スタビライザーの描画。 自動では呼ばれないのでrender内で呼ぶ必要があります。
 	 */
-	protected void renderStabilizer(IModelCaps pEntityCaps, float par2, float par3,
+/*	protected void renderStabilizer(IModelCaps pEntityCaps, float par2, float par3,
 									float ticksExisted, float pheadYaw, float pheadPitch, float par7) {
 		// スタビライザーの描画、doRenderの方がいいか？
 		if (stabiliser == null || stabiliser.isEmpty() || render == null)
@@ -93,7 +94,7 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 			}
 		}
 		GL11.glPopMatrix();
-	}
+	}*/
 
 	/**
 	 * モデル切替時に実行されるコード
@@ -115,7 +116,7 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 	}
 
 	public void setDefaultPause(float par1, float par2, float pTicksExisted,
-			float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps) {
+								float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
 		setDefaultPause();
 	}
 
@@ -126,12 +127,12 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 			changeModel((IModelCaps)pArg[0]);
 			return true;
 		case caps_renderFace:
-			renderFace((IModelCaps)pArg[0], (Float)pArg[1], (Float)pArg[2], (Float)pArg[3],
-				(Float)pArg[4], (Float)pArg[5], (Float)pArg[6], (Boolean)pArg[7]);
+			/*renderFace((IModelCaps)pArg[0], (Float)pArg[1], (Float)pArg[2], (Float)pArg[3],
+				(Float)pArg[4], (Float)pArg[5], (Float)pArg[6], (Boolean)pArg[7]);*/
 			return true;
 		case caps_renderBody:
-			renderBody((IModelCaps)pArg[0], (Float)pArg[1], (Float)pArg[2], (Float)pArg[3],
-				(Float)pArg[4], (Float)pArg[5], (Float)pArg[6], (Boolean)pArg[7]);
+			/*renderBody((IModelCaps)pArg[0], (Float)pArg[1], (Float)pArg[2], (Float)pArg[3],
+				(Float)pArg[4], (Float)pArg[5], (Float)pArg[6], (Boolean)pArg[7]);*/
 			return true;
 		}
 		return super.setCapsValue(pIndex, pArg);
@@ -150,11 +151,10 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 
 	// Actors実験区画
 	// このへん未だ未整理
-	public void renderFace(IModelCaps pEntityCaps, float par2, float par3, float ticksExisted,
-			float pheadYaw, float pheadPitch, float par7, boolean pIsRender) {
+	public void renderFace(IModelCaps pEntityCaps, MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, boolean pIsRender) {
 	}
-	public void renderBody(IModelCaps pEntityCaps, float par2, float par3, float ticksExisted,
-			float pheadYaw, float pheadPitch, float par7, boolean pIsRender) {
+
+	public void renderBody(IModelCaps pEntityCaps, MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, boolean pIsRender) {
 	}
 	/**
 	 * 表情をテクスチャのUVマップを変えることで表現

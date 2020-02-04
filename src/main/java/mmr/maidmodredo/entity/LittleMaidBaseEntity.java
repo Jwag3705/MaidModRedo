@@ -443,7 +443,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
 
         /*if (levels > 0 && this.experienceLevel % 5 == 0 && (float)this.lastXPSound < (float)this.ticksExisted - 100.0F) {
             float f = this.experienceLevel > 30 ? 1.0F : (float)this.experienceLevel / 30.0F;
-            this.world.playSound((PlayerEntity)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_PLAYER_LEVELUP, this.getSoundCategory(), f * 0.75F, 1.0F);
+            this.world.playSound((PlayerEntity)null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_PLAYER_LEVELUP, this.getSoundCategory(), f * 0.75F, 1.0F);
             this.lastXPSound = this.ticksExisted;
         }*/
         this.setMaidData(getMaidData().withLevel(this.experienceLevel));
@@ -505,7 +505,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
             MinecraftServer minecraftserver = ((ServerWorld) this.world).getServer();
             this.brain.getMemory(p_213742_1_).ifPresent((p_213752_3_) -> {
                 ServerWorld serverworld = minecraftserver.getWorld(p_213752_3_.getDimension());
-                PointOfInterestManager pointofinterestmanager = serverworld.func_217443_B();
+                PointOfInterestManager pointofinterestmanager = serverworld.getPointOfInterestManager();
                 Optional<PointOfInterestType> optional = pointofinterestmanager.func_219148_c(p_213752_3_.getPos());
                 BiPredicate<LittleMaidBaseEntity, PointOfInterestType> bipredicate = field_213774_bB.get(p_213742_1_);
                 if (optional.isPresent() && bipredicate.test(this, optional.get())) {
@@ -1087,7 +1087,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
                 double d7 = a;
                 double d8 = a * 0.3D;
 
-                getEntityWorld().addParticle(ParticleTypes.NOTE, posX, posY + getHeight() + 0.1D, posZ, d6, d7, d8);
+                getEntityWorld().addParticle(ParticleTypes.NOTE, getPosX(), getPosY() + getHeight() + 0.1D, getPosZ(), d6, d7, d8);
                 break;
             case 13:
                 // 不自由行動
@@ -1112,7 +1112,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            this.world.addParticle(particleData, this.posX + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.posY + 1.0D + (double) (this.rand.nextFloat() * this.getHeight()), this.posZ + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d0, d1, d2);
+            this.world.addParticle(particleData, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + 1.0D + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d0, d1, d2);
         }
 
     }
@@ -1214,11 +1214,12 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
                     return true;
                 }
 
-                if (this.isOwner(player) && player.isSneaking() && itemstack.isEmpty() && getAnimation() != PET_ANIMATION) {
+                /*if (this.isOwner(player) && player.() && itemstack.isEmpty() && getAnimation() != PET_ANIMATION) {
                     MaidPacketHandler.animationModel(this, PET_ANIMATION);
 
                     return true;
-                } else if (item.itemInteractionForEntity(itemstack, player, this, hand)) {
+                } else*/
+                if (item.itemInteractionForEntity(itemstack, player, this, hand)) {
                 } else if (this.isOwner(player) && !SWEETITEM.contains(item) && item != Items.FEATHER) {
                     if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
                         if (!player.world.isRemote) {
@@ -1486,9 +1487,9 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
             AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(world, itemstack, this);
             if (this.getHeldItemMainhand().getItem() instanceof net.minecraft.item.BowItem)
                 abstractarrowentity = ((net.minecraft.item.BowItem) this.getHeldItemMainhand().getItem()).customeArrow(abstractarrowentity);
-            double d0 = target.posX - this.posX;
-            double d1 = target.getBoundingBox().minY + (double) (target.getHeight() / 3.0F) - abstractarrowentity.posY;
-            double d2 = target.posZ - this.posZ;
+            double d0 = target.getPosX() - this.getPosX();
+            double d1 = target.getBoundingBox().minY + (double) (target.getHeight() / 3.0F) - abstractarrowentity.getPosY();
+            double d2 = target.getPosZ() - this.getPosZ();
             double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
             abstractarrowentity.shoot(d0, d1 + d3 * (double) 0.2F, d2, distanceFactor * 1.75F, (float) (1.0F));
             this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
@@ -1511,10 +1512,10 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
 
     public void shoot(LivingEntity p_213670_1_, ItemStack p_213670_2_, IProjectile p_213670_3_, float p_213670_4_) {
         Entity entity = (Entity) p_213670_3_;
-        double d0 = p_213670_1_.posX - this.posX;
-        double d1 = p_213670_1_.posZ - this.posZ;
+        double d0 = p_213670_1_.getPosX() - this.getPosX();
+        double d1 = p_213670_1_.getPosZ() - this.getPosZ();
         double d2 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1);
-        double d3 = p_213670_1_.getBoundingBox().minY + (double) (p_213670_1_.getHeight() / 3.0F) - entity.posY + d2 * (double) 0.2F;
+        double d3 = p_213670_1_.getBoundingBox().minY + (double) (p_213670_1_.getHeight() / 3.0F) - entity.getPosY() + d2 * (double) 0.2F;
         Vector3f vector3f = this.func_213673_a(new Vec3d(d0, d3, d1), p_213670_4_);
         p_213670_3_.shoot((double) vector3f.getX(), (double) vector3f.getY(), (double) vector3f.getZ(), 1.6F, (float) (14 - this.world.getDifficulty().getId() * 4));
         this.playSound(SoundEvents.ITEM_CROSSBOW_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
@@ -1524,15 +1525,15 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
         Vec3d vec3d = p_213673_1_.normalize();
         Vec3d vec3d1 = vec3d.crossProduct(new Vec3d(0.0D, 1.0D, 0.0D));
         if (vec3d1.lengthSquared() <= 1.0E-7D) {
-            vec3d1 = vec3d.crossProduct(this.func_213286_i(1.0F));
+            vec3d1 = vec3d.crossProduct(this.getUpVector(1.0F));
         }
 
         Quaternion quaternion = new Quaternion(new Vector3f(vec3d1), 90.0F, true);
         Vector3f vector3f = new Vector3f(vec3d);
-        vector3f.func_214905_a(quaternion);
+        vector3f.transform(quaternion);
         Quaternion quaternion1 = new Quaternion(vector3f, p_213673_2_, true);
         Vector3f vector3f1 = new Vector3f(vec3d);
-        vector3f1.func_214905_a(quaternion1);
+        vector3f1.transform(quaternion1);
         return vector3f1;
     }
 

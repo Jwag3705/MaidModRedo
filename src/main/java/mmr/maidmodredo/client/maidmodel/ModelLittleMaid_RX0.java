@@ -4,38 +4,38 @@ package mmr.maidmodredo.client.maidmodel;
 
 public class ModelLittleMaid_RX0 extends ModelLittleMaidBase {
 
-	public MaidRendererModel bipedForelock;
-	public MaidRendererModel bipedForelockRight;
-	public MaidRendererModel bipedForelockLeft;
-	public MaidRendererModel bipedBust;
-	public MaidRendererModel bipedTrunk;
-	public MaidRendererModel bipedWaist;
-	public MaidRendererModel bipedHipRight;
-	public MaidRendererModel bipedHipLeft;
-	public MaidRendererModel bipedForearmRight;
-	public MaidRendererModel bipedForearmLeft;
-	public MaidRendererModel bipedShinRight;
-	public MaidRendererModel bipedTiptoeRight;
-	public MaidRendererModel bipedHeelRight;
-	public MaidRendererModel bipedShinLeft;
-	public MaidRendererModel bipedTiptoeLeft;
-	public MaidRendererModel bipedHeelLeft;
-	public MaidRendererModel bipedRibbon;
-	public MaidRendererModel bipedRibbon1;
-	public MaidRendererModel bipedRibbon2;
-	public MaidRendererModel bipedTail;
-	public MaidRendererModel SkirtRU;
-	public MaidRendererModel SkirtRB;
-	public MaidRendererModel SkirtLU;
-	public MaidRendererModel SkirtLB;
-	public MaidRendererModel bipedRibbonR;
-	public MaidRendererModel bipedRibbonRSensorU;
-	public MaidRendererModel bipedRibbonRSensorB;
-	public MaidRendererModel bipedSideTailR;
-	public MaidRendererModel bipedRibbonL;
-	public MaidRendererModel bipedRibbonLSensorU;
-	public MaidRendererModel bipedRibbonLSensorB;
-	public MaidRendererModel bipedSideTailL;
+    public MaidModelRenderer bipedForelock;
+    public MaidModelRenderer bipedForelockRight;
+    public MaidModelRenderer bipedForelockLeft;
+    public MaidModelRenderer bipedBust;
+    public MaidModelRenderer bipedTrunk;
+    public MaidModelRenderer bipedWaist;
+    public MaidModelRenderer bipedHipRight;
+    public MaidModelRenderer bipedHipLeft;
+    public MaidModelRenderer bipedForearmRight;
+    public MaidModelRenderer bipedForearmLeft;
+    public MaidModelRenderer bipedShinRight;
+    public MaidModelRenderer bipedTiptoeRight;
+    public MaidModelRenderer bipedHeelRight;
+    public MaidModelRenderer bipedShinLeft;
+    public MaidModelRenderer bipedTiptoeLeft;
+    public MaidModelRenderer bipedHeelLeft;
+    public MaidModelRenderer bipedRibbon;
+    public MaidModelRenderer bipedRibbon1;
+    public MaidModelRenderer bipedRibbon2;
+    public MaidModelRenderer bipedTail;
+    public MaidModelRenderer SkirtRU;
+    public MaidModelRenderer SkirtRB;
+    public MaidModelRenderer SkirtLU;
+    public MaidModelRenderer SkirtLB;
+    public MaidModelRenderer bipedRibbonR;
+    public MaidModelRenderer bipedRibbonRSensorU;
+    public MaidModelRenderer bipedRibbonRSensorB;
+    public MaidModelRenderer bipedSideTailR;
+    public MaidModelRenderer bipedRibbonL;
+    public MaidModelRenderer bipedRibbonLSensorU;
+    public MaidModelRenderer bipedRibbonLSensorB;
+    public MaidModelRenderer bipedSideTailL;
 
 
 
@@ -52,102 +52,101 @@ public class ModelLittleMaid_RX0 extends ModelLittleMaidBase {
 
 	@Override
 	public void initModel(float psize, float pyoffset) {
-		bipedHead = new MaidRendererModel(this);
+        bipedHead = new MaidModelRenderer(this);
 		bipedHead.setTextureOffset(0, 0).addBox(-4F, -8F, -4F, 8, 8, 8, psize - 0.2F);
-		bipedForelock = new MaidRendererModel(this);
-		bipedForelockRight = new MaidRendererModel(this);
+        bipedForelock = new MaidModelRenderer(this);
+        bipedForelockRight = new MaidModelRenderer(this);
 		bipedForelockRight.setTextureOffset(0, 50).addBox(0F, 0F, -0.5F, 3, 13, 1, psize);
-		bipedForelockLeft = new MaidRendererModel(this);
+        bipedForelockLeft = new MaidModelRenderer(this);
 		bipedForelockLeft.setTextureOffset(56, 50).addBox(-3F, 0F, -0.5F, 3, 13, 1, psize);
-		bipedRibbon = new MaidRendererModel(this);
+        bipedRibbon = new MaidModelRenderer(this);
 		bipedRibbon.setTextureOffset(116, 10).addBox(-1.5F, 0F, -1.5F, 3, 3, 3);
-		bipedRibbon1 = new MaidRendererModel(this);
+        bipedRibbon1 = new MaidModelRenderer(this);
 		bipedRibbon1.setTextureOffset(116, 0).addBox(-4F, 0F, -2F, 4, 3, 2);
-		bipedRibbon2 = new MaidRendererModel(this);
+        bipedRibbon2 = new MaidModelRenderer(this);
 		bipedRibbon2.setTextureOffset(116, 5).addBox(0F, 0F, -2F, 4, 3, 2);
-		bipedTail = new MaidRendererModel(this);
+        bipedTail = new MaidModelRenderer(this);
 		bipedTail.setTextureOffset(108, 0).addBox(-1.5F, -0.5F, -0.5F, 3, 11, 1, psize);
-		
-		bipedRibbonR = new MaidRendererModel(this);
+
+        bipedRibbonR = new MaidModelRenderer(this);
 		bipedRibbonR.setTextureOffset(80, 0).addBox(-1F, 0F, -1F, 2, 2, 2, 0.1F);
-		bipedRibbonRSensorU = new MaidRendererModel(this);
+        bipedRibbonRSensorU = new MaidModelRenderer(this);
 		bipedRibbonRSensorU.setTextureOffset(80, 4).addBox(-1F, 0F, -1F, 2, 5, 2, 0.2F);
-		bipedRibbonRSensorB = new MaidRendererModel(this);
+        bipedRibbonRSensorB = new MaidModelRenderer(this);
 		bipedRibbonRSensorB.setTextureOffset(74, 0).addBox(-1F, 0F, 0F, 2, 2, 1, 0.1F);
-		bipedSideTailR = new MaidRendererModel(this);
+        bipedSideTailR = new MaidModelRenderer(this);
 		bipedSideTailR.setTextureOffset(96, 0).addBox(-1F, -0.5F, -0.5F, 2, 11, 1, psize);
-		
-		bipedRibbonL = new MaidRendererModel(this);
+
+        bipedRibbonL = new MaidModelRenderer(this);
 		bipedRibbonL.setTextureOffset(88, 0).addBox(-1F, 0F, -1F, 2, 2, 2, 0.1F);
-		bipedRibbonLSensorU = new MaidRendererModel(this);
+        bipedRibbonLSensorU = new MaidModelRenderer(this);
 		bipedRibbonLSensorU.setTextureOffset(88, 4).addBox(-1F, 0F, -1F, 2, 5, 2, 0.2F);
-		bipedRibbonLSensorB = new MaidRendererModel(this);
+        bipedRibbonLSensorB = new MaidModelRenderer(this);
 		bipedRibbonLSensorB.setTextureOffset(74, 3).addBox(-1F, 0F, 0F, 2, 2, 1, 0.1F);
-		bipedSideTailL = new MaidRendererModel(this);
+        bipedSideTailL = new MaidModelRenderer(this);
 		bipedSideTailL.setTextureOffset(102, 0).addBox(-1F, -0.5F, -0.5F, 2, 11, 1, psize);
-		
-		
-		
-		bipedBody = new MaidRendererModel(this);
+
+
+        bipedBody = new MaidModelRenderer(this);
 		bipedBody.setTextureOffset(32, 7).addBox(-3F, 0F, -1F, 6, 3, 3, psize);
 		bipedBody.setTextureOffset(26, 40).addBox(-1.5F, -1.0F, -1.5F, 3, 3, 3, psize);
-		bipedBust = new MaidRendererModel(this);
+        bipedBust = new MaidModelRenderer(this);
 		bipedBust.setTextureOffset(32, 0).addBox(-3F, -2.5F, 0F, 6, 4, 3, psize - 0.04F);
-		
-		bipedRightArm = new MaidRendererModel(this);
+
+        bipedRightArm = new MaidModelRenderer(this);
 		bipedRightArm.setTextureOffset(8, 47).addBox(-2F, -0.5F, -1F, 2, 7, 2, psize);
-		bipedForearmRight = new MaidRendererModel(this);
+        bipedForearmRight = new MaidModelRenderer(this);
 		bipedForearmRight.setTextureOffset(0, 40).addBox(-1F, -1F, -1F, 2, 8, 2, psize - 0.05F);
-		bipedLeftArm = new MaidRendererModel(this);
+        bipedLeftArm = new MaidModelRenderer(this);
 		bipedLeftArm.setTextureOffset(48, 47).addBox(0F, -0.5F, -1F, 2, 7, 2, psize);
-		bipedForearmLeft = new MaidRendererModel(this);
+        bipedForearmLeft = new MaidModelRenderer(this);
 		bipedForearmLeft.setTextureOffset(56, 40).addBox(-1F, -1F, -1F, 2, 8, 2, psize - 0.05F);
-		
-		bipedTrunk = new MaidRendererModel(this);
-		bipedWaist = new MaidRendererModel(this);
+
+        bipedTrunk = new MaidModelRenderer(this);
+        bipedWaist = new MaidModelRenderer(this);
 		bipedWaist.setTextureOffset(24, 46).addBox(-2.5F, 0F, -1.95F, 5, 7, 3, psize);
-		bipedHipRight = new MaidRendererModel(this);
+        bipedHipRight = new MaidModelRenderer(this);
 		bipedHipRight.setTextureOffset(50, 0).addBox(0F, -1.5F, -2F, 3, 4, 4, psize);
-		bipedHipLeft = new MaidRendererModel(this);
+        bipedHipLeft = new MaidModelRenderer(this);
 		bipedHipLeft.setTextureOffset(50, 8).addBox(-3F, -1.5F, -2F, 3, 4, 4, psize);
-		
-		bipedRightLeg = new MaidRendererModel(this);
+
+        bipedRightLeg = new MaidModelRenderer(this);
 		bipedRightLeg.setTextureOffset(0, 29).addBox(-3F, 0F, -2F, 3, 7, 4, psize);
-		bipedShinRight = new MaidRendererModel(this);
+        bipedShinRight = new MaidModelRenderer(this);
 		bipedShinRight.setTextureOffset(0, 16).addBox(-3F, 0F, -3F, 3, 9, 4, psize - 0.2F);
-		bipedTiptoeRight = new MaidRendererModel(this);
+        bipedTiptoeRight = new MaidModelRenderer(this);
 		bipedTiptoeRight.setTextureOffset(12, 26).addBox(-1.5F, 0F, -4F, 3, 2, 4, psize);
-		bipedHeelRight = new MaidRendererModel(this);
+        bipedHeelRight = new MaidModelRenderer(this);
 		bipedHeelRight.setTextureOffset(10, 16).addBox(-1F, 0.25F, -3.25F, 2, 1, 3, psize + 0.25F);
-		
-		bipedLeftLeg = new MaidRendererModel(this);
+
+        bipedLeftLeg = new MaidModelRenderer(this);
 		bipedLeftLeg.setTextureOffset(50, 29).addBox(0F, 0F, -2F, 3, 7, 4, psize);
-		bipedShinLeft = new MaidRendererModel(this);
+        bipedShinLeft = new MaidModelRenderer(this);
 		bipedShinLeft.setTextureOffset(50, 16).addBox(0F, 0F, -3F, 3, 9, 4, psize - 0.2F);
-		bipedTiptoeLeft = new MaidRendererModel(this);
+        bipedTiptoeLeft = new MaidModelRenderer(this);
 		bipedTiptoeLeft.setTextureOffset(38, 26).addBox(-1.5F, 0F, -4F, 3, 2, 4, psize);
-		bipedHeelLeft = new MaidRendererModel(this);
+        bipedHeelLeft = new MaidModelRenderer(this);
 		bipedHeelLeft.setTextureOffset(20, 16).addBox(-1F, 0.25F, -3.25F, 2, 1, 3, psize + 0.25F);
-		
-		Skirt = new MaidRendererModel(this);
+
+        Skirt = new MaidModelRenderer(this);
 		Skirt.setTextureOffset(20, 26).addBox(-3F, 0F, -3F, 6, 8, 6, psize + 0.05F);
-		SkirtRU = new MaidRendererModel(this);
+        SkirtRU = new MaidModelRenderer(this);
 		SkirtRU.setTextureOffset(8, 34).addBox(2F, 2F, -3F, 3, 7, 6, psize);
-		SkirtRB = new MaidRendererModel(this);
+        SkirtRB = new MaidModelRenderer(this);
 		SkirtRB.setTextureOffset(8, 48).addBox(-4F, 0F, -4F, 4, 8, 8, psize);
-		SkirtLU = new MaidRendererModel(this);
+        SkirtLU = new MaidModelRenderer(this);
 		SkirtLU.setTextureOffset(38, 34).addBox(-5F, 2F, -3F, 3, 7, 6, psize);
-		SkirtLB = new MaidRendererModel(this);
+        SkirtLB = new MaidModelRenderer(this);
 		SkirtLB.setTextureOffset(32, 48).addBox(0F, 0F, -4F, 4, 8, 8, psize);
-		
-		mainFrame = new MaidRendererModel(this);
-		bipedNeck = new MaidRendererModel(this);
-		bipedTorso = new MaidRendererModel(this);
-		bipedPelvic = new MaidRendererModel(this);
-		
-		Arms[0] = new MaidRendererModel(this);
+
+        mainFrame = new MaidModelRenderer(this);
+        bipedNeck = new MaidModelRenderer(this);
+        bipedTorso = new MaidModelRenderer(this);
+        bipedPelvic = new MaidModelRenderer(this);
+
+        Arms[0] = new MaidModelRenderer(this);
 		Arms[0].setRotationPoint(0F, 5F, -1F);
-		Arms[1] = new MaidRendererModel(this);
+        Arms[1] = new MaidModelRenderer(this);
 		Arms[1].setRotationPoint(0F, 5F, -1F);
 		//Arms[1].isInvertX = true;
 		
@@ -203,7 +202,7 @@ public class ModelLittleMaid_RX0 extends ModelLittleMaidBase {
 		bipedHead.addChild(HeadMount);
 		
 		/*
-		MaidRendererModel ltest = new MaidRendererModel(this);
+		MaidModelRenderer ltest = new MaidModelRenderer(this);
 		ltest.setTextureOffset( 8, 8).addPlate(-4F, -4F, -4F, 8, 8, ModelPlate.planeXYFront, 0.3F);
 		ltest.setTextureOffset(24, 8).addPlate(-4F, -4F,  4F, 8, 8, ModelPlate.planeXYBack, 0.3F);
 		ltest.setTextureOffset( 0, 8).addPlate(-4F, -4F, -4F, 8, 8, ModelPlate.planeZYRight, 0.3F);
@@ -219,8 +218,8 @@ public class ModelLittleMaid_RX0 extends ModelLittleMaidBase {
 
 	@Override
 	public void setDefaultPause(float par1, float par2, float pTicksExisted,
-			float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps) {
-		super.setDefaultPause(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps);
+                                float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
+        super.setDefaultPause(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, pEntityCaps);
 		int lvisible = ModelCapsHelper.getCapsValueInt(pEntityCaps, caps_PartsVisible);
 		
 		

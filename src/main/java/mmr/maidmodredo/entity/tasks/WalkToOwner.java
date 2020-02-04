@@ -97,8 +97,8 @@ public class WalkToOwner extends Task<LittleMaidBaseEntity> {
 
     private void startTeleport(LivingEntity player, LittleMaidBaseEntity owner) {
         if (!owner.getLeashed() && !owner.isPassenger()) {
-            int i = MathHelper.floor(player.posX) - 2;
-            int j = MathHelper.floor(player.posZ) - 2;
+            int i = MathHelper.floor(player.getPosX()) - 2;
+            int j = MathHelper.floor(player.getPosZ()) - 2;
             int k = MathHelper.floor(player.getBoundingBox().minY);
 
             for (int l = 0; l <= 4; ++l) {
@@ -131,7 +131,7 @@ public class WalkToOwner extends Task<LittleMaidBaseEntity> {
 
             Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockTowards((CreatureEntity) p_220487_1_, 10, 7, new Vec3d(blockpos));
             if (vec3d != null) {
-                this.field_220488_a = p_220487_1_.getNavigator().func_225466_a(vec3d.x, vec3d.y, vec3d.z, 0);
+                this.field_220488_a = p_220487_1_.getNavigator().getPathToPos(vec3d.x, vec3d.y, vec3d.z, 0);
                 return this.field_220488_a != null;
             }
         }

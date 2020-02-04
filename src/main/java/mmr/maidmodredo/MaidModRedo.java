@@ -4,13 +4,9 @@ import mmr.maidmodredo.client.render.LittleButlerRender;
 import mmr.maidmodredo.client.render.LittleMaidBaseRender;
 import mmr.maidmodredo.client.render.MaidFishingBobberRender;
 import mmr.maidmodredo.client.render.WanderMaidRender;
-import mmr.maidmodredo.client.resource.OldZipTexturesWrapper;
-import mmr.maidmodredo.entity.LittleButlerEntity;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
-import mmr.maidmodredo.entity.LittleMaidEntity;
-import mmr.maidmodredo.entity.WanderMaidEntity;
-import mmr.maidmodredo.entity.misc.MaidFishingBobberEntity;
 import mmr.maidmodredo.init.LittleContainers;
+import mmr.maidmodredo.init.LittleEntitys;
 import mmr.maidmodredo.init.MaidDataSerializers;
 import mmr.maidmodredo.init.MaidJob;
 import mmr.maidmodredo.network.MaidPacketHandler;
@@ -18,7 +14,6 @@ import mmr.maidmodredo.utils.CommonHelper;
 import mmr.maidmodredo.utils.FileList;
 import mmr.maidmodredo.utils.ModelManager;
 import mmr.maidmodredo.utils.manager.StabilizerManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraftforge.common.MinecraftForge;
@@ -94,13 +89,13 @@ public class MaidModRedo
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-        Minecraft.getInstance().getResourceManager().addResourcePack(new OldZipTexturesWrapper());
-        RenderingRegistry.registerEntityRenderingHandler(WanderMaidEntity.class, WanderMaidRender::new);
-        RenderingRegistry.registerEntityRenderingHandler(LittleMaidEntity.class, LittleMaidBaseRender::new);
-        RenderingRegistry.registerEntityRenderingHandler(LittleButlerEntity.class, LittleButlerRender::new);
+        //((SimpleReloadableResourceManager)Minecraft.getInstance().getResourceManager()).addResourcePack(new OldZipTexturesWrapper());
+        RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.WANDERMAID, WanderMaidRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.LITTLEMAID, LittleMaidBaseRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.LITTLEBUTLER, LittleButlerRender::new);
 
 
-        RenderingRegistry.registerEntityRenderingHandler(MaidFishingBobberEntity.class, MaidFishingBobberRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.MAID_FISHING_BOBBER, MaidFishingBobberRender::new);
 
         LittleContainers.registerScreenFactories();
     }

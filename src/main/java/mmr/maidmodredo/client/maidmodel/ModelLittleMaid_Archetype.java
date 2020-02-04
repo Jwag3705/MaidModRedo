@@ -9,13 +9,13 @@ import org.lwjgl.opengl.GL11;
 public class ModelLittleMaid_Archetype extends ModelLittleMaidBase {
 
 	// fields
-	public MaidRendererModel bipedHeadwear;
-	public MaidRendererModel ChignonR;
-	public MaidRendererModel ChignonL;
-	public MaidRendererModel ChignonB;
-	public MaidRendererModel Tail;
-	public MaidRendererModel SideTailR;
-	public MaidRendererModel SideTailL;
+    public MaidModelRenderer bipedHeadwear;
+    public MaidModelRenderer ChignonR;
+    public MaidModelRenderer ChignonL;
+    public MaidModelRenderer ChignonB;
+    public MaidModelRenderer Tail;
+    public MaidModelRenderer SideTailR;
+    public MaidModelRenderer SideTailL;
 
 	public ModelLittleMaid_Archetype() {
 		super();
@@ -34,81 +34,81 @@ public class ModelLittleMaid_Archetype extends ModelLittleMaidBase {
 		pyoffset += 8F;
 
 		// 装備位置
-		Arms = new MaidRendererModel[1];
-		Arms[0] = new MaidRendererModel(this, 0, 0);
+        Arms = new MaidModelRenderer[1];
+        Arms[0] = new MaidModelRenderer(this, 0, 0);
 		Arms[0].setRotationPoint(-1F, 5F, -1F);
 		HeadMount.setRotationPoint(0F, -4F, 0F);
 		HeadTop.setRotationPoint(0F, -13F, 0F);
 
-		bipedHead = new MaidRendererModel(this, 0, 0);
+        bipedHead = new MaidModelRenderer(this, 0, 0);
 		bipedHead.addBox(-4F, -8F, -4F, 8, 8, 8, psize);
 		bipedHead.setRotationPoint(0F, 0F, 0F);
 		bipedHead.addChild(HeadMount);
 		bipedHead.addChild(HeadTop);
 
-		bipedHeadwear = new MaidRendererModel(this, 24, 0);
+        bipedHeadwear = new MaidModelRenderer(this, 24, 0);
 		bipedHeadwear.addBox(-4F, 0F, 1F, 8, 4, 3, psize);
 		bipedHeadwear.setRotationPoint(0F, 0F, 0F);
 		bipedHead.addChild(bipedHeadwear);
 
-		bipedBody = new MaidRendererModel(this, 32, 8);
+        bipedBody = new MaidModelRenderer(this, 32, 8);
 		bipedBody.addBox(-3F, 0F, -2F, 6, 7, 4, psize);
 		bipedBody.setRotationPoint(0F, 0F, 0F);
 
-		bipedRightArm = new MaidRendererModel(this, 48, 0);
+        bipedRightArm = new MaidModelRenderer(this, 48, 0);
 		bipedRightArm.addBox(-2.0F, -1F, -1F, 2, 8, 2, psize);
 		bipedRightArm.setRotationPoint(-3.0F, 1.5F, 0F);
 		bipedRightArm.addChild(Arms[0]);
 
-		bipedLeftArm = new MaidRendererModel(this, 56, 0);
+        bipedLeftArm = new MaidModelRenderer(this, 56, 0);
 		bipedLeftArm.addBox(0.0F, -1F, -1F, 2, 8, 2, psize);
 		bipedLeftArm.setRotationPoint(3.0F, 1.5F, 0F);
 
-		bipedRightLeg = new MaidRendererModel(this, 32, 19);
+        bipedRightLeg = new MaidModelRenderer(this, 32, 19);
 		bipedRightLeg.addBox(-2F, 0F, -2F, 3, 9, 4, psize);
 		bipedRightLeg.setRotationPoint(-1F, 7F, 0F);
 
-		bipedLeftLeg = new MaidRendererModel(this, 32, 19);
+        bipedLeftLeg = new MaidModelRenderer(this, 32, 19);
 		bipedLeftLeg.setMirror(true);
 		bipedLeftLeg.addBox(-1F, 0F, -2F, 3, 9, 4, psize);
 		bipedLeftLeg.setRotationPoint(1F, 7F, 0F);
 
-		Skirt = new MaidRendererModel(this, 0, 16);
+        Skirt = new MaidModelRenderer(this, 0, 16);
 		Skirt.addBox(-4F, -2F, -4F, 8, 8, 8, psize);
 		Skirt.setRotationPoint(0F, 7F, 0F);
 
-		ChignonR = new MaidRendererModel(this, 24, 18);
+        ChignonR = new MaidModelRenderer(this, 24, 18);
 		ChignonR.addBox(-5F, -7F, 0.2F, 1, 3, 3, psize);
 		ChignonR.setRotationPoint(0F, 0F, 0F);
 		bipedHead.addChild(ChignonR);
 
-		ChignonL = new MaidRendererModel(this, 24, 18);
+        ChignonL = new MaidModelRenderer(this, 24, 18);
 		ChignonL.addBox(4F, -7F, 0.2F, 1, 3, 3, psize);
 		ChignonL.setRotationPoint(0F, 0F, 0F);
 		bipedHead.addChild(ChignonL);
 
-		ChignonB = new MaidRendererModel(this, 52, 10);
+        ChignonB = new MaidModelRenderer(this, 52, 10);
 		ChignonB.addBox(-2F, -7.2F, 4F, 4, 4, 2, psize);
 		ChignonB.setRotationPoint(0F, 0F, 0F);
 		bipedHead.addChild(ChignonB);
 
-		Tail = new MaidRendererModel(this, 46, 20);
+        Tail = new MaidModelRenderer(this, 46, 20);
 		Tail.addBox(-1.5F, -6.8F, 4F, 3, 9, 3, psize);
 		Tail.setRotationPoint(0F, 0F, 0F);
 		bipedHead.addChild(Tail);
 
-		SideTailR = new MaidRendererModel(this, 58, 21);
+        SideTailR = new MaidModelRenderer(this, 58, 21);
 		SideTailR.addBox(-5.5F, -6.8F, 0.9F, 1, 8, 2, psize);
 		SideTailR.setRotationPoint(0.0F, 0.0F, 0.0F);
 		bipedHead.addChild(SideTailR);
 
-		SideTailL = new MaidRendererModel(this, 58, 21);
+        SideTailL = new MaidModelRenderer(this, 58, 21);
 		SideTailL.setMirror(true);
 		SideTailL.addBox(4.5F, -6.8F, 0.9F, 1, 8, 2, psize);
 		SideTailL.setRotationPoint(0.0F, 0.0F, 0.0F);
 		bipedHead.addChild(SideTailL);
 
-		mainFrame = new MaidRendererModel(this, 0, 0);
+        mainFrame = new MaidModelRenderer(this, 0, 0);
 		mainFrame.setRotationPoint(0F, 0F + pyoffset, 0F);
 		mainFrame.addChild(bipedHead);
 		mainFrame.addChild(bipedBody);
@@ -179,7 +179,7 @@ public class ModelLittleMaid_Archetype extends ModelLittleMaidBase {
 
 	@Override
 	public void setRotationAngles(float par1, float par2, float pTicksExisted,
-			float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps) {
+                                  float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
 //		super.setRotationAnglesMM(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6);
 		
 		bipedHead.rotateAngleY = pHeadYaw / 57.29578F;

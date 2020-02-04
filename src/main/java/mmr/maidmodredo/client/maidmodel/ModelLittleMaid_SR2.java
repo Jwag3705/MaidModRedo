@@ -11,13 +11,14 @@ import net.minecraft.entity.LivingEntity;
  */
 public class ModelLittleMaid_SR2<T extends LivingEntity> extends ModelLittleMaidBase<T> {
 
-	public MaidRendererModel eyeR;
-	public MaidRendererModel eyeL;
+    public MaidModelRenderer eyeR;
+    public MaidModelRenderer eyeL;
 
 
 	public ModelLittleMaid_SR2() {
 		super();
 	}
+
 	public ModelLittleMaid_SR2(float psize) {
 		super(psize);
 	}
@@ -32,10 +33,10 @@ public class ModelLittleMaid_SR2<T extends LivingEntity> extends ModelLittleMaid
 
 		//TODO
 		// 追加パーツ
-		eyeR = new MaidRendererModel(this, 32, 19);
+        eyeR = new MaidModelRenderer(this, 32, 19);
 		eyeR.addBox(-4.0F, -5.0F, -4.001F, 4, 4, 0, psize);
 		eyeR.setRotationPoint(0.0F, 0.0F, 0.0F);
-		eyeL = new MaidRendererModel(this, 42, 19);
+        eyeL = new MaidModelRenderer(this, 42, 19);
 		eyeL.addBox(0.0F, -5.0F, -4.001F, 4, 4, 0, psize);
 		eyeL.setRotationPoint(0.0F, 0.0F, 0.0F);
 		bipedHead.addChild(eyeR);
@@ -65,8 +66,8 @@ public class ModelLittleMaid_SR2<T extends LivingEntity> extends ModelLittleMaid
 
 	@Override
 	public void setRotationAngles(float par1, float par2, float pTicksExisted,
-			float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps) {
-		super.setRotationAngles(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps);
+                                  float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
+        super.setRotationAngles(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, pEntityCaps);
 		if (aimedBow) {
 			if (ModelCapsHelper.getCapsValueInt(pEntityCaps, caps_dominantArm) == 0) {
 				eyeL.setVisible(true);
@@ -77,8 +78,8 @@ public class ModelLittleMaid_SR2<T extends LivingEntity> extends ModelLittleMaid
 	}
 
     @Override
-    public void setAnimations(float par1, float par2, float pTicksExisted, float pHeadYaw, float pHeadPitch, float par6, IModelCaps pEntityCaps, IMaidAnimation animation) {
-        super.setAnimations(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6, pEntityCaps, animation);
+    public void setAnimations(float par1, float par2, float pTicksExisted, float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps, IMaidAnimation animation) {
+        super.setAnimations(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, pEntityCaps, animation);
 
         if (animation.getAnimation() == LittleMaidBaseEntity.PET_ANIMATION) {
 
@@ -89,5 +90,4 @@ public class ModelLittleMaid_SR2<T extends LivingEntity> extends ModelLittleMaid
 	public String getUsingTexture() {
 		return null;
 	}
-
 }

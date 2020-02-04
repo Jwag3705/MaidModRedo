@@ -14,6 +14,8 @@ public abstract class TextureBoxBase {
 	protected float modelYOffset;
 	protected float modelMountedYOffset;
 	protected boolean isUpdateSize;
+    //Applicable entity for texture
+    public Class modelEntity;
 
 
 	public void setModelSize(float pHeight, float pWidth, float pYOffset, float pMountedYOffset) {
@@ -98,4 +100,8 @@ public abstract class TextureBoxBase {
 		return getMountedYOffset(null);
 	}
 
+
+    public Class getModelEntity() {
+        return modelEntity;
+    }
 }

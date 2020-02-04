@@ -33,19 +33,19 @@ public class ModelManager {
     public static String nameTextureIndex = "config/mod_MMM_textureList.cfg";
     public static String defaultModelName = "Orign";
 
-    public static final int tx_oldwild		= 0x10; //16;
-    public static final int tx_oldarmor1	= 0x11; //17;
-    public static final int tx_oldarmor2	= 0x12; //18;
-    public static final int tx_oldeye		= 0x13; //19;
-    public static final int tx_gui			= 0x20; //32;
-    public static final int tx_wild			= 0x30; //48;
-    public static final int tx_armor1		= 0x40; //64;
-    public static final int tx_armor2		= 0x50; //80;
-    public static final int tx_eye			= 0x60; //96;
-    public static final int tx_eyecontract	= 0x60; //96;
-    public static final int tx_eyewild		= 0x70; //112;
-    public static final int tx_armor1light	= 0x80; //128;
-    public static final int tx_armor2light	= 0x90; //144;
+    public static final int tx_oldwild = 0x10; //16;
+    public static final int tx_oldarmor1 = 0x11; //17;
+    public static final int tx_oldarmor2 = 0x12; //18;
+    public static final int tx_oldeye = 0x13; //19;
+    public static final int tx_gui = 0x20; //32;
+    public static final int tx_wild = 0x30; //48;
+    public static final int tx_armor1 = 0x40; //64;
+    public static final int tx_armor2 = 0x50; //80;
+    public static final int tx_eye = 0x60; //96;
+    public static final int tx_eyecontract = 0x60; //96;
+    public static final int tx_eyewild = 0x70; //112;
+    public static final int tx_armor1light = 0x80; //128;
+    public static final int tx_armor2light = 0x90; //144;
     public static String[] armorFilenamePrefix;
     /**
      * 旧タイプのファイル名
@@ -88,9 +88,11 @@ public class ModelManager {
 
     public Map<Class, TextureBoxBase> entityTextures = new HashMap<Class, TextureBoxBase>();
 
+    //public Map<Class, TextureBoxBase> entityTextures = new HashMap<Class, TextureBoxBase>();
+
     protected List<String[]> searchPrefix = new ArrayList<String[]>();
 
-    public static final String[] searchFileNamePrefix = new String[]{"littleMaidMob","mmmlibx","ModelMulti","LittleMaidMob"};
+    public static final String[] searchFileNamePrefix = new String[]{"littleMaidMob", "mmmlibx", "ModelMulti", "LittleMaidMob"};
 
     public void init() {
         addSearch("littleMaidMob", "/assets/minecraft/textures/entity/ModelMulti/", "ModelMulti_");
@@ -99,16 +101,6 @@ public class ModelManager {
         addSearch("littleMaidMob", "/assets/minecraft/textures/entity/LittleButler/", "ModelLittleButler_");
         addSearch("littleMaidMob", "/mob/ModelMulti/", "ModelMulti_");
         addSearch("littleMaidMob", "/mob/littleMaid/", "ModelLittleMaid_");
-    }
-
-    //TODO you must link entity and texture
-    private void setEntityTexture(String fname, TextureBox lts) {
-        if (lts.fileName.contains("littlemaid")) {
-            this.entityTextures.put(LittleButlerEntity.class, lts);
-        } else {
-            this.entityTextures.put(LittleMaidEntity.class, lts);
-        }
-
     }
 
     protected String[] getSearch(String pName) {
@@ -124,7 +116,7 @@ public class ModelManager {
      * 追加対象となる検索対象ファイル群とそれぞれの検索文字列を設定する。
      */
     public void addSearch(String pName, String pTextureDir, String pClassPrefix) {
-        searchPrefix.add(new String[] {pName, pTextureDir, pClassPrefix});
+        searchPrefix.add(new String[]{pName, pTextureDir, pClassPrefix});
     }
 
     /**
@@ -139,19 +131,19 @@ public class ModelManager {
         return null;
     }
 
-    public static List<TextureBox> getTextureList()
-    {
+    public static List<TextureBox> getTextureList() {
         return instance.textures;
     }
 
     /**
      * 渡されたTextureBoxBaseを判定してTextureBoxを返す。
+     *
      * @param pBoxBase
      * @return
      */
     public TextureBox getTextureBox(TextureBoxBase pBoxBase) {
         if (pBoxBase instanceof TextureBox) {
-            return (TextureBox)pBoxBase;
+            return (TextureBox) pBoxBase;
         } else if (pBoxBase instanceof TextureBoxServer) {
             return getTextureBox(pBoxBase.textureName);
         }
@@ -177,9 +169,16 @@ public class ModelManager {
 
     protected void getArmorPrefix() {
         //1.8検討
-        armorFilenamePrefix = new String[]{"leather","chainmail","iron","diamond","gold"};
+        armorFilenamePrefix = new String[]{"leather", "chainmail", "iron", "diamond", "gold"};
     }
 
+    private Class setSupportEntity(String fname) {
+        if (fname.toLowerCase().contains("littlebutler")) {
+            return LittleButlerEntity.class;
+        } else {
+            return LittleMaidEntity.class;
+        }
+    }
 
     public boolean loadTextures() {
         MaidModRedo.LOGGER.debug("loadTexturePacks.");
@@ -209,7 +208,7 @@ public class ModelManager {
         // テクスチャパッケージにモデルクラスを紐付け
         ModelMultiBase[] ldm = modelMap.get(defaultModelName);
         if (ldm == null && !modelMap.isEmpty()) {
-            ldm = (ModelMultiBase[])modelMap.values().toArray()[0];
+            ldm = (ModelMultiBase[]) modelMap.values().toArray()[0];
         }
         for (TextureBox ltb : textures) {
             if (ltb.modelName.isEmpty()) {
@@ -238,15 +237,14 @@ public class ModelManager {
                     if (lbox != null) {
                         lbox = lbox.duplicate();
                         lbox.setModels(le.getKey(), null, le.getValue());
+
                         textures.add(lbox);
-                        setEntityTexture(lbox.fileName, lbox);
                     }
                 }
             }
         }
         MaidModRedo.LOGGER.debug("Loaded Texture Lists.(" + textures.size() + ")");
         for (TextureBox lbox : textures) {
-            setEntityTexture(lbox.fileName, lbox);
             MaidModRedo.LOGGER.debug("texture: " + lbox.textureName + "(" + lbox.fileName + ")" + "- hasModel:" + "%b", lbox.models != null);
         }
         for (int li = textures.size() - 1; li >= 0; li--) {
@@ -257,13 +255,14 @@ public class ModelManager {
         MaidModRedo.LOGGER.debug("Rebuild Texture Lists.(%d)", textures.size());
         for (TextureBox lbox : textures) {
 
-            if(lbox.getWildColorBits()>0){
+            if (lbox.getWildColorBits() > 0) {
                 setTextureForType(lbox);
             }
             MaidModRedo.LOGGER.debug("texture: %s(%s) - hasModel:%b", lbox.textureName, lbox.fileName, lbox.models != null);
         }
 
         setDefaultTexture(LittleMaidEntity.class, getTextureBox("default_" + defaultModelName));
+        setDefaultTexture(LittleButlerEntity.class, getTextureBox("littlebutler_Aug"));
 
         return false;
     }
@@ -271,7 +270,7 @@ public class ModelManager {
     //Entityのクラスでテクスチャを分ける
     //TODO
     private void setTextureForType(TextureBox lbox) {
-        if (lbox.fileName.contains("littlemaid")) {
+        if (lbox.modelEntity == LittleButlerEntity.class) {
             setDefaultTexture(LittleButlerEntity.class, lbox);
         } else {
             setDefaultTexture(LittleMaidEntity.class, lbox);
@@ -296,7 +295,7 @@ public class ModelManager {
 
     public void buildCrafterTexture() {
         // TODO:実験コード標準モデルテクスチャで構築
-        TextureBox lbox = new TextureBox("Crafter_Steve", new String[] {"", "", ""});
+        TextureBox lbox = new TextureBox(LittleMaidEntity.class, "Crafter_Steve", new String[]{"", "", ""});
         lbox.fileName = "";
 
         lbox.addTexture(0x0c, "/assets/minecraft/textures/entity/lmsteve/steve.png");
@@ -417,14 +416,15 @@ public class ModelManager {
      * 渡された名称を解析してLMM用のモデルクラスかどうかを判定する。
      * 「ModelLittleMaid_」という文字列が含まれていて、
      * 「MMM_ModelBiped」を継承していればマルチモデルとしてクラスを登録する。
+     *
      * @param fname
      */
-    @SuppressWarnings({ "unused", "unchecked", "rawtypes" })
+    @SuppressWarnings({"unused", "unchecked", "rawtypes"})
     protected void addModelClass(String fname, String[] pSearch) {
         // モデルを追加
         int lfindprefix = fname.indexOf(pSearch[2]);
         if (lfindprefix > -1/* && fname.endsWith(".class")*/) {
-            String cn = fname.endsWith(".class") ? fname.substring(0,fname.lastIndexOf(".class")) : fname;
+            String cn = fname.endsWith(".class") ? fname.substring(0, fname.lastIndexOf(".class")) : fname;
             String pn = cn.substring(pSearch[2].length() + lfindprefix);
 
             if (modelMap.containsKey(pn)) return;
@@ -434,7 +434,7 @@ public class ModelManager {
                 if (lpackage != null) {
 //					cn = (new StringBuilder("")).append(".").append(cn).toString();
                     cn = cn.replace("/", ".");
-                    System.out.println("MMM_TextureManager.addModelClass : "+cn);
+                    System.out.println("MMM_TextureManager.addModelClass : " + cn);
                     lclass = MaidModRedo.class.getClassLoader().loadClass(cn);
                 } else {
                     lclass = Class.forName(cn);
@@ -451,12 +451,10 @@ public class ModelManager {
                 mlm[2] = cm.newInstance(lsize[1]);
                 modelMap.put(pn, mlm);
                 MaidModRedo.LOGGER.debug("getModelClass-%s:%s", pn, cn);
-            }
-            catch (Exception exception) {
+            } catch (Exception exception) {
                 MaidModRedo.LOGGER.debug("getModelClass-Exception: %s", fname);
                 //if(DevMode.DEVELOPMENT_debug_MODE || LMRConfig.cfg_PrintdebugMessage) exception.printStackTrace();
-            }
-            catch (Error error) {
+            } catch (Error error) {
                 MaidModRedo.LOGGER.debug("getModelClass-Error: %s", fname);
                 //if(DevMode.DEVELOPMENT_debug_MODE || LMRConfig.cfg_PrintdebugMessage) error.printStackTrace();
             }
@@ -465,6 +463,8 @@ public class ModelManager {
 
     //TODO
     protected boolean addTextureName(String fname, String[] pSearch) {
+        Class entityClass = setSupportEntity(fname);
+
         // パッケージにテクスチャを登録
         if (!fname.startsWith("/")) {
             fname = (new StringBuilder()).append("/").append(fname).toString();
@@ -490,10 +490,10 @@ public class ModelManager {
                     }
                     TextureBox lts = getTextureBox(pn);
                     if (lts == null) {
-                        lts = new TextureBox(pn, pSearch);
+                        lts = new TextureBox(entityClass, pn, pSearch);
                         //Set here to assign textures for each entity
                         //エンティティごとにテクスチャを割り当てるために、ここで設定する
-                        setEntityTexture(fname, lts);
+
                         textures.add(lts);
                         MaidModRedo.LOGGER.debug("getTextureName-append-texturePack-%s", pn);
                     }
@@ -518,19 +518,18 @@ public class ModelManager {
             MaidModRedo.LOGGER.debug("Start searching %s", file.getName());
             do {
                 zipentry = zipinputstream.getNextEntry();
-                if(zipentry == null)
-                {
+                if (zipentry == null) {
                     break;
                 }
                 if (!zipentry.isDirectory()) {
                     if (zipentry.getName().endsWith(".class")) {
                         addModelClass(zipentry.getName(), pSearch);
-                    } else if(zipentry.getName().endsWith(".png")){
+                    } else if (zipentry.getName().endsWith(".png")) {
                         String lt1 = "mob/littleMaid";
                         String lt2 = "mob/ModelMulti";
                         String lt3 = "mob/LittleButler";
                         addTextureName(zipentry.getName(), pSearch);
-                        if(FMLEnvironment.dist == Dist.CLIENT &&
+                        if (FMLEnvironment.dist == Dist.CLIENT &&
                                 (zipentry.getName().startsWith(lt1)
                                         || zipentry.getName().startsWith(lt2)
                                         || zipentry.getName().startsWith(lt3)
@@ -539,7 +538,7 @@ public class ModelManager {
                         }
                     }
                 }
-            } while(true);
+            } while (true);
 
             zipinputstream.close();
             fileinputstream.close();
@@ -559,14 +558,14 @@ public class ModelManager {
 
         try {
             for (File nfile : file.listFiles()) {
-                if(nfile.isDirectory()) {
+                if (nfile.isDirectory()) {
                     addTexturesDir(nfile, root, pSearch);
                 } else {
                     String tn = FileClassUtil.getLinuxAntiDotName(nfile.getAbsolutePath());
                     String rmn = FileClassUtil.getLinuxAntiDotName(root.getAbsolutePath());
                     if (nfile.getName().endsWith(".class")) {
-                        if(tn.startsWith(rmn)) addModelClass(FileClassUtil.getClassName(tn, rmn), pSearch);
-                    } else if(nfile.getName().endsWith(".png")) {
+                        if (tn.startsWith(rmn)) addModelClass(FileClassUtil.getClassName(tn, rmn), pSearch);
+                    } else if (nfile.getName().endsWith(".png")) {
                         String s = nfile.getPath().replace('\\', '/');
 
                         int i = s.toLowerCase().indexOf(pSearch[1].toLowerCase());
@@ -580,7 +579,7 @@ public class ModelManager {
                             if (loc.startsWith("/")) {
                                 loc = loc.substring(1);
                             }
-                            if(FMLEnvironment.dist== Dist.CLIENT &&
+                            if (FMLEnvironment.dist == Dist.CLIENT &&
                                     (loc.startsWith(lt1)
                                             || loc.startsWith(lt2)
                                             || loc.startsWith(lt3)
@@ -624,20 +623,24 @@ public class ModelManager {
         boolean f = false;
         TextureBox lreturn = null;
         for (TextureBox ltb : getTextureList()) {
-            if (ModelManager.instance.entityTextures.containsKey(pEntityClass)) {
-                if (ltb.hasColor(pColor)) {
-                    if (f) {
-                        return ltb;
-                    }
-                    if (lreturn == null) {
-                        lreturn = ltb;
-                    }
+            if (ltb.hasColor(pColor)) {
+                if (f && ltb.getModelEntity() == pEntityClass) {
+                    return ltb;
                 }
-                if (ltb == pNowBox) {
-                    f = true;
+                if (lreturn == null) {
+                    lreturn = ltb;
                 }
             }
+            if (ltb == pNowBox) {
+                f = true;
+            }
+
         }
+
+        if (lreturn == null) {
+            return pNowBox;
+        }
+
         return lreturn == null ? null : lreturn;
     }
 
@@ -645,17 +648,22 @@ public class ModelManager {
         // 前のテクスチャパッケージの名前を返す
         TextureBox lreturn = null;
         for (TextureBox ltb : getTextureList()) {
-            if (ModelManager.instance.entityTextures.containsKey(pEntityClass)) {
-                if (ltb == pNowBox) {
-                    if (lreturn != null) {
-                        break;
-                    }
-                }
-                if (ltb.hasColor(pColor)) {
-                    lreturn = ltb;
+
+            if (ltb == pNowBox) {
+                if (lreturn != null) {
+                    break;
                 }
             }
+            if (ltb.hasColor(pColor) && ltb.getModelEntity() == pEntityClass) {
+                lreturn = ltb;
+            }
+
         }
+
+        if (lreturn == null) {
+            return pNowBox;
+        }
+
         return lreturn == null ? null : lreturn;
     }
 
@@ -671,20 +679,24 @@ public class ModelManager {
         boolean f = false;
         TextureBox lreturn = null;
         for (TextureBox ltb : getTextureList()) {
-            if (ModelManager.instance.entityTextures.containsKey(pEntityClass)) {
-                if (ltb.hasArmor()) {
-                    if (f) {
-                        return ltb;
-                    }
-                    if (lreturn == null) {
-                        lreturn = ltb;
-                    }
+
+            if (ltb.hasArmor()) {
+                if (f && ltb.getModelEntity() == pEntityClass) {
+                    return ltb;
                 }
-                if (ltb == pNowBox) {
-                    f = true;
+                if (lreturn == null) {
+                    lreturn = ltb;
                 }
             }
+            if (ltb == pNowBox) {
+                f = true;
+            }
         }
+
+        if (lreturn == null) {
+            return pNowBox;
+        }
+
         return lreturn;
     }
 
@@ -693,17 +705,21 @@ public class ModelManager {
         TextureBox lreturn = null;
         for (TextureBox ltb : getTextureList()) {
 
-            if (ModelManager.instance.entityTextures.containsKey(pEntityClass)) {
-                if (ltb == pNowBox) {
-                    if (lreturn != null) {
-                        break;
-                    }
-                }
-                if (ltb.hasArmor()) {
-                    lreturn = ltb;
+
+            if (ltb == pNowBox) {
+                if (lreturn != null) {
+                    break;
                 }
             }
+            if (ltb.hasArmor() && ltb.getModelEntity() == pEntityClass) {
+                lreturn = ltb;
+            }
         }
+
+        if (lreturn == null) {
+            return pNowBox;
+        }
+
         return lreturn;
     }
 
@@ -728,6 +744,7 @@ public class ModelManager {
     /**
      * テクスチャパック名に対応するインデックスを返す。
      * 基本サーバー用。
+     *
      * @param pEntity
      * @param pPackName
      * @return
@@ -754,6 +771,7 @@ public class ModelManager {
 
     /**
      * 指定されたテクスチャパックのサーバー側の管理番号を返す。
+     *
      * @param pBox
      * @return
      */
@@ -781,6 +799,7 @@ public class ModelManager {
     public TextureBox getDefaultTexture(IModelEntity pEntity) {
         return getDefaultTexture(pEntity.getClass());
     }
+
     @SuppressWarnings("rawtypes")
     public TextureBox getDefaultTexture(Class pEntityClass) {
         if (defaultTextures.containsKey(pEntityClass)) {

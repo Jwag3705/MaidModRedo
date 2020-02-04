@@ -50,8 +50,9 @@ public class TextureBox extends TextureBoxBase {
 		wildColor = -1;
 	}
 
-	public TextureBox(String pTextureName, String[] pSearch) {
+	public TextureBox(Class pModelEntity, String pTextureName, String[] pSearch) {
 		this();
+		modelEntity = pModelEntity;
 		textureName = pTextureName;
 		fileName = pTextureName;
 		int li = pTextureName.lastIndexOf("_");
@@ -198,6 +199,7 @@ public class TextureBox extends TextureBoxBase {
 
 	public TextureBox duplicate() {
 		TextureBox lbox = new TextureBox();
+		lbox.modelEntity = modelEntity;
 		lbox.textureName = textureName;
 		lbox.packegeName = packegeName;
 		lbox.fileName = fileName;

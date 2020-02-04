@@ -73,8 +73,8 @@ public class ModelConfigCompound {
      */
     public boolean contract;
 
-    public TextureBoxBase textureBox[];
-    public ModelMultiBase textureModel[];
+    public TextureBoxBase[] textureBox;
+    public ModelMultiBase[] textureModel;
 
     /**
      * 表示制御に使うフラグ群<br>

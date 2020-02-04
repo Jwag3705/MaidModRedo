@@ -3,13 +3,10 @@ package mmr.maidmodredo.client.maidmodel;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 public class ModelBaseSolo<T extends LivingEntity> extends ModelBaseNihil<T> implements IModelBaseMMM {
@@ -53,15 +50,18 @@ public class ModelBaseSolo<T extends LivingEntity> extends ModelBaseNihil<T> imp
             //}
         }
         if (textures.length > 2 && textures[2] != null) {
+            matrixStack.push();
+
             // Actors用
             //model.setRotationAngles(par2, par3, par4, par5, par6, par7, entityCaps);
             // Face
             // TODO テクスチャのロードはなんか考える。
-            //Minecraft.getInstance().getTextureManager().bindTexture(textures[2]);
-            //model.setCapsValue(caps_renderFace, entityCaps, matrixStack,iVertexBuilder,packedLightIn,packedOverlayIn,red,green,blue,alpha, isRendering);
+            Minecraft.getInstance().getTextureManager().bindTexture(textures[2]);
+            model.setCapsValue(caps_renderFace, entityCaps, matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha, isRendering);
             // Body
-            //Minecraft.getInstance().getTextureManager().bindTexture(textures[0]);
-            //model.setCapsValue(caps_renderBody, entityCaps, matrixStack,iVertexBuilder,packedLightIn,packedOverlayIn,red,green,blue,alpha, isRendering);
+            Minecraft.getInstance().getTextureManager().bindTexture(textures[0]);
+            model.setCapsValue(caps_renderBody, entityCaps, matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha, isRendering);
+            matrixStack.pop();
         } else {
             matrixStack.push();
 
@@ -69,7 +69,6 @@ public class ModelBaseSolo<T extends LivingEntity> extends ModelBaseNihil<T> imp
             if (textures.length > 0 && textures[0] != null) {
                 Minecraft.getInstance().getTextureManager().bindTexture(textures[0]);
             }
-
 
             model.render(entityCaps, matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha, isRendering);
             matrixStack.pop();
@@ -85,26 +84,6 @@ public class ModelBaseSolo<T extends LivingEntity> extends ModelBaseNihil<T> imp
         }
 //		textures = blanks;
         renderCount++;
-    }
-
-    @Nullable
-    protected RenderType func_230042_a_(ResourceLocation location, LivingEntity p_230042_1_, boolean p_230042_2_, boolean p_230042_3_) {
-        ResourceLocation resourcelocation = location;
-        if (p_230042_3_) {
-            return RenderType.entityTranslucent(resourcelocation);
-        } else if (p_230042_2_) {
-            return this.getRenderType(resourcelocation);
-        } else {
-            return p_230042_1_.isGlowing() ? RenderType.outline(resourcelocation) : null;
-        }
-    }
-
-    public static int getPackedOverlay(LivingEntity livingEntityIn, float uIn) {
-        return OverlayTexture.packLight(OverlayTexture.lightToInt(uIn), OverlayTexture.getV(livingEntityIn.hurtTime > 0 || livingEntityIn.deathTime > 0));
-    }
-
-    protected boolean isVisible(LivingEntity livingEntityIn) {
-        return !livingEntityIn.isInvisible();
     }
 
     @Override

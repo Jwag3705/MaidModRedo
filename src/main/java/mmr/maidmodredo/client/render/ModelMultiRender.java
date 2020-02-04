@@ -56,7 +56,7 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
     }
 
     public void setModelValues(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, IModelCaps pEntityCaps) {
-
+        //matrixStackIn.push();
         modelMain.model = entityIn.getModelConfigCompound().textureModel[0];
         modelFATT.modelInner = entityIn.getModelConfigCompound().textureModel[1];
         modelFATT.modelOuter = entityIn.getModelConfigCompound().textureModel[2];
@@ -89,12 +89,98 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
         //modelMain.setCapsValue(IModelCaps.caps_isSneak, entityIn.isSneaking());
         modelMain.setCapsValue(IModelCaps.caps_aimedBow, entityIn.isShooting());
         modelMain.setCapsValue(IModelCaps.caps_crossbow, entityIn.isCharging());
-        modelMain.setCapsValue(IModelCaps.caps_isWait, false);
+        modelMain.setCapsValue(IModelCaps.caps_isWait, entityIn.isMaidWait());
         modelMain.setCapsValue(IModelCaps.caps_isChild, entityIn.isChild());
         modelMain.setCapsValue(IModelCaps.caps_entityIdFactor, 0F);
         modelMain.setCapsValue(IModelCaps.caps_ticksExisted, entityIn.ticksExisted);
         //カスタム設定
         modelMain.setCapsValue(IModelCaps.caps_motionSitting, false);
+
+        modelMain.setCapsValue(IModelCaps.caps_heldItemLeft, (Integer) 0);
+        modelMain.setCapsValue(IModelCaps.caps_heldItemRight, (Integer) 0);
+        //modelMain.setCapsValue(IModelCaps.caps_onGround, renderSwingProgress(entityIn, par9));
+        modelMain.setCapsValue(IModelCaps.caps_onGround, entityIn.getSwingProgress(partialTicks, entityIn.getSwingHand()), entityIn.getSwingProgress(partialTicks, entityIn.getSwingHand()));
+        //modelMain.setCapsValue(IModelCaps.caps_isRiding, entityIn.isRidingRender());
+        //modelMain.setCapsValue(IModelCaps.caps_isSneak, entityIn.isSneaking());
+        /* modelMain.setCapsValue(IModelCaps.caps_aimedBow, entityIn.isAimebow());*/
+        modelMain.setCapsValue(IModelCaps.caps_isWait, entityIn.isMaidWait());
+        modelMain.setCapsValue(IModelCaps.caps_isChild, entityIn.isChild());
+        modelMain.setCapsValue(IModelCaps.caps_entityIdFactor, entityIn.entityIdFactor);
+        modelMain.setCapsValue(IModelCaps.caps_ticksExisted, entityIn.ticksExisted);
+        modelMain.setCapsValue(IModelCaps.caps_dominantArm, entityIn.getPrimaryHand().ordinal());
+
+        modelFATT.setModelAttributes(entityModel);
+        modelMain.setModelAttributes(entityModel);
+
+        entityModel = modelMain;
+
+        //途中でRenderされなくなるのを防ぐためにあえてここで描画する
+        //Draw here to continue drawing
+       /* boolean shouldSit = entityIn.isPassenger() && (entityIn.getRidingEntity() != null && entityIn.getRidingEntity().shouldRiderSit());
+
+
+        float f = MathHelper.interpolateAngle(partialTicks, entityIn.prevRenderYawOffset, entityIn.renderYawOffset);
+        float f1 = MathHelper.interpolateAngle(partialTicks, entityIn.prevRotationYawHead, entityIn.rotationYawHead);
+        float f2 = f1 - f;
+        if (shouldSit && entityIn.getRidingEntity() instanceof LivingEntity) {
+            LivingEntity livingentity = (LivingEntity)entityIn.getRidingEntity();
+            f = MathHelper.interpolateAngle(partialTicks, livingentity.prevRenderYawOffset, livingentity.renderYawOffset);
+            f2 = f1 - f;
+            float f3 = MathHelper.wrapDegrees(f2);
+            if (f3 < -85.0F) {
+                f3 = -85.0F;
+            }
+
+            if (f3 >= 85.0F) {
+                f3 = 85.0F;
+            }
+
+            f = f1 - f3;
+            if (f3 * f3 > 2500.0F) {
+                f += f3 * 0.2F;
+            }
+        }
+
+        float f6 = MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch);
+
+        if (entityIn.getPose() == Pose.SLEEPING) {
+            Direction direction = entityIn.getBedDirection();
+            if (direction != null) {
+                float f4 = entityIn.getEyeHeight(Pose.STANDING) - 0.1F;
+                matrixStackIn.translate((double)((float)(-direction.getXOffset()) * f4), 0.0D, (double)((float)(-direction.getZOffset()) * f4));
+            }
+        }
+
+        float f7 = this.handleRotationFloat(entityIn, partialTicks);
+        this.applyRotations(entityIn, matrixStackIn, f7, f, partialTicks);
+        matrixStackIn.scale(-1.0F, -1.0F, 1.0F);
+        this.preRenderCallback(entityIn, matrixStackIn, partialTicks);
+        matrixStackIn.translate(0.0D, (double)-1.501F, 0.0D);
+        float f8 = 0.0F;
+        float f5 = 0.0F;
+        if (!shouldSit && entityIn.isAlive()) {
+            f8 = MathHelper.lerp(partialTicks, entityIn.prevLimbSwingAmount, entityIn.limbSwingAmount);
+            f5 = entityIn.limbSwing - entityIn.limbSwingAmount * (1.0F - partialTicks);
+            if (entityIn.isChild()) {
+                f5 *= 3.0F;
+            }
+
+            if (f8 > 1.0F) {
+                f8 = 1.0F;
+            }
+        }
+
+        this.modelMain.setLivingAnimations(entityIn, f5, f8, partialTicks);
+        this.modelMain.render(entityIn, f5, f8, f7, f2, f6);
+        boolean flag = this.isVisible(entityIn);
+        boolean flag1 = !flag && !entityIn.isInvisibleToPlayer(Minecraft.getInstance().player);
+        RenderType rendertype = this.func_230042_a_(entityIn, flag, flag1);
+        if (rendertype != null) {
+            IVertexBuilder ivertexbuilder = bufferIn.getBuffer(rendertype);
+            int i = getPackedOverlay(entityIn, this.getOverlayProgress(entityIn, partialTicks));
+            modelMain.render(matrixStackIn, ivertexbuilder, packedLightIn, i, 1.0F, 1.0F, 1.0F, flag1 ? 0.15F : 1.0F);
+        }
+        matrixStackIn.pop();*/
     }
 
     public void renderModelMulti(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, IModelCaps pEntityCaps) {

@@ -1,6 +1,8 @@
 package mmr.maidmodredo.client.maidmodel;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 
 /**
@@ -8,7 +10,7 @@ import net.minecraft.entity.LivingEntity;
  * インターフェースでもいいような気がする。
  *
  */
-public abstract class AbstractModelBase<T extends LivingEntity> extends EntityModel<T> {
+public abstract class AbstractModelBase<T extends LivingEntity> extends SegmentedModel<T> {
 
 	/**
 	 * アーマーモデルのサイズを返す。
@@ -16,4 +18,9 @@ public abstract class AbstractModelBase<T extends LivingEntity> extends EntityMo
 	 */
 	public abstract float[] getArmorModelsSize();
 
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of();
+    }
+
+    ;
 }

@@ -1,6 +1,6 @@
 package mmr.maidmodredo.client.screen;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.inventory.MaidInventoryContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -11,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer> {
@@ -84,7 +83,7 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float renderPartialTicks, int xMouse, int yMouse) {
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(MAID_INVENTORY);
 
         int originPosX = (this.width - this.xSize) / 2;
@@ -141,10 +140,10 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
         int ii = mouseX - guiLeft;
         int jj = mouseY - guiTop;
 
-        GlStateManager.pushMatrix();
+        RenderSystem.pushMatrix();
         this.func_214130_a(guiLeft, guiTop);
 
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
 
         if (maidinventory.getLittleMaidEntity().canChangeModel() && ii > 7 && ii < 96 && jj > 7 && jj < 70) {
             // ボタンの表示
@@ -154,9 +153,9 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
             txbutton[3].visible = true;
 
             // テクスチャ名称の表示
-            GL11.glPushMatrix();
-            GL11.glTranslatef(mouseX - ii, mouseY - jj, 0.0F);
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.pushMatrix();
+            RenderSystem.translatef(mouseX - ii, mouseY - jj, 0.0F);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 //			RenderHelper.disableStandardItemLighting();
 
             if (maidinventory.getLittleMaidEntity().textureData.textureBox[0] != null) {
@@ -169,19 +168,19 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
                 int lby = 68;
                 int lcolor;
                 lcolor = jj < 20 ? 0xc0882222 : 0xc0000000;
-                GlStateManager.disableLighting();
-                GlStateManager.disableDepthTest();
-                GlStateManager.colorMask(true, true, true, false);
+                RenderSystem.disableLighting();
+                RenderSystem.disableDepthTest();
+                RenderSystem.colorMask(true, true, true, false);
                 fillGradient(lbx - 3, lby - 4, lbx + ltwmax + 3, lby + 8, lcolor, lcolor);
                 drawString(this.minecraft.fontRenderer, ls1, 52 - ltw1 / 2, lby - 2, -1);
                 lcolor = jj > 46 ? 0xc0882222 : 0xc0000000;
                 fillGradient(lbx - 3, lby + 8, lbx + ltwmax + 3, lby + 16 + 4, lcolor, lcolor);
                 drawString(this.minecraft.fontRenderer, ls2, 52 - ltw2 / 2, lby + 10, -1);
-                GlStateManager.enableLighting();
-                GlStateManager.enableDepthTest();
-                GlStateManager.colorMask(true, true, true, true);
+                RenderSystem.enableLighting();
+                RenderSystem.enableDepthTest();
+                RenderSystem.colorMask(true, true, true, true);
             }
-            GL11.glPopMatrix();
+            RenderSystem.popMatrix();
         } else {
             txbutton[0].visible = false;
             txbutton[1].visible = false;

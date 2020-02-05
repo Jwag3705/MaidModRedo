@@ -3,7 +3,6 @@ package mmr.maidmodredo.client.maidmodel;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 import org.lwjgl.opengl.GL11;
 
@@ -56,11 +55,9 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 		//renderStabilizer(pEntityCaps, par2, par3, ticksExisted, pheadYaw, pheadPitch, par7);
 	}
 
-    public Iterable<ModelRenderer> getParts() {
+    /*public Iterable<ModelRenderer> getParts() {
         return ImmutableList.of(this.mainFrame);
-    }
-
-    ;
+    }*/
 
 
 	/**

@@ -1,16 +1,24 @@
 package mmr.maidmodredo.client.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import mmr.maidmodredo.client.maidmodel.IModelCaps;
 import mmr.maidmodredo.client.maidmodel.ModelBase;
 import mmr.maidmodredo.client.maidmodel.ModelBaseDuo;
 import mmr.maidmodredo.client.maidmodel.ModelBaseSolo;
+import mmr.maidmodredo.client.model.ModelFake;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.List;
 
@@ -20,14 +28,14 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
     public IModelCaps fcaps;
 
     public ModelMultiRender(EntityRendererManager manager, float pShadowSize) {
-        super(manager, null, pShadowSize);
+        super(manager, new ModelFake<>(), pShadowSize);
         modelFATT = new ModelBaseDuo<>(this);
         modelFATT.isModelAlphablend = true;
         modelFATT.isRendering = true;
         modelMain = new ModelBaseSolo<>(this);
         modelMain.isModelAlphablend = true;
         modelMain.capsLink = modelFATT;
-        entityModel = modelMain;
+        //entityModel = modelMain;
         //setRenderPassModel(modelFATT);
     }
 
@@ -56,7 +64,7 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
     }
 
     public void setModelValues(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, IModelCaps pEntityCaps) {
-        //matrixStackIn.push();
+        matrixStackIn.push();
         modelMain.model = entityIn.getModelConfigCompound().textureModel[0];
         modelFATT.modelInner = entityIn.getModelConfigCompound().textureModel[1];
         modelFATT.modelOuter = entityIn.getModelConfigCompound().textureModel[2];
@@ -112,11 +120,12 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
         modelFATT.setModelAttributes(entityModel);
         modelMain.setModelAttributes(entityModel);
 
-        entityModel = modelMain;
+        //entityModel = modelMain;
 
         //途中でRenderされなくなるのを防ぐためにあえてここで描画する
         //Draw here to continue drawing
-       /* boolean shouldSit = entityIn.isPassenger() && (entityIn.getRidingEntity() != null && entityIn.getRidingEntity().shouldRiderSit());
+
+        boolean shouldSit = entityIn.isPassenger() && (entityIn.getRidingEntity() != null && entityIn.getRidingEntity().shouldRiderSit());
 
 
         float f = MathHelper.interpolateAngle(partialTicks, entityIn.prevRenderYawOffset, entityIn.renderYawOffset);
@@ -180,7 +189,7 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
             int i = getPackedOverlay(entityIn, this.getOverlayProgress(entityIn, partialTicks));
             modelMain.render(matrixStackIn, ivertexbuilder, packedLightIn, i, 1.0F, 1.0F, 1.0F, flag1 ? 0.15F : 1.0F);
         }
-        matrixStackIn.pop();*/
+        matrixStackIn.pop();
     }
 
     public void renderModelMulti(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, IModelCaps pEntityCaps) {

@@ -98,7 +98,7 @@ public class ModelManager {
         addSearch("littleMaidMob", "/assets/minecraft/textures/entity/ModelMulti/", "ModelMulti_");
         addSearch("littleMaidMob", "/assets/minecraft/textures/entity/littleMaid/", "ModelMulti_");
         addSearch("littleMaidMob", "/assets/minecraft/textures/entity/littleMaid/", "ModelLittleMaid_");
-        addSearch("littleMaidMob", "/assets/minecraft/textures/entity/LittleButler/", "ModelLittleButler_");
+        addSearch("littleMaidMob", "/assets/minecraft/textures/entity/LittleButler/", "ModelLittleMaid_");
         addSearch("littleMaidMob", "/mob/ModelMulti/", "ModelMulti_");
         addSearch("littleMaidMob", "/mob/littleMaid/", "ModelLittleMaid_");
     }

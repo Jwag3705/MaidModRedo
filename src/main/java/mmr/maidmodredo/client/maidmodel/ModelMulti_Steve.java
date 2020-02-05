@@ -3,7 +3,6 @@ package mmr.maidmodredo.client.maidmodel;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
@@ -122,11 +121,10 @@ public class ModelMulti_Steve extends ModelMultiBase {
         });
 	}
 
-    public Iterable<ModelRenderer> getParts() {
+    /*public Iterable<ModelRenderer> getParts() {
         return ImmutableList.of(this.mainFrame);
     }
-
-    ;
+    */
 
 
 	public void setDefaultPause(float par1, float par2, float pTicksExisted,

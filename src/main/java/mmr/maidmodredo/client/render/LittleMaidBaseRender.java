@@ -258,9 +258,24 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
 //		modelMain.isAlphablend = true;
 //		modelFATT.isAlphablend = true;
 
+        modelMain.setCapsValue(IModelCaps.caps_heldItemLeft, (Integer) 0);
+        modelMain.setCapsValue(IModelCaps.caps_heldItemRight, (Integer) 0);
+        //modelMain.setCapsValue(IModelCaps.caps_onGround, renderSwingProgress(lmaid, par9));
+        modelMain.setCapsValue(IModelCaps.caps_onGround, lmaid.getSwingProgress(partialTicks, lmaid.getSwingHand()), lmaid.getSwingProgress(partialTicks, lmaid.getSwingHand()));
+        //modelMain.setCapsValue(IModelCaps.caps_isRiding, lmaid.isRidingRender());
+        //modelMain.setCapsValue(IModelCaps.caps_isSneak, lmaid.isSneaking());
+        /* modelMain.setCapsValue(IModelCaps.caps_aimedBow, lmaid.isAimebow());*/
+        modelMain.setCapsValue(IModelCaps.caps_isWait, lmaid.isMaidWait());
+        modelMain.setCapsValue(IModelCaps.caps_isChild, lmaid.isChild());
+        modelMain.setCapsValue(IModelCaps.caps_entityIdFactor, lmaid.entityIdFactor);
+        modelMain.setCapsValue(IModelCaps.caps_ticksExisted, lmaid.ticksExisted);
+        modelMain.setCapsValue(IModelCaps.caps_dominantArm, lmaid.getPrimaryHand().ordinal());
 
         //カスタム設定
         //modelMain.setCapsValue(IModelCaps.caps_motionSitting, lmaid.isMotionSitting());
+
+        modelFATT.setModelAttributes(entityModel);
+        modelMain.setModelAttributes(entityModel);
         // だが無意味だ
 //		plittleMaid.textureModel0.isChild = plittleMaid.textureModel1.isChild = plittleMaid.textureModel2.isChild = plittleMaid.isChild();
     }

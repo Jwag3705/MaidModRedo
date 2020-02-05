@@ -205,7 +205,7 @@ public abstract class ModelMultiBase<T extends LivingEntity> extends ModelBase<T
     /**
      * ハードポイントに接続されたアイテムを表示する
      */
-    public abstract void renderItems(IModelCaps pEntityCaps);
+    public abstract void renderItems(IModelCaps pEntityCaps, MatrixStack stack, boolean left);
 
     public abstract void renderFirstPersonHand(IModelCaps pEntityCaps);
 

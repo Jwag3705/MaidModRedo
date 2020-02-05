@@ -86,9 +86,9 @@ public class ModelBaseDuo<T extends LivingEntity> extends ModelBaseNihil<T> impl
 	// IModelMMM追加分
 
 	@Override
-	public void renderItems(LivingEntity pEntity, MobRenderer pRender) {
+    public void renderItems(LivingEntity pEntity, MatrixStack stack, boolean left) {
 		if (modelInner != null) {
-			modelInner.renderItems(entityCaps);
+            modelInner.renderItems(entityCaps, stack, left);
 		}
 	}
 

@@ -1,8 +1,9 @@
-package mmr.maidmodredo.client.maidmodel;
+package mmr.maidmodredo.client.maidmodel.animator;
 
 import mmr.maidmodredo.api.ClientInfo;
 import mmr.maidmodredo.api.IMaidAnimation;
 import mmr.maidmodredo.api.MaidAnimation;
+import mmr.maidmodredo.client.maidmodel.Transform;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;

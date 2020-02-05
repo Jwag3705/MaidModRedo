@@ -86,7 +86,6 @@ public class ModelManager {
     @SuppressWarnings("rawtypes")
     protected Map<Class, TextureBox> defaultTextures = new HashMap<Class, TextureBox>();
 
-    public Map<Class, TextureBoxBase> entityTextures = new HashMap<Class, TextureBoxBase>();
 
     //public Map<Class, TextureBoxBase> entityTextures = new HashMap<Class, TextureBoxBase>();
 

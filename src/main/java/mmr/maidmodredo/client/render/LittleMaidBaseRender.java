@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -229,10 +230,12 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
                 // Forge: moved this call down, fixes incorrect offset while sneaking.
                 //Force render(?)
                 if (modelMain.model instanceof ModelLittleMaidBase) {
+                    ModelLittleMaidBase<T> maidBase = (ModelLittleMaidBase<T>) modelMain.model;
+
                     if (flag) {
-                        ((ModelLittleMaidBase) modelMain.model).bipedLeftArm.setAnglesAndRotation(matrixStackIn);
+                        modelMain.renderItems(p_188358_1_, matrixStackIn, flag);
                     } else {
-                        ((ModelLittleMaidBase) modelMain.model).bipedRightArm.setAnglesAndRotation(matrixStackIn);
+                        modelMain.renderItems(p_188358_1_, matrixStackIn, flag);
                     }
                 }
 
@@ -261,7 +264,7 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
         modelMain.setCapsValue(IModelCaps.caps_heldItemLeft, (Integer) 0);
         modelMain.setCapsValue(IModelCaps.caps_heldItemRight, (Integer) 0);
         //modelMain.setCapsValue(IModelCaps.caps_onGround, renderSwingProgress(lmaid, par9));
-        modelMain.setCapsValue(IModelCaps.caps_onGround, lmaid.getSwingProgress(partialTicks, lmaid.getSwingHand()), lmaid.getSwingProgress(partialTicks, lmaid.getSwingHand()));
+        modelMain.setCapsValue(IModelCaps.caps_onGround, entityIn.getSwingProgress(partialTicks, Hand.MAIN_HAND), entityIn.getSwingProgress(partialTicks, Hand.OFF_HAND));
         //modelMain.setCapsValue(IModelCaps.caps_isRiding, lmaid.isRidingRender());
         //modelMain.setCapsValue(IModelCaps.caps_isSneak, lmaid.isSneaking());
         /* modelMain.setCapsValue(IModelCaps.caps_aimedBow, lmaid.isAimebow());*/

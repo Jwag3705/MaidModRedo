@@ -5,10 +5,7 @@ import mmr.maidmodredo.client.render.LittleMaidBaseRender;
 import mmr.maidmodredo.client.render.MaidFishingBobberRender;
 import mmr.maidmodredo.client.render.WanderMaidRender;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
-import mmr.maidmodredo.init.LittleContainers;
-import mmr.maidmodredo.init.LittleEntitys;
-import mmr.maidmodredo.init.MaidDataSerializers;
-import mmr.maidmodredo.init.MaidJob;
+import mmr.maidmodredo.init.*;
 import mmr.maidmodredo.network.MaidPacketHandler;
 import mmr.maidmodredo.utils.CommonHelper;
 import mmr.maidmodredo.utils.FileList;
@@ -16,6 +13,12 @@ import mmr.maidmodredo.utils.ModelManager;
 import mmr.maidmodredo.utils.manager.StabilizerManager;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.gen.placement.Placement;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,6 +30,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -86,6 +90,15 @@ public class MaidModRedo
 
         MaidDataSerializers.registerData();
         MaidJob.init();
+
+        for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
+
+            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLAINS) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST)) {
+                biome.addStructure(LittleFeatures.MAIDCAFE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+            }
+
+            biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, LittleFeatures.MAIDCAFE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(Placement.NOPE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+        }
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

@@ -1,5 +1,6 @@
 package mmr.maidmodredo.client.maidmodel;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mmr.maidmodredo.api.IMaidAnimation;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.client.Minecraft;
@@ -466,7 +467,12 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
     }
 
     @Override
-    public void renderItems(IModelCaps pEntityCaps) {
+    public void renderItems(IModelCaps pEntityCaps, MatrixStack stack, boolean left) {
+        if (left) {
+            this.bipedLeftArm.setAnglesAndRotation(stack);
+        } else {
+            this.bipedRightArm.setAnglesAndRotation(stack);
+        }
 		/*// 手持ちの表示
 		GL11.glPushMatrix();
 		// R

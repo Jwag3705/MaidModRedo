@@ -258,7 +258,12 @@ public class ModelMulti_Steve extends ModelMultiBase {
 	}
 
 	@Override
-	public void renderItems(IModelCaps pEntityCaps) {
+    public void renderItems(IModelCaps pEntityCaps, MatrixStack stack, boolean left) {
+        if (left) {
+            this.bipedLeftArm.setAnglesAndRotation(stack);
+        } else {
+            this.bipedRightArm.setAnglesAndRotation(stack);
+        }
 	/*	// 手持ちの表示
 		GL11.glPushMatrix();
 		

@@ -1,7 +1,12 @@
 {
-  "item.maidmodredo.bagu_hat": "Baguchan's Hat",
+  "item.maidmodredo.powderd_donut": "Powderd Donuts",
+  "item.maidmodredo.jelly_donut": "Jelly Donuts",
+  "item.maidmodredo.combined_donut": "Combined Donuts",
+  "item.maidmodredo.sugar_donut": "Sugar Donuts",
+
 
   "item.maidmodredo.caramel_apple": "Caramel Apple",
+  "item.maidmodredo.bagu_hat": "Baguchan's Hat",
   "item.maidmodredo.broom": "Broom",
   "item.maidmodredo.sugar_coin": "Sugar Coin",
   "item.maidmodredo.housewand": "House Wand",

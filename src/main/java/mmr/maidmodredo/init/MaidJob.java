@@ -1,6 +1,7 @@
 package mmr.maidmodredo.init;
 
 import mmr.maidmodredo.MaidModRedo;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.schedule.Schedule;
 import net.minecraft.item.*;
@@ -30,6 +31,9 @@ public class MaidJob {
     });
     public static final MaidJob LUMBERJACK = new MaidJob("lumberjack", (item) -> {
         return item.getItem() instanceof AxeItem;
+    });
+    public static final MaidJob TORCHER = new MaidJob("torcher", (item) -> {
+        return item.getItem() == Item.getItemFromBlock(Blocks.TORCH);
     });
 
     public static final MaidJob FENCER = new MaidJob("fencer", (item) -> {
@@ -127,6 +131,8 @@ public class MaidJob {
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "farmer"), FARMER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "fisher"), FISHER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "lumberjack"), LUMBERJACK);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "torcher"), TORCHER);
+
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "fencer"), FENCER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "guard"), GUARD);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "archer"), ARCHER);

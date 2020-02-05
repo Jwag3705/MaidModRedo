@@ -94,7 +94,7 @@ public class FishingTask extends Task<LittleMaidBaseEntity> {
 
     @Override
     protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
-        return !this.isFinishFishing;
+        return !this.isFinishFishing && entityIn.getHeldItem(Hand.MAIN_HAND).getItem() instanceof FishingRodItem;
     }
 
     protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {

@@ -2,6 +2,7 @@ package mmr.maidmodredo.client.maidmodel;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import mmr.maidmodredo.client.maidmodel.animator.MaidModelAnimator;
 import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;

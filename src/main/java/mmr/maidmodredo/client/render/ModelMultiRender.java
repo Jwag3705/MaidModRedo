@@ -17,6 +17,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
@@ -92,7 +93,7 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
 
         modelMain.setCapsValue(IModelCaps.caps_heldItemLeft, (Integer) 0);
         modelMain.setCapsValue(IModelCaps.caps_heldItemRight, (Integer) 0);
-        modelMain.setCapsValue(IModelCaps.caps_onGround, getSwingProgress(entityIn, partialTicks));
+        modelMain.setCapsValue(IModelCaps.caps_onGround, entityIn.getSwingProgress(partialTicks, Hand.MAIN_HAND), entityIn.getSwingProgress(partialTicks, Hand.OFF_HAND));
         modelMain.setCapsValue(IModelCaps.caps_isRiding, entityIn.isPassenger());
         //modelMain.setCapsValue(IModelCaps.caps_isSneak, entityIn.isSneaking());
         modelMain.setCapsValue(IModelCaps.caps_aimedBow, entityIn.isShooting());
@@ -119,7 +120,6 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
 
         modelFATT.setModelAttributes(entityModel);
         modelMain.setModelAttributes(entityModel);
-
         //entityModel = modelMain;
 
         //途中でRenderされなくなるのを防ぐためにあえてここで描画する

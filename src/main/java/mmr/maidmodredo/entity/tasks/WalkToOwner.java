@@ -87,7 +87,7 @@ public class WalkToOwner extends Task<LittleMaidBaseEntity> {
                     this.startExecuting(worldIn, owner, gameTime);
                 }
 
-                if (player != null && player.getDistanceSq(owner) > 200.0D) {
+                if (player != null && player.getDistanceSq(owner) > 220.0D) {
                     this.startTeleport(player, owner);
                 }
 

@@ -97,7 +97,7 @@ public class LumberJackTask extends Task<LittleMaidBaseEntity> {
 
     @Override
     protected boolean shouldContinueExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
-        return !this.isFinishLumberJack && !this.isCutWood || this.isCutWood && this.blockPostion.withinDistance(entityIn.getPositionVec(), 10.0D) && !worldIn.getBlockState(this.blockPostion).isAir();
+        return !this.isFinishLumberJack && !this.isCutWood || entityIn.getHeldItem(Hand.MAIN_HAND).getItem() instanceof AxeItem && this.isCutWood && this.blockPostion.withinDistance(entityIn.getPositionVec(), 10.0D) && !worldIn.getBlockState(this.blockPostion).isAir();
     }
 
     protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
@@ -131,6 +131,10 @@ public class LumberJackTask extends Task<LittleMaidBaseEntity> {
                 owner.world.destroyBlock(this.blockPostion, true);
                 owner.giveExperiencePoints(2 + owner.getRNG().nextInt(3));
                 isCutWood = false;
+
+                owner.getHeldItem(Hand.MAIN_HAND).damageItem(1, owner, (p_220000_1_) -> {
+                    p_220000_1_.sendBreakAnimation(Hand.MAIN_HAND);
+                });
 
                 if (worldIn.getBlockState(this.blockPostion.down()).getBlock() == Blocks.DIRT) {
                     Inventory inventory = owner.getInventoryMaidMain();

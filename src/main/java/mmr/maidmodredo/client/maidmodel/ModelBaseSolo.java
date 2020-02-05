@@ -98,9 +98,9 @@ public class ModelBaseSolo<T extends LivingEntity> extends ModelBaseNihil<T> imp
     // IModelMMM追加分
 
     @Override
-    public void renderItems(LivingEntity pEntity, MobRenderer pRender) {
+    public void renderItems(LivingEntity pEntity, MatrixStack stack, boolean left) {
         if (model != null) {
-            model.renderItems(entityCaps);
+            model.renderItems(entityCaps, stack, left);
         }
     }
 

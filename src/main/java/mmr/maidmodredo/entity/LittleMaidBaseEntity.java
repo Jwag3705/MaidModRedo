@@ -85,7 +85,9 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
     }, MemoryModuleType.MEETING_POINT, (p_213772_0_, p_213772_1_) -> {
         return p_213772_1_ == PointOfInterestType.MEETING;
     });
-    private static final Set<Item> SWEETITEM = Sets.newHashSet(Items.SUGAR, Items.COOKIE, Items.PUMPKIN_PIE, LittleItems.CARAMEL_APPLE, LittleItems.STRAWBERRY_CAKE, LittleItems.REDVELVET_CAKE, LittleItems.LAVENDER_CAKE, LittleItems.ICECREAM_CAKE, LittleItems.DEVILSFOOD_CAKE, LittleItems.COFFEE_CAKE, LittleItems.CHEESE_CAKE, LittleItems.CARROT_CAKE, LittleItems.BIRTHDAY_CAKE);
+    private static final Set<Item> SWEETITEM = Sets.newHashSet(Items.SUGAR, Items.COOKIE, Items.PUMPKIN_PIE, LittleItems.CARAMEL_APPLE
+            , LittleItems.STRAWBERRY_CAKE, LittleItems.REDVELVET_CAKE, LittleItems.LAVENDER_CAKE, LittleItems.ICECREAM_CAKE, LittleItems.DEVILSFOOD_CAKE, LittleItems.COFFEE_CAKE, LittleItems.CHEESE_CAKE, LittleItems.CARROT_CAKE, LittleItems.BIRTHDAY_CAKE
+            , LittleItems.COMBINED_DONUT, LittleItems.JELLY_DONUT, LittleItems.POWDERD_DONUT, LittleItems.SUGAR_DONUT);
 
     private InventoryMaidMain inventoryMaidMain;
     private InventoryMaidEquipment inventoryMaidEquipment;
@@ -231,7 +233,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
 
         if (this.isTamed() && !this.isMaidWaitEx() && !isFreedom()) {
             p_213744_1_.setSchedule(LittleSchedules.FOLLOW);
-            p_213744_1_.registerActivity(LittleActivitys.FOLLOW, MaidTasks.follow());
+            p_213744_1_.registerActivity(LittleActivitys.FOLLOW, MaidTasks.follow(getMaidData().getJob(), f));
         } else if (this.isTamed() && this.isMaidWaitEx()) {
             p_213744_1_.setSchedule(LittleSchedules.WAITING);
             p_213744_1_.registerActivity(LittleActivitys.WAITING, MaidTasks.waiting());
@@ -372,11 +374,11 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
             maidContractLimit = 24000;
         }
 
-        if ((compound.contains("texName"))) {
+        if ((compound.contains("texName", 10))) {
             textureData.textureBox[0] = ModelManager.instance.getTextureBoxServer(compound.getString("texName"));
         }
 
-        if ((compound.contains("texArmor"))) {
+        if ((compound.contains("texArmor", 10))) {
             textureData.textureBox[1] = ModelManager.instance.getTextureBoxServer(compound.getString("texArmor"));
         }
         textureNameMain = compound.getString("textureModelNameForClient");
@@ -1309,6 +1311,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
 
         // モデルの初期化
         ((TextureBox) textureData.textureBox[0]).models[0].setCapsValue(IModelCaps.caps_changeModel, maidCaps);
+
 
         // スタビの付け替え
 //		for (Entry<String, MMM_EquippedStabilizer> le : pEntity.maidStabilizer.entrySet()) {

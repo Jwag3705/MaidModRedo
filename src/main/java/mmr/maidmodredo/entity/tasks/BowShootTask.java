@@ -192,6 +192,7 @@ public class BowShootTask extends Task<LittleMaidBaseEntity> {
                         this.field_220749_b = CrossbowState.READY_TO_ATTACK;
                     }
                 } else if (this.field_220749_b == CrossbowState.READY_TO_ATTACK && flag) {
+                    owner.giveExperiencePoints(2 + owner.getRNG().nextInt(2));
                     owner.attackEntityWithRangedAttack((LivingEntity) entity, BowItem.getArrowVelocity(i));
                     ItemStack itemstack1 = owner.getHeldItem(ProjectileHelper.getHandWith(owner, Items.CROSSBOW));
                     CrossbowItem.setCharged(itemstack1, false);
@@ -203,6 +204,7 @@ public class BowShootTask extends Task<LittleMaidBaseEntity> {
                         owner.resetActiveHand();
                     } else if (flag) {
                         if (i >= 20) {
+                            owner.giveExperiencePoints(1 + owner.getRNG().nextInt(2));
                             owner.resetActiveHand();
                             owner.attackEntityWithRangedAttack((LivingEntity) entity, BowItem.getArrowVelocity(i));
                             this.attackTick = 20;

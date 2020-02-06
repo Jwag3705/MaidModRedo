@@ -98,6 +98,7 @@ public class TorchPlaceTask extends Task<LittleMaidBaseEntity> {
                 worldIn.setBlockState(this.blockPostion, Block.getBlockFromItem(owner.getHeldItem(Hand.MAIN_HAND).getItem()).getDefaultState(), 3);
                 owner.getHeldItem(Hand.MAIN_HAND).shrink(1);
                 owner.swingArm(Hand.MAIN_HAND);
+                owner.giveExperiencePoints(1);
                 isFinishPlacing = true;
             }
         }

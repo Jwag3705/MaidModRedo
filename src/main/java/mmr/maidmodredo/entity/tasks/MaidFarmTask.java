@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.init.MaidJob;
+import mmr.maidmodredo.network.MaidPacketHandler;
 import net.minecraft.block.*;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
@@ -127,29 +128,29 @@ public class MaidFarmTask extends Task<LittleMaidBaseEntity> {
                         if (itemstack.getItem() == Items.WHEAT_SEEDS) {
                             worldIn.setBlockState(this.field_220422_a, Blocks.WHEAT.getDefaultState(), 3);
                             flag = true;
-                            owner.swingArm(Hand.MAIN_HAND);
+                            MaidPacketHandler.animationModel(owner, LittleMaidBaseEntity.FARM_ANIMATION);
                             owner.giveExperiencePoints(1);
                         } else if (itemstack.getItem() == Items.POTATO) {
                             worldIn.setBlockState(this.field_220422_a, Blocks.POTATOES.getDefaultState(), 3);
                             flag = true;
-                            owner.swingArm(Hand.MAIN_HAND);
+                            MaidPacketHandler.animationModel(owner, LittleMaidBaseEntity.FARM_ANIMATION);
                             owner.giveExperiencePoints(1);
                         } else if (itemstack.getItem() == Items.CARROT) {
                             worldIn.setBlockState(this.field_220422_a, Blocks.CARROTS.getDefaultState(), 3);
                             flag = true;
-                            owner.swingArm(Hand.MAIN_HAND);
+                            MaidPacketHandler.animationModel(owner, LittleMaidBaseEntity.FARM_ANIMATION);
                             owner.giveExperiencePoints(1);
                         } else if (itemstack.getItem() == Items.BEETROOT_SEEDS) {
                             worldIn.setBlockState(this.field_220422_a, Blocks.BEETROOTS.getDefaultState(), 3);
                             flag = true;
-                            owner.swingArm(Hand.MAIN_HAND);
+                            MaidPacketHandler.animationModel(owner, LittleMaidBaseEntity.FARM_ANIMATION);
                             owner.giveExperiencePoints(1);
                         } else if (itemstack.getItem() instanceof net.minecraftforge.common.IPlantable) {
                             if (((net.minecraftforge.common.IPlantable) itemstack.getItem()).getPlantType(worldIn, field_220422_a) == net.minecraftforge.common.PlantType.Crop) {
                                 worldIn.setBlockState(field_220422_a, ((net.minecraftforge.common.IPlantable) itemstack.getItem()).getPlant(worldIn, field_220422_a), 3);
                                 flag = true;
                             }
-                            owner.swingArm(Hand.MAIN_HAND);
+                            MaidPacketHandler.animationModel(owner, LittleMaidBaseEntity.FARM_ANIMATION);
                             owner.giveExperiencePoints(1);
                         }
                     }

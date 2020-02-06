@@ -233,9 +233,9 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
                     ModelLittleMaidBase<T> maidBase = (ModelLittleMaidBase<T>) modelMain.model;
 
                     if (flag) {
-                        modelMain.renderItems(p_188358_1_, matrixStackIn, flag);
+                        maidBase.renderItems(p_188358_1_, matrixStackIn, flag);
                     } else {
-                        modelMain.renderItems(p_188358_1_, matrixStackIn, flag);
+                        maidBase.renderItems(p_188358_1_, matrixStackIn, flag);
                     }
                 }
 

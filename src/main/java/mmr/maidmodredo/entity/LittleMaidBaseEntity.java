@@ -97,10 +97,12 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
 
     public static final MaidAnimation TALK_ANIMATION = MaidAnimation.create(100);
     public static final MaidAnimation PET_ANIMATION = MaidAnimation.create(100);
+    public static final MaidAnimation FARM_ANIMATION = MaidAnimation.create(15);
 
     private static final MaidAnimation[] ANIMATIONS = {
             TALK_ANIMATION,
-            PET_ANIMATION
+            PET_ANIMATION,
+            FARM_ANIMATION
     };
 
     public EntityCaps maidCaps = new EntityCaps(this);

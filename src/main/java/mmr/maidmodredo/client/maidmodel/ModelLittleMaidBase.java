@@ -389,6 +389,18 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
             animator.setStaticKeyframe(10);
             animator.resetKeyframe(10);
         }
+
+        if (animation.getAnimation() == LittleMaidBaseEntity.FARM_ANIMATION) {
+            animator.setAnimation(LittleMaidBaseEntity.FARM_ANIMATION);
+            animator.startKeyframe(10);
+            animator.rotate(this.bipedBody, 0.4F, 0.0F, 0.0F);
+            animator.rotate(this.bipedRightArm, -0.4F, 0.0F, 0.0F);
+            animator.rotate(this.bipedLeftArm, -0.4F, 0.0F, 0.0F);
+            animator.endKeyframe();
+
+
+            animator.resetKeyframe(5);
+        }
     }
 
     public static float getPartialTicks() {

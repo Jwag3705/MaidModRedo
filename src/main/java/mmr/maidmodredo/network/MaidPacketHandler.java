@@ -31,7 +31,12 @@ public class MaidPacketHandler {
     }
 
     public static void syncModel(LittleMaidBaseEntity entity, CompoundNBT compoundNBT) {
-        MaidPacketHandler.CHANNEL.sendToServer(new MessageChangeModelStat(entity, compoundNBT));
+        if (!entity.getEntityWorld().isRemote()) {
+            MaidPacketHandler.CHANNEL.sendToServer(new MessageChangeModelStat(entity, compoundNBT));
+
+        } else {
+            MaidPacketHandler.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MessageChangeModelStat(entity.getEntityId(), compoundNBT));
+        }
     }
 
     public static void animationModel(LittleMaidBaseEntity entity, MaidAnimation animation) {

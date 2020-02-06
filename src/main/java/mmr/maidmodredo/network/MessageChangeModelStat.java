@@ -49,9 +49,7 @@ public class MessageChangeModelStat {
                 if (entity instanceof LittleMaidBaseEntity) {
                     LittleMaidBaseEntity littlemaid = (LittleMaidBaseEntity) entity;
 
-
                     littlemaid.setTextureNameMain(message.tag.getString("Main"));
-
                     littlemaid.setTextureNameArmor(message.tag.getString("Armor"));
                 }
             });

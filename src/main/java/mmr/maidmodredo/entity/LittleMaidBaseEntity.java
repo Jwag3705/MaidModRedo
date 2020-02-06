@@ -94,6 +94,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
 
     private int animationTick;
     private MaidAnimation animation = NO_ANIMATION;
+    private int firstload = 100;
 
     public static final MaidAnimation TALK_ANIMATION = MaidAnimation.create(100);
     public static final MaidAnimation PET_ANIMATION = MaidAnimation.create(100);
@@ -103,15 +104,15 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
             PET_ANIMATION
     };
 
-    public ModelConfigCompound textureData;
-    public EntityCaps maidCaps;
+    public EntityCaps maidCaps = new EntityCaps(this);
+    public ModelConfigCompound textureData = new ModelConfigCompound(this, maidCaps);
 
     protected boolean mstatOpenInventory;
 
     public float entityIdFactor;
 
-    protected String textureNameMain;
-    protected String textureNameArmor;
+    protected String textureNameMain = "default_" + ModelManager.defaultModelName;
+    protected String textureNameArmor = "default_" + ModelManager.defaultModelName;
 
     public boolean isWildSaved = false;
 
@@ -165,20 +166,9 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
         workingCount = new Counter(11, 10, -10);
         registerTick = new Counter(200, 200, -20);
 
-        maidCaps = new EntityCaps(this);
-        textureData = new ModelConfigCompound(this, maidCaps);
-
 //		if (getEntityWorld().isRemote) {
 
         // 形態形成場
-
-        textureData.setColor((byte) 0xc);
-
-        TextureBox ltb[] = new TextureBox[2];
-
-        ltb[0] = ltb[1] = ModelManager.instance.getDefaultTexture(this);
-
-        setTexturePackName(ltb);
 
         entityIdFactor = getEntityId() * 70;
     }
@@ -374,19 +364,18 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
             maidContractLimit = 24000;
         }
 
-        if ((compound.contains("texName", 10))) {
+        if ((compound.contains("texName"))) {
             textureData.textureBox[0] = ModelManager.instance.getTextureBoxServer(compound.getString("texName"));
         }
 
-        if ((compound.contains("texArmor", 10))) {
+        if ((compound.contains("texArmor"))) {
             textureData.textureBox[1] = ModelManager.instance.getTextureBoxServer(compound.getString("texArmor"));
         }
+
         textureNameMain = compound.getString("textureModelNameForClient");
 
         if (textureNameMain.isEmpty()) {
-
             textureNameMain = "default_" + ModelManager.defaultModelName;
-
         }
 
         textureNameArmor = compound.getString("textureArmorNameForClient");
@@ -908,14 +897,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
             // Entity初回生成時のインベントリ更新用
             // ClientサイドにおいてthePlayerが取得できるまでに時間がかかる？ので待機
             // サーバーの方が先に起動するのでクライアント側が更新を受け取れない
-
-            if (firstload > 0) {
-                if (Minecraft.getMinecraft().world != null && Minecraft.getMinecraft().player != null) {
-                    syncNet(LMRMessage.EnumPacketMode.SERVER_REQUEST_MODEL, null);
-                    syncNet(LMRMessage.EnumPacketMode.REQUEST_CURRENT_ITEM, null);
-                    firstload = 0;
-                }
-            }*/
+*/
 
         } else {
             updateRemainsContract();
@@ -970,7 +952,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
         }
     }
 
-    protected void onSpawnWild() {
+    private void onSpawnWild() {
         // 野生メイドの色設定処理
         int nsize = 0;
         byte avaliableColor[] = new byte[16];
@@ -1429,8 +1411,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
         tagCompound.putString("Main", getModelNameMain());
         tagCompound.putString("Armor", getModelNameArmor());
 
-        this.setTextureNameMain(tagCompound.getString("Main"));
-        this.setTextureNameArmor(tagCompound.getString("Armor"));
         MaidPacketHandler.syncModel(this, tagCompound);
     }
 

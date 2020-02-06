@@ -1,9 +1,6 @@
 package mmr.maidmodredo;
 
-import mmr.maidmodredo.client.render.LittleButlerRender;
-import mmr.maidmodredo.client.render.LittleMaidBaseRender;
-import mmr.maidmodredo.client.render.MaidFishingBobberRender;
-import mmr.maidmodredo.client.render.WanderMaidRender;
+import mmr.maidmodredo.client.render.*;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.init.*;
 import mmr.maidmodredo.network.MaidPacketHandler;
@@ -11,6 +8,7 @@ import mmr.maidmodredo.utils.CommonHelper;
 import mmr.maidmodredo.utils.FileList;
 import mmr.maidmodredo.utils.ModelManager;
 import mmr.maidmodredo.utils.manager.StabilizerManager;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.world.biome.Biome;
@@ -92,8 +90,12 @@ public class MaidModRedo
         MaidJob.init();
 
         for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
+            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.OVERWORLD)) {
+                biome.getSpawns(EntityClassification.MONSTER).add(new Biome.SpawnListEntry(LittleEntitys.ZOMBIEMAID, 5, 1, 2));
+                biome.getSpawns(EntityClassification.MONSTER).add(new Biome.SpawnListEntry(LittleEntitys.ZOMBIEBUTLER, 5, 1, 2));
+            }
 
-            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLAINS) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST)) {
+            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.OVERWORLD) && (BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLAINS) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST))) {
                 biome.addStructure(LittleFeatures.MAIDCAFE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
             }
 
@@ -106,6 +108,8 @@ public class MaidModRedo
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.WANDERMAID, WanderMaidRender::new);
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.LITTLEMAID, LittleMaidBaseRender::new);
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.LITTLEBUTLER, LittleButlerRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.ZOMBIEMAID, ZombieMaidRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.ZOMBIEBUTLER, ZombieButlerRender::new);
 
 
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.MAID_FISHING_BOBBER, MaidFishingBobberRender::new);

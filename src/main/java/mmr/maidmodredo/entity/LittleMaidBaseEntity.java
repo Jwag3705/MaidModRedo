@@ -108,7 +108,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
     public EntityCaps maidCaps = new EntityCaps(this);
     public ModelConfigCompound textureData = new ModelConfigCompound(this, maidCaps);
 
-    protected boolean mstatOpenInventory;
+    private boolean mstatOpenInventory;
 
     public float entityIdFactor;
 
@@ -120,8 +120,8 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
     protected Counter maidOverDriveTime;
     protected Counter workingCount;
 
-    public int experienceLevel;
-    public int experienceTotal;
+    private int experienceLevel;
+    private int experienceTotal;
     public float experience;
     protected static final DataParameter<Float> dataWatch_MaidExpValue = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.FLOAT);
 

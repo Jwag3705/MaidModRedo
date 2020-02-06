@@ -38,6 +38,7 @@ public class LittleItems {
 
 
     public static final Item LITTLEMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.LITTLEMAID, 0xe3e3e3, 0xa45131, (new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
+    public static final Item LITTLEBUTLER_SPAWNEGG = new SpawnEggItem(LittleEntitys.LITTLEBUTLER, 0x382929, 0xa45131, (new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
     public static final Item WANDERMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.WANDERMAID, 4547222, 15377456, (new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
 
     @SubscribeEvent
@@ -67,6 +68,7 @@ public class LittleItems {
         event.getRegistry().register(HOUSEWAND.setRegistryName("housewand"));
         event.getRegistry().register(JOBBOOK.setRegistryName("job_book"));
         event.getRegistry().register(LITTLEMAID_SPAWNEGG.setRegistryName("littlemaid_spawnegg"));
+        event.getRegistry().register(LITTLEBUTLER_SPAWNEGG.setRegistryName("littlebutler_spawnegg"));
         event.getRegistry().register(WANDERMAID_SPAWNEGG.setRegistryName("wandermaid_spawnegg"));
     }
 }

@@ -1,4 +1,4 @@
-package mmr.maidmodredo.utils;
+package mmr.maidmodredo.utils.entitycap;
 
 import mmr.maidmodredo.client.maidmodel.IModelCaps;
 import net.minecraft.entity.LivingEntity;

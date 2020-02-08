@@ -90,12 +90,12 @@ public class MaidModRedo
         MaidJob.init();
 
         for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
-            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.OVERWORLD)) {
-                biome.getSpawns(EntityClassification.MONSTER).add(new Biome.SpawnListEntry(LittleEntitys.ZOMBIEMAID, 5, 1, 2));
-                biome.getSpawns(EntityClassification.MONSTER).add(new Biome.SpawnListEntry(LittleEntitys.ZOMBIEBUTLER, 5, 1, 2));
-            }
 
-            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.OVERWORLD) && (BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLAINS) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST))) {
+            biome.getSpawns(EntityClassification.MONSTER).add(new Biome.SpawnListEntry(LittleEntitys.ZOMBIEMAID, 5, 1, 2));
+            biome.getSpawns(EntityClassification.MONSTER).add(new Biome.SpawnListEntry(LittleEntitys.ZOMBIEBUTLER, 5, 1, 2));
+
+
+            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLAINS) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST)) {
                 biome.addStructure(LittleFeatures.MAIDCAFE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
             }
 

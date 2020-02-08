@@ -1,4 +1,4 @@
-package mmr.maidmodredo.utils;
+package mmr.maidmodredo.utils.entitycap;
 
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 

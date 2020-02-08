@@ -26,7 +26,7 @@ public class JobBookItem extends Item {
     public ActionResultType onItemUse(ItemUseContext context) {
         World world = context.getWorld();
         BlockPos blockpos = context.getPos();
-        if (context.getFace() != Direction.DOWN && world.getBlockState(blockpos.up()).isAir(world, blockpos.up()) && world.getBlockState(blockpos.up(2)).isAir(world, blockpos.up(2))) {
+        if (context.getFace() != Direction.DOWN && world.getBlockState(blockpos.up()).isAir(world, blockpos.up())) {
 
             PlayerEntity playerentity = context.getPlayer();
             world.playSound(playerentity, blockpos, SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.BLOCKS, 1.0F, 1.0F);

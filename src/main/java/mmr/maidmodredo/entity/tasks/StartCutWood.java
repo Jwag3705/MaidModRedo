@@ -36,9 +36,12 @@ public class StartCutWood extends Task<LittleMaidBaseEntity> {
 
     @Override
     protected boolean shouldExecute(ServerWorld worldIn, LittleMaidBaseEntity owner) {
+        BlockPos jobPos = owner.getBrain().getMemory(MemoryModuleType.JOB_SITE).get().getPos();
         if (owner.getMaidData().getJob() != MaidJob.LUMBERJACK) {
             return false;
         } else if (!(owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof AxeItem)) {
+            return false;
+        } else if (owner.getDistanceSq(jobPos.getX(), jobPos.getY(), jobPos.getZ()) > 24 * 24) {
             return false;
         } else {
             this.canCutting = false;

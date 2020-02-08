@@ -19,8 +19,8 @@ import mmr.maidmodredo.inventory.InventoryMaidMain;
 import mmr.maidmodredo.inventory.MaidInventoryContainer;
 import mmr.maidmodredo.network.MaidPacketHandler;
 import mmr.maidmodredo.utils.Counter;
-import mmr.maidmodredo.utils.EntityCaps;
 import mmr.maidmodredo.utils.ModelManager;
+import mmr.maidmodredo.utils.entitycap.EntityCaps;
 import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.*;
@@ -98,11 +98,13 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
     public static final MaidAnimation TALK_ANIMATION = MaidAnimation.create(100);
     public static final MaidAnimation PET_ANIMATION = MaidAnimation.create(100);
     public static final MaidAnimation FARM_ANIMATION = MaidAnimation.create(15);
+    public static final MaidAnimation EAT_ANIMATION = MaidAnimation.create(14);
 
     private static final MaidAnimation[] ANIMATIONS = {
             TALK_ANIMATION,
             PET_ANIMATION,
-            FARM_ANIMATION
+            FARM_ANIMATION,
+            EAT_ANIMATION
     };
 
     public EntityCaps maidCaps = new EntityCaps(this);
@@ -594,11 +596,13 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
 
                 addContractLimit(recontract);
 
+                MaidPacketHandler.animationModel(this, EAT_ANIMATION);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
             } else if (itemstack.getItem() == Items.SUGAR) {
                 this.heal(1);
                 itemstack.shrink(1);
                 addContractLimit(recontract);
+                MaidPacketHandler.animationModel(this, EAT_ANIMATION);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
             }
         }
@@ -1142,9 +1146,8 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
                     return true;
                 }
             } else {
-                if (!itemstack.isEmpty()) {
 
-                    if (SWEETITEM.contains(item) && this.getHealth() < this.getMaxHealth()) {
+                if (!itemstack.isEmpty() && SWEETITEM.contains(item) && this.getHealth() < this.getMaxHealth()) {
                         if (item.isFood()) {
                             if (!player.abilities.isCreativeMode) {
                                 itemstack.shrink(1);
@@ -1183,7 +1186,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
                         //getEntityWorld().setEntityState(this, (byte) 11);
                         return true;
                     }
-                }
+
 
                 if (this.isOwner(player) && item == Items.SUGAR) {
                     if (!this.world.isRemote) {
@@ -1211,8 +1214,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
 
                     return true;
                 } else*/
-                if (item.itemInteractionForEntity(itemstack, player, this, hand)) {
-                } else if (this.isOwner(player) && !SWEETITEM.contains(item) && item != Items.FEATHER) {
+                if (this.isOwner(player) && !item.itemInteractionForEntity(itemstack, player, this, hand)) {
                     if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
                         if (!player.world.isRemote) {
                             ServerPlayerEntity entityPlayerMP = (ServerPlayerEntity) player;

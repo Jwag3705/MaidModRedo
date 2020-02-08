@@ -93,7 +93,7 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
         modelMain.setCapsValue(IModelCaps.caps_crossbow, entityIn.isCharging());
         modelMain.setCapsValue(IModelCaps.caps_isWait, entityIn.isMaidWait());
         modelMain.setCapsValue(IModelCaps.caps_isChild, entityIn.isChild());
-        modelMain.setCapsValue(IModelCaps.caps_entityIdFactor, 0F);
+        modelMain.setCapsValue(IModelCaps.caps_entityIdFactor, entityIn.entityIdFactor);
         modelMain.setCapsValue(IModelCaps.caps_ticksExisted, entityIn.ticksExisted);
         //カスタム設定
         modelMain.setCapsValue(IModelCaps.caps_motionSitting, false);

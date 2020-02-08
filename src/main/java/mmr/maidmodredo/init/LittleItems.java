@@ -13,6 +13,13 @@ import net.minecraftforge.fml.common.Mod;
 public class LittleItems {
     public static final Item APPLE_JUICE = new DrinkItem((new Item.Properties()).food(LittleFoods.APPLE_JUICE).group(LittleItemGroups.LITTLEMAID));
 
+    public static final Item BLUEBERRY_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.LITTLEMAID));
+    public static final Item CHEESECAKE_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.LITTLEMAID));
+    public static final Item CHERRY_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.LITTLEMAID));
+    public static final Item CHOCOLATE_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.LITTLEMAID));
+    public static final Item STRAWBERRY_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.LITTLEMAID));
+
+
     public static final Item COMBINED_DONUT = new Item((new Item.Properties()).food(LittleFoods.DONUT).group(LittleItemGroups.LITTLEMAID));
     public static final Item JELLY_DONUT = new Item((new Item.Properties()).food(LittleFoods.DONUT).group(LittleItemGroups.LITTLEMAID));
     public static final Item SUGAR_DONUT = new Item((new Item.Properties()).food(LittleFoods.DONUT).group(LittleItemGroups.LITTLEMAID));
@@ -44,6 +51,12 @@ public class LittleItems {
     @SubscribeEvent
     public static void onItemRegistry(final RegistryEvent.Register<Item> event) {
         event.getRegistry().register(APPLE_JUICE.setRegistryName("apple_juice"));
+
+        event.getRegistry().register(BLUEBERRY_PIE.setRegistryName("blueberry_pie"));
+        event.getRegistry().register(CHEESECAKE_PIE.setRegistryName("cheesecake_pie"));
+        event.getRegistry().register(CHERRY_PIE.setRegistryName("cherry_pie"));
+        event.getRegistry().register(CHOCOLATE_PIE.setRegistryName("chocolate_pie"));
+        event.getRegistry().register(STRAWBERRY_PIE.setRegistryName("strawberry_pie"));
 
         event.getRegistry().register(COMBINED_DONUT.setRegistryName("combined_donut"));
         event.getRegistry().register(JELLY_DONUT.setRegistryName("jelly_donut"));

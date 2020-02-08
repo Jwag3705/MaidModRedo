@@ -87,7 +87,8 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
     });
     private static final Set<Item> SWEETITEM = Sets.newHashSet(Items.SUGAR, Items.COOKIE, Items.PUMPKIN_PIE, LittleItems.CARAMEL_APPLE
             , LittleItems.STRAWBERRY_CAKE, LittleItems.REDVELVET_CAKE, LittleItems.LAVENDER_CAKE, LittleItems.ICECREAM_CAKE, LittleItems.DEVILSFOOD_CAKE, LittleItems.COFFEE_CAKE, LittleItems.CHEESE_CAKE, LittleItems.CARROT_CAKE, LittleItems.BIRTHDAY_CAKE
-            , LittleItems.COMBINED_DONUT, LittleItems.JELLY_DONUT, LittleItems.POWDERD_DONUT, LittleItems.SUGAR_DONUT);
+            , LittleItems.COMBINED_DONUT, LittleItems.JELLY_DONUT, LittleItems.POWDERD_DONUT, LittleItems.SUGAR_DONUT
+            , LittleItems.BLUEBERRY_PIE, LittleItems.CHEESECAKE_PIE, LittleItems.CHERRY_PIE, LittleItems.CHOCOLATE_PIE, LittleItems.STRAWBERRY_PIE);
 
     private InventoryMaidMain inventoryMaidMain;
     private InventoryMaidEquipment inventoryMaidEquipment;

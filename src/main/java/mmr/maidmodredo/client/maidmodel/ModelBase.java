@@ -18,8 +18,6 @@ public abstract class ModelBase<T extends LivingEntity> extends AbstractModelBas
 	public LivingRenderer render;
 
 	// ModelBaseとある程度互換
-	public int textureWidth = 64;
-	public int textureHeight = 32;
 	public float onGrounds[] = new float[] {0.0F, 0.0F};
 	public int dominantArm = 0;
 	public boolean isRiding = false;

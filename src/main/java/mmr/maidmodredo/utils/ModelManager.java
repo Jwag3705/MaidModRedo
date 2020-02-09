@@ -3,9 +3,11 @@ package mmr.maidmodredo.utils;
 import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.api.classutil.FileClassUtil;
 import mmr.maidmodredo.client.maidmodel.*;
+import mmr.maidmodredo.client.resource.NewZipTexturesWapper;
 import mmr.maidmodredo.client.resource.OldZipTexturesWrapper;
 import mmr.maidmodredo.entity.LittleButlerEntity;
 import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.monstermaid.EnderMaidEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -98,6 +100,7 @@ public class ModelManager {
         addSearch("littleMaidMob", "/assets/minecraft/textures/entity/littleMaid/", "ModelMulti_");
         addSearch("littleMaidMob", "/assets/minecraft/textures/entity/littleMaid/", "ModelLittleMaid_");
         addSearch("littleMaidMob", "/assets/minecraft/textures/entity/LittleButler/", "ModelLittleMaid_");
+        addSearch("MaidModRedo", "/assets/maidmodredo/textures/entity/monstermaid/EnderMaid/", "EnderMaidModel_");
         addSearch("littleMaidMob", "/mob/ModelMulti/", "ModelMulti_");
         addSearch("littleMaidMob", "/mob/littleMaid/", "ModelLittleMaid_");
     }
@@ -174,6 +177,8 @@ public class ModelManager {
     private Class setSupportEntity(String fname) {
         if (fname.toLowerCase().contains("littlebutler")) {
             return LittleButlerEntity.class;
+        } else if (fname.toLowerCase().contains("endermaid")) {
+            return EnderMaidEntity.class;
         } else {
             return LittleMaidEntity.class;
         }
@@ -204,6 +209,8 @@ public class ModelManager {
         // TODO 実験コード
         buildCrafterTexture();
 
+        buildEnderGirlTexture();
+
         // テクスチャパッケージにモデルクラスを紐付け
         ModelMultiBase[] ldm = modelMap.get(defaultModelName);
         if (ldm == null && !modelMap.isEmpty()) {
@@ -216,6 +223,9 @@ public class ModelManager {
                 //大文字小文字の差は無視する
                 for (String key : modelMap.keySet()) {
                     if (key.toLowerCase().equals(ltb.modelName.toLowerCase())) {
+                        //fix first upper case(example: tea -> Tea)
+                        ltb.modelName = ltb.modelName.substring(0, 1).toUpperCase() + ltb.modelName.substring(1).toLowerCase();
+
                         ltb.setModels(key, modelMap.get(ltb.modelName), ldm);
                         break;
                     }
@@ -260,10 +270,31 @@ public class ModelManager {
             MaidModRedo.LOGGER.debug("texture: %s(%s) - hasModel:%b", lbox.textureName, lbox.fileName, lbox.models != null);
         }
 
+        setDefaultTexture(EnderMaidEntity.class, getTextureBox("endermaid_Ender"));
         setDefaultTexture(LittleMaidEntity.class, getTextureBox("default_" + defaultModelName));
         setDefaultTexture(LittleButlerEntity.class, getTextureBox("littlebutler_Aug"));
 
         return false;
+    }
+
+    private void buildEnderGirlTexture() {
+        TextureBox lbox = new TextureBox(LittleMaidEntity.class, "Crafter_Steve", new String[]{"", "", ""});
+        lbox.fileName = "";
+
+        lbox.addTexture(0x0c, "/assets/maidmodredo/textures/entity/monstermaid/endermaid/endermaid_0c.png");
+        /*if (armorFilenamePrefix != null && armorFilenamePrefix.length > 0) {
+            for (String ls : armorFilenamePrefix) {
+                Map<Integer, ResourceLocation> lmap = new HashMap<Integer, ResourceLocation>();
+                lmap.put(tx_armor1, new ResourceLocation(
+                        (new StringBuilder()).append("textures/models/armor/").append(ls).append("_layer_2.png").toString()));
+                lmap.put(tx_armor2, new ResourceLocation(
+                        (new StringBuilder()).append("textures/models/armor/").append(ls).append("_layer_1.png").toString()));
+                lbox.armors.put(ls, lmap);
+            }
+        }*/
+        lbox.addTexture(0x3c, "/assets/maidmodredo/textures/entity/monstermaid/endermaid/endermaid_3c.png");
+
+        textures.add(lbox);
     }
 
     //Entityのクラスでテクスチャを分ける
@@ -271,6 +302,8 @@ public class ModelManager {
     private void setTextureForType(TextureBox lbox) {
         if (lbox.modelEntity == LittleButlerEntity.class) {
             setDefaultTexture(LittleButlerEntity.class, lbox);
+        } else if (lbox.modelEntity == EnderMaidEntity.class) {
+            //setDefaultTexture(EnderMaidEntity.class, lbox);
         } else {
             setDefaultTexture(LittleMaidEntity.class, lbox);
         }
@@ -449,7 +482,7 @@ public class ModelManager {
                 mlm[1] = cm.newInstance(lsize[0]);
                 mlm[2] = cm.newInstance(lsize[1]);
                 modelMap.put(pn, mlm);
-                MaidModRedo.LOGGER.debug("getModelClass-%s:%s", pn, cn);
+                MaidModRedo.LOGGER.debug("getModelClass-" + pn + ":" + cn);
             } catch (Exception exception) {
                 MaidModRedo.LOGGER.debug("getModelClass-Exception: %s", fname);
                 //if(DevMode.DEVELOPMENT_debug_MODE || LMRConfig.cfg_PrintdebugMessage) exception.printStackTrace();
@@ -497,7 +530,11 @@ public class ModelManager {
                         MaidModRedo.LOGGER.debug("getTextureName-append-texturePack-%s", pn);
                     }
                     //lts.addTexture(lindex, fname);
-                    lts.addTexture(lindex, fname);
+                    if (fname.contains("maidmodredo")) {
+                        lts.addTexture(lindex, "maidmodredo:" + fname);
+                    } else {
+                        lts.addTexture(lindex, fname);
+                    }
                     return true;
                 }
             }
@@ -527,6 +564,7 @@ public class ModelManager {
                         String lt1 = "mob/littleMaid";
                         String lt2 = "mob/ModelMulti";
                         String lt3 = "mob/LittleButler";
+                        String lt4 = "mob/EnderMaid";
                         addTextureName(zipentry.getName(), pSearch);
                         if (FMLEnvironment.dist == Dist.CLIENT &&
                                 (zipentry.getName().startsWith(lt1)
@@ -534,6 +572,12 @@ public class ModelManager {
                                         || zipentry.getName().startsWith(lt3)
                                         || (!zipentry.getName().equals(zipentry.getName().toLowerCase())))) {
                             OldZipTexturesWrapper.keys.add(zipentry.getName());
+                        }
+
+                        if (FMLEnvironment.dist == Dist.CLIENT &&
+                                (zipentry.getName().startsWith(lt4)
+                                        || (!zipentry.getName().equals(zipentry.getName().toLowerCase())))) {
+                            NewZipTexturesWapper.keys.add(zipentry.getName());
                         }
                     }
                 }
@@ -574,6 +618,7 @@ public class ModelManager {
                             String lt1 = "mob/littleMaid";
                             String lt2 = "mob/ModelMulti";
                             String lt3 = "mob/LittleButler";
+                            String lt4 = "mob/EnderMaid";
                             String loc = s.substring(i);
                             if (loc.startsWith("/")) {
                                 loc = loc.substring(1);
@@ -585,6 +630,13 @@ public class ModelManager {
                                             || (!loc.equals(loc.toLowerCase())))) {
                                 OldZipTexturesWrapper.keys.add(loc);
                             }
+
+                            if (FMLEnvironment.dist == Dist.CLIENT &&
+                                    (loc.startsWith(lt4)
+                                            || (!loc.equals(loc.toLowerCase())))) {
+                                NewZipTexturesWapper.keys.add(loc);
+                            }
+
 //							addTextureName(s.substring(i).replace('\\', '/'));
                         }
                     }/* else {

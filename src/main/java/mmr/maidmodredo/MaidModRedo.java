@@ -110,6 +110,7 @@ public class MaidModRedo
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.LITTLEBUTLER, LittleButlerRender::new);
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.ZOMBIEMAID, ZombieMaidRender::new);
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.ZOMBIEBUTLER, ZombieButlerRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.ENDERMAID, EnderMaidRender::new);
 
 
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.MAID_FISHING_BOBBER, MaidFishingBobberRender::new);

@@ -102,6 +102,8 @@ public class ZombieMaidModel<T extends ZombieMaidEntity> extends SegmentedModel<
         float f = MathHelper.sin(this.swingProgress * (float) Math.PI);
         float f1 = MathHelper.sin((1.0F - (1.0F - this.swingProgress) * (1.0F - this.swingProgress)) * (float) Math.PI);
 
+        this.bipedHead.rotateAngleY = netHeadYaw * ((float) Math.PI / 180F);
+        this.bipedHead.rotateAngleX = headPitch * ((float) Math.PI / 180F);
 
         this.bipedRightArm.rotateAngleZ = 0.0F;
         this.bipedLeftArm.rotateAngleZ = 0.0F;

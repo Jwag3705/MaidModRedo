@@ -59,7 +59,7 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
 
     public void setModelValues(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, IModelCaps pEntityCaps) {
         //matrixStackIn.push();
-        modelMain.model = entityIn.getModelConfigCompound().textureModel[0];
+        modelMain.model = entityIn.getModelConfigCompound().textureModel[1];
         modelFATT.modelInner = entityIn.getModelConfigCompound().textureModel[1];
         modelFATT.modelOuter = entityIn.getModelConfigCompound().textureModel[2];
         //modelMain.model = ((TextureBox) entityIn.getTextureBox()[0]).models[0];

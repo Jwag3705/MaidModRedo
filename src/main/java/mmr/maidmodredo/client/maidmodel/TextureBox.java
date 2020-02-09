@@ -215,8 +215,15 @@ public class TextureBox extends TextureBoxBase {
 	
 	public boolean addTexture(int pIndex, String pLocation) {
 		String ls = "/assets/minecraft/";
+		String ls2 = "/assets/maidmodredo/";
 		if (pLocation.startsWith(ls)) {
 			pLocation = pLocation.substring(ls.length());
+		} else if (pLocation.contains(ls2)) {
+			pLocation = pLocation.substring("maidmodredo:".length() + ls2.length());
+
+			pLocation = "maidmodredo:" + pLocation;
+
+			ls = "/assets/maidmodredo/";
 		}
 		boolean lflag = false;
 		switch ((pIndex & 0xfff0)) {

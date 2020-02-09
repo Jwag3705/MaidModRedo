@@ -19,6 +19,10 @@
   "item.maidmodredo.littlemaid_spawnegg": "LittleMaid SpawnEgg",
   "item.maidmodredo.littlebutler_spawnegg": "LittleButler SpawnEgg",
   "item.maidmodredo.wandermaid_spawnegg": "WanderMaid SpawnEgg",
+  "item.maidmodredo.endermaid_spawnegg": "EnderMaid SpawnEgg",
+  "item.maidmodredo.zombiemaid_spawnegg": "ZombieMaid SpawnEgg",
+  "item.maidmodredo.zombiebutler_spawnegg": "ZombieButler SpawnEgg",
+
   "entity.maidmodredo.littlemaid": "LittleMaid",
   "entity.maidmodredo.littlebuttler": "LittleButler",
   "entity.maidmodredo.wandermaid": "WanderMaid",

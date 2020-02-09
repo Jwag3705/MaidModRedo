@@ -10,6 +10,7 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
+import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.item.*;
@@ -89,6 +90,7 @@ public class BowShootTask extends Task<LittleMaidBaseEntity> {
 
         Brain<?> brain = entityIn.getBrain();
         entityIn.getBrain().removeMemory(this.field_220541_a);
+        brain.setFallbackActivity(Activity.IDLE);
         brain.updateActivity(worldIn.getDayTime(), worldIn.getGameTime());
     }
 

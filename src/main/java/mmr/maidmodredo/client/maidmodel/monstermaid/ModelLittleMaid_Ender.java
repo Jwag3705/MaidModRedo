@@ -110,7 +110,11 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
 
     @Override
     public void renderItems(IModelCaps pEntityCaps, MatrixStack stack, boolean left) {
-
+        if (left) {
+            this.handL.setAnglesAndRotation(stack);
+        } else {
+            this.handR.setAnglesAndRotation(stack);
+        }
     }
 
     @Override
@@ -450,5 +454,4 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
-
 }

@@ -954,7 +954,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
 //		recallRenderParamTextureName(textureModelNameForClient, textureArmorNameForClient);
         if (!isContract()) {
             //setMaidMode(EntityMode_Basic.mmode_Wild);
-            onSpawnWild();
+            //onSpawnWild();
         }
     }
 

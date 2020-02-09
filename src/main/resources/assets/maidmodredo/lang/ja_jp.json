@@ -20,6 +20,10 @@
   "item.maidmodredo.littlebutler_spawnegg": "リトルバトラーのスポーンエッグ",
   "item.maidmodredo.wandermaid_spawnegg": "商人メイドのスポーンエッグ",
   "entity.maidmodredo.littlemaid": "リトルメイド",
+  "item.maidmodredo.endermaid_spawnegg": "エンダーメイドのスポーンエッグ",
+  "item.maidmodredo.zombiemaid_spawnegg": "ゾンビメイドのスポーンエッグ",
+  "item.maidmodredo.zombiebutler_spawnegg": "ゾンビバトラーのスポーンエッグ",
+
   "entity.maidmodredo.littlebuttler": "リトルバトラー",
   "entity.maidmodredo.wandermaid": "商人メイド",
   "entity.maidmodredo.zombie_maid": "ゾンビメイド",

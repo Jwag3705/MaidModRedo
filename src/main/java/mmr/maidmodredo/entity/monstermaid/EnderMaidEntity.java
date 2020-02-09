@@ -1,6 +1,5 @@
 package mmr.maidmodredo.entity.monstermaid;
 
-import mmr.maidmodredo.client.maidmodel.TextureBoxBase;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -49,13 +48,23 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
     /**
      * Teleport the enderman to another entity
      */
-    private boolean teleportToEntity(Entity p_70816_1_) {
+    public boolean teleportToEntity(Entity p_70816_1_) {
         Vec3d vec3d = new Vec3d(this.getPosX() - p_70816_1_.getPosX(), this.getPosYHeight(0.5D) - p_70816_1_.getPosYEye(), this.getPosZ() - p_70816_1_.getPosZ());
         vec3d = vec3d.normalize();
         double d0 = 16.0D;
-        double d1 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * 8.0D - vec3d.x * 16.0D;
-        double d2 = this.getPosY() + (double) (this.rand.nextInt(16) - 8) - vec3d.y * 16.0D;
-        double d3 = this.getPosZ() + (this.rand.nextDouble() - 0.5D) * 8.0D - vec3d.z * 16.0D;
+        double d1 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * 16.0D - vec3d.x * 32.0D;
+        double d2 = this.getPosY() + (double) (this.rand.nextInt(16) - 8) - vec3d.y * 32.0D;
+        double d3 = this.getPosZ() + (this.rand.nextDouble() - 0.5D) * 16.0D - vec3d.z * 32.0D;
+        return this.teleportTo(d1, d2, d3);
+    }
+
+    public boolean teleportToOwner(Entity p_70816_1_) {
+        Vec3d vec3d = new Vec3d(this.getPosX() - p_70816_1_.getPosX(), this.getPosYHeight(0.5D) - p_70816_1_.getPosYEye(), this.getPosZ() - p_70816_1_.getPosZ());
+        vec3d = vec3d.normalize();
+        double d0 = 16.0D;
+        double d1 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * 4.0D - vec3d.x * 8.0D;
+        double d2 = this.getPosY() + (double) (this.rand.nextInt(6) - 3) - vec3d.y * 8.0D;
+        double d3 = this.getPosZ() + (this.rand.nextDouble() - 0.5D) * 4.0D - vec3d.z * 8.0D;
         return this.teleportTo(d1, d2, d3);
     }
 
@@ -127,16 +136,6 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
         }
     }
 
-    private void onSpawnWild() {
-        // 野生メイドの色設定処理
-        int nsize = 0;
-        byte avaliableColor[] = new byte[16];
-        TextureBoxBase box = getModelConfigCompound().textureBox[0];
-        for (byte i = 0; i < 16; i++) {
-            if ((box.wildColor & 1 << i) > 0) {
-                avaliableColor[nsize++] = i;
-            }
-        }
-        setColor(avaliableColor[rand.nextInt(nsize)]);
+    public void onSpawnWithEgg() {
     }
 }

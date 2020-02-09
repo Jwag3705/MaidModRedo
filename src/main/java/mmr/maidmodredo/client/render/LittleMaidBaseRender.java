@@ -3,7 +3,7 @@ package mmr.maidmodredo.client.render;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mmr.maidmodredo.client.maidmodel.IModelCaps;
 import mmr.maidmodredo.client.maidmodel.ModelBase;
-import mmr.maidmodredo.client.maidmodel.ModelLittleMaidBase;
+import mmr.maidmodredo.client.maidmodel.ModelMultiBase;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.utils.helper.RendererHelper;
 import net.minecraft.client.Minecraft;
@@ -229,8 +229,8 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
 
                 // Forge: moved this call down, fixes incorrect offset while sneaking.
                 //Force render(?)
-                if (modelMain.model instanceof ModelLittleMaidBase) {
-                    ModelLittleMaidBase<T> maidBase = (ModelLittleMaidBase<T>) modelMain.model;
+                if (modelMain.model instanceof ModelMultiBase) {
+                    ModelMultiBase<T> maidBase = (ModelMultiBase<T>) modelMain.model;
 
                     if (flag) {
                         maidBase.renderItems(p_188358_1_, matrixStackIn, flag);

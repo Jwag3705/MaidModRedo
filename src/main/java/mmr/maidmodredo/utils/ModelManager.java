@@ -10,6 +10,7 @@ import mmr.maidmodredo.client.resource.OldZipTexturesWrapper;
 import mmr.maidmodredo.entity.LittleButlerEntity;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import mmr.maidmodredo.entity.monstermaid.EnderMaidEntity;
+import mmr.maidmodredo.init.MaidModels;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -275,32 +276,28 @@ public class ModelManager {
     }
 
     private Class setSupportEntity(String fname) {
-        if (fname.toLowerCase().contains("littlebutler")) {
-            return LittleButlerEntity.class;
-        } else if (fname.toLowerCase().contains("endermaid")) {
-            return EnderMaidEntity.class;
-        } else {
-            return LittleMaidEntity.class;
-        }
+        return MaidModels.maidModelsList.stream().filter((entity) -> {
+            return fname.toLowerCase().contains(entity.getModelName());
+        }).findAny().orElse(MaidModels.LITTLEMAID).getEntityClass();
+
     }
 
     //Returns true if both modelEntity and textureDirectory have a relationship
     public boolean checkModelName(TextureBox ltb) {
-        if (ltb.modelEntity == LittleMaidEntity.class && ltb.textureDir[1].toLowerCase().contains("littlemaid")) {
-            return true;
-        } else if (ltb.modelEntity == LittleButlerEntity.class && ltb.textureDir[1].toLowerCase().contains("littlebutler")) {
-            return true;
-        } else if (ltb.modelEntity == EnderMaidEntity.class && ltb.textureDir[1].toLowerCase().contains("endermaid")) {
-            return true;
-        } else {
-            return false;
+
+        for (int i = 0; i < MaidModels.maidModelsList.size(); i++) {
+            if (ltb.modelEntity == MaidModels.maidModelsList.get(i).getEntityClass() && ltb.textureDir[1].toLowerCase().contains(MaidModels.maidModelsList.get(i).getModelName())) {
+                return true;
+            }
         }
+        return false;
     }
 
 
     //Entityのクラスでテクスチャを分ける
     //TODO
     private void setTextureForType(TextureBox lbox) {
+        ;
         if (modelEntityMap.containsValue(lbox.modelEntity)) {
             setDefaultTexture(lbox.modelEntity, lbox);
         } else {

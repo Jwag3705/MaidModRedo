@@ -64,6 +64,8 @@ public class MaidModRedo
 
     private void setup(final FMLCommonSetupEvent event)
     {
+        MaidModels.registerModel();
+
         String classpath = System.getProperty("java.class.path");
         String separator = System.getProperty("path.separator");
 

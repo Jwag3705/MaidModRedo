@@ -1,6 +1,8 @@
 package mmr.maidmodredo.entity.monstermaid;
 
+import mmr.maidmodredo.api.MaidAnimation;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
+import mmr.maidmodredo.network.MaidPacketHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,6 +14,17 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EnderMaidEntity extends LittleMaidBaseEntity {
+
+    public static final MaidAnimation HOLD_ANIMATION = MaidAnimation.create(60);
+
+    private static final MaidAnimation[] ANIMATIONS = {
+            TALK_ANIMATION,
+            PET_ANIMATION,
+            FARM_ANIMATION,
+            EAT_ANIMATION,
+            HOLD_ANIMATION
+    };
+
     public EnderMaidEntity(EntityType<? extends LittleMaidBaseEntity> p_i48575_1_, World p_i48575_2_) {
         super(p_i48575_1_, p_i48575_2_);
     }
@@ -78,6 +91,7 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
         if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return false;
         boolean flag2 = p_70816_1_.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
         if (flag2) {
+            MaidPacketHandler.animationModel(this, HOLD_ANIMATION);
             this.world.playSound((PlayerEntity) null, p_70816_1_.prevPosX, p_70816_1_.prevPosY, p_70816_1_.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
             this.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
         }
@@ -159,5 +173,10 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
     @Override
     protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
         return sizeIn.height * 0.9F;
+    }
+
+    @Override
+    public MaidAnimation[] getAnimations() {
+        return ANIMATIONS;
     }
 }

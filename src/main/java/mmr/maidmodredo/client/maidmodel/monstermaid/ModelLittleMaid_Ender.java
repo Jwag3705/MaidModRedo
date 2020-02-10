@@ -14,7 +14,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMultiMMMBase<T> {
-    private MaidModelRenderer maidCap;
+    public MaidModelRenderer maidCap;
     public MaidModelRenderer handR;
     public MaidModelRenderer legR;
     public MaidModelRenderer head;
@@ -73,7 +73,7 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
 
         maidCap = new MaidModelRenderer(this, 35, 10);
         maidCap.setRotationPoint(0.0F, -4.0F, 0.0F);
-        maidCap.addBox(-3.5F, -10.0F, -4.0F, 7, 2, 2, 0.0F, false);
+        maidCap.addBox(-3.5F, -10.8F, -4.0F, 7, 2, 2, 0.0F, false);
         this.mainFrame.addChild(head);
         this.mainFrame.addChild(body);
         this.mainFrame.addChild(hair);
@@ -301,6 +301,8 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
 
         animator.update(animation);
         if (animation.getAnimation() == LittleMaidBaseEntity.TALK_ANIMATION) {
+            handR.setRotateAngle(0.0F, 0.0F, 0.0F);
+            handL.setRotateAngle(0.0F, 0.0F, 0.0F);
 
             animator.setAnimation(LittleMaidBaseEntity.TALK_ANIMATION);
             animator.startKeyframe(5);
@@ -413,6 +415,24 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
 
 
             animator.resetKeyframe(4);
+        }
+
+        if (animation.getAnimation() == EnderMaidEntity.HOLD_ANIMATION) {
+            handR.setRotateAngle(0.0F, 0.0F, 0.0F);
+            handL.setRotateAngle(0.0F, 0.0F, 0.0F);
+
+            animator.setAnimation(EnderMaidEntity.HOLD_ANIMATION);
+            animator.startKeyframe(5);
+
+            animator.rotate(this.handR, -1.2F, 0, 0);
+            animator.rotate(this.handL, -1.2F, 0, 0);
+            animator.endKeyframe();
+
+            animator.startKeyframe(40);
+            animator.rotate(this.handR, -1.2F, 0, 0);
+            animator.rotate(this.handL, -1.2F, 0, 0);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
         }
     }
 

@@ -105,6 +105,8 @@ public class WalkToOwner extends Task<LittleMaidBaseEntity> {
                 for (int i1 = 0; i1 <= 4; ++i1) {
                     if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.canTeleportToBlock(owner.world, owner, new BlockPos(i + l, k - 1, j + i1))) {
                         owner.setLocationAndAngles((double) ((float) (i + l) + 0.5F), (double) k, (double) ((float) (j + i1) + 0.5F), owner.rotationYaw, owner.rotationPitch);
+
+                        owner.getBrain().removeMemory(MemoryModuleType.PATH);
                         return;
                     }
                 }

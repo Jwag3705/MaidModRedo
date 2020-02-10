@@ -14,6 +14,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMultiMMMBase<T> {
+    private MaidModelRenderer maidCap;
     public MaidModelRenderer handR;
     public MaidModelRenderer legR;
     public MaidModelRenderer head;
@@ -21,7 +22,7 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
     public MaidModelRenderer handL;
     public MaidModelRenderer legL;
     public MaidModelRenderer jaw;
-    public MaidModelRenderer hear;
+    public MaidModelRenderer hair;
 
     public ModelLittleMaid_Ender() {
         super();
@@ -56,9 +57,9 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         this.body = new MaidModelRenderer(this, 32, 16);
         this.body.setRotationPoint(0.0F, -4.0F, -0.0F);
         this.body.addBox(-3.5F, 0.0F, -2.0F, 7, 11, 4, 0.0F);
-        this.hear = new MaidModelRenderer(this, 0, 32);
-        this.hear.setRotationPoint(0.0F, -4.0F, -0.0F);
-        this.hear.addBox(-4.0F, -8.0F, -4.0F, 8, 12, 8, 0.75F);
+        this.hair = new MaidModelRenderer(this, 0, 32);
+        this.hair.setRotationPoint(0.0F, -4.0F, -0.0F);
+        this.hair.addBox(-4.0F, -8.0F, -4.0F, 8, 12, 8, 0.75F);
         this.handR = new MaidModelRenderer(this, 56, 0);
         this.handR.setRotationPoint(-4.5F, -1.6F, 0.0F);
         this.handR.addBox(-1.0F, -2.0F, -1.0F, 2, 16, 2, 0.0F);
@@ -69,14 +70,19 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         this.legL = new MaidModelRenderer(this, 56, 0);
         this.legL.setRotationPoint(2.0F, 7.0F, 0.0F);
         this.legL.addBox(-1.0F, 0.0F, -1.0F, 2, 17, 2, 0.0F);
+
+        maidCap = new MaidModelRenderer(this, 35, 10);
+        maidCap.setRotationPoint(0.0F, 24.0F, 0.0F);
+        maidCap.addBox(-3.5F, -38.0F, -4.0F, 7, 2, 2, 0.0F, false);
         this.mainFrame.addChild(head);
         this.mainFrame.addChild(body);
-        this.mainFrame.addChild(hear);
+        this.mainFrame.addChild(hair);
         this.mainFrame.addChild(jaw);
         this.mainFrame.addChild(legR);
         this.mainFrame.addChild(legL);
         this.mainFrame.addChild(handR);
         this.mainFrame.addChild(handL);
+        this.mainFrame.addChild(maidCap);
     }
 
     @Override
@@ -414,12 +420,8 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
                                 float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
         LittleMaidBaseEntity baseEntity = (LittleMaidBaseEntity) pEntityCaps.getCapsValue(IModelCaps.caps_Entity);
 
-        this.hear.rotateAngleY = pHeadYaw * ((float) Math.PI / 180F);
-        this.hear.rotateAngleX = pHeadPitch * ((float) Math.PI / 180F);
         this.head.rotateAngleY = pHeadYaw * ((float) Math.PI / 180F);
         this.head.rotateAngleX = pHeadPitch * ((float) Math.PI / 180F);
-        this.jaw.rotateAngleY = pHeadYaw * ((float) Math.PI / 180F);
-        this.jaw.rotateAngleX = pHeadPitch * ((float) Math.PI / 180F);
 
 
         this.handR.rotateAngleY = 0.0F;
@@ -448,6 +450,10 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         this.handL.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
         this.handR.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
         this.handL.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
+
+        this.jaw.copyModelAngles(head);
+        this.hair.copyModelAngles(head);
+        this.maidCap.copyModelAngles(head);
     }
 
     /**

@@ -2,10 +2,7 @@ package mmr.maidmodredo.entity.monstermaid;
 
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
@@ -30,6 +27,10 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
 
         if (this.getOwner() != null && this.getOwner().getPosY() < -10) {
             this.helpOwnerFromVoid(this.getOwner());
+        }
+
+        if (this.getOwner() != null && this.getPosY() < -10 && this.getOwner().onGround) {
+            this.teleportTo(this.getOwner().getPosX(), this.getOwner().getPosY(), this.getOwner().getPosZ());
         }
 
 
@@ -71,6 +72,7 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
     }
 
     public boolean helpOwnerFromVoid(LivingEntity p_70816_1_) {
+        p_70816_1_.fallDistance = 0.0F;
 
         net.minecraftforge.event.entity.living.EnderTeleportEvent event = new net.minecraftforge.event.entity.living.EnderTeleportEvent(p_70816_1_, this.getPosX(), this.getPosY(), this.getPosZ(), 0);
         if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return false;
@@ -86,6 +88,7 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
      * Teleport the enderman
      */
     private boolean teleportTo(double x, double y, double z) {
+        this.fallDistance = 0.0F;
         BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(x, y, z);
 
         while (blockpos$mutable.getY() > 0 && !this.world.getBlockState(blockpos$mutable).getMaterial().blocksMovement()) {
@@ -151,5 +154,10 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
     }
 
     public void onSpawnWithEgg() {
+    }
+
+    @Override
+    protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
+        return sizeIn.height * 0.9F;
     }
 }

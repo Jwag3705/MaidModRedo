@@ -11,7 +11,6 @@ import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.memory.WalkTarget;
-import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -201,7 +200,6 @@ public class LumberJackTask extends Task<LittleMaidBaseEntity> {
         this.breakingTime = 0;
         entityIn.getNavigator().clearPath();
         Brain<?> brain = entityIn.getBrain();
-        brain.setFallbackActivity(Activity.IDLE);
         brain.updateActivity(worldIn.getDayTime(), worldIn.getGameTime());
     }
 

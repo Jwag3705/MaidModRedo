@@ -269,7 +269,7 @@ public class ModelManager {
 
         setDefaultTexture(EnderMaidEntity.class, getTextureBox("endermaid_Ender"));
         setDefaultTexture(LittleMaidEntity.class, getTextureBox("default_" + defaultModelName));
-        setDefaultTexture(LittleButlerEntity.class, getTextureBox("littlebutler_Aug"));
+        setDefaultTexture(LittleButlerEntity.class, getTextureBox("littlebutler_SR2"));
 
         return false;
     }

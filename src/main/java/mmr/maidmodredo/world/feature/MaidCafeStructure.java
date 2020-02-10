@@ -10,6 +10,7 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.OverworldGenSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
@@ -44,20 +45,22 @@ public class MaidCafeStructure extends Structure<NoFeatureConfig> {
     @Override
     public boolean func_225558_a_(BiomeManager p_225558_1_, ChunkGenerator<?> chunkGen, Random rand, int chunkPosX, int chunkPosZ, Biome p_225558_6_) {
         ChunkPos chunkpos = this.getStartPositionForPosition(chunkGen, rand, chunkPosX, chunkPosZ, 0, 0);
-        if (chunkPosX == chunkpos.x && chunkPosZ == chunkpos.z) {
-            Biome biome = p_225558_1_.getBiome(new BlockPos(chunkPosX * 16 + 9, 0, chunkPosZ * 16 + 9));
-            if (chunkGen.hasStructure(biome, this)) {
+        if (chunkGen.getSettings() instanceof OverworldGenSettings) {
+            if (chunkPosX == chunkpos.x && chunkPosZ == chunkpos.z) {
+                Biome biome = p_225558_1_.getBiome(new BlockPos(chunkPosX * 16 + 9, 0, chunkPosZ * 16 + 9));
+                if (chunkGen.hasStructure(biome, this)) {
 
-                for (int k = chunkPosX - 10; k <= chunkPosX + 10; ++k) {
-                    for (int l = chunkPosZ - 10; l <= chunkPosZ + 10; ++l) {
-                        if (Feature.PILLAGER_OUTPOST.func_225558_a_(p_225558_1_, chunkGen, rand, k, l, p_225558_1_.getBiome(new BlockPos((k << 4) + 9, 0, (l << 4) + 9)))) {
-                            return false;
+                    for (int k = chunkPosX - 10; k <= chunkPosX + 10; ++k) {
+                        for (int l = chunkPosZ - 10; l <= chunkPosZ + 10; ++l) {
+                            if (Feature.PILLAGER_OUTPOST.func_225558_a_(p_225558_1_, chunkGen, rand, k, l, p_225558_1_.getBiome(new BlockPos((k << 4) + 9, 0, (l << 4) + 9)))) {
+                                return false;
+                            }
                         }
                     }
+
+
+                    return true;
                 }
-
-
-                return true;
             }
         }
 

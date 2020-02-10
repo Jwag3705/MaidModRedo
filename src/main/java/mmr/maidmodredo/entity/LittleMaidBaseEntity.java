@@ -1253,7 +1253,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
                     this.setAttackTarget((LivingEntity) null);
                     this.setMaidWait(true);
                     this.setFreedom(false);
-                    this.setHealth(20.0F);
+                    this.setHealth(this.getMaxHealth());
                     this.playTameEffect(true);
                     this.world.setEntityState(this, (byte) 7);
                     resetBrain((ServerWorld) this.world);

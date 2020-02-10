@@ -4,6 +4,7 @@ import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
@@ -22,6 +23,17 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
         super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
         this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
+    }
+
+    protected void updateAITasks() {
+
+
+        if (this.getOwner() != null && this.getOwner().getPosY() < -10) {
+            this.helpOwnerFromVoid(this.getOwner());
+        }
+
+
+        super.updateAITasks();
     }
 
     public void livingTick() {
@@ -58,14 +70,16 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
         return this.teleportTo(d1, d2, d3);
     }
 
-    public boolean teleportToOwner(Entity p_70816_1_) {
-        Vec3d vec3d = new Vec3d(this.getPosX() - p_70816_1_.getPosX(), this.getPosYHeight(0.5D) - p_70816_1_.getPosYEye(), this.getPosZ() - p_70816_1_.getPosZ());
-        vec3d = vec3d.normalize();
-        double d0 = 16.0D;
-        double d1 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * 4.0D - vec3d.x * 8.0D;
-        double d2 = this.getPosY() + (double) (this.rand.nextInt(6) - 3) - vec3d.y * 8.0D;
-        double d3 = this.getPosZ() + (this.rand.nextDouble() - 0.5D) * 4.0D - vec3d.z * 8.0D;
-        return this.teleportTo(d1, d2, d3);
+    public boolean helpOwnerFromVoid(LivingEntity p_70816_1_) {
+
+        net.minecraftforge.event.entity.living.EnderTeleportEvent event = new net.minecraftforge.event.entity.living.EnderTeleportEvent(p_70816_1_, this.getPosX(), this.getPosY(), this.getPosZ(), 0);
+        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return false;
+        boolean flag2 = p_70816_1_.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+        if (flag2) {
+            this.world.playSound((PlayerEntity) null, p_70816_1_.prevPosX, p_70816_1_.prevPosY, p_70816_1_.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
+            this.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+        }
+        return flag2;
     }
 
     /**

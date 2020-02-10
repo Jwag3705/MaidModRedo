@@ -72,8 +72,8 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         this.legL.addBox(-1.0F, 0.0F, -1.0F, 2, 17, 2, 0.0F);
 
         maidCap = new MaidModelRenderer(this, 35, 10);
-        maidCap.setRotationPoint(0.0F, 24.0F, 0.0F);
-        maidCap.addBox(-3.5F, -38.0F, -4.0F, 7, 2, 2, 0.0F, false);
+        maidCap.setRotationPoint(0.0F, -4.0F, 0.0F);
+        maidCap.addBox(-3.5F, -10.0F, -4.0F, 7, 2, 2, 0.0F, false);
         this.mainFrame.addChild(head);
         this.mainFrame.addChild(body);
         this.mainFrame.addChild(hair);

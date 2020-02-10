@@ -13,11 +13,14 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelMultiRender<T> {
@@ -248,6 +251,39 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
             }
         }
 
+    }
+
+    @Override
+    protected void applyRotations(T entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+        float f = entityLiving.getSwimAnimation(partialTicks);
+        if (entityLiving.isElytraFlying()) {
+            super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+            float f1 = (float) entityLiving.getTicksElytraFlying() + partialTicks;
+            float f2 = MathHelper.clamp(f1 * f1 / 100.0F, 0.0F, 1.0F);
+            if (!entityLiving.isSpinAttacking()) {
+                matrixStackIn.rotate(Vector3f.XP.rotationDegrees(f2 * (-90.0F - entityLiving.rotationPitch)));
+            }
+
+            Vec3d vec3d = entityLiving.getLook(partialTicks);
+            Vec3d vec3d1 = entityLiving.getMotion();
+            double d0 = Entity.horizontalMag(vec3d1);
+            double d1 = Entity.horizontalMag(vec3d);
+            if (d0 > 0.0D && d1 > 0.0D) {
+                double d2 = (vec3d1.x * vec3d.x + vec3d1.z * vec3d.z) / (Math.sqrt(d0) * Math.sqrt(d1));
+                double d3 = vec3d1.x * vec3d.z - vec3d1.z * vec3d.x;
+                matrixStackIn.rotate(Vector3f.YP.rotation((float) (Math.signum(d3) * Math.acos(d2))));
+            }
+        } else if (f > 0.0F) {
+            super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+            float f3 = entityLiving.isInWater() ? -90.0F - entityLiving.rotationPitch : -90.0F;
+            float f4 = MathHelper.lerp(f, 0.0F, f3);
+            matrixStackIn.rotate(Vector3f.XP.rotationDegrees(f4));
+            if (entityLiving.isActualySwimming()) {
+                //matrixStackIn.translate(0.0D, -1.0D, (double)0.3F);
+            }
+        } else {
+            super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+        }
     }
 
     @Override

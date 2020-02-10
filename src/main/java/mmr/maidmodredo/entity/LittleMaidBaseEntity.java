@@ -919,7 +919,54 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
         }
 
         super.tick();
+
+        this.updatePose();
     }
+
+    protected void updatePose() {
+        if (this.isPoseClear(Pose.SWIMMING)) {
+            Pose pose;
+            if (this.isSleeping()) {
+                pose = Pose.SLEEPING;
+            } else if (this.isSwimming()) {
+                pose = Pose.SWIMMING;
+            } else if (this.isSpinAttacking()) {
+                pose = Pose.SPIN_ATTACK;
+            } else {
+                pose = Pose.STANDING;
+            }
+
+            Pose pose1;
+            if (!this.isSpectator() && !this.isPassenger() && !this.isPoseClear(pose)) {
+                pose1 = Pose.SWIMMING;
+            } else {
+                pose1 = pose;
+            }
+
+            this.setPose(pose1);
+        }
+    }
+
+  /*  public void travel(Vec3d p_213352_1_) {
+        if (this.isServerWorld() && this.isInWater()) {
+            this.moveRelative(0.01F, p_213352_1_);
+            this.move(MoverType.SELF, this.getMotion());
+            this.setMotion(this.getMotion().scale(0.9D));
+        } else {
+            super.travel(p_213352_1_);
+        }
+
+    }
+
+    public void updateSwimming() {
+        if (!this.world.isRemote) {
+            if (this.isServerWorld() && this.isInWater()) {
+                this.setSwimming(true);
+            } else {
+                this.setSwimming(false);
+            }
+        }
+    }*/
 
     public boolean isShooting() {
         return isAggressive() && getHeldItem(Hand.MAIN_HAND).getItem() instanceof BowItem;

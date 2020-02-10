@@ -1,5 +1,6 @@
 package mmr.maidmodredo.client.render;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.client.model.ZombieMaidModel;
 import mmr.maidmodredo.entity.ZombieButlerEntity;
@@ -22,4 +23,11 @@ public class ZombieButlerRender<T extends ZombieButlerEntity> extends MobRendere
         return TEXTURE;
     }
 
+    protected void applyRotations(T entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+        if (entityLiving.isConverting()) {
+            rotationYaw += (float) (Math.cos((double) entityLiving.ticksExisted * 3.25D) * Math.PI * 0.25D);
+        }
+
+        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+    }
 }

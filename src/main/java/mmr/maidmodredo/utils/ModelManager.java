@@ -1,5 +1,7 @@
 package mmr.maidmodredo.utils;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.api.classutil.FileClassUtil;
 import mmr.maidmodredo.client.maidmodel.*;
@@ -69,6 +71,10 @@ public class ModelManager {
      * ローカルで保持しているモデルのリスト
      */
     protected Map<String, ModelMultiBase[]> modelMap = new TreeMap<String, ModelMultiBase[]>();
+
+    //It is use for match entity and model
+    protected Map<String, Class> modelEntityMap = Maps.newHashMap(ImmutableMap.of("littlemaid", LittleMaidEntity.class, "littlebutler", LittleButlerEntity.class
+            , "endermaid", EnderMaidEntity.class));
     /**
      * ローカルで保持しているテクスチャパック
      */
@@ -174,16 +180,6 @@ public class ModelManager {
         armorFilenamePrefix = new String[]{"leather", "chainmail", "iron", "diamond", "gold"};
     }
 
-    private Class setSupportEntity(String fname) {
-        if (fname.toLowerCase().contains("littlebutler")) {
-            return LittleButlerEntity.class;
-        } else if (fname.toLowerCase().contains("endermaid")) {
-            return EnderMaidEntity.class;
-        } else {
-            return LittleMaidEntity.class;
-        }
-    }
-
     public boolean loadTextures() {
         MaidModRedo.LOGGER.debug("loadTexturePacks.");
         // アーマーのファイル名を識別するための文字列を獲得する
@@ -209,8 +205,6 @@ public class ModelManager {
         // TODO 実験コード
         buildCrafterTexture();
 
-        buildEnderGirlTexture();
-
         // テクスチャパッケージにモデルクラスを紐付け
         ModelMultiBase[] ldm = modelMap.get(defaultModelName);
         if (ldm == null && !modelMap.isEmpty()) {
@@ -226,8 +220,11 @@ public class ModelManager {
                         //fix first upper case(example: tea -> Tea)
                         ltb.modelName = ltb.modelName.substring(0, 1).toUpperCase() + ltb.modelName.substring(1).toLowerCase();
 
-                        ltb.setModels(key, modelMap.get(ltb.modelName), ldm);
-                        break;
+                        if (checkModelName(ltb)) {
+                            ltb.setModels(key, modelMap.get(ltb.modelName), ldm);
+                            break;
+                        }
+
                     }
                 }
             }
@@ -277,33 +274,35 @@ public class ModelManager {
         return false;
     }
 
-    private void buildEnderGirlTexture() {
-        TextureBox lbox = new TextureBox(LittleMaidEntity.class, "Crafter_Steve", new String[]{"", "", ""});
-        lbox.fileName = "";
-
-        lbox.addTexture(0x0c, "/assets/maidmodredo/textures/entity/monstermaid/endermaid/endermaid_0c.png");
-        /*if (armorFilenamePrefix != null && armorFilenamePrefix.length > 0) {
-            for (String ls : armorFilenamePrefix) {
-                Map<Integer, ResourceLocation> lmap = new HashMap<Integer, ResourceLocation>();
-                lmap.put(tx_armor1, new ResourceLocation(
-                        (new StringBuilder()).append("textures/models/armor/").append(ls).append("_layer_2.png").toString()));
-                lmap.put(tx_armor2, new ResourceLocation(
-                        (new StringBuilder()).append("textures/models/armor/").append(ls).append("_layer_1.png").toString()));
-                lbox.armors.put(ls, lmap);
-            }
-        }*/
-        lbox.addTexture(0x3c, "/assets/maidmodredo/textures/entity/monstermaid/endermaid/endermaid_3c.png");
-
-        textures.add(lbox);
+    private Class setSupportEntity(String fname) {
+        if (fname.toLowerCase().contains("littlebutler")) {
+            return LittleButlerEntity.class;
+        } else if (fname.toLowerCase().contains("endermaid")) {
+            return EnderMaidEntity.class;
+        } else {
+            return LittleMaidEntity.class;
+        }
     }
+
+    //Returns true if both modelEntity and textureDirectory have a relationship
+    public boolean checkModelName(TextureBox ltb) {
+        if (ltb.modelEntity == LittleMaidEntity.class && ltb.textureDir[1].toLowerCase().contains("littlemaid")) {
+            return true;
+        } else if (ltb.modelEntity == LittleButlerEntity.class && ltb.textureDir[1].toLowerCase().contains("littlebutler")) {
+            return true;
+        } else if (ltb.modelEntity == EnderMaidEntity.class && ltb.textureDir[1].toLowerCase().contains("endermaid")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     //Entityのクラスでテクスチャを分ける
     //TODO
     private void setTextureForType(TextureBox lbox) {
-        if (lbox.modelEntity == LittleButlerEntity.class) {
-            setDefaultTexture(LittleButlerEntity.class, lbox);
-        } else if (lbox.modelEntity == EnderMaidEntity.class) {
-            //setDefaultTexture(EnderMaidEntity.class, lbox);
+        if (modelEntityMap.containsValue(lbox.modelEntity)) {
+            setDefaultTexture(lbox.modelEntity, lbox);
         } else {
             setDefaultTexture(LittleMaidEntity.class, lbox);
         }
@@ -774,18 +773,18 @@ public class ModelManager {
         return lreturn;
     }
 
-    public String getRandomTextureString(Random pRand) {
-        return getRandomTexture(pRand).textureName;
+    public String getRandomTextureString(IModelEntity entity, Random pRand) {
+        return getRandomTexture(entity, pRand).textureName;
     }
 
-    public TextureBoxServer getRandomTexture(Random pRand) {
+    public TextureBoxServer getRandomTexture(IModelEntity entity, Random pRand) {
         if (textureServer.isEmpty()) {
             return null;
         }
         // 野生色があるものをリストアップ
         List<TextureBoxServer> llist = new ArrayList<TextureBoxServer>();
         for (TextureBoxServer lbox : textureServer) {
-            if (lbox.getWildColorBits() > 0) {
+            if (lbox.modelEntity == entity.getClass() && lbox.getWildColorBits() > 0) {
                 llist.add(lbox);
             }
         }

@@ -11,6 +11,7 @@ public class TextureBoxServer extends TextureBoxBase {
 	}
 
 	public TextureBoxServer(TextureBox pBox) {
+		modelEntity = pBox.modelEntity;
 		localBox		= pBox;
 		contractColor	= pBox.getContractColorBits();
 		wildColor		= pBox.getWildColorBits();

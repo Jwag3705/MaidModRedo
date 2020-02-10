@@ -76,8 +76,8 @@ public class MaidModRedo
 
         StabilizerManager.init();
         ModelManager.instance.init();
-
         ModelManager.instance.loadTextures();
+
         if (CommonHelper.isClient) {
             debug("Localmode: InitTextureList.");
 

@@ -944,7 +944,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
         /*if (LMRConfig.cfg_isFixedWildMaid) {
             ls = "default_Orign";
         } else {*/
-        ls = ModelManager.instance.getRandomTextureString(rand);
+        ls = ModelManager.instance.getRandomTextureString(this, rand);
         //}
         textureData.setTextureInitServer(ls);
         MaidModRedo.LOGGER.debug("init-ID:%d, %s:%d", getEntityId(), textureData.textureBox[0].textureName, textureData.getColor());
@@ -1359,7 +1359,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
 
 
     protected void refreshModels() {
-        String defName = ModelManager.instance.getRandomTextureString(rand);
+        String defName = ModelManager.instance.getRandomTextureString(this, rand);
 
         TextureBoxBase mainModel = modelBoxAutoSelect(textureNameMain);
 

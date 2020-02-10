@@ -132,6 +132,10 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         // カウンタ系の加算値、リミット値の設定など行う予定。
     }
 
+    public boolean supportForEntity(Class entity) {
+        return entity == EnderMaidEntity.class;
+    }
+
     @Override
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks,
                                   float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {

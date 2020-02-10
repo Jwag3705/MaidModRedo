@@ -11,13 +11,13 @@ import java.util.Map;
 
 public class ModelBaseSolo<T extends LivingEntity> extends ModelBaseNihil<T> implements IModelBaseMMM {
 
-    public ModelMultiBase<T> model;
+    public ModelMultiBase model;
     public ResourceLocation[] textures;
     public static final ResourceLocation[] blanks = new ResourceLocation[0];
 
 
-    public ModelBaseSolo(MobRenderer pRender) {
-        rendererLivingEntity = pRender;
+    public ModelBaseSolo() {
+
     }
 
     @Override

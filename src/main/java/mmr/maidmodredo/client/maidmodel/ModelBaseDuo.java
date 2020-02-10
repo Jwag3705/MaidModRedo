@@ -15,8 +15,8 @@ import java.util.Map;
  */
 public class ModelBaseDuo<T extends LivingEntity> extends ModelBaseNihil<T> implements IModelBaseMMM {
 
-	public ModelMultiBase<T> modelOuter;
-	public ModelMultiBase<T> modelInner;
+    public ModelMultiBase modelOuter;
+    public ModelMultiBase modelInner;
 	/**
 	 * 部位毎のアーマーテクスチャの指定。
 	 * 外側。
@@ -45,8 +45,7 @@ public class ModelBaseDuo<T extends LivingEntity> extends ModelBaseNihil<T> impl
 
 	public float[] textureLightColor;
 
-	public ModelBaseDuo(MobRenderer pRender) {
-		rendererLivingEntity = pRender;
+    public ModelBaseDuo() {
 		renderParts = 0;
 	}
 

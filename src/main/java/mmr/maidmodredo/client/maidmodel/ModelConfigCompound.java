@@ -165,8 +165,8 @@ public class ModelConfigCompound {
                     lc = (color & 0x00ff) + (contract ? ModelManager.tx_eyecontract : ModelManager.tx_eyewild);
                     textures[0][1] = lbox.getTextureName(lc);
                     lf = true;
-                }
                     textureModel[0] = lbox.models[0];
+                }
 
             }
             // TODO ★ 暫定処置 クライアントに存在しないテクスチャが指定された場合、デフォルトを読み出す。
@@ -205,9 +205,9 @@ public class ModelConfigCompound {
                     textures[3][i] = lbox.getArmorTextureName(ModelManager.tx_armor1light, is);
                     textures[4][i] = lbox.getArmorTextureName(ModelManager.tx_armor2light, is);
                 }
-            }
                 textureModel[1] = lbox.models[1];
                 textureModel[2] = lbox.models[2];
+            }
 
 
         } else {
@@ -234,8 +234,8 @@ public class ModelConfigCompound {
                             textures[0][1] = lbox.localBox.getTextureName(lc);
                         }
                         lf = true;
-                    }
                         textureModel[0] = lbox.localBox.models[0];
+                    }
 
                 }
 
@@ -259,9 +259,9 @@ public class ModelConfigCompound {
                             }
                         }
                     }
-                }
                     textureModel[1] = lbox.localBox.models[1];
                     textureModel[2] = lbox.localBox.models[2];
+                }
 
 
             }

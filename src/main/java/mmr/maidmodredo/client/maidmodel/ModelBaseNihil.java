@@ -2,12 +2,9 @@ package mmr.maidmodredo.client.maidmodel;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.entity.LivingEntity;
 
 public class ModelBaseNihil<T extends LivingEntity> extends ModelBase<T> {
-
-	public MobRenderer rendererLivingEntity;
 
 	public boolean isAlphablend;
 	public boolean isModelAlphablend;

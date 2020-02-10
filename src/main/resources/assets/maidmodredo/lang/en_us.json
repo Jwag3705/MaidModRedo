@@ -26,6 +26,7 @@
   "entity.maidmodredo.littlemaid": "LittleMaid",
   "entity.maidmodredo.littlebuttler": "LittleButler",
   "entity.maidmodredo.wandermaid": "WanderMaid",
+  "entity.maidmodredo.ender_maid": "Ender Maid",
   "entity.maidmodredo.zombie_maid": "Zombie Maid",
   "entity.maidmodredo.zombie_buttler": "Zombie Butler",
   "item.maidmodredo.setbed": "Selected BedPostion: %s, %s, %s",

@@ -120,7 +120,7 @@ public class MaidModRedo
 
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
-
+        MaidRecipes.registerRecipe();
     }
 
     private void processIMC(final InterModProcessEvent event)

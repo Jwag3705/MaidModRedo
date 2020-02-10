@@ -12,6 +12,7 @@ import mmr.maidmodredo.api.MaidAnimation;
 import mmr.maidmodredo.client.maidmodel.*;
 import mmr.maidmodredo.entity.data.MaidData;
 import mmr.maidmodredo.entity.misc.MaidFishingBobberEntity;
+import mmr.maidmodredo.entity.tasks.JobTasks;
 import mmr.maidmodredo.entity.tasks.MaidTasks;
 import mmr.maidmodredo.init.*;
 import mmr.maidmodredo.inventory.InventoryMaidEquipment;
@@ -240,7 +241,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
 
 
         p_213744_1_.registerActivity(Activity.CORE, MaidTasks.core(f));
-        p_213744_1_.registerActivity(Activity.WORK, MaidTasks.work(getMaidData().getJob(), f), ImmutableSet.of(Pair.of(MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT)));
+        p_213744_1_.registerActivity(Activity.WORK, JobTasks.work(getMaidData().getJob(), f), ImmutableSet.of(Pair.of(MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT)));
         p_213744_1_.registerActivity(Activity.REST, MaidTasks.rest(f));
         p_213744_1_.registerActivity(Activity.IDLE, MaidTasks.idle(f));
         p_213744_1_.registerActivity(Activity.PANIC, MaidTasks.panic(f));

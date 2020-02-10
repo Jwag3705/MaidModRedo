@@ -32,6 +32,9 @@ public class MaidJob {
     public static final MaidJob CHEF = new MaidJob("chef", (item) -> {
         return item.getItem() == Items.COAL;
     });
+    public static final MaidJob BARISTA = new MaidJob("barista", (item) -> {
+        return item.getItem() == Items.GLASS_BOTTLE;
+    });
     public static final MaidJob LUMBERJACK = new MaidJob("lumberjack", (item) -> {
         return item.getItem() instanceof AxeItem;
     });
@@ -136,6 +139,7 @@ public class MaidJob {
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "normal"), NORMAL);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "farmer"), FARMER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "fisher"), FISHER);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "barista"), BARISTA);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "chef"), CHEF);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "lumberjack"), LUMBERJACK);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "torcher"), TORCHER);

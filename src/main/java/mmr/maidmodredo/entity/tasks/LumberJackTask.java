@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -88,12 +89,12 @@ public class LumberJackTask extends Task<LittleMaidBaseEntity> {
                     for (Direction direction : Direction.Plane.HORIZONTAL) {
                         BlockState blockstate1 = worldIn.getBlockState(blockpos$mutable.setPos(findPos).move(direction));
                         if (blockstate1.isIn(BlockTags.LEAVES)) {
-                            break;
+                            return this.canCutting && this.blockPostion != null;
                         }
                     }
 
-                    if (worldIn.getBlockState(findPos).isIn(BlockTags.LEAVES)) {
-                        break;
+                    if (worldIn.getBlockState(findPos).isIn(BlockTags.LEAVES) && !worldIn.getBlockState(findPos).get(BlockStateProperties.PERSISTENT)) {
+                        return this.canCutting && this.blockPostion != null;
                     } else if (f == 9) {
                         this.blockPostion = null;
                         return false;

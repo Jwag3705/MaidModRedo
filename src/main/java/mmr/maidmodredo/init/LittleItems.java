@@ -11,46 +11,46 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = MaidModRedo.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class LittleItems {
-    public static final Item APPLE_JUICE = new DrinkItem((new Item.Properties()).food(LittleFoods.APPLE_JUICE).group(LittleItemGroups.LITTLEMAID));
+    public static final Item APPLE_JUICE = new DrinkItem((new Item.Properties()).food(LittleFoods.APPLE_JUICE).group(LittleItemGroups.FOODS));
 
-    public static final Item BLUEBERRY_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item CHEESECAKE_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item CHERRY_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item CHOCOLATE_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item STRAWBERRY_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.LITTLEMAID));
-
-
-    public static final Item COMBINED_DONUT = new Item((new Item.Properties()).food(LittleFoods.DONUT).group(LittleItemGroups.LITTLEMAID));
-    public static final Item JELLY_DONUT = new Item((new Item.Properties()).food(LittleFoods.DONUT).group(LittleItemGroups.LITTLEMAID));
-    public static final Item SUGAR_DONUT = new Item((new Item.Properties()).food(LittleFoods.DONUT).group(LittleItemGroups.LITTLEMAID));
-    public static final Item POWDERD_DONUT = new Item((new Item.Properties()).food(LittleFoods.DONUT).group(LittleItemGroups.LITTLEMAID));
+    public static final Item BLUEBERRY_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.FOODS));
+    public static final Item CHEESECAKE_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.FOODS));
+    public static final Item CHERRY_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.FOODS));
+    public static final Item CHOCOLATE_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.FOODS));
+    public static final Item STRAWBERRY_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.FOODS));
 
 
-    public static final Item DEVILSFOOD_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item REDVELVET_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item CARROT_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item LAVENDER_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item ICECREAM_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item CHEESE_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item COFFEE_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item STRAWBERRY_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item BIRTHDAY_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item BAGU_HAT = new BaguHatItem(MaidArmorMaterial.BAGU_HAT, EquipmentSlotType.HEAD, (new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
-
-    public static final Item CARAMEL_APPLE = new Item((new Item.Properties()).food(LittleFoods.CARAMEL_APPLE).group(LittleItemGroups.LITTLEMAID));
-    public static final Item BROOM = new BroomItem((new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
-    public static final Item SUGARCOIN = new Item((new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
-    public static final Item HOUSEWAND = new HouseWandItem((new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
-    public static final Item JOBBOOK = new JobBookItem((new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
+    public static final Item COMBINED_DONUT = new Item((new Item.Properties()).food(LittleFoods.DONUT).group(LittleItemGroups.FOODS));
+    public static final Item JELLY_DONUT = new Item((new Item.Properties()).food(LittleFoods.DONUT).group(LittleItemGroups.FOODS));
+    public static final Item SUGAR_DONUT = new Item((new Item.Properties()).food(LittleFoods.DONUT).group(LittleItemGroups.FOODS));
+    public static final Item POWDERD_DONUT = new Item((new Item.Properties()).food(LittleFoods.DONUT).group(LittleItemGroups.FOODS));
 
 
-    public static final Item LITTLEMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.LITTLEMAID, 0xe3e3e3, 0xa45131, (new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
-    public static final Item LITTLEBUTLER_SPAWNEGG = new SpawnEggItem(LittleEntitys.LITTLEBUTLER, 0x382929, 0xa45131, (new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
-    public static final Item WANDERMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.WANDERMAID, 4547222, 15377456, (new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
-    public static final Item ENDERMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.ENDERMAID, 1447446, 0, (new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
+    public static final Item DEVILSFOOD_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
+    public static final Item REDVELVET_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
+    public static final Item CARROT_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
+    public static final Item LAVENDER_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
+    public static final Item ICECREAM_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
+    public static final Item CHEESE_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
+    public static final Item COFFEE_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
+    public static final Item STRAWBERRY_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
+    public static final Item BIRTHDAY_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
+    public static final Item BAGU_HAT = new BaguHatItem(MaidArmorMaterial.BAGU_HAT, EquipmentSlotType.HEAD, (new Item.Properties()).group(LittleItemGroups.MISC));
 
-    public static final Item ZOMBIEMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.ZOMBIEMAID, 7969893, 0xe3e3e3, (new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
-    public static final Item ZOMBIEBUTLER_SPAWNEGG = new SpawnEggItem(LittleEntitys.ZOMBIEBUTLER, 7969893, 0x382929, (new Item.Properties()).group(LittleItemGroups.LITTLEMAID));
+    public static final Item CARAMEL_APPLE = new Item((new Item.Properties()).food(LittleFoods.CARAMEL_APPLE).group(LittleItemGroups.FOODS));
+    public static final Item BROOM = new BroomItem((new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item SUGARCOIN = new Item((new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item HOUSEWAND = new HouseWandItem((new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item JOBBOOK = new JobBookItem((new Item.Properties()).group(LittleItemGroups.MISC));
+
+
+    public static final Item LITTLEMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.LITTLEMAID, 0xe3e3e3, 0xa45131, (new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item LITTLEBUTLER_SPAWNEGG = new SpawnEggItem(LittleEntitys.LITTLEBUTLER, 0x382929, 0xa45131, (new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item WANDERMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.WANDERMAID, 4547222, 15377456, (new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item ENDERMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.ENDERMAID, 1447446, 0, (new Item.Properties()).group(LittleItemGroups.MISC));
+
+    public static final Item ZOMBIEMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.ZOMBIEMAID, 7969893, 0xe3e3e3, (new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item ZOMBIEBUTLER_SPAWNEGG = new SpawnEggItem(LittleEntitys.ZOMBIEBUTLER, 7969893, 0x382929, (new Item.Properties()).group(LittleItemGroups.MISC));
 
 
 

@@ -39,7 +39,11 @@ public class MaidCombatOrPanic extends Task<LittleMaidBaseEntity> {
                         brain.removeMemory(MemoryModuleType.HURT_BY_ENTITY);
                         brain.removeMemory(MemoryModuleType.NEAREST_HOSTILE);
 
-                        brain.switchTo(entityIn.getMaidData().getJob().getSubActivity());
+                        if (!isYourFriend(entityIn) && !isYourOwner(entityIn)) {
+                            brain.switchTo(entityIn.getMaidData().getJob().getSubActivity());
+                        } else {
+                            brain.removeMemory(MaidMemoryModuleType.TARGET_HOSTILES);
+                        }
                     }
                 } else if (!entityIn.isTamed() || func_220512_b(entityIn) && entityIn.isTamed() && !entityIn.isMaidWait()) {
                     if (!brain.hasActivity(Activity.PANIC)) {
@@ -54,6 +58,18 @@ public class MaidCombatOrPanic extends Task<LittleMaidBaseEntity> {
             }
     }
 
+    private boolean isYourOwner(LittleMaidBaseEntity entityIn) {
+        return entityIn.getBrain().getMemory(MaidMemoryModuleType.TARGET_HOSTILES).isPresent() && entityIn.getOwner() == entityIn.getBrain().getMemory(MaidMemoryModuleType.TARGET_HOSTILES).get();
+    }
+
+    private boolean isYourFriend(LittleMaidBaseEntity entityIn) {
+        if (entityIn.getBrain().getMemory(MaidMemoryModuleType.TARGET_HOSTILES).isPresent()) {
+            if (entityIn.getBrain().getMemory(MaidMemoryModuleType.TARGET_HOSTILES).get() instanceof LittleMaidBaseEntity) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static boolean func_220513_a(LivingEntity p_220513_0_) {
         return p_220513_0_.getBrain().hasMemory(MemoryModuleType.NEAREST_HOSTILE);

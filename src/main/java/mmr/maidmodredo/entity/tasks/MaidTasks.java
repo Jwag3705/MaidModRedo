@@ -17,7 +17,7 @@ import net.minecraft.village.PointOfInterestType;
 
 public class MaidTasks {
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> core(float p_220638_1_) {
-        return ImmutableList.of(Pair.of(0, new SwimTask(0.4F, 0.8F)), Pair.of(0, new InteractWithDoorTask()), Pair.of(0, new LookTask(45, 90)), Pair.of(0, new MaidCombatOrPanic()), Pair.of(0, new WakeUpTask()), Pair.of(1, new WalkToTargetTask(200)), Pair.of(10, new GatherPOITask(PointOfInterestType.HOME, MemoryModuleType.HOME, false)));
+        return ImmutableList.of(Pair.of(0, new SwimTask(0.4F, 0.8F)), Pair.of(0, new InteractWithDoorTask()), Pair.of(0, new LookTask(45, 90)), Pair.of(0, new MaidCombatOrPanic()), Pair.of(0, new WakeUpTask()), Pair.of(1, new WalkToTargetTask(200)), Pair.of(1, new WalkToItem()), Pair.of(10, new GatherPOITask(PointOfInterestType.HOME, MemoryModuleType.HOME, false)));
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> cutWood(float p_220636_1_) {

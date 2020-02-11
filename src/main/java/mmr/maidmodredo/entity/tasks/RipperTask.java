@@ -82,7 +82,11 @@ public class RipperTask extends Task<LittleMaidBaseEntity> {
 
     private SheepEntity findSheep(LittleMaidBaseEntity owner) {
         List<SheepEntity> list = owner.world.getEntitiesWithinAABB(SheepEntity.class, owner.getBoundingBox().grow(12.0D, 4.0D, 12.0D), LivingEntity::isAlive);
-        return list.get(owner.getRNG().nextInt(list.size()));
+        if (!list.isEmpty()) {
+            return list.get(owner.getRNG().nextInt(list.size()));
+        } else {
+            return null;
+        }
     }
 
     @Override

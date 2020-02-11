@@ -150,12 +150,12 @@ public class MaidInventoryContainer extends Container {
         // int indexEquipment = 5;
         // int indexMain = 27;
 
-        if (index < 32) {
-            if (!this.mergeItemStack(dstItemStack, 32, this.inventorySlots.size(), true)) {
+        if (index < this.getLittleMaidEntity().getInventoryMaidEquipment().getSizeInventory() + this.getLittleMaidEntity().getInventoryMaidMain().getSizeInventory()) {
+            if (!this.mergeItemStack(dstItemStack, this.getLittleMaidEntity().getInventoryMaidEquipment().getSizeInventory() + this.getLittleMaidEntity().getInventoryMaidMain().getSizeInventory(), this.inventorySlots.size(), true)) {
                 return stackEmpty;
             }
         } else {
-            if (!this.mergeItemStack(dstItemStack, 5, 32, false)) {
+            if (!this.mergeItemStack(dstItemStack, 0, this.getLittleMaidEntity().getInventoryMaidEquipment().getSizeInventory() + this.getLittleMaidEntity().getInventoryMaidMain().getSizeInventory(), false)) {
                 return stackEmpty;
             }
         }

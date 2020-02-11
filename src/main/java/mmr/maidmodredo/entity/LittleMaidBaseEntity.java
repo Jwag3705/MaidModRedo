@@ -12,6 +12,7 @@ import mmr.maidmodredo.api.MaidAnimation;
 import mmr.maidmodredo.client.maidmodel.*;
 import mmr.maidmodredo.entity.data.MaidData;
 import mmr.maidmodredo.entity.misc.MaidFishingBobberEntity;
+import mmr.maidmodredo.entity.pathnavigator.MaidGroundPathNavigator;
 import mmr.maidmodredo.entity.tasks.JobTasks;
 import mmr.maidmodredo.entity.tasks.MaidTasks;
 import mmr.maidmodredo.init.*;
@@ -53,6 +54,8 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.GlobalPos;
@@ -175,6 +178,15 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
         // 形態形成場
 
         entityIdFactor = getEntityId() * 70;
+
+        this.setPathPriority(PathNodeType.LAVA, -4.0F);
+        this.setPathPriority(PathNodeType.DANGER_FIRE, -4.0F);
+        this.setPathPriority(PathNodeType.DAMAGE_FIRE, -4.0F);
+    }
+
+    @Override
+    protected PathNavigator createNavigator(World worldIn) {
+        return new MaidGroundPathNavigator(this, worldIn);
     }
 
     protected void registerAttributes() {

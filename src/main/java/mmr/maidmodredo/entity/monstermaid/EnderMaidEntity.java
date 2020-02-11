@@ -7,6 +7,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -27,6 +29,7 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
 
     public EnderMaidEntity(EntityType<? extends LittleMaidBaseEntity> p_i48575_1_, World p_i48575_2_) {
         super(p_i48575_1_, p_i48575_2_);
+        this.setPathPriority(PathNodeType.WATER, -1.0F);
     }
 
     protected void registerAttributes() {
@@ -39,13 +42,18 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
 
 
         if (this.getOwner() != null && this.getOwner().getPosY() < -10) {
-            this.helpOwnerFromVoid(this.getOwner());
+            this.helpOwner(this.getOwner());
         }
 
         if (this.getOwner() != null && this.getPosY() < -10 && this.getOwner().onGround) {
             this.teleportTo(this.getOwner().getPosX(), this.getOwner().getPosY(), this.getOwner().getPosZ());
         }
 
+        if (this.getOwner() != null && this.getOwner().isBurning() && this.getOwner().isInLava() && this.getOwner().getActivePotionEffect(Effects.FIRE_RESISTANCE) == null && this.onGround) {
+            if (this.getOwner() instanceof PlayerEntity && !((PlayerEntity) this.getOwner()).isCreative() && !((PlayerEntity) this.getOwner()).isSpectator()) {
+                this.helpOwner(this.getOwner());
+            }
+        }
 
         super.updateAITasks();
     }
@@ -84,7 +92,7 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
         return this.teleportTo(d1, d2, d3);
     }
 
-    public boolean helpOwnerFromVoid(LivingEntity p_70816_1_) {
+    public boolean helpOwner(LivingEntity p_70816_1_) {
         p_70816_1_.fallDistance = 0.0F;
 
         net.minecraftforge.event.entity.living.EnderTeleportEvent event = new net.minecraftforge.event.entity.living.EnderTeleportEvent(p_70816_1_, this.getPosX(), this.getPosY(), this.getPosZ(), 0);

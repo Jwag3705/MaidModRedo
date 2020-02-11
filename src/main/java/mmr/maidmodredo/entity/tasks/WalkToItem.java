@@ -22,7 +22,7 @@ public class WalkToItem extends Task<LittleMaidBaseEntity> {
 
     protected boolean shouldExecute(ServerWorld worldIn, LittleMaidBaseEntity owner) {
 
-        if (owner.isSleeping() || !owner.isTamed()) {
+        if (owner.isSleeping() || !owner.isTamed() || !owner.isMaidWait()) {
             return false;
         }
         itemEntity = findItem(owner);

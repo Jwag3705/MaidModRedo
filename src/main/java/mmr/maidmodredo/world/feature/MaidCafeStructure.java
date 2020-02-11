@@ -2,11 +2,13 @@ package mmr.maidmodredo.world.feature;
 
 import com.mojang.datafixers.Dynamic;
 import mmr.maidmodredo.world.feature.structure.MaidCafePieces;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -14,6 +16,7 @@ import net.minecraft.world.gen.OverworldGenSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
@@ -107,5 +110,37 @@ public class MaidCafeStructure extends Structure<NoFeatureConfig> {
             this.recalculateStructureSize();
         }
 
+        public void func_225565_a_(IWorld p_225565_1_, ChunkGenerator<?> p_225565_2_, Random p_225565_3_, MutableBoundingBox p_225565_4_, ChunkPos p_225565_5_) {
+            super.func_225565_a_(p_225565_1_, p_225565_2_, p_225565_3_, p_225565_4_, p_225565_5_);
+            int i = this.bounds.minY;
+
+            for (int j = p_225565_4_.minX; j <= p_225565_4_.maxX; ++j) {
+                for (int k = p_225565_4_.minZ; k <= p_225565_4_.maxZ; ++k) {
+                    BlockPos blockpos = new BlockPos(j, i, k);
+                    if (!p_225565_1_.isAirBlock(blockpos) && this.bounds.isVecInside(blockpos)) {
+                        boolean flag = false;
+
+                        for (StructurePiece structurepiece : this.components) {
+                            if (structurepiece.getBoundingBox().isVecInside(blockpos)) {
+                                flag = true;
+                                break;
+                            }
+                        }
+
+                        if (flag) {
+                            for (int l = i - 1; l > 1; --l) {
+                                BlockPos blockpos1 = new BlockPos(j, l, k);
+                                if (!p_225565_1_.isAirBlock(blockpos1) && !p_225565_1_.getBlockState(blockpos1).getMaterial().isLiquid()) {
+                                    break;
+                                }
+
+                                p_225565_1_.setBlockState(blockpos1, Blocks.COBBLESTONE.getDefaultState(), 2);
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
     }
 }

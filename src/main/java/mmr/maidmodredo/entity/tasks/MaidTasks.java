@@ -21,7 +21,7 @@ public class MaidTasks {
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> cutWood(float p_220636_1_) {
-        return ImmutableList.of(Pair.of(0, new LumberJackTask()));
+        return ImmutableList.of(Pair.of(0, new LumberJackTask()), Pair.of(99, new UpdateActivityTask()));
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> rest(float p_220635_1_) {
@@ -53,12 +53,12 @@ public class MaidTasks {
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> attack(float p_220636_1_) {
         float f = p_220636_1_ * 1.25F;
-        return ImmutableList.of(Pair.of(0, new AttackTask(MaidMemoryModuleType.TARGET_HOSTILES, f)));
+        return ImmutableList.of(Pair.of(0, new AttackTask(MaidMemoryModuleType.TARGET_HOSTILES, f)), Pair.of(99, new UpdateActivityTask()));
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> shot(float p_220636_1_) {
         float f = p_220636_1_ * 1.2F;
-        return ImmutableList.of(Pair.of(0, new BowShootTask(MaidMemoryModuleType.TARGET_HOSTILES, f)));
+        return ImmutableList.of(Pair.of(0, new BowShootTask(MaidMemoryModuleType.TARGET_HOSTILES, f)), Pair.of(99, new UpdateActivityTask()));
     }
 
     private static Pair<Integer, Task<LivingEntity>> func_220643_a() {

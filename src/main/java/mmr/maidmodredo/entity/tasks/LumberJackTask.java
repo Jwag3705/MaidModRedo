@@ -17,6 +17,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -78,6 +79,28 @@ public class LumberJackTask extends Task<LittleMaidBaseEntity> {
             }
 
             this.blockPostion = this.func_223517_a(worldIn);
+
+
+            if (this.blockPostion != null) {
+                for (int f = 0; f < 10; f++) {
+                    BlockPos findPos = this.blockPostion.up(f);
+                    BlockPos.Mutable blockpos$mutable = (new BlockPos.Mutable(findPos));
+                    for (Direction direction : Direction.Plane.HORIZONTAL) {
+                        BlockState blockstate1 = worldIn.getBlockState(blockpos$mutable.setPos(findPos).move(direction));
+                        if (blockstate1.isIn(BlockTags.LEAVES)) {
+                            break;
+                        }
+                    }
+
+                    if (worldIn.getBlockState(findPos).isIn(BlockTags.LEAVES)) {
+                        break;
+                    } else if (f == 9) {
+                        this.blockPostion = null;
+                        return false;
+                    }
+                }
+            }
+
             return this.canCutting && this.blockPostion != null;
         }
     }

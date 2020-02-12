@@ -117,6 +117,9 @@ public class AttackTask extends Task<LittleMaidBaseEntity> {
             this.attackTick = 20;
             attacker.swingArm(Hand.MAIN_HAND);
             attacker.attackEntityAsMob(enemy);
+            attacker.getHeldItem(Hand.MAIN_HAND).damageItem(1, attacker, (p_213625_1_) -> {
+                p_213625_1_.sendBreakAnimation(Hand.MAIN_HAND);
+            });
 
             if (attacker.getMaidData().getJob() == MaidJob.GUARD) {
                 attacker.resetActiveHand();

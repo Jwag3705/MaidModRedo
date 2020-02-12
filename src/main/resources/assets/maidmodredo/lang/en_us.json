@@ -32,5 +32,8 @@
   "item.maidmodredo.setbed": "Selected BedPostion: %s, %s, %s",
   "item.maidmodredo.setmaidbed": "Successed Setting Maid's BedPostion: %s, %s, %s",
   "item.maidmodredo.set_jobpostion": "Selected JobPostion: %s, %s, %s",
-  "item.maidmodredo.setmaid_jobpostion": "Successed Setting Maid's JobPostion: %s, %s, %s"
+  "item.maidmodredo.setmaid_jobpostion": "Successed Setting Maid's JobPostion: %s, %s, %s",
+  "gui.maidmodredo.maidinventory.change_job": "Change Job",
+  "gui.maidmodredo.job_select": "Job Select",
+  "gui.maidmodredo.job_select.warning": "Once you select a combat job, you can not change it"
 }

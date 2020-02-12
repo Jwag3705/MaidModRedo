@@ -22,6 +22,7 @@
   "item.maidmodredo.endermaid_spawnegg": "エンダーメイドのスポーンエッグ",
   "item.maidmodredo.zombiemaid_spawnegg": "ゾンビメイドのスポーンエッグ",
   "item.maidmodredo.zombiebutler_spawnegg": "ゾンビバトラーのスポーンエッグ",
+
   "entity.maidmodredo.littlemaid": "リトルメイド",
   "entity.maidmodredo.littlebuttler": "リトルバトラー",
   "entity.maidmodredo.wandermaid": "商人メイド",
@@ -31,5 +32,8 @@
   "item.maidmodredo.setbed": "ベットの位置を本に記録しました: %s, %s, %s",
   "item.maidmodredo.setmaidbed": "メイドが寝るベットの位置を設定しました: %s, %s, %s",
   "item.maidmodredo.set_jobpostion": "仕事場所を本に記録しました: %s, %s, %s",
-  "item.maidmodredo.setmaid_jobpostion": "メイドの仕事場所の位置を設定しました: %s, %s, %s"
+  "item.maidmodredo.setmaid_jobpostion": "メイドの仕事場所の位置を設定しました: %s, %s, %s",
+  "gui.maidmodredo.maidinventory.change_job": "Change Job",
+  "gui.maidmodredo.job_select": "Job Select",
+  "gui.maidmodredo.job_select.warning": "戦闘系のjobのものは一度選ぶと変更できません"
 }

@@ -1061,22 +1061,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
     public void setOpenInventory(boolean flag) {
         mstatOpenInventory = flag;
 
-        if (!this.world.isRemote() && (!this.getMaidData().getJob().isLockJob()) || this.getMaidData().getJob().isLockJob() && this.getMaidData().getLevel() == 0) {
-            MaidJob.MAID_JOB_REGISTRY.stream().filter((job) -> {
-                if (job.getSubRequireItem() != null) {
-                    return this.getMaidData().getLevel() >= job.getNeedLevel() && job.getRequireItem().test(this.getHeldItem(Hand.MAIN_HAND)) && job.getSubRequireItem().test(this.getHeldItem(Hand.OFF_HAND));
-                } else {
-                    return this.getMaidData().getLevel() >= job.getNeedLevel() && job.getRequireItem().test(this.getHeldItem(Hand.MAIN_HAND));
-                }
-            }).findFirst().ifPresent((p_220388_2_) ->
-            {
-                if (p_220388_2_ == MaidJob.WILD) {
-                    this.setMaidData(this.getMaidData().withJob(MaidJob.NORMAL));
-                } else {
-                    this.setMaidData(this.getMaidData().withJob(p_220388_2_));
-                }
-            });
-        }
     }
 
     public boolean isOpenInventory() {

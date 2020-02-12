@@ -41,18 +41,24 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
     protected void updateAITasks() {
 
 
-        if (this.getOwner() != null && this.getOwner().getPosY() < -10) {
-            this.helpOwner(this.getOwner());
+        if (this.getOwner() != null && this.getOwner().getPosY() < -10 && this.getOwner().isAlive()) {
+            if (!((PlayerEntity) this.getOwner()).isCreative() && !((PlayerEntity) this.getOwner()).isSpectator()) {
+                this.helpOwner(this.getOwner());
+            }
         }
 
-        if (this.getOwner() != null && this.getPosY() < -10 && this.getOwner().onGround) {
+        if (this.getOwner() != null && this.getPosY() < -10 && this.getOwner().onGround && this.getOwner().isAlive()) {
             this.teleportTo(this.getOwner().getPosX(), this.getOwner().getPosY(), this.getOwner().getPosZ());
         }
 
-        if (this.getOwner() != null && this.getOwner().isBurning() && this.getOwner().isInLava() && this.getOwner().getActivePotionEffect(Effects.FIRE_RESISTANCE) == null && this.onGround) {
-            if (this.getOwner() instanceof PlayerEntity && !((PlayerEntity) this.getOwner()).isCreative() && !((PlayerEntity) this.getOwner()).isSpectator()) {
+        if (this.getOwner() != null && this.getOwner().isBurning() && this.getOwner().isInLava() && this.getOwner().getActivePotionEffect(Effects.FIRE_RESISTANCE) == null && this.onGround && this.getOwner().isAlive()) {
+            if (!((PlayerEntity) this.getOwner()).isCreative() && !((PlayerEntity) this.getOwner()).isSpectator()) {
                 this.helpOwner(this.getOwner());
             }
+        }
+
+        if (this.getOwner() != null && !((PlayerEntity) this.getOwner()).isCreative() && !((PlayerEntity) this.getOwner()).isSpectator()) {
+            this.teleportAndHelpFallOwner();
         }
 
         super.updateAITasks();
@@ -68,6 +74,26 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
         super.livingTick();
     }
 
+    /**
+     * Help Owner and teleport endermaid and owner
+     */
+    protected boolean teleportAndHelpFallOwner() {
+        if (!this.world.isRemote() && this.isAlive() && this.getOwner() != null && this.getOwner().isAlive() && this.getOwner().fallDistance > 10D) {
+            for (int i = 0; i < 16; ++i) {
+                double d0 = this.getOwner().getPosX() + (this.rand.nextDouble() - 0.5D) * 8.0D;
+                double d1 = this.getOwner().getPosY() + (double) (this.rand.nextInt(16) - 8);
+                double d2 = this.getOwner().getPosZ() + (this.rand.nextDouble() - 0.5D) * 8.0D;
+                if (this.teleportTo(d0, d1, d2)) {
+                    this.helpOwner(this.getOwner());
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
+    }
+
     protected boolean teleportRandomly() {
         if (!this.world.isRemote() && this.isAlive()) {
             double d0 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * 32.0D;
@@ -80,7 +106,7 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
     }
 
     /**
-     * Teleport the enderman to another entity
+     * Teleport the endermaid to another entity
      */
     public boolean teleportToEntity(Entity p_70816_1_) {
         Vec3d vec3d = new Vec3d(this.getPosX() - p_70816_1_.getPosX(), this.getPosYHeight(0.5D) - p_70816_1_.getPosYEye(), this.getPosZ() - p_70816_1_.getPosZ());
@@ -107,7 +133,7 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
     }
 
     /**
-     * Teleport the enderman
+     * Teleport the endermaid
      */
     private boolean teleportTo(double x, double y, double z) {
         this.fallDistance = 0.0F;

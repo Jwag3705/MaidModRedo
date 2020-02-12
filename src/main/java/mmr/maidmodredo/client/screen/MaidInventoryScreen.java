@@ -5,10 +5,13 @@ import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.inventory.MaidInventoryContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ChangePageButton;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,6 +27,7 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
     private float mousePosx;
     private float mousePosY;
     public ChangePageButton txbutton[] = new ChangePageButton[4];
+    private Button jobBotton;
 
     public MaidInventoryScreen(MaidInventoryContainer maidinventory, PlayerInventory playerInventory, ITextComponent p_i51105_3_) {
         super(maidinventory, playerInventory, p_i51105_3_);
@@ -57,6 +61,10 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
             maidinventory.getLittleMaidEntity().setTextureNames();
             maidinventory.getLittleMaidEntity().syncModelNames();
         }, true));
+
+        jobBotton = this.addButton(new Button(guiLeft + 110, guiTop + 48, 50, 20, I18n.format("gui.maidmodredo.maidinventory.change_job"), (p_214158_1_) -> {
+            this.getMinecraft().displayGuiScreen(new JobSelectScreen(this.maidinventory.getLittleMaidEntity(), new TranslationTextComponent("gui.maidmodredo.job_select")));
+        }));
 
         int buttonPosX = ((this.width - this.xSize) / 2) + 102;
 

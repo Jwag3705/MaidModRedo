@@ -11,6 +11,7 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.ShieldItem;
+import net.minecraft.item.SwordItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.server.ServerWorld;
@@ -30,7 +31,7 @@ public class AttackTask extends Task<LittleMaidBaseEntity> {
         Entity entity = owner.getBrain().getMemory(this.field_220541_a).get();
         double d0 = getTargetDistance(owner);
 
-        return !isYourFriend(owner) && !isYourOwner(owner) && owner.getDistanceSq(entity) < d0 * d0;
+        return !isYourFriend(owner) && !isYourOwner(owner) && owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof SwordItem && owner.getDistanceSq(entity) < d0 * d0;
     }
 
     private boolean isYourOwner(LittleMaidBaseEntity entityIn) {

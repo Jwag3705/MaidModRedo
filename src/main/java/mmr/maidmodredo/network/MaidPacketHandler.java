@@ -3,6 +3,7 @@ package mmr.maidmodredo.network;
 import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.api.MaidAnimation;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
+import mmr.maidmodredo.init.MaidJob;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -28,11 +29,20 @@ public class MaidPacketHandler {
                 .encoder(MessageAnimation::writePacketData).decoder(MessageAnimation::readPacketData)
                 .consumer(MessageAnimation.Handler::handle)
                 .add();
+        CHANNEL.messageBuilder(MessageMaidJobSet.class, 2)
+                .encoder(MessageMaidJobSet::writePacketData).decoder(MessageMaidJobSet::readPacketData)
+                .consumer(MessageMaidJobSet.Handler::handle)
+                .add();
     }
 
     public static void syncModel(LittleMaidBaseEntity entity, CompoundNBT compoundNBT) {
         MaidPacketHandler.CHANNEL.sendToServer(new MessageChangeModelStat(entity, compoundNBT));
     }
+
+    public static void syncMaidJob(LittleMaidBaseEntity entity, MaidJob job) {
+        MaidPacketHandler.CHANNEL.sendToServer(new MessageMaidJobSet(entity, job));
+    }
+
 
     public static void animationModel(LittleMaidBaseEntity entity, MaidAnimation animation) {
         if (!entity.getEntityWorld().isRemote()) {

@@ -17,7 +17,7 @@ public class TextureBoxServer extends TextureBoxBase {
 		wildColor		= pBox.getWildColorBits();
 		textureName		= pBox.textureName;
 		isUpdateSize = (pBox.models != null && pBox.models[0] != null) ?
-				ModelCapsHelper.getCapsValueBoolean(pBox.models[0], IModelCaps.caps_isUpdateSize) : false;
+				true : false;
 /*
 		if (pBox.models != null) {
 			modelHeight			= pBox.models[0].getHeight(null);
@@ -43,23 +43,23 @@ public class TextureBoxServer extends TextureBoxBase {
 	}
 
 	@Override
-	public float getHeight(IModelCaps pEntityCaps) {
-		return localBox != null ? localBox.models[0].getHeight(pEntityCaps) : modelHeight;
+	public float getHeight() {
+		return localBox != null ? localBox.models[0].getHeight() : modelHeight;
 	}
 
 	@Override
-	public float getWidth(IModelCaps pEntityCaps) {
-		return localBox != null ? localBox.models[0].getWidth(pEntityCaps) : modelWidth;
+	public float getWidth() {
+		return localBox != null ? localBox.models[0].getWidth() : modelWidth;
 	}
 
 	@Override
-	public float getYOffset(IModelCaps pEntityCaps) {
-		return localBox != null ? localBox.models[0].getyOffset(pEntityCaps) : modelYOffset;
+	public float getYOffset() {
+		return localBox != null ? localBox.models[0].getyOffset() : modelYOffset;
 	}
 
 	@Override
-	public float getMountedYOffset(IModelCaps pEntityCaps) {
-		return localBox != null ? localBox.models[0].getMountedYOffset(pEntityCaps) : modelMountedYOffset;
+	public float getMountedYOffset() {
+		return localBox != null ? localBox.models[0].getMountedYOffset() : modelMountedYOffset;
 	}
 
 }

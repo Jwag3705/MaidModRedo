@@ -72,34 +72,20 @@ public abstract class TextureBoxBase {
 		return getRandomColor(getContractColorBits(), pRand);
 	}
 
-	public float getHeight(IModelCaps pEntityCaps) {
-		return modelHeight;
-	}
 	public float getHeight() {
-		return getHeight(null);
+        return modelHeight;
 	}
 
-	public float getWidth(IModelCaps pEntityCaps) {
-		return modelWidth;
-	}
 	public float getWidth() {
-		return getWidth(null);
+        return modelWidth;
 	}
 
-	public float getYOffset(IModelCaps pEntityCaps) {
-		return modelYOffset;
-	}
 	public float getYOffset() {
-		return getYOffset(null);
-	}
-
-	public float getMountedYOffset(IModelCaps pEntityCaps) {
-		return modelMountedYOffset;
+        return modelYOffset;
 	}
 	public float getMountedYOffset() {
-		return getMountedYOffset(null);
+        return modelMountedYOffset;
 	}
-
 
     public Class getModelEntity() {
         return modelEntity;

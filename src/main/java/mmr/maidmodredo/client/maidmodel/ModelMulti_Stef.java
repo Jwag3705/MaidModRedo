@@ -1,6 +1,8 @@
 package mmr.maidmodredo.client.maidmodel;
 
-public class ModelMulti_Stef extends ModelMulti_Steve {
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
+
+public class ModelMulti_Stef<T extends LittleMaidBaseEntity> extends ModelMulti_Steve<T> {
 
     public MaidModelRenderer bust;
 
@@ -105,8 +107,8 @@ public class ModelMulti_Stef extends ModelMulti_Steve {
 		return "Crafter";
 	}
 
-	public void setDefaultPause(float par1, float par2, float pTicksExisted,
-                                float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
+	public void setDefaultPause(T entity, float par1, float par2, float pTicksExisted,
+								float pHeadYaw, float pHeadPitch) {
 		// 初期姿勢
 		bipedBody.setRotationPoint(0.0F, 0.7F, 0.0F);bipedBody.setRotateAngle(0.0F, 0.0F, 0.0F);
 		bipedHead.setRotationPoint(0.0F, 1.35F, 0.0F);bipedHead.setRotateAngleDeg(pHeadPitch, pHeadYaw, 0.0F);

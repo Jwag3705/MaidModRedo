@@ -6,8 +6,6 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.Map;
-
 /**
  * アーマーの二重描画用クラス。
  * 必ずInner側にはモデルを設定すること。
@@ -15,8 +13,8 @@ import java.util.Map;
  */
 public class ModelBaseDuo<T extends LivingEntity> extends ModelBaseNihil<T> implements IModelBaseMMM {
 
-    public ModelMultiBase modelOuter;
-    public ModelMultiBase modelInner;
+	public ModelMultiBase<T> modelOuter;
+	public ModelMultiBase<T> modelInner;
 	/**
 	 * 部位毎のアーマーテクスチャの指定。
 	 * 外側。
@@ -50,13 +48,13 @@ public class ModelBaseDuo<T extends LivingEntity> extends ModelBaseNihil<T> impl
 	}
 
 	@Override
-	public void setLivingAnimations(IModelCaps pEntityCaps, float limbSwing, float limbSwingAmount, float partialTick) {
-		super.setLivingAnimations(pEntityCaps, limbSwing, limbSwingAmount, partialTick);
+	public void setLivingAnimations(T entity, float limbSwing, float limbSwingAmount, float partialTick) {
+		super.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTick);
 		if (modelInner != null) {
-			modelInner.setLivingAnimations(entityCaps, limbSwing, limbSwingAmount, partialTick);
+			modelInner.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTick);
 		}
 		if (modelOuter != null) {
-			modelOuter.setLivingAnimations(entityCaps, limbSwing, limbSwingAmount, partialTick);
+			modelOuter.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTick);
 		}
 		isAlphablend = true;
 	}
@@ -74,10 +72,10 @@ public class ModelBaseDuo<T extends LivingEntity> extends ModelBaseNihil<T> impl
     public void render(T par7Entity, float par1, float par2, float par3,
                        float par4, float par5) {
 		if (modelInner != null) {
-            modelInner.setRotationAngles(par1, par2, par3, par4, par5, entityCaps);
+			modelInner.render(par7Entity, par1, par2, par3, par4, par5);
 		}
 		if (modelOuter != null) {
-            modelOuter.setRotationAngles(par1, par2, par3, par4, par5, entityCaps);
+			modelOuter.render(par7Entity, par1, par2, par3, par4, par5);
 		}
 	}
 
@@ -87,7 +85,7 @@ public class ModelBaseDuo<T extends LivingEntity> extends ModelBaseNihil<T> impl
 	@Override
     public void renderItems(LivingEntity pEntity, MatrixStack stack, boolean left) {
 		if (modelInner != null) {
-            modelInner.renderItems(entityCaps, stack, left);
+			modelInner.renderItems(stack, left);
 		}
 	}
 
@@ -105,13 +103,6 @@ public class ModelBaseDuo<T extends LivingEntity> extends ModelBaseNihil<T> impl
 	 * Renderer辺でこの変数を設定する。
 	 * 設定値はIModelCapsを継承したEntitiyとかを想定。
 	 */
-	@Override
-	public void setEntityCaps(IModelCaps pEntityCaps) {
-		entityCaps = pEntityCaps;
-		if (capsLink != null) {
-			capsLink.setEntityCaps(pEntityCaps);
-		}
-	}
 
 	@Override
 	public void setRender(MobRenderer pRender) {
@@ -128,32 +119,6 @@ public class ModelBaseDuo<T extends LivingEntity> extends ModelBaseNihil<T> impl
 		isRendering = pFlag;
 	}
 
-
-	// IModelCaps追加分
-
-	@Override
-	public Map<String, Integer> getModelCaps() {
-		return modelInner == null ? null : modelInner.getModelCaps();
-	}
-
-	@Override
-	public Object getCapsValue(int pIndex, Object ... pArg) {
-		return modelInner == null ? null : modelInner.getCapsValue(pIndex, pArg);
-	}
-
-	@Override
-	public boolean setCapsValue(int pIndex, Object... pArg) {
-		if (capsLink != null) {
-			capsLink.setCapsValue(pIndex, pArg);
-		}
-		if (modelOuter != null) {
-			modelOuter.setCapsValue(pIndex, pArg);
-		}
-		if (modelInner != null) {
-			return modelInner.setCapsValue(pIndex, pArg);
-		}
-		return false;
-	}
 
 	@Override
 	public void showAllParts() {

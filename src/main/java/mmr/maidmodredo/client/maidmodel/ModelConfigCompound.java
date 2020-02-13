@@ -17,8 +17,6 @@ public class ModelConfigCompound {
 //public class MMM_TextureData implements MMM_ITextureEntity {
 
     public LivingEntity owner;
-    public IModelCaps entityCaps;
-
     /**
      * 使用されるテクスチャリソースのコンテナ
      */
@@ -88,9 +86,8 @@ public class ModelConfigCompound {
     public int data_Value = 21;
 
 
-    public ModelConfigCompound(LivingEntity pEntity, IModelCaps pCaps) {
+    public ModelConfigCompound(LivingEntity pEntity) {
         owner = pEntity;
-        entityCaps = pCaps;
         textures = new ResourceLocation[][]{
                 /**
                  * 基本、発光

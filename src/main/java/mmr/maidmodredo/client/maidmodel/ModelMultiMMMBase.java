@@ -48,7 +48,7 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 	 * mainFrameに全てぶら下がっているならば標準で描画する。
 	 */
 	@Override
-	public void render(IModelCaps pEntityCaps, MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, boolean pIsRender) {
+	public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 		ImmutableList.of(this.mainFrame).forEach((p_228292_8_) -> {
 			p_228292_8_.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 		});
@@ -101,15 +101,6 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 	}*/
 
 	/**
-	 * モデル切替時に実行されるコード
-	 * @param pEntityCaps
-	 * Entityの値を操作するためのModelCaps。
-	 */
-	public void changeModel(IModelCaps pEntityCaps) {
-		// カウンタ系の加算値、リミット値の設定など行う予定。
-	}
-
-	/**
 	 * 初期ロード時に実行
 	 */
 	public void buildTexture() {
@@ -119,46 +110,17 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 	public void setDefaultPause() {
 	}
 
-	public void setDefaultPause(float par1, float par2, float pTicksExisted,
-								float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
+	public void setDefaultPause(T entity, float par1, float par2, float pTicksExisted,
+								float pHeadYaw, float pHeadPitch) {
 		setDefaultPause();
-	}
-
-	@Override
-	public boolean setCapsValue(int pIndex, Object... pArg) {
-		switch (pIndex) {
-		case caps_changeModel:
-			changeModel((IModelCaps)pArg[0]);
-			return true;
-		case caps_renderFace:
-			/*renderFace((IModelCaps)pArg[0], (Float)pArg[1], (Float)pArg[2], (Float)pArg[3],
-				(Float)pArg[4], (Float)pArg[5], (Float)pArg[6], (Boolean)pArg[7]);*/
-			return true;
-		case caps_renderBody:
-			/*renderBody((IModelCaps)pArg[0], (Float)pArg[1], (Float)pArg[2], (Float)pArg[3],
-				(Float)pArg[4], (Float)pArg[5], (Float)pArg[6], (Boolean)pArg[7]);*/
-			return true;
-		}
-		return super.setCapsValue(pIndex, pArg);
-	}
-
-	@Override
-	public Object getCapsValue(int pIndex, Object... pArg) {
-		switch (pIndex) {
-		case caps_setFaceTexture:
-			return setFaceTexture((Integer)pArg[0]);
-		case caps_textureLightColor:
-			return getTextureLightColor((IModelCaps)pArg[0]);
-		}
-		return super.getCapsValue(pIndex, pArg);
 	}
 
 	// Actors実験区画
 	// このへん未だ未整理
-	public void renderFace(IModelCaps pEntityCaps, MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, boolean pIsRender) {
+	public void renderFace(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 	}
 
-	public void renderBody(IModelCaps pEntityCaps, MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, boolean pIsRender) {
+	public void renderBody(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 	}
 	/**
 	 * 表情をテクスチャのUVマップを変えることで表現
@@ -169,10 +131,6 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 		// v = (int)(pIndex / 2) * 32 / 32
 		GL11.glTranslatef(((pIndex & 0x01) * 32) / textureWidth, (((pIndex >>> 1) & 0x01) * 16) / textureHeight , 0F);
 		return pIndex / 4;
-	}
-
-	public float[] getTextureLightColor(IModelCaps pEntityCaps) {
-		return null;
 	}
 
 }

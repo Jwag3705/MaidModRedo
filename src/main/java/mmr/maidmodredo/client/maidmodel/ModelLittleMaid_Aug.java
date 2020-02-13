@@ -1,11 +1,12 @@
 package mmr.maidmodredo.client.maidmodel;
 
 
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 
 /**
  * サンプルとしてaddPartsを使用しています。
  */
-public class ModelLittleMaid_Aug extends ModelLittleMaid_SR2 {
+public class ModelLittleMaid_Aug<T extends LittleMaidBaseEntity> extends ModelLittleMaid_SR2<T> {
 
     public MaidModelRenderer shaggyB;
     public MaidModelRenderer shaggyR;
@@ -101,17 +102,17 @@ public class ModelLittleMaid_Aug extends ModelLittleMaid_SR2 {
 	}
 
 	@Override
-	public void setLivingAnimations(IModelCaps pEntityCaps, float par2, float par3, float pRenderPartialTicks) {
-		super.setLivingAnimations(pEntityCaps, par2, par3, pRenderPartialTicks);
+	public void setLivingAnimations(T entity, float par2, float par3, float pRenderPartialTicks) {
+		super.setLivingAnimations(entity, par2, par3, pRenderPartialTicks);
 		
 		float f3 = entityTicksExisted + pRenderPartialTicks + entityIdFactor;
-		float f4;
-		if (ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_isLookSuger)) {
+		float f4 = (1F - entity.getHealth() / entity.getMaxHealth()) * 0.5F;
+		/*if (ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_isLookSuger)) {
 			f3 *= 8.0F;
 			f4 = -0.2F;
 		} else {
-			f4 = (1F - ModelCapsHelper.getCapsValueInt(pEntityCaps, caps_health) / 20F) * 0.5F;
-		}
+
+		}*/
 		float f5 = mh_sin(f3 * 0.067F) * 0.05F - f4;
 		float f6 = 40.0F / 57.29578F;
 		sensor1.setRotateAngle(f5, -f6, f5);
@@ -121,9 +122,9 @@ public class ModelLittleMaid_Aug extends ModelLittleMaid_SR2 {
 	}
 
 	@Override
-	public void setRotationAngles(float par1, float par2, float pTicksExisted,
-                                  float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
-        super.setRotationAngles(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, pEntityCaps);
+	public void render(T entity, float par1, float par2, float pTicksExisted,
+					   float pHeadYaw, float pHeadPitch) {
+		super.render(entity, par1, par2, pTicksExisted, pHeadYaw, pHeadPitch);
 		
 		SideTailR.setRotateAngleX(SideTailL.setRotateAngleX(bipedHead.getRotateAngleX() * -0.666666666F));
 	}

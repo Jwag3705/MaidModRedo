@@ -4,15 +4,16 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import mmr.maidmodredo.api.IMaidAnimation;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.Items;
+import net.minecraft.util.Hand;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
 /**
  * LMM用に最適化
  */
-public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelMultiMMMBase<T> {
+public abstract class ModelLittleMaidBase<T extends LittleMaidBaseEntity> extends ModelMultiMMMBase<T> {
 
     //fields
     public MaidModelRenderer bipedTorso;
@@ -146,22 +147,17 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
         return 0.35F;
     }
 
-    @Override
-    public void setLivingAnimations(IModelCaps pEntityCaps, float par2, float par3, float pRenderPartialTicks) {
-        float angle = ModelCapsHelper.getCapsValueFloat(pEntityCaps, caps_interestedAngle, (Float) pRenderPartialTicks);
-        bipedHead.setRotateAngleZ(angle);
-    }
 
     /**
      * 姿勢制御用
      * 独自追加分
      */
     @Override
-    public void setRotationAngles(float par1, float par2, float pTicksExisted,
-                                  float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
-        setDefaultPause(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, pEntityCaps);
+    public void render(T entity, float par1, float par2, float pTicksExisted,
+                       float pHeadYaw, float pHeadPitch) {
+        setDefaultPause(entity, par1, par2, pTicksExisted, pHeadYaw, pHeadPitch);
 
-        if (isRiding) {
+        if (entity.isPassenger() && (entity.getRidingEntity() != null && entity.getRidingEntity().shouldRiderSit())) {
             // 乗り物に乗っている
             bipedRightArm.addRotateAngleX(-0.6283185F);
             bipedLeftArm.addRotateAngleX(-0.6283185F);
@@ -174,64 +170,38 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
 
         //カスタム設定
         //お座りモーションの場合はモデル側で位置を調整する
-        if (motionSitting && isRiding) {
+       /* if (motionSitting && entity.isPassenger() && (entity.getRidingEntity() != null && entity.getRidingEntity().shouldRiderSit()) {
             mainFrame.rotationPointY += 5.00F;
-        }
+        }*/
 
-        // アイテム持ってるときの腕振りを抑える+表示角オフセット
-        if (heldItem[1] != 0) {
-            bipedLeftArm.setRotateAngleX(bipedLeftArm.getRotateAngleX() * 0.5F);
-            bipedLeftArm.addRotateAngleDegX(-18F * heldItem[1]);
-        }
-        if (heldItem[0] != 0) {
-            bipedRightArm.setRotateAngleX(bipedRightArm.getRotateAngleX() * 0.5F);
-            bipedRightArm.addRotateAngleDegX(-18F * heldItem[0]);
-        }
-
-//		bipedRightArm.setRotateAngleY(0.0F);
-//		bipedLeftArm.setRotateAngleY(0.0F);
-
-        if ((onGrounds[0] > -9990F || onGrounds[1] > -9990F) && !aimedBow) {
-            // 腕振り
-            float f6, f7, f8;
-            f6 = mh_sin(mh_sqrt(onGrounds[0]) * (float) Math.PI * 2.0F);
-            f7 = mh_sin(mh_sqrt(onGrounds[1]) * (float) Math.PI * 2.0F);
-            bipedTorso.setRotateAngleY((f6 - f7) * 0.2F);
-            Skirt.addRotateAngleY(bipedTorso.rotateAngleY);
-            bipedRightArm.addRotateAngleY(bipedTorso.rotateAngleY);
-            bipedLeftArm.addRotateAngleY(bipedTorso.rotateAngleY);
-            bipedPelvic.addRotateAngleY(-bipedTorso.rotateAngleY);
-            bipedHead.addRotateAngleY(-bipedTorso.rotateAngleY);
-            // R
-            if (onGrounds[0] > 0F) {
-                f6 = 1.0F - onGrounds[0];
-                f6 *= f6;
-                f6 *= f6;
-                f6 = 1.0F - f6;
-                f7 = mh_sin(f6 * (float) Math.PI);
-                f8 = mh_sin(onGrounds[0] * (float) Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
-                bipedRightArm.addRotateAngleX(-f7 * 1.2F - f8);
-                bipedRightArm.addRotateAngleY(bipedTorso.rotateAngleY * 2.0F);
-                bipedRightArm.setRotateAngleZ(mh_sin(onGrounds[0] * 3.141593F) * -0.4F);
-            } else {
-                bipedRightArm.addRotateAngleX(bipedTorso.rotateAngleY);
+        if (this.swingProgress > 0.0F) {
+            HandSide handside = this.getMainHand(entity);
+            ModelRenderer modelrenderer = this.getArmForSide(handside);
+            float f1 = this.swingProgress;
+            this.bipedBody.rotateAngleY = MathHelper.sin(MathHelper.sqrt(f1) * ((float) Math.PI * 2F)) * 0.2F;
+            if (handside == HandSide.LEFT) {
+                this.bipedBody.rotateAngleY *= -1.0F;
             }
-            // L
-            if (onGrounds[1] > 0F) {
-                f6 = 1.0F - onGrounds[1];
-                f6 *= f6;
-                f6 *= f6;
-                f6 = 1.0F - f6;
-                f7 = mh_sin(f6 * (float) Math.PI);
-                f8 = mh_sin(onGrounds[1] * (float) Math.PI) * -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
-                bipedLeftArm.rotateAngleX -= f7 * 1.2D + f8;
-                bipedLeftArm.rotateAngleY += bipedTorso.rotateAngleY * 2.0F;
-                bipedLeftArm.setRotateAngleZ(mh_sin(onGrounds[1] * 3.141593F) * 0.4F);
-            } else {
-                bipedLeftArm.rotateAngleX += bipedTorso.rotateAngleY;
-            }
+            Skirt.rotateAngleY = bipedBody.rotateAngleY;
+
+            this.bipedRightArm.rotationPointZ = MathHelper.sin(this.bipedBody.rotateAngleY) * 5.0F;
+            this.bipedRightArm.rotationPointX = -MathHelper.cos(this.bipedBody.rotateAngleY) * 5.0F;
+            this.bipedLeftArm.rotationPointZ = -MathHelper.sin(this.bipedBody.rotateAngleY) * 5.0F;
+            this.bipedLeftArm.rotationPointX = MathHelper.cos(this.bipedBody.rotateAngleY) * 5.0F;
+            this.bipedRightArm.rotateAngleY += this.bipedBody.rotateAngleY;
+            this.bipedLeftArm.rotateAngleY += this.bipedBody.rotateAngleY;
+            this.bipedLeftArm.rotateAngleX += this.bipedBody.rotateAngleY;
+            f1 = 1.0F - this.swingProgress;
+            f1 = f1 * f1;
+            f1 = f1 * f1;
+            f1 = 1.0F - f1;
+            float f2 = MathHelper.sin(f1 * (float) Math.PI);
+            float f3 = MathHelper.sin(this.swingProgress * (float) Math.PI) * -(this.bipedHead.rotateAngleX - 0.7F) * 0.75F;
+            modelrenderer.rotateAngleX = (float) ((double) modelrenderer.rotateAngleX - ((double) f2 * 1.2D + (double) f3));
+            modelrenderer.rotateAngleY += this.bipedBody.rotateAngleY * 2.0F;
+            modelrenderer.rotateAngleZ += MathHelper.sin(this.swingProgress * (float) Math.PI) * -0.4F;
         }
-        if (isSneak) {
+      /*  if (isSneak) {
             // しゃがみ
             bipedTorso.rotateAngleX += 0.5F;
             bipedNeck.rotateAngleX -= 0.5F;
@@ -249,8 +219,8 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
             bipedTorso.rotationPointY += 1.00F;
         } else {
             // 通常立ち
-        }
-        if (isWait) {
+        }*/
+        if (entity.isMaidWait()) {
             //待機状態の特別表示
             float lx = mh_sin(pTicksExisted * 0.067F) * 0.05F - 0.7F;
             bipedRightArm.setRotateAngle(lx, 0.0F, -0.4F);
@@ -258,21 +228,19 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
         } else {
             float la, lb, lc;
 
-            LittleMaidBaseEntity entity = (LittleMaidBaseEntity) pEntityCaps.getCapsValue(IModelCaps.caps_Entity);
+            LittleMaidBaseEntity maidentity = (LittleMaidBaseEntity) entity;
 
-            if (aimedBow) {
-                Boolean isCharging = (Boolean) pEntityCaps.getCapsValue(IModelCaps.caps_crossbow);
-
-                if (isCharging) {
+            if (entity.isShooting()) {
+                if (maidentity.isCharging()) {
                     this.bipedRightArm.rotateAngleY = -0.8F;
                     this.bipedRightArm.rotateAngleX = -0.97079635F;
                     this.bipedLeftArm.rotateAngleX = -0.97079635F;
-                    float f2 = MathHelper.clamp(entity.getItemInUseMaxCount(), 0.0F, 25.0F);
+                    float f2 = MathHelper.clamp(maidentity.getItemInUseMaxCount(), 0.0F, 25.0F);
                     this.bipedLeftArm.rotateAngleY = MathHelper.lerp(f2 / 25.0F, 0.4F, 0.85F);
                     this.bipedLeftArm.rotateAngleX = MathHelper.lerp(f2 / 25.0F, this.bipedLeftArm.rotateAngleX, (-(float) Math.PI / 2F));
                 } else {
                     // 弓構え
-                    float lonGround = onGrounds[dominantArm];
+                    float lonGround = getMainHand(entity).ordinal();
                     float f6 = mh_sin(lonGround * 3.141593F);
                     float f7 = mh_sin((1.0F - (1.0F - lonGround) * (1.0F - lonGround)) * 3.141593F);
                     la = 0.1F - f6 * 0.6F;
@@ -290,7 +258,7 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
                     bipedRightArm.addRotateAngleZ(la);
                     bipedLeftArm.addRotateAngleZ(-la);
                 }
-            } else if (entity.isHolding(Items.CROSSBOW)) {
+            } else if (maidentity.isHolding(Items.CROSSBOW)) {
                 this.bipedRightArm.rotateAngleY = -0.3F + this.bipedHead.rotateAngleY;
                 this.bipedLeftArm.rotateAngleY = 0.6F + this.bipedHead.rotateAngleY;
                 this.bipedRightArm.rotateAngleX = (-(float) Math.PI / 2F) + this.bipedHead.rotateAngleX + 0.1F;
@@ -306,16 +274,12 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
             }
         }
 
-        Entity entity = (Entity) pEntityCaps.getCapsValue(IModelCaps.caps_Entity);
-
         if (entity instanceof IMaidAnimation) {
-            setAnimations(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, pEntityCaps, ((IMaidAnimation) entity));
+            setAnimations(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, entity, ((IMaidAnimation) entity));
         }
     }
 
-    public void setAnimations(float par1, float par2, float pTicksExisted, float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps, IMaidAnimation animation) {
-
-
+    public void setAnimations(float par1, float par2, float pTicksExisted, float pHeadYaw, float pHeadPitch, T entity, IMaidAnimation animation) {
         animator.update(animation);
         if (animation.getAnimation() == LittleMaidBaseEntity.TALK_ANIMATION) {
 
@@ -442,9 +406,9 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
     }
 
     @Override
-    public void setDefaultPause(float par1, float par2, float pTicksExisted,
-                                float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
-        super.setDefaultPause(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, pEntityCaps);
+    public void setDefaultPause(T entity, float par1, float par2, float pTicksExisted,
+                                float pHeadYaw, float pHeadPitch) {
+        super.setDefaultPause(entity, par1, par2, pTicksExisted, pHeadYaw, pHeadPitch);
         mainFrame.setRotationPoint(0F, 8F, 0F);
         bipedTorso.setRotationPoint(0F, 0F, 0F);
         bipedTorso.setRotateAngle(0F, 0F, 0F);
@@ -509,7 +473,7 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
     }
 
     @Override
-    public void renderItems(IModelCaps pEntityCaps, MatrixStack stack, boolean left) {
+    public void renderItems(MatrixStack stack, boolean left) {
         if (left) {
             this.bipedLeftArm.setAnglesAndRotation(stack);
         } else {
@@ -538,13 +502,12 @@ public abstract class ModelLittleMaidBase<T extends LivingEntity> extends ModelM
 		GL11.glPopMatrix();*/
     }
 
-    @Override
-    public void renderFirstPersonHand(IModelCaps pEntityCaps) {
-        float var2 = 1.0F;
-        //GL11.glColor3f(var2, var2, var2);
-        onGrounds[0] = onGrounds[1] = 0.0F;
-        //setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, pEntityCaps);
-        //bipedRightArm.render(0.0625F);
+    protected ModelRenderer getArmForSide(HandSide side) {
+        return side == HandSide.LEFT ? this.bipedLeftArm : this.bipedRightArm;
     }
 
+    protected HandSide getMainHand(T entityIn) {
+        HandSide handside = entityIn.getPrimaryHand();
+        return entityIn.swingingHand == Hand.MAIN_HAND ? handside : handside.opposite();
+    }
 }

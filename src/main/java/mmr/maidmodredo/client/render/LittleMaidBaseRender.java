@@ -1,9 +1,8 @@
 package mmr.maidmodredo.client.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import mmr.maidmodredo.client.maidmodel.IModelCaps;
 import mmr.maidmodredo.client.maidmodel.ModelBase;
-import mmr.maidmodredo.client.maidmodel.ModelMultiBase;
+import mmr.maidmodredo.client.maidmodel.ModelBaseSolo;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.utils.helper.RendererHelper;
 import net.minecraft.client.Minecraft;
@@ -16,7 +15,6 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -75,7 +73,7 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
                             Minecraft.getInstance().getTextureManager().bindTexture(texInner);
                             GL11.glEnable(GL11.GL_BLEND);
                             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                            modelFATT.modelInner.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, fcaps);
+                            modelFATT.modelInner.render(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, fcaps);
                             modelFATT.modelInner.setLivingAnimations(fcaps, limbSwing, limbSwingAmount, partialTicks);
                             modelFATT.modelInner.render(fcaps,matrixStackIn, bufferIn.getBuffer(RendetType), limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, renderScale, true);
                         } catch (Exception e) {
@@ -136,7 +134,7 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
                                 Minecraft.getInstance().getTextureManager().bindTexture(texOuter);
                                 GL11.glEnable(GL11.GL_BLEND);
                                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                                modelFATT.modelOuter.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, renderScale, fcaps);
+                                modelFATT.modelOuter.render(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, renderScale, fcaps);
                                 modelFATT.modelOuter.setLivingAnimations(fcaps, limbSwing, limbSwingAmount, partialTicks);
                                 modelFATT.modelOuter.render(fcaps, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, renderScale, true);
                             } catch (Exception e) {
@@ -195,7 +193,7 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
     /**
      * 手持ちアイテムレイヤー
      */
-    public class MMMHeldItemLayer<T extends LittleMaidBaseEntity, M extends ModelBase<T>> extends LayerRenderer<T, M> {
+    public class MMMHeldItemLayer<T extends LittleMaidBaseEntity, M extends ModelBaseSolo<T>> extends LayerRenderer<T, M> {
 
         //レイヤーと化したアイテム描画
 
@@ -232,15 +230,12 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
 
                 // Forge: moved this call down, fixes incorrect offset while sneaking.
                 //Force render(?)
-                if (modelMain.model instanceof ModelMultiBase) {
-                    ModelMultiBase<T> maidBase = (ModelMultiBase<T>) modelMain.model;
-
-                    if (flag) {
-                        maidBase.renderItems(p_188358_1_, matrixStackIn, flag);
-                    } else {
-                        maidBase.renderItems(p_188358_1_, matrixStackIn, flag);
-                    }
+                if (flag) {
+                    this.getEntityModel().renderItems(p_188358_1_, matrixStackIn, flag);
+                } else {
+                    this.getEntityModel().renderItems(p_188358_1_, matrixStackIn, flag);
                 }
+
 
                 matrixStackIn.rotate(Vector3f.XP.rotationDegrees(-90.0F));
                 matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F));
@@ -287,9 +282,9 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
     }
 
     @Override
-    public void setModelValues(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, IModelCaps pEntityCaps) {
+    public void setModelValues(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         LittleMaidBaseEntity lmaid = entityIn;
-        super.setModelValues(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn, pEntityCaps);
+        super.setModelValues(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
 
 //		modelMain.setRender(this);
 //		modelMain.setEntityCaps(pEntityCaps);
@@ -297,24 +292,11 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
 //		modelMain.isAlphablend = true;
 //		modelFATT.isAlphablend = true;
 
-        modelMain.setCapsValue(IModelCaps.caps_heldItemLeft, (Integer) 0);
-        modelMain.setCapsValue(IModelCaps.caps_heldItemRight, (Integer) 0);
-        //modelMain.setCapsValue(IModelCaps.caps_onGround, renderSwingProgress(lmaid, par9));
-        modelMain.setCapsValue(IModelCaps.caps_onGround, entityIn.getSwingProgress(partialTicks, Hand.MAIN_HAND), entityIn.getSwingProgress(partialTicks, Hand.OFF_HAND));
-        //modelMain.setCapsValue(IModelCaps.caps_isRiding, lmaid.isRidingRender());
-        //modelMain.setCapsValue(IModelCaps.caps_isSneak, lmaid.isSneaking());
-        /* modelMain.setCapsValue(IModelCaps.caps_aimedBow, lmaid.isAimebow());*/
-        modelMain.setCapsValue(IModelCaps.caps_isWait, lmaid.isMaidWait());
-        modelMain.setCapsValue(IModelCaps.caps_isChild, lmaid.isChild());
-        modelMain.setCapsValue(IModelCaps.caps_entityIdFactor, lmaid.entityIdFactor);
-        modelMain.setCapsValue(IModelCaps.caps_ticksExisted, lmaid.ticksExisted);
-        modelMain.setCapsValue(IModelCaps.caps_dominantArm, lmaid.getPrimaryHand().ordinal());
-
         //カスタム設定
-        //modelMain.setCapsValue(IModelCaps.caps_motionSitting, lmaid.isMotionSitting());
+        //this.getEntityModel().setCapsValue(IModelCaps.caps_motionSitting, lmaid.isMotionSitting());
 
         modelFATT.setModelAttributes(entityModel);
-        modelMain.setModelAttributes(entityModel);
+        this.getEntityModel().setModelAttributes(entityModel);
         // だが無意味だ
 //		plittleMaid.textureModel0.isChild = plittleMaid.textureModel1.isChild = plittleMaid.textureModel2.isChild = plittleMaid.isChild();
     }

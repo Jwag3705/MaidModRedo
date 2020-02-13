@@ -4,13 +4,14 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import mmr.maidmodredo.api.IMaidAnimation;
-import mmr.maidmodredo.client.maidmodel.IModelCaps;
 import mmr.maidmodredo.client.maidmodel.MaidModelRenderer;
 import mmr.maidmodredo.client.maidmodel.ModelMultiMMMBase;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.entity.monstermaid.EnderMaidEntity;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.Items;
+import net.minecraft.util.Hand;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMultiMMMBase<T> {
@@ -86,7 +87,7 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
     }
 
     @Override
-    public void render(IModelCaps pEntityCaps, MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, boolean pIsRender) {
+    public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         ImmutableList.of(this.mainFrame).forEach((p_228292_8_) -> {
             p_228292_8_.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         });
@@ -115,7 +116,7 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
 
 
     @Override
-    public void renderItems(IModelCaps pEntityCaps, MatrixStack stack, boolean left) {
+    public void renderItems(MatrixStack stack, boolean left) {
         if (left) {
             this.handL.setAnglesAndRotation(stack);
         } else {
@@ -124,30 +125,16 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
     }
 
     @Override
-    public void renderFirstPersonHand(IModelCaps pEntityCaps) {
-
-    }
-
-    @Override
     public float[] getArmorModelsSize() {
         return new float[]{0.55F, 1.95F};
     }
 
-
-    public void changeModel(IModelCaps pEntityCaps) {
-        // カウンタ系の加算値、リミット値の設定など行う予定。
-    }
-
-    public boolean supportForEntity(Class entity) {
-        return entity == EnderMaidEntity.class;
-    }
-
     @Override
-    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks,
-                                  float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
-        setDefaultPause(limbSwing, limbSwingAmount, ageInTicks, pHeadYaw, pHeadPitch, pEntityCaps);
+    public void render(T entity, float limbSwing, float limbSwingAmount, float ageInTicks,
+                       float pHeadYaw, float pHeadPitch) {
+        setDefaultPause(entity, limbSwing, limbSwingAmount, ageInTicks, pHeadYaw, pHeadPitch);
 
-        if (isRiding) {
+        if (entity.isPassenger() && (entity.getRidingEntity() != null && entity.getRidingEntity().shouldRiderSit())) {
             // 乗り物に乗っている
             handR.addRotateAngleX(-0.6283185F);
             handL.addRotateAngleX(-0.6283185F);
@@ -158,82 +145,40 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
 //			mainFrame.rotationPointY += 5.00F;
         }
 
-        //カスタム設定
+        /*//カスタム設定
         //お座りモーションの場合はモデル側で位置を調整する
-        if (motionSitting && isRiding) {
+        if (motionSitting && entity.isPassenger() && (entity.getRidingEntity() != null && entity.getRidingEntity().shouldRiderSit()) {
             mainFrame.rotationPointY += 5.00F;
-        }
+        }*/
 
-        // アイテム持ってるときの腕振りを抑える+表示角オフセット
-        if (heldItem[1] != 0) {
-            handL.setRotateAngleX(handL.getRotateAngleX() * 0.5F);
-            handL.addRotateAngleDegX(-18F * heldItem[1]);
-        }
-        if (heldItem[0] != 0) {
-            handR.setRotateAngleX(handR.getRotateAngleX() * 0.5F);
-            handR.addRotateAngleDegX(-18F * heldItem[0]);
-        }
-
-//		handR.setRotateAngleY(0.0F);
-//		handL.setRotateAngleY(0.0F);
-
-        if ((onGrounds[0] > -9990F || onGrounds[1] > -9990F) && !aimedBow) {
-            // 腕振り
-            float f6, f7, f8;
-            f6 = mh_sin(mh_sqrt(onGrounds[0]) * (float) Math.PI * 2.0F);
-            f7 = mh_sin(mh_sqrt(onGrounds[1]) * (float) Math.PI * 2.0F);
-            body.setRotateAngleY((f6 - f7) * 0.2F);
-            handR.addRotateAngleY(body.rotateAngleY);
-            handL.addRotateAngleY(body.rotateAngleY);
-            head.addRotateAngleY(-body.rotateAngleY);
-            // R
-            if (onGrounds[0] > 0F) {
-                f6 = 1.0F - onGrounds[0];
-                f6 *= f6;
-                f6 *= f6;
-                f6 = 1.0F - f6;
-                f7 = mh_sin(f6 * (float) Math.PI);
-                f8 = mh_sin(onGrounds[0] * (float) Math.PI) * -(head.rotateAngleX - 0.7F) * 0.75F;
-                handR.addRotateAngleX(-f7 * 1.2F - f8);
-                handR.addRotateAngleY(body.rotateAngleY * 2.0F);
-                handR.setRotateAngleZ(mh_sin(onGrounds[0] * 3.141593F) * -0.4F);
-            } else {
-                handR.addRotateAngleX(body.rotateAngleY);
+        if (this.swingProgress > 0.0F) {
+            HandSide handside = this.getMainHand(entity);
+            ModelRenderer modelrenderer = this.getArmForSide(handside);
+            float f1 = this.swingProgress;
+            this.body.rotateAngleY = MathHelper.sin(MathHelper.sqrt(f1) * ((float) Math.PI * 2F)) * 0.2F;
+            if (handside == HandSide.LEFT) {
+                this.body.rotateAngleY *= -1.0F;
             }
-            // L
-            if (onGrounds[1] > 0F) {
-                f6 = 1.0F - onGrounds[1];
-                f6 *= f6;
-                f6 *= f6;
-                f6 = 1.0F - f6;
-                f7 = mh_sin(f6 * (float) Math.PI);
-                f8 = mh_sin(onGrounds[1] * (float) Math.PI) * -(head.rotateAngleX - 0.7F) * 0.75F;
-                handL.rotateAngleX -= f7 * 1.2D + f8;
-                handL.rotateAngleY += body.rotateAngleY * 2.0F;
-                handL.setRotateAngleZ(mh_sin(onGrounds[1] * 3.141593F) * 0.4F);
-            } else {
-                handL.rotateAngleX += body.rotateAngleY;
-            }
-        }
-        if (isSneak) {
-           /* // しゃがみ
-            body.rotateAngleX += 0.5F;
-            bipedNeck.rotateAngleX -= 0.5F;
-            handR.rotateAngleX += 0.2F;
-            handL.rotateAngleX += 0.2F;
 
-            bipedPelvic.addRotationPointY(-0.5F);
-            bipedPelvic.addRotationPointZ(-0.6F);
-            bipedPelvic.addRotateAngleX(-0.5F);
-            head.rotationPointY = 1.0F;
-//			Skirt.setRotationPoint(0.0F, 5.8F, 2.7F);
-            Skirt.rotationPointY -= 0.25F;
-            Skirt.rotationPointZ += 0.00F;
-            Skirt.addRotateAngleX(0.2F);*/
-        } else {
-            // 通常立ち
+            this.handR.rotationPointZ = MathHelper.sin(this.body.rotateAngleY) * 5.0F;
+            this.handR.rotationPointX = -MathHelper.cos(this.body.rotateAngleY) * 5.0F;
+            this.handL.rotationPointZ = -MathHelper.sin(this.body.rotateAngleY) * 5.0F;
+            this.handL.rotationPointX = MathHelper.cos(this.body.rotateAngleY) * 5.0F;
+            this.handR.rotateAngleY += this.body.rotateAngleY;
+            this.handL.rotateAngleY += this.body.rotateAngleY;
+            this.handL.rotateAngleX += this.body.rotateAngleY;
+            f1 = 1.0F - this.swingProgress;
+            f1 = f1 * f1;
+            f1 = f1 * f1;
+            f1 = 1.0F - f1;
+            float f2 = MathHelper.sin(f1 * (float) Math.PI);
+            float f3 = MathHelper.sin(this.swingProgress * (float) Math.PI) * -(this.head.rotateAngleX - 0.7F) * 0.75F;
+            modelrenderer.rotateAngleX = (float) ((double) modelrenderer.rotateAngleX - ((double) f2 * 1.2D + (double) f3));
+            modelrenderer.rotateAngleY += this.body.rotateAngleY * 2.0F;
+            modelrenderer.rotateAngleZ += MathHelper.sin(this.swingProgress * (float) Math.PI) * -0.4F;
         }
-        if (isWait) {
+
+        if (entity.isMaidWait()) {
             //待機状態の特別表示
             float lx = mh_sin(ageInTicks * 0.067F) * 0.05F - 0.7F;
             handR.setRotateAngle(lx, 0.0F, -0.4F);
@@ -241,12 +186,8 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         } else {
             float la, lb, lc;
 
-            LittleMaidBaseEntity entity = (LittleMaidBaseEntity) pEntityCaps.getCapsValue(IModelCaps.caps_Entity);
-
-            if (aimedBow) {
-                Boolean isCharging = (Boolean) pEntityCaps.getCapsValue(IModelCaps.caps_crossbow);
-
-                if (isCharging) {
+            if (entity.isShooting()) {
+                if (entity.isCharging()) {
                     this.handR.rotateAngleY = -0.8F;
                     this.handR.rotateAngleX = -0.97079635F;
                     this.handL.rotateAngleX = -0.97079635F;
@@ -255,7 +196,7 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
                     this.handL.rotateAngleX = MathHelper.lerp(f2 / 25.0F, this.handL.rotateAngleX, (-(float) Math.PI / 2F));
                 } else {
                     // 弓構え
-                    float lonGround = onGrounds[dominantArm];
+                    float lonGround = getMainHand(entity).ordinal();
                     float f6 = mh_sin(lonGround * 3.141593F);
                     float f7 = mh_sin((1.0F - (1.0F - lonGround) * (1.0F - lonGround)) * 3.141593F);
                     la = 0.1F - f6 * 0.6F;
@@ -289,14 +230,12 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
             }
         }
 
-        Entity entity = (Entity) pEntityCaps.getCapsValue(IModelCaps.caps_Entity);
-
         if (entity instanceof IMaidAnimation) {
-            setAnimations(limbSwing, limbSwingAmount, ageInTicks, pHeadYaw, pHeadPitch, pEntityCaps, ((IMaidAnimation) entity));
+            setAnimations(limbSwing, limbSwingAmount, ageInTicks, pHeadYaw, pHeadPitch, entity, ((IMaidAnimation) entity));
         }
     }
 
-    public void setAnimations(float par1, float par2, float ageInTicks, float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps, IMaidAnimation animation) {
+    public void setAnimations(float par1, float par2, float ageInTicks, float pHeadYaw, float pHeadPitch, T pEntityCaps, IMaidAnimation animation) {
 
 
         animator.update(animation);
@@ -436,13 +375,12 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         }
     }
 
-    public void setDefaultPause(float limbSwing, float limbSwingAmount, float ageInTicks,
-                                float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
-        LittleMaidBaseEntity baseEntity = (LittleMaidBaseEntity) pEntityCaps.getCapsValue(IModelCaps.caps_Entity);
-
+    public void setDefaultPause(T entity, float limbSwing, float limbSwingAmount, float ageInTicks,
+                                float pHeadYaw, float pHeadPitch) {
         this.head.rotateAngleY = pHeadYaw * ((float) Math.PI / 180F);
         this.head.rotateAngleX = pHeadPitch * ((float) Math.PI / 180F);
 
+        this.body.rotateAngleY = 0.0F;
 
         this.handR.rotateAngleY = 0.0F;
         this.handL.rotateAngleY = 0.0F;
@@ -456,7 +394,7 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         this.legR.rotateAngleY = 0.0F;
         this.legL.rotateAngleY = 0.0F;
 
-        if (baseEntity.isMaidWait()) {
+        if (entity.isMaidWait()) {
             handR.rotateAngleZ = -0.4F;
             handL.rotateAngleZ = 0.4F;
             handR.rotateAngleX = -0.4F;
@@ -484,4 +422,14 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
+
+    protected ModelRenderer getArmForSide(HandSide side) {
+        return side == HandSide.LEFT ? this.handL : this.handR;
+    }
+
+    protected HandSide getMainHand(T entityIn) {
+        HandSide handside = entityIn.getPrimaryHand();
+        return entityIn.swingingHand == Hand.MAIN_HAND ? handside : handside.opposite();
+    }
+
 }

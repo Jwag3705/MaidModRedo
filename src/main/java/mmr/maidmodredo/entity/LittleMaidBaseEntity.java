@@ -9,7 +9,10 @@ import com.mojang.datafixers.util.Pair;
 import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.api.IMaidAnimation;
 import mmr.maidmodredo.api.MaidAnimation;
-import mmr.maidmodredo.client.maidmodel.*;
+import mmr.maidmodredo.client.maidmodel.IModelEntity;
+import mmr.maidmodredo.client.maidmodel.ModelConfigCompound;
+import mmr.maidmodredo.client.maidmodel.TextureBox;
+import mmr.maidmodredo.client.maidmodel.TextureBoxBase;
 import mmr.maidmodredo.entity.data.MaidData;
 import mmr.maidmodredo.entity.misc.MaidFishingBobberEntity;
 import mmr.maidmodredo.entity.pathnavigator.MaidGroundPathNavigator;
@@ -22,7 +25,6 @@ import mmr.maidmodredo.inventory.MaidInventoryContainer;
 import mmr.maidmodredo.network.MaidPacketHandler;
 import mmr.maidmodredo.utils.Counter;
 import mmr.maidmodredo.utils.ModelManager;
-import mmr.maidmodredo.utils.entitycap.EntityCaps;
 import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.*;
@@ -81,7 +83,7 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, IModelEntity, IMaidAnimation, ICrossbowUser {
+public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity, IMaidAnimation, ICrossbowUser {
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.PATH, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.field_225462_q, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MaidMemoryModuleType.TARGET_HOSTILES, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.field_226332_A_, MemoryModuleType.LAST_WORKED_AT_POI);
     private static final ImmutableList<SensorType<? extends Sensor<? super LittleMaidBaseEntity>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.INTERACTABLE_DOORS, SensorType.NEAREST_BED, SensorType.HURT_BY, LittleSensorTypes.MAID_HOSTILES, LittleSensorTypes.DEFEND_OWNER);
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<LittleMaidBaseEntity, PointOfInterestType>> field_213774_bB = ImmutableMap.of(MemoryModuleType.HOME, (p_213769_0_, p_213769_1_) -> {
@@ -112,8 +114,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
             EAT_ANIMATION
     };
 
-    public EntityCaps maidCaps = new EntityCaps(this);
-    public ModelConfigCompound textureData = new ModelConfigCompound(this, maidCaps);
+    public ModelConfigCompound textureData = new ModelConfigCompound(this);
 
     private boolean mstatOpenInventory;
 
@@ -1341,8 +1342,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
         MaidModRedo.LOGGER.debug("ID:%d, TextureModel:%s", getEntityId(), textureData.getTextureName(0));
 
         // モデルの初期化
-        ((TextureBox) textureData.textureBox[0]).models[0].setCapsValue(IModelCaps.caps_changeModel, maidCaps);
-
 
         // スタビの付け替え
 //		for (Entry<String, MMM_EquippedStabilizer> le : pEntity.maidStabilizer.entrySet()) {
@@ -1461,23 +1460,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelCaps, 
         tagCompound.putString("Armor", getModelNameArmor());
 
         MaidPacketHandler.syncModel(this, tagCompound);
-    }
-
-    @Override
-    public Map<String, Integer> getModelCaps() {
-        return maidCaps.getModelCaps();
-    }
-
-
-    @Override
-    public Object getCapsValue(int pIndex, Object... pArg) {
-        return maidCaps.getCapsValue(pIndex, pArg);
-    }
-
-
-    @Override
-    public boolean setCapsValue(int pIndex, Object... pArg) {
-        return maidCaps.setCapsValue(pIndex, pArg);
     }
 
     public void resetPlayingAnimationToDefault() {

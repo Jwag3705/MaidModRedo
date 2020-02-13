@@ -1,42 +1,25 @@
 package mmr.maidmodredo.client.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import mmr.maidmodredo.client.maidmodel.IModelCaps;
-import mmr.maidmodredo.client.maidmodel.ModelBase;
 import mmr.maidmodredo.client.maidmodel.ModelBaseDuo;
 import mmr.maidmodredo.client.maidmodel.ModelBaseSolo;
-import mmr.maidmodredo.client.model.ModelFake;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 
 import java.util.List;
 
-public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRenderer<T, ModelBase<T>> {
-    public ModelBaseSolo<T> modelMain;
+public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRenderer<T, ModelBaseSolo<T>> {
     public ModelBaseDuo<T> modelFATT;
-    public IModelCaps fcaps;
 
     public ModelMultiRender(EntityRendererManager manager, float pShadowSize) {
-        super(manager, new ModelFake<>(), pShadowSize);
+        super(manager, new ModelBaseSolo<>(), pShadowSize);
         modelFATT = new ModelBaseDuo<>();
         modelFATT.isModelAlphablend = true;
         modelFATT.isRendering = true;
-        modelMain = new ModelBaseSolo<>();
-        modelMain.isModelAlphablend = true;
-        modelMain.capsLink = modelFATT;
-        //entityModel = modelMain;
         //setRenderPassModel(modelFATT);
     }
 
@@ -58,74 +41,45 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
     @Override
     protected void preRenderCallback(T entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
         super.preRenderCallback(entitylivingbaseIn, matrixStackIn, partialTickTime);
-        Float lscale = (Float) modelMain.getCapsValue(IModelCaps.caps_ScaleFactor);
-        if (lscale != null) {
-            matrixStackIn.scale(lscale, lscale, lscale);
-        }
+
+        //matrixStackIn.scale(lscale, lscale, lscale);
+
     }
 
-    public void setModelValues(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, IModelCaps pEntityCaps) {
-        matrixStackIn.push();
-        modelMain.model = entityIn.getModelConfigCompound().textureModel[0];
+    public void setModelValues(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        //matrixStackIn.push();
+
+        this.getEntityModel().isModelAlphablend = true;
+        this.getEntityModel().capsLink = modelFATT;
+        this.getEntityModel().model = entityIn.getModelConfigCompound().textureModel[0];
         modelFATT.modelInner = entityIn.getModelConfigCompound().textureModel[1];
         modelFATT.modelOuter = entityIn.getModelConfigCompound().textureModel[2];
-        //modelMain.model = ((TextureBox) entityIn.getTextureBox()[0]).models[0];
-        modelMain.textures = entityIn.getTextures(0);
+        //this.getEntityModel().model = ((TextureBox) entityIn.getTextureBox()[0]).models[0];
+        this.getEntityModel().textures = entityIn.getTextures(0);
         //modelFATT.modelInner = ((TextureBox) entityIn.getTextureBox()[1]).models[1];
         //modelFATT.modelOuter = ((TextureBox) entityIn.getTextureBox()[1]).models[2];
         modelFATT.textureInner = entityIn.getTextures(1);
         modelFATT.textureOuter = entityIn.getTextures(2);
         modelFATT.textureInnerLight = entityIn.getTextures(3);
         modelFATT.textureOuterLight = entityIn.getTextures(4);
-        modelFATT.textureLightColor = (float[]) modelFATT.getCapsValue(IModelCaps.caps_textureLightColor, pEntityCaps);
-
-        modelMain.setEntityCaps(pEntityCaps);
-        modelFATT.setEntityCaps(pEntityCaps);
-        modelMain.setRender(this);
+        this.getEntityModel().setRender(this);
         modelFATT.setRender(this);
-        modelMain.showAllParts();
+        this.getEntityModel().showAllParts();
         modelFATT.showAllParts();
-        modelMain.isAlphablend = true;
+        this.getEntityModel().isAlphablend = true;
         modelFATT.isAlphablend = true;
-        modelMain.renderCount = 0;
+        this.getEntityModel().renderCount = 0;
         modelFATT.renderCount = 0;
-        modelMain.lighting = modelFATT.lighting = entityIn.getBrightness();
-
-        modelMain.setCapsValue(IModelCaps.caps_heldItemLeft, (Integer) 0);
-        modelMain.setCapsValue(IModelCaps.caps_heldItemRight, (Integer) 0);
-        modelMain.setCapsValue(IModelCaps.caps_onGround, entityIn.getSwingProgress(partialTicks, Hand.MAIN_HAND), entityIn.getSwingProgress(partialTicks, Hand.OFF_HAND));
-        modelMain.setCapsValue(IModelCaps.caps_isRiding, entityIn.isPassenger());
-        //modelMain.setCapsValue(IModelCaps.caps_isSneak, entityIn.isSneaking());
-        modelMain.setCapsValue(IModelCaps.caps_aimedBow, entityIn.isShooting());
-        modelMain.setCapsValue(IModelCaps.caps_crossbow, entityIn.isCharging());
-        modelMain.setCapsValue(IModelCaps.caps_isWait, entityIn.isMaidWait());
-        modelMain.setCapsValue(IModelCaps.caps_isChild, entityIn.isChild());
-        modelMain.setCapsValue(IModelCaps.caps_entityIdFactor, entityIn.entityIdFactor);
-        modelMain.setCapsValue(IModelCaps.caps_ticksExisted, entityIn.ticksExisted);
-        //カスタム設定
-        modelMain.setCapsValue(IModelCaps.caps_motionSitting, false);
-
-        modelMain.setCapsValue(IModelCaps.caps_heldItemLeft, (Integer) 0);
-        modelMain.setCapsValue(IModelCaps.caps_heldItemRight, (Integer) 0);
-        //modelMain.setCapsValue(IModelCaps.caps_onGround, renderSwingProgress(entityIn, par9));
-        modelMain.setCapsValue(IModelCaps.caps_onGround, entityIn.getSwingProgress(partialTicks, entityIn.getSwingHand()), entityIn.getSwingProgress(partialTicks, entityIn.getSwingHand()));
-        //modelMain.setCapsValue(IModelCaps.caps_isRiding, entityIn.isRidingRender());
-        //modelMain.setCapsValue(IModelCaps.caps_isSneak, entityIn.isSneaking());
-        /* modelMain.setCapsValue(IModelCaps.caps_aimedBow, entityIn.isAimebow());*/
-        modelMain.setCapsValue(IModelCaps.caps_isWait, entityIn.isMaidWait());
-        modelMain.setCapsValue(IModelCaps.caps_isChild, entityIn.isChild());
-        modelMain.setCapsValue(IModelCaps.caps_entityIdFactor, entityIn.entityIdFactor);
-        modelMain.setCapsValue(IModelCaps.caps_ticksExisted, entityIn.ticksExisted);
-        modelMain.setCapsValue(IModelCaps.caps_dominantArm, entityIn.getPrimaryHand().ordinal());
+        this.getEntityModel().lighting = modelFATT.lighting = entityIn.getBrightness();
 
         modelFATT.setModelAttributes(entityModel);
-        modelMain.setModelAttributes(entityModel);
+        this.getEntityModel().setModelAttributes(entityModel);
         //entityModel = modelMain;
 
         //途中でRenderされなくなるのを防ぐためにあえてここで描画する
         //Draw here to continue drawing
 
-        boolean shouldSit = entityIn.isPassenger() && (entityIn.getRidingEntity() != null && entityIn.getRidingEntity().shouldRiderSit());
+        /*boolean shouldSit = entityIn.isPassenger() && (entityIn.getRidingEntity() != null && entityIn.getRidingEntity().shouldRiderSit());
 
 
         float f = MathHelper.interpolateAngle(partialTicks, entityIn.prevRenderYawOffset, entityIn.renderYawOffset);
@@ -189,19 +143,18 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
             int i = getPackedOverlay(entityIn, this.getOverlayProgress(entityIn, partialTicks));
             modelMain.render(matrixStackIn, ivertexbuilder, packedLightIn, i, 1.0F, 1.0F, 1.0F, flag1 ? 0.15F : 1.0F);
         }
-        matrixStackIn.pop();
+        matrixStackIn.pop();*/
     }
 
-    public void renderModelMulti(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, IModelCaps pEntityCaps) {
-        setModelValues(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn, pEntityCaps);
+    public void renderModelMulti(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        setModelValues(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
 
     @Override
     public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-        fcaps = entityIn.maidCaps;
-        renderModelMulti(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn, fcaps);
+        renderModelMulti(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
     // TODO いらん？

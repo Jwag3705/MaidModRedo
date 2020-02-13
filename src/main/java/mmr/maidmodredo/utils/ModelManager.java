@@ -407,10 +407,10 @@ public class ModelManager {
                         "%04x,%04x,%f,%f,%f,%f,%s",
                         lbox.getContractColorBits(),
                         lbox.getWildColorBits(),
-                        lbox.getHeight(null),
-                        lbox.getWidth(null),
-                        lbox.getYOffset(null),
-                        lbox.getMountedYOffset(null),
+                        lbox.getHeight(),
+                        lbox.getWidth(),
+                        lbox.getYOffset(),
+                        lbox.getMountedYOffset(),
                         lbox.textureName));
                 bw.newLine();
             }

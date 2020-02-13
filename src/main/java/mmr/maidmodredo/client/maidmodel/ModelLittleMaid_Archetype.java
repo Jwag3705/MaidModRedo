@@ -1,13 +1,17 @@
 package mmr.maidmodredo.client.maidmodel;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import mmr.maidmodredo.entity.LittleMaidBaseEntity;
+import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.util.HandSide;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 /**
  * 旧型モデル互換のベースモデル。
  * 関節リンクしていない
  */
-public class ModelLittleMaid_Archetype extends ModelLittleMaidBase {
+public class ModelLittleMaid_Archetype<T extends LittleMaidBaseEntity> extends ModelLittleMaidBase<T> {
 
 	// fields
     public MaidModelRenderer bipedHeadwear;
@@ -171,17 +175,15 @@ public class ModelLittleMaid_Archetype extends ModelLittleMaidBase {
 	}
 
 	@Override
-	public void setLivingAnimations(IModelCaps pEntityCaps, float par2, float par3, float pRenderPartialTicks) {
+	public void setLivingAnimations(T pEntityCaps, float par2, float par3, float pRenderPartialTicks) {
 		super.setLivingAnimations(pEntityCaps, par2, par3, pRenderPartialTicks);
-		float f3 = ModelCapsHelper.getCapsValueFloat(pEntityCaps, caps_interestedAngle, pRenderPartialTicks);
-		bipedHead.rotateAngleZ = f3;
 //		bipedHeadwear.rotateAngleZ = f3;
 	}
 
 	@Override
-	public void setRotationAngles(float par1, float par2, float pTicksExisted,
-                                  float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
-//		super.setRotationAnglesMM(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6);
+	public void render(T entity, float par1, float par2, float pTicksExisted,
+					   float pHeadYaw, float pHeadPitch) {
+//		super.renderMM(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, par6);
 		
 		bipedHead.rotateAngleY = pHeadYaw / 57.29578F;
 		bipedHead.rotateAngleX = pHeadPitch / 57.29578F;
@@ -196,7 +198,7 @@ public class ModelLittleMaid_Archetype extends ModelLittleMaidBase {
 		bipedRightLeg.rotateAngleY = 0.0F;
 		bipedLeftLeg.rotateAngleY = 0.0F;
 
-		if (isRiding) {
+		if (entity.isPassenger() && (entity.getRidingEntity() != null && entity.getRidingEntity().shouldRiderSit())) {
 			// 乗り物に乗っている
 			bipedRightArm.rotateAngleX += -0.6283185F;
 			bipedLeftArm.rotateAngleX += -0.6283185F;
@@ -205,73 +207,40 @@ public class ModelLittleMaid_Archetype extends ModelLittleMaidBase {
 			bipedRightLeg.rotateAngleY = 0.3141593F;
 			bipedLeftLeg.rotateAngleY = -0.3141593F;
 		}
-		// アイテム持ってるときの腕振りを抑える
-		if (heldItem[1] != 0) {
-			bipedLeftArm.rotateAngleX = bipedLeftArm.rotateAngleX * 0.5F
-					- 0.3141593F * heldItem[1];
-		}
-		if (heldItem[0] != 0) {
-			bipedRightArm.rotateAngleX = bipedRightArm.rotateAngleX * 0.5F
-					- 0.3141593F * heldItem[0];
-		}
-		
+
 		bipedRightArm.rotateAngleY = 0.0F;
 		bipedLeftArm.rotateAngleY = 0.0F;
-		float lonGround = onGrounds[dominantArm];
-		if (lonGround > -9990F && !aimedBow) {
-			// 腕振り
-			float f6 = lonGround;
-			bipedBody.rotateAngleY = mh_sin(mh_sqrt(f6) * 3.141593F * 2.0F) * 0.2F;
+
+		if (this.swingProgress > 0.0F) {
+			HandSide handside = this.getMainHand(entity);
+			ModelRenderer modelrenderer = this.getArmForSide(handside);
+			float f1 = this.swingProgress;
+			this.bipedBody.rotateAngleY = MathHelper.sin(MathHelper.sqrt(f1) * ((float) Math.PI * 2F)) * 0.2F;
+			if (handside == HandSide.LEFT) {
+				this.bipedBody.rotateAngleY *= -1.0F;
+			}
 			Skirt.rotateAngleY = bipedBody.rotateAngleY;
-			bipedRightArm.rotationPointZ = mh_sin(bipedBody.rotateAngleY) * 4F;
-			bipedRightArm.rotationPointX = -mh_cos(bipedBody.rotateAngleY) * 4F + 1.0F;
-			bipedLeftArm.rotationPointZ = -mh_sin(bipedBody.rotateAngleY) * 4F;
-			bipedLeftArm.rotationPointX = mh_cos(bipedBody.rotateAngleY) * 4F - 1.0F;
-			bipedRightArm.rotateAngleY += bipedBody.rotateAngleY;
-			bipedLeftArm.rotateAngleY += bipedBody.rotateAngleY;
-			bipedLeftArm.rotateAngleX += bipedBody.rotateAngleY;
-			f6 = 1.0F - lonGround;
-			f6 *= f6;
-			f6 *= f6;
-			f6 = 1.0F - f6;
-			float f7 = mh_sin(f6 * 3.141593F);
-			float f8 = mh_sin(lonGround * 3.141593F)
-					* -(bipedHead.rotateAngleX - 0.7F) * 0.75F;
-			bipedRightArm.rotateAngleX -= f7 * 1.2D + f8;
-			bipedRightArm.rotateAngleY += bipedBody.rotateAngleY * 2.0F;
-			bipedRightArm.rotateAngleZ = mh_sin(lonGround * 3.141593F) * -0.4F;
+
+			this.bipedRightArm.rotationPointZ = MathHelper.sin(this.bipedBody.rotateAngleY) * 5.0F;
+			this.bipedRightArm.rotationPointX = -MathHelper.cos(this.bipedBody.rotateAngleY) * 5.0F;
+			this.bipedLeftArm.rotationPointZ = -MathHelper.sin(this.bipedBody.rotateAngleY) * 5.0F;
+			this.bipedLeftArm.rotationPointX = MathHelper.cos(this.bipedBody.rotateAngleY) * 5.0F;
+			this.bipedRightArm.rotateAngleY += this.bipedBody.rotateAngleY;
+			this.bipedLeftArm.rotateAngleY += this.bipedBody.rotateAngleY;
+			this.bipedLeftArm.rotateAngleX += this.bipedBody.rotateAngleY;
+			f1 = 1.0F - this.swingProgress;
+			f1 = f1 * f1;
+			f1 = f1 * f1;
+			f1 = 1.0F - f1;
+			float f2 = MathHelper.sin(f1 * (float) Math.PI);
+			float f3 = MathHelper.sin(this.swingProgress * (float) Math.PI) * -(this.bipedHead.rotateAngleX - 0.7F) * 0.75F;
+			modelrenderer.rotateAngleX = (float) ((double) modelrenderer.rotateAngleX - ((double) f2 * 1.2D + (double) f3));
+			modelrenderer.rotateAngleY += this.bipedBody.rotateAngleY * 2.0F;
+			modelrenderer.rotateAngleZ += MathHelper.sin(this.swingProgress * (float) Math.PI) * -0.4F;
 		}
-		if (isSneak) {
-			// しゃがみ
-			bipedBody.rotateAngleX = 0.5F;
-			bipedRightLeg.rotateAngleX -= 0.0F;
-			bipedLeftLeg.rotateAngleX -= 0.0F;
-			bipedRightArm.rotateAngleX += 0.4F;
-			bipedLeftArm.rotateAngleX += 0.4F;
-			bipedRightLeg.rotationPointZ = 3F;
-			bipedLeftLeg.rotationPointZ = 3F;
-			bipedRightLeg.rotationPointY = 6F;
-			bipedLeftLeg.rotationPointY = 6F;
-			bipedHead.rotationPointY = 1.0F;
-			bipedHeadwear.rotationPointY = 1.0F;
-			bipedHeadwear.rotateAngleX += 0.5F;
-			Skirt.rotationPointY = 5.8F;
-			Skirt.rotationPointZ = 2.7F;
-			Skirt.rotateAngleX = 0.2F;
-		} else {
-			// 通常立ち
-			bipedBody.rotateAngleX = 0.0F;
-			bipedRightLeg.rotationPointZ = 0.0F;
-			bipedLeftLeg.rotationPointZ = 0.0F;
-			bipedRightLeg.rotationPointY = 7F;
-			bipedLeftLeg.rotationPointY = 7F;
-			bipedHead.rotationPointY = 0.0F;
-			bipedHeadwear.rotationPointY = 0.0F;
-			Skirt.rotationPointY = 7.0F;
-			Skirt.rotationPointZ = 0.0F;
-			Skirt.rotateAngleX = 0.0F;
-		}
-		if (isWait) {
+
+		float lonGround = getMainHand(entity).ordinal();
+		if (entity.isMaidWait()) {
 			// 待機状態の特別表示
 			bipedRightArm.rotateAngleX = mh_sin(pTicksExisted * 0.067F) * 0.05F - 0.7F;
 			bipedRightArm.rotateAngleY = 0.0F;
@@ -280,7 +249,7 @@ public class ModelLittleMaid_Archetype extends ModelLittleMaidBase {
 			bipedLeftArm.rotateAngleY = 0.0F;
 			bipedLeftArm.rotateAngleZ = 0.4F;
 		} else {
-			if (aimedBow) {
+			if (entity.isShooting()) {
 				// 弓構え
 				float f6 = mh_sin(lonGround * 3.141593F);
 				float f7 = mh_sin((1.0F - (1.0F - lonGround)
@@ -317,7 +286,7 @@ public class ModelLittleMaid_Archetype extends ModelLittleMaidBase {
 	}
 
 	@Override
-    public void renderItems(IModelCaps pEntityCaps, MatrixStack stack, boolean left) {
+	public void renderItems(MatrixStack stack, boolean left) {
         if (left) {
             this.bipedLeftArm.setAnglesAndRotation(stack);
         } else {

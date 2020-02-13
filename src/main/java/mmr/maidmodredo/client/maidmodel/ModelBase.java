@@ -1,7 +1,5 @@
 package mmr.maidmodredo.client.maidmodel;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import mmr.maidmodredo.client.maidmodel.animator.MaidModelAnimator;
 import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -18,28 +16,11 @@ public abstract class ModelBase<T extends LivingEntity> extends AbstractModelBas
 	public LivingRenderer render;
 
 	// ModelBaseとある程度互換
-	public float onGrounds[] = new float[] {0.0F, 0.0F};
-	public int dominantArm = 0;
-	public boolean isRiding = false;
-	public boolean isChild = true;
     public List<ModelRenderer> boxList = new ArrayList<ModelRenderer>();
-	//カスタム設定
-	public boolean motionSitting = false;
-
     public MaidModelAnimator animator = MaidModelAnimator.create();
 
 
 	// ModelBase互換関数群
-
-    public void render(IModelCaps pEntityCaps, MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, boolean pIsRender) {
-	}
-
-	public void setRotationAngles(float par1, float par2, float pTicksExisted,
-                                  float pHeadYaw, float pHeadPitch, IModelCaps pEntityCaps) {
-	}
-
-	public void setLivingAnimations(IModelCaps pEntityCaps, float par2, float par3, float pRenderPartialTicks) {
-	}
 
 	/*public ModelRenderer getRandomModelBox(Random par1Random) {
 		return super.getRandomModelBox(par1Random);

@@ -10,7 +10,6 @@ public class ModelBaseNihil<T extends LivingEntity> extends ModelBase<T> {
 	public boolean isModelAlphablend;
 	public IModelBaseMMM capsLink;
     public float lighting;
-	public IModelCaps entityCaps;
 	public boolean isRendering;
 	/**
 	 * レンダリングが実行された回数。

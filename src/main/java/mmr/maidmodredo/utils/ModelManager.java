@@ -299,7 +299,6 @@ public class ModelManager {
     //Entityのクラスでテクスチャを分ける
     //TODO
     private void setTextureForType(TextureBox lbox) {
-        ;
         if (modelEntityMap.containsValue(lbox.modelEntity)) {
             setDefaultTexture(lbox.modelEntity, lbox);
         } else {

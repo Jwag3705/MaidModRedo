@@ -43,7 +43,6 @@ public class MaidPacketHandler {
         MaidPacketHandler.CHANNEL.sendToServer(new MessageMaidJobSet(entity, job));
     }
 
-
     public static void animationModel(LittleMaidBaseEntity entity, MaidAnimation animation) {
         if (!entity.getEntityWorld().isRemote()) {
             entity.setAnimation(animation);

@@ -34,7 +34,7 @@
   "item.maidmodredo.setmaidbed": "メイドが寝るベットの位置を設定しました: %s, %s, %s",
   "item.maidmodredo.set_jobpostion": "仕事場所を本に記録しました: %s, %s, %s",
   "item.maidmodredo.setmaid_jobpostion": "メイドの仕事場所の位置を設定しました: %s, %s, %s",
-  "gui.maidmodredo.maidinventory.change_job": "Change Job",
-  "gui.maidmodredo.job_select": "Job Select",
-  "gui.maidmodredo.job_select.warning": "戦闘系のjobのものは一度選ぶと変更できません"
+  "gui.maidmodredo.maidinventory.change_job": "ジョブチェンジ",
+  "gui.maidmodredo.job_select": "ジョブセレクト",
+  "gui.maidmodredo.job_select.warning": "戦闘系のjobのものはレベルアップすると変更できなくなります"
 }

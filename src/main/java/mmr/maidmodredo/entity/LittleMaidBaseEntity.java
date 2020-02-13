@@ -522,12 +522,13 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             CompoundNBT nbt = this.writeWithoutTypeId(new CompoundNBT());
             phantomEntity.setPhantom(this.getOwnerId(), this.getType(), nbt);
             phantomEntity.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
-            phantomEntity.setTextureNameMain(textureData.textureBox[0].textureName);
-            phantomEntity.setTextureNameArmor(textureData.textureBox[1].textureName);
-            phantomEntity.setTextureNames();
             phantomEntity.setMotion(0, 0, 0);
             phantomEntity.maidContractLimit = 24000 * 7;
             phantomEntity.setTamed(true);
+            phantomEntity.textureData = textureData;
+            phantomEntity.setHealth(phantomEntity.getMaxHealth());
+            phantomEntity.dead = false;
+            phantomEntity.setTextureNames();
 
             if (this.hasCustomName()) {
                 phantomEntity.setCustomName(this.getCustomName());
@@ -634,12 +635,14 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
                 itemstack.shrink(1);
 
                 addContractLimit(recontract);
+                MaidPacketHandler.animationModel(this, EAT_ANIMATION);
 
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
             } else if (itemstack.getItem() == Items.SUGAR) {
                 this.heal(1);
                 itemstack.shrink(1);
                 addContractLimit(recontract);
+                MaidPacketHandler.animationModel(this, EAT_ANIMATION);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
             }
         }
@@ -849,7 +852,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
                 giveExperiencePoints(2 + this.getRNG().nextInt(2));
             }
         }
-
+        this.swingArm(Hand.MAIN_HAND);
 
         return flag;
     }
@@ -1485,6 +1488,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
         MaidPacketHandler.syncModel(this, tagCompound);
     }
+
 
     public void resetPlayingAnimationToDefault() {
         this.setAnimation(IMaidAnimation.NO_ANIMATION);

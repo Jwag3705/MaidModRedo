@@ -36,5 +36,5 @@
   "item.maidmodredo.setmaid_jobpostion": "Successed Setting Maid's JobPostion: %s, %s, %s",
   "gui.maidmodredo.maidinventory.change_job": "Change Job",
   "gui.maidmodredo.job_select": "Job Select",
-  "gui.maidmodredo.job_select.warning": "Once you select a combat job, you can not change it"
+  "gui.maidmodredo.job_select.warning": "Once you select a combat job, it does become unchangeable when you level up the job"
 }

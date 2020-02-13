@@ -28,10 +28,13 @@ public class AttackTask extends Task<LittleMaidBaseEntity> {
     }
 
     protected boolean shouldExecute(ServerWorld worldIn, LittleMaidBaseEntity owner) {
-        Entity entity = owner.getBrain().getMemory(this.field_220541_a).get();
         double d0 = getTargetDistance(owner);
-
-        return !isYourFriend(owner) && !isYourOwner(owner) && owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof SwordItem && owner.getDistanceSq(entity) < d0 * d0;
+        if (owner.getBrain().getMemory(this.field_220541_a).isPresent()) {
+            Entity entity = owner.getBrain().getMemory(this.field_220541_a).get();
+            return !isYourFriend(owner) && !isYourOwner(owner) && owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof SwordItem && owner.getDistanceSq(entity) < d0 * d0;
+        } else {
+            return false;
+        }
     }
 
     private boolean isYourOwner(LittleMaidBaseEntity entityIn) {
@@ -115,7 +118,6 @@ public class AttackTask extends Task<LittleMaidBaseEntity> {
         double d0 = this.getAttackReachSqr(attacker, enemy);
         if (distToEnemySqr <= d0 && this.attackTick <= 0) {
             this.attackTick = 20;
-            attacker.swingArm(Hand.MAIN_HAND);
             attacker.attackEntityAsMob(enemy);
             attacker.getHeldItem(Hand.MAIN_HAND).damageItem(1, attacker, (p_213625_1_) -> {
                 p_213625_1_.sendBreakAnimation(Hand.MAIN_HAND);

@@ -2,7 +2,6 @@ package mmr.maidmodredo.entity.phantom;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.Dynamic;
-import mmr.maidmodredo.client.maidmodel.IModelEntity;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.entity.ai.PhantomFollowOwnerGoal;
 import net.minecraft.block.BlockState;
@@ -35,7 +34,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
-public class SugarPhantomEntity extends LittleMaidBaseEntity implements IModelEntity {
+public class SugarPhantomEntity extends LittleMaidBaseEntity {
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.createKey(SugarPhantomEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
     protected static final DataParameter<CompoundNBT> MAID_PHANTOM_DATA = EntityDataManager.createKey(SugarPhantomEntity.class, DataSerializers.COMPOUND_NBT);
 

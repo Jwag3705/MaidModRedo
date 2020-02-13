@@ -110,7 +110,7 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
 
         //XP bar
         blit(p_214130_1_ + 180, p_214130_2_ + 26, this.getBlitOffset(), 0.0F, 237.0F, 102, 15, 256, 256);
-        blit(p_214130_1_ + 180, p_214130_2_ + 29, this.getBlitOffset(), 0.0F, 227.0F, 102, 5, 256, 256);
+        blit(p_214130_1_ + 180, p_214130_2_ + 29, this.getBlitOffset(), 102.0F, 223.0F, 102, 34, 256, 256);
         if (i > 0) {
             int f = (int) (100 * (this.container.getLittleMaidEntity().experience));
             blit(p_214130_1_ + 180, p_214130_2_ + 29, this.getBlitOffset(), 0.0F, 232.0F, f + 1, 5, 256, 256);

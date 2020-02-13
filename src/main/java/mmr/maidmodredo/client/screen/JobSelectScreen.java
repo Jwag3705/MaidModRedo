@@ -40,8 +40,8 @@ public class JobSelectScreen extends Screen {
                 net.minecraftforge.client.ForgeHooksClient.refreshResources(this.minecraft, net.minecraftforge.resource.VanillaResourceType.LANGUAGES);
                 this.font.setBidiFlag(this.maidJobManager.isCurrentMaidJobBidirectional());*/
                 this.confirmSettingsBtn.setMessage(I18n.format("gui.done"));
-                this.onClose();
             }
+            this.onClose();
         }));
         super.init();
     }

@@ -1,71 +1,44 @@
 package mmr.maidmodredo.init;
 
 import mmr.maidmodredo.MaidModRedo;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.schedule.Schedule;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.DefaultedRegistry;
 import net.minecraft.util.registry.MutableRegistry;
 import net.minecraft.util.registry.Registry;
 
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class MaidJob {
     public static final DefaultedRegistry<MaidJob> MAID_JOB_REGISTRY = registerDefaulted("maid_job", "normal", () -> {
         return MaidJob.NORMAL;
     });
-    public static final MaidJob WILD = new MaidJob("wild", (item) -> {
-        return item == ItemStack.EMPTY;
-    }).setSchedule(LittleSchedules.FREEDOM);
-    public static final MaidJob NORMAL = new MaidJob("normal", (item) -> {
-        return item == ItemStack.EMPTY;
-    }).setSchedule(LittleSchedules.FREEDOM);
-    public static final MaidJob FARMER = new MaidJob("farmer", (item) -> {
-        return item.getItem() instanceof HoeItem;
-    });
-    public static final MaidJob FISHER = new MaidJob("fisher", (item) -> {
-        return item.getItem() instanceof FishingRodItem;
-    });
-    public static final MaidJob CHEF = new MaidJob("chef", (item) -> {
-        return item.getItem() == Items.COAL;
-    });
-    public static final MaidJob BARISTA = new MaidJob("barista", (item) -> {
-        return item.getItem() == Items.GLASS_BOTTLE;
-    });
-    public static final MaidJob LUMBERJACK = new MaidJob("lumberjack", (item) -> {
-        return item.getItem() instanceof AxeItem;
-    });
-    public static final MaidJob TORCHER = new MaidJob("torcher", (item) -> {
-        return item.getItem() == Item.getItemFromBlock(Blocks.TORCH);
-    });
-    public static final MaidJob RIPPER = new MaidJob("ripper", (item) -> {
-        return item.getItem() instanceof ShearsItem;
-    });
+    public static final MaidJob WILD = new MaidJob("wild", ItemStack.EMPTY).setSchedule(LittleSchedules.FREEDOM);
+    public static final MaidJob NORMAL = new MaidJob("normal", ItemStack.EMPTY).setSchedule(LittleSchedules.FREEDOM);
+    public static final MaidJob FARMER = new MaidJob("farmer", new ItemStack(Items.DIAMOND_HOE));
+    public static final MaidJob FISHER = new MaidJob("fisher", new ItemStack(Items.FISHING_ROD));
+    public static final MaidJob CHEF = new MaidJob("chef", new ItemStack(Items.COAL));
+    public static final MaidJob BARISTA = new MaidJob("barista", new ItemStack(Items.GLASS_BOTTLE));
+    public static final MaidJob LUMBERJACK = new MaidJob("lumberjack", new ItemStack(Items.DIAMOND_AXE));
+    public static final MaidJob TORCHER = new MaidJob("torcher", new ItemStack(Items.TORCH));
+    public static final MaidJob RIPPER = new MaidJob("ripper", new ItemStack(Items.SHEARS));
 
-    public static final MaidJob FENCER = new MaidJob("fencer", (item) -> {
-        return item.getItem() instanceof SwordItem;
-    }).setSubActivity(LittleActivitys.ATTACK).setLockJob();
-    public static final MaidJob GUARD = new MaidJob("guard", (item) -> {
-        return item.getItem() instanceof SwordItem;
-    }).setSubRequireItem((item) -> {
-        return item.getItem() instanceof ShieldItem;
-    }).setSubActivity(LittleActivitys.ATTACK).setLockJob().setNeedLevel(10);
-    public static final MaidJob ARCHER = new MaidJob("archer", (item) -> {
-        return item.getItem() instanceof ShootableItem;
-    }).setSubActivity(LittleActivitys.SHOT).setLockJob().setNeedLevel(10);
+    public static final MaidJob FENCER = new MaidJob("fencer", new ItemStack(Items.DIAMOND_SWORD)).setSubActivity(LittleActivitys.ATTACK).setLockJob();
+    public static final MaidJob GUARD = new MaidJob("guard", new ItemStack(Items.DIAMOND_SWORD)).setSubRequireItem(new ItemStack(Items.SHIELD)).setSubActivity(LittleActivitys.ATTACK).setLockJob().setNeedLevel(10);
+    public static final MaidJob ARCHER = new MaidJob("archer", new ItemStack(Items.BOW)).setSubActivity(LittleActivitys.SHOT).setLockJob().setNeedLevel(10);
 
     private final String name;
     private Activity activity;
-    private final Predicate<ItemStack> requireItem;
-    private Predicate<ItemStack> subRequireItem;
+    private final ItemStack requireItem;
+    private ItemStack subRequireItem;
     private Schedule schedule = LittleSchedules.LITTLEMAID_WORK;
     private boolean lockJob;
     private int needLevel;
 
-    public MaidJob(String nameIn, Predicate<ItemStack> p_i50179_3_) {
+    public MaidJob(String nameIn, ItemStack p_i50179_3_) {
         this.name = nameIn;
         this.requireItem = p_i50179_3_;
         this.needLevel = 0;
@@ -101,16 +74,17 @@ public class MaidJob {
         return this;
     }
 
-    public Predicate<ItemStack> getSubRequireItem() {
+    public ItemStack getSubRequireItem() {
         return this.subRequireItem;
     }
 
-    public MaidJob setSubRequireItem(Predicate<ItemStack> subRequireItem) {
+    public MaidJob setSubRequireItem(ItemStack subRequireItem) {
         this.subRequireItem = subRequireItem;
         return this;
     }
 
-    public Predicate<ItemStack> getRequireItem() {
+    //used render
+    public ItemStack getRequireItem() {
         return this.requireItem;
     }
 

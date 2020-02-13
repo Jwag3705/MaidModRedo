@@ -1,5 +1,6 @@
 package mmr.maidmodredo.client.screen;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.init.MaidJob;
 import mmr.maidmodredo.network.MaidPacketHandler;
@@ -9,6 +10,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.list.ExtendedList;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -110,6 +112,14 @@ public class JobSelectScreen extends Screen {
             public void render(int p_render_1_, int p_render_2_, int p_render_3_, int p_render_4_, int p_render_5_, int p_render_6_, int p_render_7_, boolean p_render_8_, float p_render_9_) {
                 JobSelectScreen.this.font.setBidiFlag(true);
                 List.this.drawCenteredString(JobSelectScreen.this.font, this.field_214398_b.toString(), List.this.width / 2, p_render_2_ + 1, 16777215);
+                if (this.field_214398_b.isLockJob()) {
+                    List.this.drawCenteredString(JobSelectScreen.this.font, "(Combat Job)", (int) (List.this.width / 1.5), p_render_2_ + 1, 16777215);
+                }
+                drawItemStack(this.field_214398_b.getRequireItem(), (int) (List.this.width / 3), p_render_2_, 1.0F);
+
+                if (this.field_214398_b.getSubRequireItem() != null) {
+                    drawItemStack(this.field_214398_b.getSubRequireItem(), (int) (List.this.width / 2.75), p_render_2_, 1.0F);
+                }
                 //JobSelectScreen.this.font.setBidiFlag(JobSelectScreen.this.maidJobManager.getCurrentMaidJob().isBidirectional());
 
             }
@@ -127,5 +137,18 @@ public class JobSelectScreen extends Screen {
                 List.this.setSelected(this);
             }
         }
+    }
+
+    private void drawItemStack(ItemStack stack, int x, int y, float scale) {
+
+        RenderSystem.pushMatrix();
+        RenderSystem.scalef(scale, scale, scale);
+        RenderSystem.translatef(0, 0, 32.0F);
+
+        this.itemRenderer.zLevel = 200.0F;
+
+        this.itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
+        this.itemRenderer.zLevel = 0.0F;
+        RenderSystem.popMatrix();
     }
 }

@@ -118,7 +118,7 @@ public class JobSelectScreen extends Screen {
                 drawItemStack(this.field_214398_b.getRequireItem(), (int) (List.this.width / 3), p_render_2_, 1.0F);
 
                 if (this.field_214398_b.getSubRequireItem() != null) {
-                    drawItemStack(this.field_214398_b.getSubRequireItem(), (int) (List.this.width / 2.75), p_render_2_, 1.0F);
+                    drawItemStack(this.field_214398_b.getSubRequireItem(), (int) (List.this.width / 2.65), p_render_2_, 1.0F);
                 }
                 //JobSelectScreen.this.font.setBidiFlag(JobSelectScreen.this.maidJobManager.getCurrentMaidJob().isBidirectional());
 

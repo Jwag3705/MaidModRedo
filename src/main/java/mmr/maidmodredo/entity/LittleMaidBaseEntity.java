@@ -16,6 +16,7 @@ import mmr.maidmodredo.client.maidmodel.TextureBoxBase;
 import mmr.maidmodredo.entity.data.MaidData;
 import mmr.maidmodredo.entity.misc.MaidFishingBobberEntity;
 import mmr.maidmodredo.entity.pathnavigator.MaidGroundPathNavigator;
+import mmr.maidmodredo.entity.phantom.SugarPhantomEntity;
 import mmr.maidmodredo.entity.tasks.JobTasks;
 import mmr.maidmodredo.entity.tasks.MaidTasks;
 import mmr.maidmodredo.init.*;
@@ -165,7 +166,9 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
     public LittleMaidBaseEntity(EntityType<? extends LittleMaidBaseEntity> p_i48575_1_, World p_i48575_2_) {
         super(p_i48575_1_, p_i48575_2_);
-        ((GroundPathNavigator) this.getNavigator()).setBreakDoors(true);
+        if (this.getNavigator() instanceof GroundPathNavigator) {
+            ((GroundPathNavigator) this.getNavigator()).setBreakDoors(true);
+        }
         this.getNavigator().setCanSwim(true);
         this.setCanPickUpLoot(true);
         this.brain = this.createBrain(new Dynamic<>(NBTDynamicOps.INSTANCE, new CompoundNBT()));
@@ -231,7 +234,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         this.initBrain(this.getBrain());
     }
 
-    private void initBrain(Brain<LittleMaidBaseEntity> p_213744_1_) {
+    protected void initBrain(Brain<LittleMaidBaseEntity> p_213744_1_) {
         float f = (float) this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue();
 
 
@@ -508,9 +511,30 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         this.func_213742_a(MemoryModuleType.HOME);
         this.func_213742_a(MemoryModuleType.JOB_SITE);
         this.func_213742_a(MemoryModuleType.MEETING_POINT);
+        if (!isTamed()) {
+            InventoryHelper.dropInventoryItems(world, this, this.getInventoryMaidMain());
+            InventoryHelper.dropInventoryItems(world, this, this.getInventoryMaidEquipment());
+        }
 
-        InventoryHelper.dropInventoryItems(world, this, this.getInventoryMaidMain());
-        InventoryHelper.dropInventoryItems(world, this, this.getInventoryMaidEquipment());
+        if (!this.world.isRemote && isContract()) {
+            SugarPhantomEntity phantomEntity = LittleEntitys.SUGAR_PHANTOM.create(world);
+            phantomEntity.setNoAI(this.isAIDisabled());
+            CompoundNBT nbt = this.writeWithoutTypeId(new CompoundNBT());
+            phantomEntity.setPhantom(this.getOwnerId(), this.getType(), nbt);
+            phantomEntity.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
+            phantomEntity.setTextureNameMain(textureData.textureBox[0].textureName);
+            phantomEntity.setTextureNameArmor(textureData.textureBox[1].textureName);
+            phantomEntity.setTextureNames();
+            phantomEntity.setMotion(0, 0, 0);
+            phantomEntity.maidContractLimit = 24000 * 7;
+            phantomEntity.setTamed(true);
+
+            if (this.hasCustomName()) {
+                phantomEntity.setCustomName(this.getCustomName());
+                phantomEntity.setCustomNameVisible(this.isCustomNameVisible());
+            }
+            this.world.addEntity(phantomEntity);
+        }
 
         super.onDeath(cause);
     }
@@ -1289,7 +1313,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
                 itemstack.shrink(1);
             }
 
-            maidContractLimit = 24000;
+            maidContractLimit = (24000 * 7);
 
             if (!this.world.isRemote) {
                 if (!net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
@@ -1518,7 +1542,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             abstractarrowentity.shoot(d0, d1 + d3 * (double) 0.2F, d2, distanceFactor * 1.75F, (float) (1.0F));
             this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
             this.world.addEntity(abstractarrowentity);
-            itemstack.shrink(1);
             this.getHeldItem(ProjectileHelper.getHandWith(this, this.getHeldItem(Hand.MAIN_HAND).getItem())).damageItem(1, this, (p_213625_1_) -> {
                 p_213625_1_.sendBreakAnimation(hand);
             });
@@ -1561,25 +1584,13 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         return vector3f1;
     }
 
-
     public ItemStack findAmmo(ItemStack shootable) {
-        if (!(shootable.getItem() instanceof ShootableItem)) {
-            return ItemStack.EMPTY;
-        } else {
+        if (shootable.getItem() instanceof ShootableItem) {
             Predicate<ItemStack> predicate = ((ShootableItem) shootable.getItem()).getAmmoPredicate();
             ItemStack itemstack = ShootableItem.getHeldAmmo(this, predicate);
-            if (!itemstack.isEmpty()) {
-                return itemstack;
-            } else {
-                predicate = ((ShootableItem) shootable.getItem()).getInventoryAmmoPredicate();
-                for (int i = 0; i < this.getInventoryMaidMain().getSizeInventory(); ++i) {
-                    ItemStack itemstack1 = this.getInventoryMaidMain().getStackInSlot(i);
-                    if (predicate.test(itemstack1)) {
-                        return itemstack1;
-                    }
-                }
-                return ItemStack.EMPTY;
-            }
+            return itemstack.isEmpty() ? new ItemStack(Items.ARROW) : itemstack;
+        } else {
+            return ItemStack.EMPTY;
         }
     }
 }

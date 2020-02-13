@@ -1,6 +1,7 @@
 package mmr.maidmodredo.client.maidmodel;
 
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
+import mmr.maidmodredo.entity.phantom.SugarPhantomEntity;
 import mmr.maidmodredo.utils.CommonHelper;
 import mmr.maidmodredo.utils.EnumArmorRenderParts;
 import mmr.maidmodredo.utils.EnumTextureType;
@@ -157,7 +158,7 @@ public class ModelConfigCompound {
 
             lbox = (TextureBox) textureBox[0];
             if (lbox.hasColor(lc)) {
-                if (lbox.modelEntity == owner.getClass()) {
+                if (lbox.modelEntity == owner.getClass() || owner.getClass() == SugarPhantomEntity.class) {
                     textures[0][0] = lbox.getTextureName(lc);
                     lc = (color & 0x00ff) + (contract ? ModelManager.tx_eyecontract : ModelManager.tx_eyewild);
                     textures[0][1] = lbox.getTextureName(lc);
@@ -188,7 +189,7 @@ public class ModelConfigCompound {
         }
         if (textureBox[1] instanceof TextureBox && owner != null) {
             lbox = (TextureBox) textureBox[1];
-            if (lbox.modelEntity == owner.getClass()) {
+            if (lbox.modelEntity == owner.getClass() || owner.getClass() == SugarPhantomEntity.class) {
                 for (int i = 0; i < 4; i++) {
                     EquipmentSlotType lSlot = null;
                     for (EquipmentSlotType pSlot : EquipmentSlotType.values()) {
@@ -224,7 +225,7 @@ public class ModelConfigCompound {
                 int lc = (color & 0x00ff) + (contract ? 0 : ModelManager.tx_wild);
 
                 if (lbox.localBox.hasColor(lc)) {
-                    if (lbox.modelEntity == owner.getClass()) {
+                    if (lbox.modelEntity == owner.getClass() || owner.getClass() == SugarPhantomEntity.class) {
                         if (CommonHelper.isClient) {
                             textures[0][0] = lbox.localBox.getTextureName(lc);
                             lc = (color & 0x00ff) + (contract ? ModelManager.tx_eyecontract : ModelManager.tx_eyewild);
@@ -241,7 +242,7 @@ public class ModelConfigCompound {
         if (textureBox[1] instanceof TextureBoxServer && owner != null) {
             lbox = (TextureBoxServer) textureBox[1];
             if (lbox.localBox != null) {
-                if (lbox.modelEntity == owner.getClass()) {
+                if (lbox.modelEntity == owner.getClass() || owner.getClass() == SugarPhantomEntity.class) {
                     if (CommonHelper.isClient) {
                         for (int i = 0; i < 4; i++) {
                             for (EquipmentSlotType pSlot : EquipmentSlotType.values()) {

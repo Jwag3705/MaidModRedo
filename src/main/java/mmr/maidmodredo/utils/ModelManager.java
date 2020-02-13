@@ -10,6 +10,7 @@ import mmr.maidmodredo.client.resource.OldZipTexturesWrapper;
 import mmr.maidmodredo.entity.LittleButlerEntity;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import mmr.maidmodredo.entity.monstermaid.EnderMaidEntity;
+import mmr.maidmodredo.entity.phantom.SugarPhantomEntity;
 import mmr.maidmodredo.init.MaidModels;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -270,6 +271,7 @@ public class ModelManager {
 
         setDefaultTexture(EnderMaidEntity.class, getTextureBox("endermaid_Ender"));
         setDefaultTexture(LittleMaidEntity.class, getTextureBox("default_" + defaultModelName));
+        setDefaultTexture(SugarPhantomEntity.class, getTextureBox("default_" + defaultModelName));
         setDefaultTexture(LittleButlerEntity.class, getTextureBox("littlebutler_SR2"));
 
         return false;
@@ -781,7 +783,7 @@ public class ModelManager {
         // 野生色があるものをリストアップ
         List<TextureBoxServer> llist = new ArrayList<TextureBoxServer>();
         for (TextureBoxServer lbox : textureServer) {
-            if (lbox.modelEntity == entity.getClass() && lbox.getWildColorBits() > 0) {
+            if ((lbox.modelEntity == entity.getClass() || entity.getClass() == SugarPhantomEntity.class) && lbox.getWildColorBits() > 0) {
                 llist.add(lbox);
             }
         }

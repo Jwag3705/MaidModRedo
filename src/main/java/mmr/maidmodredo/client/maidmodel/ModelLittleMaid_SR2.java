@@ -3,7 +3,6 @@ package mmr.maidmodredo.client.maidmodel;
 
 import mmr.maidmodredo.api.IMaidAnimation;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
-import net.minecraft.entity.LivingEntity;
 
 /**
  * 瞬き付き基本形
@@ -45,10 +44,10 @@ public class ModelLittleMaid_SR2<T extends LittleMaidBaseEntity> extends ModelLi
 	@Override
 	public void setLivingAnimations(T entity, float par2, float par3, float pRenderPartialTicks) {
 		super.setLivingAnimations(entity, par2, par3, pRenderPartialTicks);
-		
-		float f3 = entityTicksExisted + pRenderPartialTicks + entityIdFactor;
+
+		float f3 = entity.ticksExisted + pRenderPartialTicks + entity.entityIdFactor;
 		// 目パチ
-        if (entity instanceof LivingEntity && ((LivingEntity) entity).isSleeping()) {
+		if (entity.isSleeping()) {
             eyeR.setVisible(true);
             eyeL.setVisible(true);
         } else if (0 > mh_sin(f3 * 0.05F) + mh_sin(f3 * 0.13F) + mh_sin(f3 * 0.7F) + 2.55F) {

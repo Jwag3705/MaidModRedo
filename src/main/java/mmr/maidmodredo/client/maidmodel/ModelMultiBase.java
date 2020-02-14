@@ -21,8 +21,6 @@ public abstract class ModelMultiBase<T extends LivingEntity> extends ModelBase<T
     public ModelRenderer Arms[];
     public ModelRenderer HardPoint[];
 
-    public float entityIdFactor;
-    public int entityTicksExisted;
     // 変数である意味ない？
     public float scaleFactor = 0.9375F;
     /**

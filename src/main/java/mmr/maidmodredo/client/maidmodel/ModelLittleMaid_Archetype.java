@@ -150,23 +150,6 @@ public class ModelLittleMaid_Archetype<T extends LittleMaidBaseEntity> extends M
 		GL11.glTranslatef(0.02F, 0.1300F, 0.0F);
 	}
 
-	public void equippedItemPosition() {
-		// 手持ちアイテムの表示位置
-		GL11.glTranslatef(0.20F, 0.0800F, -0.0875F);
-	}
-
-	public void equippedHeadItemPosition() {
-		// 頭部着装アイテムの表示位置
-		GL11.glTranslatef(0.0F, 1.0F, 0.0F);
-	}
-
-	public void equippedItemBow() {
-		// 手持ち弓の表示位置
-		// GL11.glTranslatef(-0.07F, 0.005F, 0.3F);
-		equippedItemPosition3D();
-		// GL11.glTranslatef(-0.09F, -0.125F, 0.3F);
-		GL11.glTranslatef(-0.05F, -0.075F, 0.1F);
-	}
 
 	@Deprecated
 	public boolean isItemHolder() {

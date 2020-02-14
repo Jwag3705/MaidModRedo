@@ -1,14 +1,22 @@
 package mmr.maidmodredo.client.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import mmr.maidmodredo.client.maidmodel.ModelBaseDuo;
 import mmr.maidmodredo.client.maidmodel.ModelBaseSolo;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.List;
 
@@ -47,7 +55,9 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
     }
 
     public void setModelValues(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        //matrixStackIn.push();
+        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Pre<T, ModelBaseSolo<T>>(entityIn, this, partialTicks, matrixStackIn, bufferIn, packedLightIn)))
+            return;
+        matrixStackIn.push();
 
         this.getEntityModel().isModelAlphablend = true;
         this.getEntityModel().capsLink = modelFATT;
@@ -79,9 +89,11 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
         //途中でRenderされなくなるのを防ぐためにあえてここで描画する
         //Draw here to continue drawing
 
-        /*boolean shouldSit = entityIn.isPassenger() && (entityIn.getRidingEntity() != null && entityIn.getRidingEntity().shouldRiderSit());
+        this.entityModel.swingProgress = this.getSwingProgress(entityIn, partialTicks);
 
-
+        boolean shouldSit = entityIn.isPassenger() && (entityIn.getRidingEntity() != null && entityIn.getRidingEntity().shouldRiderSit());
+        this.entityModel.isSitting = shouldSit;
+        this.entityModel.isChild = entityIn.isChild();
         float f = MathHelper.interpolateAngle(partialTicks, entityIn.prevRenderYawOffset, entityIn.renderYawOffset);
         float f1 = MathHelper.interpolateAngle(partialTicks, entityIn.prevRotationYawHead, entityIn.rotationYawHead);
         float f2 = f1 - f;
@@ -102,6 +114,8 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
             if (f3 * f3 > 2500.0F) {
                 f += f3 * 0.2F;
             }
+
+            f2 = f1 - f;
         }
 
         float f6 = MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch);
@@ -133,17 +147,30 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
             }
         }
 
-        this.modelMain.setLivingAnimations(entityIn, f5, f8, partialTicks);
-        this.modelMain.render(entityIn, f5, f8, f7, f2, f6);
+        this.getEntityModel().setLivingAnimations(entityIn, f5, f8, partialTicks);
+        this.getEntityModel().render(entityIn, f5, f8, f7, f2, f6);
         boolean flag = this.isVisible(entityIn);
         boolean flag1 = !flag && !entityIn.isInvisibleToPlayer(Minecraft.getInstance().player);
         RenderType rendertype = this.func_230042_a_(entityIn, flag, flag1);
         if (rendertype != null) {
             IVertexBuilder ivertexbuilder = bufferIn.getBuffer(rendertype);
             int i = getPackedOverlay(entityIn, this.getOverlayProgress(entityIn, partialTicks));
-            modelMain.render(matrixStackIn, ivertexbuilder, packedLightIn, i, 1.0F, 1.0F, 1.0F, flag1 ? 0.15F : 1.0F);
+            this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, i, 1.0F, 1.0F, 1.0F, flag1 ? 0.15F : 1.0F);
         }
-        matrixStackIn.pop();*/
+
+        if (!entityIn.isSpectator()) {
+            for (LayerRenderer<T, ModelBaseSolo<T>> layerrenderer : this.layerRenderers) {
+                layerrenderer.render(matrixStackIn, bufferIn, packedLightIn, entityIn, f5, f8, partialTicks, f7, f2, f6);
+            }
+        }
+
+        matrixStackIn.pop();
+        net.minecraftforge.client.event.RenderNameplateEvent renderNameplateEvent = new net.minecraftforge.client.event.RenderNameplateEvent(entityIn, entityIn.getDisplayName().getFormattedText(), matrixStackIn, bufferIn);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(renderNameplateEvent);
+        if (renderNameplateEvent.getResult() != net.minecraftforge.eventbus.api.Event.Result.DENY && (renderNameplateEvent.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW || this.canRenderName(entityIn))) {
+            this.renderName(entityIn, renderNameplateEvent.getContent(), matrixStackIn, bufferIn, packedLightIn);
+        }
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post<T, ModelBaseSolo<T>>(entityIn, this, partialTicks, matrixStackIn, bufferIn, packedLightIn));
     }
 
     public void renderModelMulti(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
@@ -153,7 +180,7 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
 
     @Override
     public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+        //super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         renderModelMulti(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 

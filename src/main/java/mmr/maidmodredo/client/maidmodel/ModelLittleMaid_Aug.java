@@ -104,8 +104,8 @@ public class ModelLittleMaid_Aug<T extends LittleMaidBaseEntity> extends ModelLi
 	@Override
 	public void setLivingAnimations(T entity, float par2, float par3, float pRenderPartialTicks) {
 		super.setLivingAnimations(entity, par2, par3, pRenderPartialTicks);
-		
-		float f3 = entityTicksExisted + pRenderPartialTicks + entityIdFactor;
+
+		float f3 = entity.ticksExisted + pRenderPartialTicks + entity.entityIdFactor;
 		float f4 = (1F - entity.getHealth() / entity.getMaxHealth()) * 0.5F;
 		/*if (ModelCapsHelper.getCapsValueBoolean(pEntityCaps, caps_isLookSuger)) {
 			f3 *= 8.0F;

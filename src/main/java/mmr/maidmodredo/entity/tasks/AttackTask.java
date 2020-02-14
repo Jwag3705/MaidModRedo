@@ -33,6 +33,9 @@ public class AttackTask extends Task<LittleMaidBaseEntity> {
             Entity entity = owner.getBrain().getMemory(this.field_220541_a).get();
             return !isYourFriend(owner) && !isYourOwner(owner) && owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof SwordItem && owner.getDistanceSq(entity) < d0 * d0;
         } else {
+            Brain<?> brain = owner.getBrain();
+            owner.getBrain().removeMemory(this.field_220541_a);
+            brain.updateActivity(worldIn.getDayTime(), worldIn.getGameTime());
             return false;
         }
     }

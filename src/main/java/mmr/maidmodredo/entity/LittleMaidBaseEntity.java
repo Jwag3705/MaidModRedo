@@ -385,14 +385,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             maidContractLimit = 24000;
         }
 
-        if ((compound.contains("texName"))) {
-            textureData.textureBox[0] = ModelManager.instance.getTextureBoxServer(compound.getString("texName"));
-        }
-
-        if ((compound.contains("texArmor"))) {
-            textureData.textureBox[1] = ModelManager.instance.getTextureBoxServer(compound.getString("texArmor"));
-        }
-
         textureNameMain = compound.getString("textureModelNameForClient");
 
         if (textureNameMain.isEmpty()) {

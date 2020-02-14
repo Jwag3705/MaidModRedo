@@ -113,10 +113,8 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
         blit(p_214130_1_ + 180, p_214130_2_ + 29, this.getBlitOffset(), 102.0F, 223.0F, 102, 34, 256, 256);
 
         String ls3 = "Health:" + maidinventory.getLittleMaidEntity().getHealth() + "/" + maidinventory.getLittleMaidEntity().getMaxHealth();
-
         int ltw3 = this.minecraft.fontRenderer.getStringWidth(ls3);
-
-        drawString(this.minecraft.fontRenderer, ls3, p_214130_1_ + 220 - ltw3 / 2, p_214130_2_ + 34, -1);
+        //drawString(this.minecraft.fontRenderer, ls3, p_214130_1_ + 230 - ltw3 / 2, p_214130_2_ + 45, -1);
 
 
         //XP bar

@@ -116,13 +116,6 @@ public class ModelConfigCompound {
         textureBox = new TextureBoxBase[2];
         textureBox[0] = textureBox[1] = ModelManager.instance.getDefaultTexture(owner.getClass());
         textureModel = new ModelMultiBase[3];
-
-        TextureBox ltb[] = new TextureBox[2];
-
-        ltb[0] = ltb[1] = ModelManager.instance.getDefaultTexture((IModelEntity) owner);
-
-        setTexturePackName(ltb);
-        this.setTextureNames();
     }
 
     /**

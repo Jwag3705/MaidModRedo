@@ -404,6 +404,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             setColor(compound.getByte("ColorB"));
         }
         refreshModels();
+        MaidPacketHandler.syncModelOnClient(this);
 
         isWildSaved = compound.getBoolean("isWildSaved");
 
@@ -935,7 +936,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             // ClientサイドにおいてthePlayerが取得できるまでに時間がかかる？ので待機
             // サーバーの方が先に起動するのでクライアント側が更新を受け取れない
 */
-
         } else {
             updateRemainsContract();
             // 拗ねる

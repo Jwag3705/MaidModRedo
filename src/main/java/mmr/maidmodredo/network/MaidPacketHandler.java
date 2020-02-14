@@ -33,6 +33,10 @@ public class MaidPacketHandler {
                 .encoder(MessageMaidJobSet::writePacketData).decoder(MessageMaidJobSet::readPacketData)
                 .consumer(MessageMaidJobSet.Handler::handle)
                 .add();
+        CHANNEL.messageBuilder(MessageSetGhostModelStat.class, 3)
+                .encoder(MessageSetGhostModelStat::writePacketData).decoder(MessageSetGhostModelStat::readPacketData)
+                .consumer(MessageSetGhostModelStat.Handler::handle)
+                .add();
     }
 
     public static void syncModel(LittleMaidBaseEntity entity, CompoundNBT compoundNBT) {
@@ -42,6 +46,14 @@ public class MaidPacketHandler {
     public static void syncMaidJob(LittleMaidBaseEntity entity, MaidJob job) {
         MaidPacketHandler.CHANNEL.sendToServer(new MessageMaidJobSet(entity, job));
     }
+
+    public static void syncModelOnClient(LittleMaidBaseEntity entity) {
+        if (entity.getEntityWorld().isRemote) {
+            MaidPacketHandler.CHANNEL.sendToServer(new MessageSetGhostModelStat(entity.getEntityId()));
+        }
+    }
+
+
 
     public static void animationModel(LittleMaidBaseEntity entity, MaidAnimation animation) {
         if (!entity.getEntityWorld().isRemote()) {

@@ -45,7 +45,7 @@ public class MessageChangeModelStat {
             NetworkEvent.Context context = ctx.get();
             ctx.get().enqueueWork(() -> {
 
-                Entity entity = ctx.get().getSender().getServerWorld().getEntityByID(message.entityID);
+                Entity entity = ctx.get().getSender().world.getEntityByID(message.entityID);
                 if (entity instanceof LittleMaidBaseEntity) {
                     LittleMaidBaseEntity littlemaid = (LittleMaidBaseEntity) entity;
 

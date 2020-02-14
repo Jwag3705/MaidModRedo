@@ -108,9 +108,19 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
 
         int i = (int) this.container.getLittleMaidEntity().xpBarCap();
 
-        //XP bar
-        blit(p_214130_1_ + 180, p_214130_2_ + 26, this.getBlitOffset(), 0.0F, 237.0F, 102, 15, 256, 256);
+
+        //Stats menu
         blit(p_214130_1_ + 180, p_214130_2_ + 29, this.getBlitOffset(), 102.0F, 223.0F, 102, 34, 256, 256);
+
+        String ls3 = "Health:" + maidinventory.getLittleMaidEntity().getHealth() + "/" + maidinventory.getLittleMaidEntity().getMaxHealth();
+
+        int ltw3 = this.minecraft.fontRenderer.getStringWidth(ls3);
+
+        drawString(this.minecraft.fontRenderer, ls3, p_214130_1_ + 220 - ltw3 / 2, p_214130_2_ + 34, -1);
+
+
+        //XP bar
+        blit(p_214130_1_ + 180, p_214130_2_ + 32, this.getBlitOffset(), 0.0F, 227.0F, 102, 5, 256, 256);
         if (i > 0) {
             int f = (int) (100 * (this.container.getLittleMaidEntity().experience));
             blit(p_214130_1_ + 180, p_214130_2_ + 29, this.getBlitOffset(), 0.0F, 232.0F, f + 1, 5, 256, 256);

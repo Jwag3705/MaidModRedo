@@ -121,7 +121,7 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
         blit(p_214130_1_ + 180, p_214130_2_ + 32, this.getBlitOffset(), 0.0F, 227.0F, 102, 5, 256, 256);
         if (i > 0) {
             int f = (int) (100 * (this.container.getLittleMaidEntity().experience));
-            blit(p_214130_1_ + 180, p_214130_2_ + 29, this.getBlitOffset(), 0.0F, 232.0F, f + 1, 5, 256, 256);
+            blit(p_214130_1_ + 180, p_214130_2_ + 32, this.getBlitOffset(), 0.0F, 232.0F, f + 1, 5, 256, 256);
         }
 
         //Job and Level info
@@ -160,9 +160,7 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
         this.func_214130_a(guiLeft, guiTop);
 
         RenderSystem.popMatrix();
-
-        this.renderHoveredToolTip(mouseX, mouseY);
-
+        RenderSystem.pushMatrix();
         if (maidinventory.getLittleMaidEntity().canChangeModel() && ii > 7 && ii < 96 && jj > 7 && jj < 70) {
             // ボタンの表示
             txbutton[0].visible = true;
@@ -171,7 +169,7 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
             txbutton[3].visible = true;
 
             // テクスチャ名称の表示
-            RenderSystem.pushMatrix();
+
             RenderSystem.translatef(mouseX - ii, mouseY - jj, 0.0F);
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 //			RenderHelper.disableStandardItemLighting();
@@ -198,18 +196,20 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
                 RenderSystem.enableDepthTest();
                 RenderSystem.colorMask(true, true, true, true);
             }
-            RenderSystem.popMatrix();
+
         } else {
             txbutton[0].visible = false;
             txbutton[1].visible = false;
             txbutton[2].visible = false;
             txbutton[3].visible = false;
         }
+        RenderSystem.popMatrix();
         /*if (ii > 25 && ii < 79 && jj > 24 && jj < 44) {
             selectbutton.visible = true;
         } else {
             selectbutton.visible = false;
         }*/
+        this.renderHoveredToolTip(mouseX, mouseY);
     }
 
 }

@@ -89,7 +89,7 @@ public class ChefTask extends Task<LittleMaidBaseEntity> {
     protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         if (this.cookingPos != null) {
             entityIn.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new BlockPosWrapper(this.cookingPos));
-            entityIn.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new BlockPosWrapper(this.cookingPos), 0.5F, 3));
+            entityIn.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new BlockPosWrapper(this.cookingPos), 0.5F, 5));
         }
     }
 

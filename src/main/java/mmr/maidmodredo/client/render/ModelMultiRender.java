@@ -90,6 +90,7 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
         //Draw here to continue drawing
 
         this.entityModel.swingProgress = this.getSwingProgress(entityIn, partialTicks);
+        this.entityModel.model.swingProgress = this.getSwingProgress(entityIn, partialTicks);
 
         boolean shouldSit = entityIn.isPassenger() && (entityIn.getRidingEntity() != null && entityIn.getRidingEntity().shouldRiderSit());
         this.entityModel.isSitting = shouldSit;

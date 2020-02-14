@@ -851,6 +851,41 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     }
 
     @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (canBlockDamageSource(source)) {
+            this.playSound(SoundEvents.ITEM_SHIELD_BLOCK, 1.0F, 1.0F);
+            return false;
+        }
+
+        return super.attackEntityFrom(source, amount);
+    }
+
+    private boolean canBlockDamageSource(DamageSource damageSourceIn) {
+        Entity entity = damageSourceIn.getImmediateSource();
+        boolean flag = false;
+        if (entity instanceof AbstractArrowEntity) {
+            AbstractArrowEntity abstractarrowentity = (AbstractArrowEntity) entity;
+            if (abstractarrowentity.getPierceLevel() > 0) {
+                flag = true;
+            }
+        }
+
+        if (!damageSourceIn.isUnblockable() && this.isActiveItemStackBlocking() && !flag) {
+            Vec3d vec3d2 = damageSourceIn.getDamageLocation();
+            if (vec3d2 != null) {
+                Vec3d vec3d = this.getLook(1.0F);
+                Vec3d vec3d1 = vec3d2.subtractReverse(this.getPositionVec()).normalize();
+                vec3d1 = new Vec3d(vec3d1.x, 0.0D, vec3d1.z);
+                if (vec3d1.dotProduct(vec3d) < 0.0D) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public void livingTick() {
         this.updateArmSwingProgress();
         if (getHealth() < getMaxHealth() && ticksExisted % 30 == 0) {

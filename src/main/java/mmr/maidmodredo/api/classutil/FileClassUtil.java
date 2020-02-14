@@ -4,8 +4,6 @@ public class FileClassUtil {
 
     /**
      * ファイルパスをLinux区切りに変換し、間に挟まった"."を除去します。
-     * @param par1
-     * @return
      */
     public static String getLinuxAntiDotName(String par1){
         par1 = par1.replace("\\", "/").replace("/./", "/");
@@ -15,9 +13,6 @@ public class FileClassUtil {
 
     /**
      * ファイルからクラスを読み取る時用。root以下にあるpathについてクラス名に変換する。
-     * @param path
-     * @param root
-     * @return
      */
     public static String getClassName(String path, String root){
         if(!path.endsWith(".class")) return null;
@@ -32,9 +27,8 @@ public class FileClassUtil {
         return path.replace("/", ".");
     }
 
-    /**与えるパスはgetLinuxAntiDotNameで正規化したものでなくてはならない
-     * @param path
-     * @return
+    /*
+     * 与えるパスはgetLinuxAntiDotNameで正規化したものでなくてはならない
      */
     public static String getParentDir(String path){
         if(path.endsWith("/.")) path=path.substring(0,path.length()-1);

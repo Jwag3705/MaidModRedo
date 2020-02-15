@@ -11,6 +11,7 @@ import mmr.maidmodredo.utils.manager.StabilizerManager;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.IFeatureConfig;
@@ -19,6 +20,7 @@ import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -153,6 +155,28 @@ public class MaidModRedo
 //			maid.writeEntityToNBT(t);
 //			maid.readEntityFromNBT(t);
             if (event.getWorld().isRemote) maid.setTextureNames();
+        }
+    }
+
+    @SubscribeEvent
+    public void onEntityHurted(LivingHurtEvent event) {
+        if (event.getSource().getImmediateSource() instanceof AbstractArrowEntity) {
+            AbstractArrowEntity arrowEntity = (AbstractArrowEntity) event.getSource().getImmediateSource();
+
+            if (arrowEntity.getShooter() instanceof LittleMaidBaseEntity) {
+                LittleMaidBaseEntity littleMaidBase = (LittleMaidBaseEntity) arrowEntity.getShooter();
+
+                if (littleMaidBase.getOwner() == event.getEntityLiving()) {
+                    event.setCanceled(true);
+                }
+
+                if (event.getEntityLiving() instanceof LittleMaidBaseEntity) {
+                    LittleMaidBaseEntity ownersLittleMaid = (LittleMaidBaseEntity) event.getEntityLiving();
+                    if (littleMaidBase.getOwner() == ownersLittleMaid.getOwner()) {
+                        event.setCanceled(true);
+                    }
+                }
+            }
         }
     }
 

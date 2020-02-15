@@ -122,9 +122,6 @@ public class BowShootTask extends Task<LittleMaidBaseEntity> {
             boolean flag = owner.getEntitySenses().canSee(entity);
 
             boolean flag1 = this.seeTime > 0;
-            boolean flag4 = owner.getOwner() != null && owner.getEntitySenses().canSee(owner.getOwner());
-            boolean flag5 = owner.getOwner() != null && owner.getDistanceSq(owner.getOwner().getPosX(), owner.getOwner().getBoundingBox().minY, owner.getOwner().getPosZ()) > d0;
-
 
             if (flag != flag1) {
                 this.seeTime = 0;
@@ -202,7 +199,7 @@ public class BowShootTask extends Task<LittleMaidBaseEntity> {
                     if (this.field_220753_f == 0) {
                         this.field_220749_b = CrossbowState.READY_TO_ATTACK;
                     }
-                } else if (this.field_220749_b == CrossbowState.READY_TO_ATTACK && flag && !flag4 && (owner.getOwner() == null || flag5)) {
+                } else if (this.field_220749_b == CrossbowState.READY_TO_ATTACK && flag) {
                     owner.giveExperiencePoints(2 + owner.getRNG().nextInt(2));
                     owner.attackEntityWithRangedAttack((LivingEntity) entity, BowItem.getArrowVelocity(i));
                     ItemStack itemstack1 = owner.getHeldItem(ProjectileHelper.getHandWith(owner, Items.CROSSBOW));
@@ -213,7 +210,7 @@ public class BowShootTask extends Task<LittleMaidBaseEntity> {
                 if (owner.isHandActive()) {
                     if (!flag && this.seeTime < -60) {
                         owner.resetActiveHand();
-                    } else if (flag && !flag4 && (owner.getOwner() == null || flag5)) {
+                    } else if (flag) {
                         if (i >= 20) {
 
                             owner.giveExperiencePoints(1 + owner.getRNG().nextInt(2));

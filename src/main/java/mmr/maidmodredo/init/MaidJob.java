@@ -28,6 +28,7 @@ public class MaidJob {
 
     public static final MaidJob FENCER = new MaidJob("fencer", new ItemStack(Items.DIAMOND_SWORD)).setSubActivity(LittleActivitys.ATTACK).setLockJob();
     public static final MaidJob GUARD = new MaidJob("guard", new ItemStack(Items.DIAMOND_SWORD)).setSubRequireItem(new ItemStack(Items.SHIELD)).setSubActivity(LittleActivitys.ATTACK).setLockJob().setNeedLevel(10);
+    public static final MaidJob DOUBLESWORD = new MaidJob("doublesword", new ItemStack(Items.DIAMOND_SWORD)).setSubRequireItem(new ItemStack(Items.DIAMOND_SWORD)).setSubActivity(LittleActivitys.DOUBLESWORD).setLockJob().setNeedLevel(5);
     public static final MaidJob ARCHER = new MaidJob("archer", new ItemStack(Items.BOW)).setSubActivity(LittleActivitys.SHOT).setLockJob().setNeedLevel(10);
 
     private final String name;
@@ -121,6 +122,7 @@ public class MaidJob {
 
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "fencer"), FENCER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "guard"), GUARD);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "doublesword"), DOUBLESWORD);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "archer"), ARCHER);
     }
 

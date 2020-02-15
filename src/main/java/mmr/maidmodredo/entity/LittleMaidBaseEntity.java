@@ -28,6 +28,7 @@ import mmr.maidmodredo.utils.Counter;
 import mmr.maidmodredo.utils.ModelManager;
 import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
@@ -107,12 +108,14 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     public static final MaidAnimation PET_ANIMATION = MaidAnimation.create(100);
     public static final MaidAnimation FARM_ANIMATION = MaidAnimation.create(15);
     public static final MaidAnimation EAT_ANIMATION = MaidAnimation.create(14);
+    public static final MaidAnimation RUSHING_ANIMATION = MaidAnimation.create(80);
 
     private static final MaidAnimation[] ANIMATIONS = {
             TALK_ANIMATION,
             PET_ANIMATION,
             FARM_ANIMATION,
-            EAT_ANIMATION
+            EAT_ANIMATION,
+            RUSHING_ANIMATION
     };
 
     public ModelConfigCompound textureData = new ModelConfigCompound(this);
@@ -134,6 +137,12 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     public float experience;
 
     public int loyalty;
+
+    public float prevShadowX, prevShadowY, prevShadowZ;
+    public float shadowX, shadowY, shadowZ;
+    public float prevShadowX2, prevShadowY2, prevShadowZ2;
+    public float shadowX2, shadowY2, shadowZ2;
+
     protected static final DataParameter<Float> dataWatch_MaidExpValue = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.FLOAT);
 
 
@@ -141,6 +150,8 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
     protected static final DataParameter<Boolean> FREEDOM = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> WAITING = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> RUSHING = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.BOOLEAN);
+
 
     protected static final DataParameter<Boolean> CONTRACT = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.BOOLEAN);
 
@@ -208,6 +219,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         this.dataManager.register(MAID_DATA, new MaidData(MaidJob.WILD, 0));
         this.dataManager.register(FREEDOM, false);
         this.dataManager.register(WAITING, false);
+        this.dataManager.register(RUSHING, false);
         this.dataManager.register(CONTRACT, false);
 
         this.dataManager.register(DATA_CHARGING_STATE, false);
@@ -260,6 +272,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         p_213744_1_.registerActivity(LittleActivitys.LUMBERJACK, MaidTasks.cutWood(f));
         p_213744_1_.registerActivity(LittleActivitys.ATTACK, MaidTasks.attack(f));
         p_213744_1_.registerActivity(LittleActivitys.SHOT, MaidTasks.shot(f));
+        p_213744_1_.registerActivity(LittleActivitys.DOUBLESWORD, MaidTasks.doubleSwordAttack(f));
         p_213744_1_.setDefaultActivities(ImmutableSet.of(Activity.CORE));
         p_213744_1_.setFallbackActivity(Activity.IDLE);
         p_213744_1_.switchTo(Activity.IDLE);
@@ -851,9 +864,37 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     }
 
     @Override
+    public void onCollideWithPlayer(PlayerEntity entityIn) {
+        super.onCollideWithPlayer(entityIn);
+    }
+
+    @Override
+    protected void collideWithEntity(Entity entityIn) {
+        float f = (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
+        float f1 = (float) this.getAttribute(SharedMonsterAttributes.ATTACK_KNOCKBACK).getValue() + 0.2F;
+
+        f += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((LivingEntity) entityIn).getCreatureAttribute());
+        f1 += (float) EnchantmentHelper.getKnockbackModifier(this);
+
+        if (this.isRushing()) {
+            entityIn.attackEntityFrom(LittleDamageSource.causeRushingDamage(this), f * 1.4F);
+            ((LivingEntity) entityIn).knockBack(this, f1 * 0.5F, (double) MathHelper.sin(this.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(this.rotationYaw * ((float) Math.PI / 180F))));
+            this.setMotion(this.getMotion().mul(0.6D, 1.6D, 0.6D));
+        }
+        super.collideWithEntity(entityIn);
+    }
+
+    @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (canBlockDamageSource(source)) {
+        if (amount > 0.0F && canBlockDamageSource(source)) {
+            this.damageShield(amount);
             this.playSound(SoundEvents.ITEM_SHIELD_BLOCK, 1.0F, 1.0F);
+            return false;
+        }
+
+        if (amount > 0.0F && canRushingDamageSource(source)) {
+            this.damageSword(amount);
+            this.playSound(SoundEvents.BLOCK_ANVIL_PLACE, 1.0F, 1.45F);
             return false;
         }
 
@@ -871,6 +912,64 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         }
 
         if (!damageSourceIn.isUnblockable() && this.isActiveItemStackBlocking() && !flag) {
+            Vec3d vec3d2 = damageSourceIn.getDamageLocation();
+            if (vec3d2 != null) {
+                Vec3d vec3d = this.getLook(1.0F);
+                Vec3d vec3d1 = vec3d2.subtractReverse(this.getPositionVec()).normalize();
+                vec3d1 = new Vec3d(vec3d1.x, 0.0D, vec3d1.z);
+                if (vec3d1.dotProduct(vec3d) < 0.0D) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    protected void damageSword(float damage) {
+        if (damage >= 2.0F && this.isRushing() && this.getHeldItem(Hand.OFF_HAND).getItem() instanceof SwordItem) {
+            int i = 1 + MathHelper.floor(damage);
+            Hand hand = this.getActiveHand();
+            this.getHeldItem(Hand.OFF_HAND).damageItem(i, this, (p_213833_1_) -> {
+                p_213833_1_.sendBreakAnimation(hand);
+            });
+
+            this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+
+        }
+    }
+
+    protected void damageShield(float damage) {
+        if (damage >= 3.0F && this.activeItemStack.isShield(this)) {
+            int i = 1 + MathHelper.floor(damage);
+            Hand hand = this.getActiveHand();
+            this.activeItemStack.damageItem(i, this, (p_213833_1_) -> {
+                p_213833_1_.sendBreakAnimation(hand);
+            });
+            if (this.activeItemStack.isEmpty()) {
+                if (hand == Hand.MAIN_HAND) {
+                    this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
+                } else {
+                    this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
+                }
+
+                this.activeItemStack = ItemStack.EMPTY;
+                this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+            }
+        }
+    }
+
+    private boolean canRushingDamageSource(DamageSource damageSourceIn) {
+        Entity entity = damageSourceIn.getImmediateSource();
+        boolean flag = false;
+        if (entity instanceof AbstractArrowEntity) {
+            AbstractArrowEntity abstractarrowentity = (AbstractArrowEntity) entity;
+            if (abstractarrowentity.getPierceLevel() > 0) {
+                flag = true;
+            }
+        }
+
+        if (!damageSourceIn.isUnblockable() && this.isRushing() && !flag) {
             Vec3d vec3d2 = damageSourceIn.getDamageLocation();
             if (vec3d2 != null) {
                 Vec3d vec3d = this.getLook(1.0F);
@@ -987,6 +1086,29 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         super.tick();
 
         this.updatePose();
+        this.updateShadow();
+    }
+
+    private void updateShadow() {
+
+        double elasticity = 0.3;
+
+        this.prevShadowX = this.shadowX;
+        this.prevShadowY = this.shadowY;
+        this.prevShadowZ = this.shadowZ;
+
+
+        this.prevShadowX2 = this.shadowX2;
+        this.prevShadowY2 = this.shadowY2;
+        this.prevShadowZ2 = this.shadowZ2;
+
+        this.shadowX += (this.getPosX() - this.shadowX) * elasticity;
+        this.shadowY += (this.getPosY() - this.shadowY) * elasticity;
+        this.shadowZ += (this.getPosZ() - this.shadowZ) * elasticity;
+
+        this.shadowX2 += (this.shadowX - this.shadowX2) * elasticity;
+        this.shadowY2 += (this.shadowY - this.shadowY2) * elasticity;
+        this.shadowZ2 += (this.shadowZ - this.shadowZ2) * elasticity;
     }
 
     protected void updatePose() {
@@ -1128,6 +1250,9 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
     public void setFreedom(boolean pflag) {
         this.dataManager.set(FREEDOM, pflag);
+        if (!world.isRemote()) {
+            this.resetBrain((ServerWorld) this.world);
+        }
     }
 
 
@@ -1144,26 +1269,28 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             setWorking(false);
 
             getNavigator().clearPath();
-
-            //clearTilePosAll();
-
-			/*
-
-			setHomePosAndDistance(
-
-					new BlockPos(MathHelper.floor(lastTickPosX),
-
-					MathHelper.floor(lastTickPosY),
-
-					MathHelper.floor(lastTickPosZ)), 0);
-
-					*/
-
         }
         if (!world.isRemote()) {
             this.resetBrain((ServerWorld) this.world);
         }
         velocityChanged = true;
+    }
+
+    public boolean isRushing() {
+        return this.dataManager.get(RUSHING);
+    }
+
+    public void setRushing(boolean pflag) {
+        this.dataManager.set(RUSHING, pflag);
+        if (pflag) {
+            MaidPacketHandler.animationModel(this, LittleMaidBaseEntity.RUSHING_ANIMATION);
+        }
+        this.shadowX = (float) this.getPosX();
+        this.shadowY = (float) this.getPosY();
+        this.shadowZ = (float) this.getPosZ();
+        this.shadowX2 = (float) this.getPosX();
+        this.shadowY2 = (float) this.getPosY();
+        this.shadowZ2 = (float) this.getPosZ();
     }
 
     @Override
@@ -1522,6 +1649,9 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     }
 
     protected void onAnimationFinish(MaidAnimation animation) {
+        if (animation == LittleMaidBaseEntity.RUSHING_ANIMATION) {
+            setRushing(false);
+        }
     }
 
     @Override

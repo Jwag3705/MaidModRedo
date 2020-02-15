@@ -157,6 +157,38 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
             IVertexBuilder ivertexbuilder = bufferIn.getBuffer(rendertype);
             int i = getPackedOverlay(entityIn, this.getOverlayProgress(entityIn, partialTicks));
             this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, i, 1.0F, 1.0F, 1.0F, flag1 ? 0.15F : 1.0F);
+
+            if (entityIn.isRushing()) {
+                double shadowX = entityIn.prevShadowX + (entityIn.shadowX - entityIn.prevShadowX) * partialTicks;
+                double shadowY = entityIn.prevShadowY + (entityIn.shadowY - entityIn.prevShadowY) * partialTicks;
+                double shadowZ = entityIn.prevShadowZ + (entityIn.shadowZ - entityIn.prevShadowZ) * partialTicks;
+
+                double shadowX2 = entityIn.prevShadowX2 + (entityIn.shadowX2 - entityIn.prevShadowX2) * partialTicks;
+                double shadowY2 = entityIn.prevShadowY2 + (entityIn.shadowY2 - entityIn.prevShadowY2) * partialTicks;
+                double shadowZ2 = entityIn.prevShadowZ2 + (entityIn.shadowZ2 - entityIn.prevShadowZ2) * partialTicks;
+
+
+                double ownerInX = entityIn.prevPosX + (entityIn.getPosX() - entityIn.prevPosX) * partialTicks;
+                double ownerInY = entityIn.prevPosY + (entityIn.getPosY() - entityIn.prevPosY) * partialTicks;
+                double ownerInZ = entityIn.prevPosZ + (entityIn.getPosZ() - entityIn.prevPosZ) * partialTicks;
+
+                double deltaX = shadowX - ownerInX;
+                double deltaY = ownerInY - shadowY;
+                double deltaZ = shadowZ - ownerInZ;
+                double deltaX2 = shadowX2 - shadowX;
+                double deltaY2 = shadowY - shadowY2;
+                double deltaZ2 = shadowZ2 - shadowZ;
+
+                matrixStackIn.push();
+                matrixStackIn.translate(-deltaX * 2.0F * -entityIn.getLook(partialTicks).x, deltaY * 2.0F, -deltaZ * 2.0F * entityIn.getLook(partialTicks).z);
+                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, i, 1.0F, 0.5F, 0.5F, 0.4F);
+                matrixStackIn.pop();
+
+                matrixStackIn.push();
+                matrixStackIn.translate(-deltaX2 * 4.0F * -entityIn.getLook(partialTicks).x, deltaY2 * 4.0F, -deltaZ2 * 4.0F * entityIn.getLook(partialTicks).z);
+                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, i, 0.5F, 1.0F, 0.5F, 0.2F);
+                matrixStackIn.pop();
+            }
         }
 
         if (!entityIn.isSpectator()) {

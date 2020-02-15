@@ -23,7 +23,7 @@ public class MaidCombatOrPanic extends Task<LittleMaidBaseEntity> {
         Brain<?> brain = entityIn.getBrain();
         if (func_220512_b(entityIn) || func_220513_a(entityIn) || (entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY))) {
                 if (entityIn.isTamed() && !entityIn.isMaidWait() && entityIn.getMaidData().getJob().getSubActivity() != null) {
-                    if (!isSetupTarget(entityIn) && func_220513_a(entityIn) || entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY)) {
+                    if (func_220513_a(entityIn) || entityIn.getBrain().hasMemory(MemoryModuleType.HURT_BY_ENTITY)) {
                         brain.removeMemory(MemoryModuleType.PATH);
                         brain.removeMemory(MemoryModuleType.WALK_TARGET);
                         brain.removeMemory(MemoryModuleType.LOOK_TARGET);

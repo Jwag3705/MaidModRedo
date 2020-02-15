@@ -2,7 +2,6 @@ package mmr.maidmodredo.entity.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
-import mmr.maidmodredo.init.MaidJob;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -11,19 +10,19 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.memory.WalkTarget;
 import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.item.ShieldItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.server.ServerWorld;
 
-public class AttackTask extends Task<LittleMaidBaseEntity> {
+public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
     private final MemoryModuleType<? extends Entity> field_220541_a;
     private final float field_220542_b;
+    protected int dashTick;
     protected int attackTick;
 
-    public AttackTask(MemoryModuleType<? extends Entity> p_i50346_1_, float p_i50346_2_) {
+    public DoubleSwordAttackTask(MemoryModuleType<? extends Entity> p_i50346_1_, float p_i50346_2_) {
         super(ImmutableMap.of(p_i50346_1_, MemoryModuleStatus.VALUE_PRESENT));
         this.field_220541_a = p_i50346_1_;
         this.field_220542_b = p_i50346_2_;
@@ -87,7 +86,7 @@ public class AttackTask extends Task<LittleMaidBaseEntity> {
     @Override
     protected void resetTask(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         super.resetTask(worldIn, entityIn, gameTimeIn);
-        entityIn.resetActiveHand();
+        entityIn.setRushing(false);
         entityIn.getNavigator().clearPath();
         Brain<?> brain = entityIn.getBrain();
         entityIn.getBrain().removeMemory(this.field_220541_a);
@@ -103,13 +102,8 @@ public class AttackTask extends Task<LittleMaidBaseEntity> {
 
             owner.getLookController().setLookPositionWithEntity(entity, 30.0F, 30.0F);
         }
+        this.dashTick = Math.max(this.dashTick - 1, 0);
         this.attackTick = Math.max(this.attackTick - 1, 0);
-    }
-
-    private void setGuard(LittleMaidBaseEntity owner) {
-        if (owner.getHeldItem(Hand.OFF_HAND).getItem() instanceof ShieldItem) {
-            owner.setActiveHand(Hand.OFF_HAND);
-        }
     }
 
     public void setWalk(LittleMaidBaseEntity p_220540_0_, Entity p_220540_1_, float p_220540_2_) {
@@ -117,28 +111,31 @@ public class AttackTask extends Task<LittleMaidBaseEntity> {
         p_220540_0_.getNavigator().tryMoveToEntityLiving(p_220540_1_, p_220540_2_);
         double d0 = p_220540_0_.getDistanceSq(p_220540_1_.getPosX(), p_220540_1_.getBoundingBox().minY, p_220540_1_.getPosZ());
 
-        p_220540_0_.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityPosWrapper(p_220540_1_), p_220540_2_, 30));
+        if (p_220540_0_.isRushing()) {
+            p_220540_0_.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityPosWrapper(p_220540_1_), p_220540_2_ * 1.6F, 30));
+        } else {
+            p_220540_0_.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityPosWrapper(p_220540_1_), p_220540_2_, 30));
+        }
         this.checkAndPerformAttack(p_220540_0_, p_220540_1_, d0);
     }
 
     protected void checkAndPerformAttack(LittleMaidBaseEntity attacker, Entity enemy, double distToEnemySqr) {
         double d0 = this.getAttackReachSqr(attacker, enemy);
         if (distToEnemySqr <= d0 && this.attackTick <= 0) {
-            this.attackTick = 20;
+            this.attackTick = 10;
             attacker.attackEntityAsMob(enemy);
             attacker.getHeldItem(Hand.MAIN_HAND).damageItem(1, attacker, (p_213625_1_) -> {
                 p_213625_1_.sendBreakAnimation(Hand.MAIN_HAND);
             });
 
-            if (attacker.getMaidData().getJob() == MaidJob.GUARD) {
-                attacker.resetActiveHand();
-            }
-        } else {
-            if (attacker.getMaidData().getJob() == MaidJob.GUARD) {
-                setGuard(attacker);
-            }
         }
 
+        if (this.dashTick <= 0 && attacker.getHeldItem(Hand.OFF_HAND).getItem() instanceof SwordItem) {
+            this.dashTick = 100;
+            attacker.setRushing(true);
+            attacker.getNavigator().clearPath();
+            attacker.getBrain().removeMemory(MemoryModuleType.WALK_TARGET);
+        }
     }
 
     protected double getAttackReachSqr(LittleMaidBaseEntity attacker, Entity attackTarget) {

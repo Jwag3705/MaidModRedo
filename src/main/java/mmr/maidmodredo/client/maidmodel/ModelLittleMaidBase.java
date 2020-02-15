@@ -395,6 +395,29 @@ public abstract class ModelLittleMaidBase<T extends LittleMaidBaseEntity> extend
 
             animator.resetKeyframe(4);
         }
+
+        if (animation.getAnimation() == LittleMaidBaseEntity.RUSHING_ANIMATION) {
+            bipedRightArm.setRotateAngle(0.0F, 0.0F, 0.0F);
+            bipedLeftArm.setRotateAngle(0.0F, 0.0F, 0.0F);
+            bipedRightLeg.setRotateAngle(0.0F, 0.0F, 0.0F);
+            bipedLeftLeg.setRotateAngle(0.0F, 0.0F, 0.0F);
+
+            animator.setAnimation(LittleMaidBaseEntity.RUSHING_ANIMATION);
+            animator.startKeyframe(4);
+            animator.rotate(this.bipedRightArm, -0.95F, -0.77F, 0.0F);
+            animator.rotate(this.bipedLeftArm, 1.0471975511965976F, 0.6F, -0.27314402793711257F);
+            animator.rotate(this.bipedRightLeg, 0.5F, 0.0F, 0.0F);
+            animator.rotate(this.bipedLeftLeg, 0.5F, 0.0F, 0.0F);
+            animator.endKeyframe();
+            animator.startKeyframe(72);
+            animator.rotate(this.bipedRightArm, -0.95F, -0.77F, 0.0F);
+            animator.rotate(this.bipedLeftArm, 1.0471975511965976F, 0.6F, -0.27314402793711257F);
+            animator.rotate(this.bipedRightLeg, 0.5F, 0.0F, 0.0F);
+            animator.rotate(this.bipedLeftLeg, 0.5F, 0.0F, 0.0F);
+            animator.endKeyframe();
+
+            animator.resetKeyframe(4);
+        }
     }
 
     public static float getPartialTicks() {

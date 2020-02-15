@@ -499,6 +499,29 @@ public class ModelLittleMaid_Revampmaid<T extends LittleMaidBaseEntity> extends 
 
             animator.resetKeyframe(4);
         }
+
+        if (animation.getAnimation() == LittleMaidBaseEntity.RUSHING_ANIMATION) {
+            handR.setRotateAngle(0.0F, 0.0F, 0.0F);
+            handL.setRotateAngle(0.0F, 0.0F, 0.0F);
+            legR.setRotateAngle(0.0F, 0.0F, 0.0F);
+            legL.setRotateAngle(0.0F, 0.0F, 0.0F);
+
+            animator.setAnimation(LittleMaidBaseEntity.RUSHING_ANIMATION);
+            animator.startKeyframe(4);
+            animator.rotate(this.handR, -0.95F, -0.77F, 0.0F);
+            animator.rotate(this.handL, 1.0471975511965976F, 0.6F, -0.27314402793711257F);
+            animator.rotate(this.legR, 0.5F, 0.0F, 0.0F);
+            animator.rotate(this.legL, 0.5F, 0.0F, 0.0F);
+            animator.endKeyframe();
+            animator.startKeyframe(72);
+            animator.rotate(this.handR, -0.95F, -0.77F, 0.0F);
+            animator.rotate(this.handL, 1.0471975511965976F, 0.6F, -0.27314402793711257F);
+            animator.rotate(this.legR, 0.5F, 0.0F, 0.0F);
+            animator.rotate(this.legL, 0.5F, 0.0F, 0.0F);
+            animator.endKeyframe();
+
+            animator.resetKeyframe(4);
+        }
     }
 
     public void setDefaultPause(T entity, float limbSwing, float limbSwingAmount, float ageInTicks,

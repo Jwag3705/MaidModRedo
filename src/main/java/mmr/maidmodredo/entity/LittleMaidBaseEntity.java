@@ -30,6 +30,8 @@ import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
@@ -82,6 +84,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -117,6 +120,9 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             EAT_ANIMATION,
             RUSHING_ANIMATION
     };
+
+    private static final UUID MODIFIER_UUID = UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E");
+    private static final AttributeModifier MODIFIER = (new AttributeModifier(MODIFIER_UUID, "Rush speed penalty", 0.25D, AttributeModifier.Operation.ADDITION)).setSaved(false);
 
     public ModelConfigCompound textureData = new ModelConfigCompound(this);
 
@@ -1281,9 +1287,14 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     }
 
     public void setRushing(boolean pflag) {
+        IAttributeInstance iattributeinstance = this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
         this.dataManager.set(RUSHING, pflag);
         if (pflag) {
             MaidPacketHandler.animationModel(this, LittleMaidBaseEntity.RUSHING_ANIMATION);
+            iattributeinstance.removeModifier(MODIFIER);
+            iattributeinstance.applyModifier(MODIFIER);
+        } else {
+            iattributeinstance.removeModifier(MODIFIER);
         }
         this.shadowX = (float) this.getPosX();
         this.shadowY = (float) this.getPosY();

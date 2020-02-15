@@ -54,7 +54,7 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
 
     }
 
-    public void setModelValues(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void setModelValues(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, int modelNum) {
         if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Pre<T, ModelBaseSolo<T>>(entityIn, this, partialTicks, matrixStackIn, bufferIn, packedLightIn)))
             return;
         matrixStackIn.push();
@@ -152,42 +152,16 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
         this.getEntityModel().render(entityIn, f5, f8, f7, f2, f6);
         boolean flag = this.isVisible(entityIn);
         boolean flag1 = !flag && !entityIn.isInvisibleToPlayer(Minecraft.getInstance().player);
+        boolean flag2 = modelNum == 1 || modelNum == 2;
         RenderType rendertype = this.func_230042_a_(entityIn, flag, flag1);
         if (rendertype != null) {
             IVertexBuilder ivertexbuilder = bufferIn.getBuffer(rendertype);
             int i = getPackedOverlay(entityIn, this.getOverlayProgress(entityIn, partialTicks));
-            this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, i, 1.0F, 1.0F, 1.0F, flag1 ? 0.15F : 1.0F);
 
-            if (entityIn.isRushing()) {
-                double shadowX = entityIn.prevShadowX + (entityIn.shadowX - entityIn.prevShadowX) * partialTicks;
-                double shadowY = entityIn.prevShadowY + (entityIn.shadowY - entityIn.prevShadowY) * partialTicks;
-                double shadowZ = entityIn.prevShadowZ + (entityIn.shadowZ - entityIn.prevShadowZ) * partialTicks;
-
-                double shadowX2 = entityIn.prevShadowX2 + (entityIn.shadowX2 - entityIn.prevShadowX2) * partialTicks;
-                double shadowY2 = entityIn.prevShadowY2 + (entityIn.shadowY2 - entityIn.prevShadowY2) * partialTicks;
-                double shadowZ2 = entityIn.prevShadowZ2 + (entityIn.shadowZ2 - entityIn.prevShadowZ2) * partialTicks;
-
-
-                double ownerInX = entityIn.prevPosX + (entityIn.getPosX() - entityIn.prevPosX) * partialTicks;
-                double ownerInY = entityIn.prevPosY + (entityIn.getPosY() - entityIn.prevPosY) * partialTicks;
-                double ownerInZ = entityIn.prevPosZ + (entityIn.getPosZ() - entityIn.prevPosZ) * partialTicks;
-
-                double deltaX = shadowX - ownerInX;
-                double deltaY = ownerInY - shadowY;
-                double deltaZ = shadowZ - ownerInZ;
-                double deltaX2 = shadowX2 - shadowX;
-                double deltaY2 = shadowY - shadowY2;
-                double deltaZ2 = shadowZ2 - shadowZ;
-
-                matrixStackIn.push();
-                matrixStackIn.translate(-deltaX * 2.0F * -entityIn.getLook(partialTicks).x, deltaY * 2.0F, -deltaZ * 2.0F * entityIn.getLook(partialTicks).z);
-                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, i, 1.0F, 0.5F, 0.5F, 0.4F);
-                matrixStackIn.pop();
-
-                matrixStackIn.push();
-                matrixStackIn.translate(-deltaX2 * 4.0F * -entityIn.getLook(partialTicks).x, deltaY2 * 4.0F, -deltaZ2 * 4.0F * entityIn.getLook(partialTicks).z);
-                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, i, 0.5F, 1.0F, 0.5F, 0.2F);
-                matrixStackIn.pop();
+            if (flag2) {
+                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, i, modelNum == 1 ? 1.0F : 0.5F, modelNum == 2 ? 1.0F : 0.5F, 0.5F, 0.15F * modelNum);
+            } else {
+                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, i, 1.0F, 1.0F, 1.0F, flag1 ? 0.15F : 1.0F);
             }
         }
 
@@ -207,15 +181,48 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
 
     }
 
-    public void renderModelMulti(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        setModelValues(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+    public void renderModelMulti(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, int modelNum) {
+        setModelValues(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn, modelNum);
     }
 
 
     @Override
     public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         //super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-        renderModelMulti(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+        matrixStackIn.push();
+        renderModelMulti(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn, 0);
+        matrixStackIn.pop();
+        if (entityIn.isRushing()) {
+            double shadowX = entityIn.prevShadowX + (entityIn.shadowX - entityIn.prevShadowX) * partialTicks;
+            double shadowY = entityIn.prevShadowY + (entityIn.shadowY - entityIn.prevShadowY) * partialTicks;
+            double shadowZ = entityIn.prevShadowZ + (entityIn.shadowZ - entityIn.prevShadowZ) * partialTicks;
+
+            double shadowX2 = entityIn.prevShadowX2 + (entityIn.shadowX2 - entityIn.prevShadowX2) * partialTicks;
+            double shadowY2 = entityIn.prevShadowY2 + (entityIn.shadowY2 - entityIn.prevShadowY2) * partialTicks;
+            double shadowZ2 = entityIn.prevShadowZ2 + (entityIn.shadowZ2 - entityIn.prevShadowZ2) * partialTicks;
+
+
+            double ownerInX = entityIn.prevPosX + (entityIn.getPosX() - entityIn.prevPosX) * partialTicks;
+            double ownerInY = entityIn.prevPosY + (entityIn.getPosY() - entityIn.prevPosY) * partialTicks;
+            double ownerInZ = entityIn.prevPosZ + (entityIn.getPosZ() - entityIn.prevPosZ) * partialTicks;
+
+            double deltaX = shadowX - ownerInX;
+            double deltaY = ownerInY - shadowY;
+            double deltaZ = shadowZ - ownerInZ;
+            double deltaX2 = shadowX2 - shadowX;
+            double deltaY2 = shadowY - shadowY2;
+            double deltaZ2 = shadowZ2 - shadowZ;
+
+            matrixStackIn.push();
+            matrixStackIn.translate(deltaX * 2.0F, deltaY * 2.0F, deltaZ * 2.0F);
+            renderModelMulti(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn, 1);
+            matrixStackIn.pop();
+
+            matrixStackIn.push();
+            matrixStackIn.translate(deltaX2 * 4.0F, deltaY2 * 4.0F, deltaZ2 * 4.0F);
+            renderModelMulti(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn, 2);
+            matrixStackIn.pop();
+        }
     }
 
     // TODO いらん？

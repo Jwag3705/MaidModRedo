@@ -282,9 +282,9 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
     }
 
     @Override
-    public void setModelValues(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void setModelValues(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, int modelNum) {
         LittleMaidBaseEntity lmaid = entityIn;
-        super.setModelValues(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+        super.setModelValues(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn, modelNum);
 
 //		modelMain.setRender(this);
 //		modelMain.setEntityCaps(pEntityCaps);

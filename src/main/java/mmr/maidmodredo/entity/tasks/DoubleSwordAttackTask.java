@@ -81,6 +81,8 @@ public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
     protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         Entity entity = entityIn.getBrain().getMemory(this.field_220541_a).get();
         setWalk(entityIn, entity, this.field_220542_b);
+        this.dashTick = 90;
+        entityIn.setRushing(true);
     }
 
     @Override
@@ -111,11 +113,9 @@ public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
         p_220540_0_.getNavigator().tryMoveToEntityLiving(p_220540_1_, p_220540_2_);
         double d0 = p_220540_0_.getDistanceSq(p_220540_1_.getPosX(), p_220540_1_.getBoundingBox().minY, p_220540_1_.getPosZ());
 
-        if (p_220540_0_.isRushing()) {
-            p_220540_0_.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityPosWrapper(p_220540_1_), p_220540_2_ * 1.6F, 30));
-        } else {
-            p_220540_0_.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityPosWrapper(p_220540_1_), p_220540_2_, 30));
-        }
+
+        p_220540_0_.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityPosWrapper(p_220540_1_), p_220540_2_, 30));
+
         this.checkAndPerformAttack(p_220540_0_, p_220540_1_, d0);
     }
 
@@ -130,11 +130,9 @@ public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
 
         }
 
-        if (this.dashTick <= 0 && attacker.getHeldItem(Hand.OFF_HAND).getItem() instanceof SwordItem) {
-            this.dashTick = 100;
+        if (this.dashTick <= 0) {
+            this.dashTick = 90;
             attacker.setRushing(true);
-            attacker.getNavigator().clearPath();
-            attacker.getBrain().removeMemory(MemoryModuleType.WALK_TARGET);
         }
     }
 

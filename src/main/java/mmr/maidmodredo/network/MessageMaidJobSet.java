@@ -52,6 +52,7 @@ public class MessageMaidJobSet {
                     LittleMaidBaseEntity littlemaid = (LittleMaidBaseEntity) entity;
 
                     littlemaid.setMaidData(littlemaid.getMaidData().withJob(message.job));
+                    littlemaid.resetBrain(ctx.get().getSender().getServerWorld());
                 }
             });
             context.setPacketHandled(true);

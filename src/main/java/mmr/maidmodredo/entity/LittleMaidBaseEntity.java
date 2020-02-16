@@ -878,7 +878,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         f1 += (float) EnchantmentHelper.getKnockbackModifier(this);
 
         if (this.isRushing()) {
-            if (this.getOwner() != entityIn || !(entityIn instanceof LittleMaidBaseEntity)) {
+            if (this.getOwner() != entityIn && !(entityIn instanceof LittleMaidBaseEntity)) {
                 if (entityIn.attackEntityFrom(LittleDamageSource.causeRushingDamage(this), f * 0.75F)) {
                     ((LivingEntity) entityIn).knockBack(this, f1 * 0.56F, (double) MathHelper.sin(this.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(this.rotationYaw * ((float) Math.PI / 180F))));
                     entityIn.setMotion(entityIn.getMotion().add(0.0D, (double) 0.25F, 0.0D));

@@ -122,7 +122,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     };
 
     private static final UUID MODIFIER_UUID = UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E");
-    private static final AttributeModifier MODIFIER = (new AttributeModifier(MODIFIER_UUID, "Rush speed penalty", 0.25D, AttributeModifier.Operation.ADDITION)).setSaved(false);
+    private static final AttributeModifier MODIFIER = (new AttributeModifier(MODIFIER_UUID, "Rush speed penalty", 0.28D, AttributeModifier.Operation.ADDITION)).setSaved(false);
 
     public ModelConfigCompound textureData = new ModelConfigCompound(this);
 

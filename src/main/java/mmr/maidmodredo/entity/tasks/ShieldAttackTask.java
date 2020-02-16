@@ -2,6 +2,7 @@ package mmr.maidmodredo.entity.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
+import mmr.maidmodredo.init.LittleDamageSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -10,19 +11,19 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.memory.WalkTarget;
 import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.item.SwordItem;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.server.ServerWorld;
 
-public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
+public class ShieldAttackTask extends Task<LittleMaidBaseEntity> {
     private final MemoryModuleType<? extends Entity> field_220541_a;
     private final float field_220542_b;
-    protected int dashTick;
+    protected int rotationTick;
     protected int attackTick;
 
-    public DoubleSwordAttackTask(MemoryModuleType<? extends Entity> p_i50346_1_, float p_i50346_2_) {
+    public ShieldAttackTask(MemoryModuleType<? extends Entity> p_i50346_1_, float p_i50346_2_) {
         super(ImmutableMap.of(p_i50346_1_, MemoryModuleStatus.VALUE_PRESENT));
         this.field_220541_a = p_i50346_1_;
         this.field_220542_b = p_i50346_2_;
@@ -32,7 +33,7 @@ public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
         double d0 = getTargetDistance(owner);
         if (owner.getBrain().getMemory(this.field_220541_a).isPresent()) {
             Entity entity = owner.getBrain().getMemory(this.field_220541_a).get();
-            return !isYourFriend(owner) && !isYourOwner(owner) && owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof SwordItem && owner.getDistanceSq(entity) < d0 * d0;
+            return !isYourFriend(owner) && !isYourOwner(owner) && owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof ShieldItem && owner.getDistanceSq(entity) < d0 * d0;
         } else {
             Brain<?> brain = owner.getBrain();
             owner.getBrain().removeMemory(this.field_220541_a);
@@ -81,13 +82,14 @@ public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
     protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         Entity entity = entityIn.getBrain().getMemory(this.field_220541_a).get();
         setWalk(entityIn, entity, this.field_220542_b);
-        this.dashTick = 90;
-        entityIn.setRushing(true);
+        this.rotationTick = 200;
+        entityIn.startRotationAttack(100);
     }
 
     @Override
     protected void resetTask(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         super.resetTask(worldIn, entityIn, gameTimeIn);
+        entityIn.resetActiveHand();
         entityIn.getNavigator().clearPath();
         Brain<?> brain = entityIn.getBrain();
         entityIn.getBrain().removeMemory(this.field_220541_a);
@@ -103,7 +105,7 @@ public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
 
             owner.getLookController().setLookPositionWithEntity(entity, 30.0F, 30.0F);
         }
-        this.dashTick = Math.max(this.dashTick - 1, 0);
+        this.rotationTick = Math.max(this.rotationTick - 1, 0);
         this.attackTick = Math.max(this.attackTick - 1, 0);
     }
 
@@ -122,18 +124,28 @@ public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
         double d0 = this.getAttackReachSqr(attacker, enemy);
         if (distToEnemySqr <= d0 && this.attackTick <= 0) {
             this.attackTick = 10;
-            attacker.attackEntityAsMob(enemy);
+            double i = attacker.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue();
+            enemy.attackEntityFrom(LittleDamageSource.causeShieldBushDamage(attacker), (float) (i + 2.0F));
             attacker.getHeldItem(Hand.MAIN_HAND).damageItem(1, attacker, (p_213625_1_) -> {
                 p_213625_1_.sendBreakAnimation(Hand.MAIN_HAND);
             });
-            if (!attacker.isRushing()) {
+            if (!attacker.isRotationAttack()) {
                 attacker.swingArm(Hand.MAIN_HAND);
             }
         }
 
-        if (this.dashTick <= 0 && attacker.getHeldItem(Hand.OFF_HAND).getItem() instanceof SwordItem) {
-            this.dashTick = 90;
-            attacker.setRushing(true);
+        if (!attacker.isRotationAttack()) {
+            setGuard(attacker);
+        } else if (this.rotationTick <= 0 && attacker.getHeldItem(Hand.OFF_HAND).getItem() instanceof ShieldItem) {
+            this.rotationTick = 280;
+            attacker.startRotationAttack(100);
+        }
+
+    }
+
+    private void setGuard(LittleMaidBaseEntity owner) {
+        if (owner.getHeldItem(Hand.OFF_HAND).getItem() instanceof ShieldItem) {
+            owner.setActiveHand(Hand.OFF_HAND);
         }
     }
 

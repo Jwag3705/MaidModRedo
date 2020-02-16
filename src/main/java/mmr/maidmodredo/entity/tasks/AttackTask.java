@@ -126,6 +126,7 @@ public class AttackTask extends Task<LittleMaidBaseEntity> {
         if (distToEnemySqr <= d0 && this.attackTick <= 0) {
             this.attackTick = 20;
             attacker.attackEntityAsMob(enemy);
+            attacker.swingArm(Hand.MAIN_HAND);
             attacker.getHeldItem(Hand.MAIN_HAND).damageItem(1, attacker, (p_213625_1_) -> {
                 p_213625_1_.sendBreakAnimation(Hand.MAIN_HAND);
             });

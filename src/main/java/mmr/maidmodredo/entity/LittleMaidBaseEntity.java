@@ -64,6 +64,7 @@ import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -81,10 +82,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -149,6 +147,8 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     public float prevShadowX2, prevShadowY2, prevShadowZ2;
     public float shadowX2, shadowY2, shadowZ2;
 
+    private int rotationAttackDuration;
+
     protected static final DataParameter<Float> dataWatch_MaidExpValue = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.FLOAT);
 
 
@@ -157,7 +157,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     protected static final DataParameter<Boolean> FREEDOM = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> WAITING = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> RUSHING = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.BOOLEAN);
-
+    protected static final DataParameter<Boolean> ROTATION_ATTACK = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.BOOLEAN);
 
     protected static final DataParameter<Boolean> CONTRACT = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.BOOLEAN);
 
@@ -226,6 +226,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         this.dataManager.register(FREEDOM, false);
         this.dataManager.register(WAITING, false);
         this.dataManager.register(RUSHING, false);
+        this.dataManager.register(ROTATION_ATTACK, false);
         this.dataManager.register(CONTRACT, false);
 
         this.dataManager.register(DATA_CHARGING_STATE, false);
@@ -279,6 +280,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         p_213744_1_.registerActivity(LittleActivitys.ATTACK, MaidTasks.attack(f));
         p_213744_1_.registerActivity(LittleActivitys.SHOT, MaidTasks.shot(f));
         p_213744_1_.registerActivity(LittleActivitys.DUAL_BLADER, MaidTasks.doubleSwordAttack(f));
+        p_213744_1_.registerActivity(LittleActivitys.SHIELDER, MaidTasks.shieldAttack(f));
         p_213744_1_.setDefaultActivities(ImmutableSet.of(Activity.CORE));
         p_213744_1_.setFallbackActivity(Activity.IDLE);
         p_213744_1_.switchTo(Activity.IDLE);
@@ -585,13 +587,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         }
     }
 
-    public Hand getSwingHand() {
-        if (this.swingingHand != null) {
-            return this.swingingHand;
-        } else {
-            return Hand.MAIN_HAND;
-        }
-    }
 
     @Override
     public boolean canDespawn(double p_213397_1_) {
@@ -864,7 +859,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
                 giveExperiencePoints(2 + this.getRNG().nextInt(2));
             }
         }
-        this.swingArm(Hand.MAIN_HAND);
 
         return flag;
     }
@@ -877,15 +871,17 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     @Override
     protected void collideWithEntity(Entity entityIn) {
         float f = (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
-        float f1 = (float) this.getAttribute(SharedMonsterAttributes.ATTACK_KNOCKBACK).getValue() + 0.2F;
+        float f1 = (float) this.getAttribute(SharedMonsterAttributes.ATTACK_KNOCKBACK).getValue() + 0.25F;
 
         f += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((LivingEntity) entityIn).getCreatureAttribute());
         f1 += (float) EnchantmentHelper.getKnockbackModifier(this);
 
         if (this.isRushing()) {
-            entityIn.attackEntityFrom(LittleDamageSource.causeRushingDamage(this), f * 1.4F);
-            ((LivingEntity) entityIn).knockBack(this, f1 * 0.5F, (double) MathHelper.sin(this.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(this.rotationYaw * ((float) Math.PI / 180F))));
-            this.setMotion(this.getMotion().mul(0.6D, 1.6D, 0.6D));
+            if (entityIn.attackEntityFrom(LittleDamageSource.causeRushingDamage(this), f * 1.4F)) {
+                ((LivingEntity) entityIn).knockBack(this, f1 * 0.5F, (double) MathHelper.sin(this.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(this.rotationYaw * ((float) Math.PI / 180F))));
+                entityIn.setMotion(entityIn.getMotion().add(0.0D, (double) 0.25F, 0.0D));
+                this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, 1.0F, 1.0F);
+            }
         }
         super.collideWithEntity(entityIn);
     }
@@ -1005,6 +1001,42 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
                 eatSweets(true);
             }
         }
+
+        this.updateRotationAttackTick();
+    }
+
+    private void updateRotationAttackTick() {
+        AxisAlignedBB axisalignedbb = this.getBoundingBox();
+        if (this.rotationAttackDuration > 0) {
+            --this.rotationAttackDuration;
+            this.updateRotationAttack(axisalignedbb, this.getBoundingBox());
+        }
+    }
+
+    private void updateRotationAttack(AxisAlignedBB p_204801_1_, AxisAlignedBB p_204801_2_) {
+        AxisAlignedBB axisalignedbb = p_204801_1_.union(p_204801_2_);
+        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, axisalignedbb.expand(1.5F, 0.0F, 1.5F));
+        if (!list.isEmpty()) {
+            for (int i = 0; i < list.size(); ++i) {
+                Entity entity = list.get(i);
+                double d1 = this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue();
+                if (entity instanceof LivingEntity && this.getOwner() != entity && !(entity instanceof LittleMaidBaseEntity)) {
+                    if (entity.attackEntityFrom(LittleDamageSource.causeRotationAttackDamage(this), (float) (d1 + 3.0F))) {
+                        ((LivingEntity) entity).knockBack(this, 0.6F, (double) MathHelper.sin(this.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(this.rotationYaw * ((float) Math.PI / 180F))));
+                        entity.setMotion(entity.getMotion().add(0.0D, (double) 0.2F, 0.0D));
+                        this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, 1.0F, 1.0F);
+                        this.getHeldItem(Hand.OFF_HAND).damageItem(1, this, (p_213625_1_) -> {
+                            p_213625_1_.sendBreakAnimation(Hand.MAIN_HAND);
+                        });
+
+                    }
+                }
+            }
+        }
+
+        if (!this.world.isRemote && this.rotationAttackDuration <= 0) {
+            this.setRotationAttack(false);
+        }
     }
 
     @Override
@@ -1093,6 +1125,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
         this.updatePose();
         this.updateShadow();
+
     }
 
     private void updateShadow() {
@@ -1296,6 +1329,27 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         } else {
             iattributeinstance.removeModifier(MODIFIER);
         }
+        this.shadowX = (float) this.getPosX();
+        this.shadowY = (float) this.getPosY();
+        this.shadowZ = (float) this.getPosZ();
+        this.shadowX2 = (float) this.getPosX();
+        this.shadowY2 = (float) this.getPosY();
+        this.shadowZ2 = (float) this.getPosZ();
+    }
+
+    public boolean isRotationAttack() {
+        return this.dataManager.get(ROTATION_ATTACK);
+    }
+
+    public void startRotationAttack(int duration) {
+        this.rotationAttackDuration = duration;
+        if (!this.world.isRemote) {
+            this.setRotationAttack(true);
+        }
+    }
+
+    public void setRotationAttack(boolean pflag) {
+        this.dataManager.set(ROTATION_ATTACK, pflag);
         this.shadowX = (float) this.getPosX();
         this.shadowY = (float) this.getPosY();
         this.shadowZ = (float) this.getPosZ();

@@ -274,6 +274,13 @@ public abstract class ModelLittleMaidBase<T extends LittleMaidBaseEntity> extend
             }
         }
 
+        float f2 = -(float) Math.PI / 1.5F;
+
+        if (entity.isRotationAttack()) {
+            this.bipedRightArm.setRotateAngle(f2, 0.0F, -f2);
+            this.bipedLeftArm.setRotateAngle(f2, 0.0F, f2);
+        }
+
         if (entity instanceof IMaidAnimation) {
             setAnimations(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, entity, ((IMaidAnimation) entity));
         }

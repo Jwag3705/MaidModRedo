@@ -375,6 +375,13 @@ public class ModelLittleMaid_Revampmaid<T extends LittleMaidBaseEntity> extends 
             }
         }
 
+        float f2 = -(float) Math.PI / 1.5F;
+
+        if (entity.isRotationAttack()) {
+            this.handR.setRotateAngle(f2, 0.0F, -f2);
+            this.handL.setRotateAngle(f2, 0.0F, f2);
+        }
+
         if (entity instanceof IMaidAnimation) {
             setAnimations(limbSwing, limbSwingAmount, ageInTicks, pHeadYaw, pHeadPitch, entity, ((IMaidAnimation) entity));
         }

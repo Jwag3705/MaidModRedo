@@ -12,6 +12,7 @@ public class LittleActivitys {
     public static final Activity ATTACK = new Activity("littlemaid.attack");
     public static final Activity SHOT = new Activity("littlemaid.shot");
     public static final Activity DUAL_BLADER = new Activity("littlemaid.dual_blader");
+    public static final Activity SHIELDER = new Activity("littlemaid.shielder");
     public static final Activity FOLLOW = new Activity("littlemaid.follow");
     public static final Activity WAITING = new Activity("littlemaid.waiting");
 
@@ -21,7 +22,7 @@ public class LittleActivitys {
         event.getRegistry().register(ATTACK.setRegistryName("attack"));
         event.getRegistry().register(SHOT.setRegistryName("shot"));
         event.getRegistry().register(DUAL_BLADER.setRegistryName("dual_blader"));
-
+        event.getRegistry().register(SHIELDER.setRegistryName("shielder"));
         event.getRegistry().register(FOLLOW.setRegistryName("follow"));
         event.getRegistry().register(WAITING.setRegistryName("waiting"));
     }

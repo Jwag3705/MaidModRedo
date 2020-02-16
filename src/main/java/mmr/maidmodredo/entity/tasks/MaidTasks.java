@@ -66,6 +66,11 @@ public class MaidTasks {
         return ImmutableList.of(Pair.of(0, new StopAttackTask()), Pair.of(0, new DoubleSwordAttackTask(MaidMemoryModuleType.TARGET_HOSTILES, f)));
     }
 
+    public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> shieldAttack(float p_220636_1_) {
+        float f = p_220636_1_ * 1.15F;
+        return ImmutableList.of(Pair.of(0, new StopAttackTask()), Pair.of(0, new ShieldAttackTask(MaidMemoryModuleType.TARGET_HOSTILES, f)));
+    }
+
     private static Pair<Integer, Task<LivingEntity>> func_220643_a() {
         return Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new LookAtEntityTask(LittleEntitys.WANDERMAID, 8.0F), 2), Pair.of(new LookAtEntityTask(LittleEntitys.LITTLEMAID, 8.0F), 2), Pair.of(new LookAtEntityTask(EntityType.CAT, 8.0F), 8), Pair.of(new LookAtEntityTask(EntityType.VILLAGER, 8.0F), 2), Pair.of(new LookAtEntityTask(EntityType.PLAYER, 8.0F), 2), Pair.of(new LookAtEntityTask(EntityClassification.CREATURE, 8.0F), 1), Pair.of(new LookAtEntityTask(EntityClassification.WATER_CREATURE, 8.0F), 1), Pair.of(new LookAtEntityTask(EntityClassification.MONSTER, 8.0F), 1), Pair.of(new DummyTask(30, 60), 2))));
     }

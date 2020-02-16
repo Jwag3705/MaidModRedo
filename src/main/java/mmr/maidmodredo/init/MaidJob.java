@@ -29,6 +29,7 @@ public class MaidJob {
     public static final MaidJob FENCER = new MaidJob("fencer", new ItemStack(Items.DIAMOND_SWORD)).setSubActivity(LittleActivitys.ATTACK).setLockJob();
     public static final MaidJob GUARD = new MaidJob("guard", new ItemStack(Items.DIAMOND_SWORD)).setSubRequireItem(new ItemStack(Items.SHIELD)).setSubActivity(LittleActivitys.ATTACK).setLockJob().setNeedLevel(10);
     public static final MaidJob DUAL_BLADER = new MaidJob("dual_blader", new ItemStack(Items.DIAMOND_SWORD)).setSubRequireItem(new ItemStack(Items.DIAMOND_SWORD)).setSubActivity(LittleActivitys.DUAL_BLADER).setLockJob().setNeedLevel(5);
+    public static final MaidJob SHIELDER = new MaidJob("shielder", new ItemStack(Items.SHIELD)).setSubRequireItem(new ItemStack(Items.SHIELD)).setSubActivity(LittleActivitys.SHIELDER).setLockJob().setNeedLevel(15);
     public static final MaidJob ARCHER = new MaidJob("archer", new ItemStack(Items.BOW)).setSubActivity(LittleActivitys.SHOT).setLockJob().setNeedLevel(10);
 
     private final String name;
@@ -123,6 +124,7 @@ public class MaidJob {
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "fencer"), FENCER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "guard"), GUARD);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "dual_blader"), DUAL_BLADER);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "shielder"), SHIELDER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "archer"), ARCHER);
     }
 

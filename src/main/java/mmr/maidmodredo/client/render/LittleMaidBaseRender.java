@@ -277,7 +277,11 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
                 //matrixStackIn.translate(0.0D, -1.0D, (double)0.3F);
             }
         } else {
-            super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+            if (entityLiving.isRotationAttack()) {
+                matrixStackIn.rotate(Vector3f.YP.rotationDegrees(((float) entityLiving.ticksExisted + partialTicks) * -75.0F));
+            } else {
+                super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+            }
         }
     }
 

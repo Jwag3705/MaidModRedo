@@ -88,7 +88,6 @@ public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
     protected void resetTask(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         super.resetTask(worldIn, entityIn, gameTimeIn);
         entityIn.getNavigator().clearPath();
-        entityIn.setRushing(false);
         entityIn.setGuard(false);
         Brain<?> brain = entityIn.getBrain();
         entityIn.getBrain().removeMemory(this.field_220541_a);

@@ -207,10 +207,10 @@ public class ModelMultiRender<T extends LittleMaidBaseEntity> extends MobRendere
             double ownerInZ = entityIn.prevPosZ + (entityIn.getPosZ() - entityIn.prevPosZ) * partialTicks;
 
             double deltaX = shadowX - ownerInX;
-            double deltaY = ownerInY - shadowY;
+            double deltaY = shadowY - ownerInY;
             double deltaZ = shadowZ - ownerInZ;
             double deltaX2 = shadowX2 - shadowX;
-            double deltaY2 = shadowY - shadowY2;
+            double deltaY2 = shadowY2 - shadowY;
             double deltaZ2 = shadowZ2 - shadowZ;
 
             matrixStackIn.push();

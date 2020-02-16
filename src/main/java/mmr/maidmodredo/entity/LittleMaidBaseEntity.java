@@ -806,27 +806,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     }
 
     @Override
-    protected void collideWithEntity(Entity entityIn) {
-        float f = (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
-        float f1 = (float) this.getAttribute(SharedMonsterAttributes.ATTACK_KNOCKBACK).getValue() + 0.25F;
-
-        f += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((LivingEntity) entityIn).getCreatureAttribute());
-        f1 += (float) EnchantmentHelper.getKnockbackModifier(this);
-
-        if (this.isRushing()) {
-            if (this.getOwner() != entityIn && !(entityIn instanceof LittleMaidBaseEntity)) {
-                if (entityIn.attackEntityFrom(LittleDamageSource.causeRushingDamage(this), f * 0.75F)) {
-                    ((LivingEntity) entityIn).knockBack(this, f1 * 0.56F, (double) MathHelper.sin(this.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(this.rotationYaw * ((float) Math.PI / 180F))));
-                    entityIn.setMotion(entityIn.getMotion().add(0.0D, (double) 0.25F, 0.0D));
-                    this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, 1.0F, 1.0F);
-                    giveExperiencePoints(3 + this.getRNG().nextInt(3));
-                }
-            }
-        }
-        super.collideWithEntity(entityIn);
-    }
-
-    @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (amount > 0.0F && canBlockDamageSource(source)) {
             this.damageShield(amount);
@@ -946,14 +925,48 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             }
         }
 
-        this.updateRotationAttackTick();
+        this.updateAttackAblityTick();
     }
 
-    private void updateRotationAttackTick() {
+    private void updateAttackAblityTick() {
         AxisAlignedBB axisalignedbb = this.getBoundingBox();
         if (this.rotationAttackDuration > 0) {
             --this.rotationAttackDuration;
             this.updateRotationAttack(axisalignedbb, this.getBoundingBox());
+        }
+
+        if (isRushing() && Entity.horizontalMag(this.getMotion()) > 0.05D) {
+            this.updateRushAttack(axisalignedbb, this.getBoundingBox());
+        }
+    }
+
+    private void updateRushAttack(AxisAlignedBB p_204801_1_, AxisAlignedBB p_204801_2_) {
+        Vec3d vec3d = this.getLook(1.0F);
+        AxisAlignedBB axisalignedbb = p_204801_1_.union(p_204801_2_);
+        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, axisalignedbb.expand(0.25F, 0.0F, 0.25F).offset(vec3d.x * 0.25D, 0.0F, vec3d.z * 0.25D));
+        if (!list.isEmpty()) {
+            for (int i = 0; i < list.size(); ++i) {
+                Entity entity = list.get(i);
+                float d1 = (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
+                float d2 = (float) this.getAttribute(SharedMonsterAttributes.ATTACK_KNOCKBACK).getValue();
+
+                d1 += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), this.getCreatureAttribute());
+
+                if (entity instanceof LivingEntity && this.getOwner() != entity && !(entity instanceof LittleMaidBaseEntity)) {
+                    if (entity.attackEntityFrom(LittleDamageSource.causeRushingDamage(this), (float) (d1 * 1.25F))) {
+                        ((LivingEntity) entity).knockBack(this, d2 + 0.4F, (double) MathHelper.sin(this.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(this.rotationYaw * ((float) Math.PI / 180F))));
+                        entity.setMotion(entity.getMotion().add(0.0D, (double) 0.25F, 0.0D));
+                        this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, 1.0F, 1.0F);
+                       /* this.getHeldItem(Hand.MAIN_HAND).damageItem(1, this, (p_213625_1_) -> {
+                            p_213625_1_.sendBreakAnimation(Hand.MAIN_HAND);
+                        });*/
+                        this.getHeldItem(Hand.OFF_HAND).damageItem(1, this, (p_213625_1_) -> {
+                            p_213625_1_.sendBreakAnimation(Hand.OFF_HAND);
+                        });
+                        giveExperiencePoints(3 + this.getRNG().nextInt(3));
+                    }
+                }
+            }
         }
     }
 

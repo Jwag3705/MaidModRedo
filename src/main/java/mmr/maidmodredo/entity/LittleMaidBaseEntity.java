@@ -148,7 +148,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     public float shadowX2, shadowY2, shadowZ2;
 
     private int rotationAttackDuration;
-    private int rushCoolTime;
+    public int rushCharge;
 
     protected static final DataParameter<Float> dataWatch_MaidExpValue = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.FLOAT);
 
@@ -159,6 +159,8 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     protected static final DataParameter<Boolean> WAITING = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> RUSHING = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> ROTATION_ATTACK = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> GUARD = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.BOOLEAN);
+
 
     protected static final DataParameter<Boolean> CONTRACT = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.BOOLEAN);
 
@@ -228,6 +230,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         this.dataManager.register(WAITING, false);
         this.dataManager.register(RUSHING, false);
         this.dataManager.register(ROTATION_ATTACK, false);
+        this.dataManager.register(GUARD, false);
         this.dataManager.register(CONTRACT, false);
 
         this.dataManager.register(DATA_CHARGING_STATE, false);
@@ -861,6 +864,10 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             }
         }
 
+        if (this.rushCharge < 4) {
+            this.rushCharge = this.rushCharge + 1;
+        }
+
         return flag;
     }
 
@@ -898,7 +905,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             return false;
         }
 
-        if (amount > 0.0F && canRushingDamageSource(source)) {
+        if (amount > 0.0F && canRushingOrGuardDamageSource(source)) {
             this.damageSword(amount);
             this.playSound(SoundEvents.BLOCK_ANVIL_PLACE, 1.0F, 1.45F);
             return false;
@@ -919,6 +926,9 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
         if (!damageSourceIn.isUnblockable() && this.isActiveItemStackBlocking() && !flag) {
             Vec3d vec3d2 = damageSourceIn.getDamageLocation();
+            if (this.getMaidData().getJob() == MaidJob.SHIELDER) {
+                return true;
+            }
             if (vec3d2 != null) {
                 Vec3d vec3d = this.getLook(1.0F);
                 Vec3d vec3d1 = vec3d2.subtractReverse(this.getPositionVec()).normalize();
@@ -927,6 +937,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
                     return true;
                 }
             }
+
         }
 
         return false;
@@ -965,7 +976,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         }
     }
 
-    private boolean canRushingDamageSource(DamageSource damageSourceIn) {
+    private boolean canRushingOrGuardDamageSource(DamageSource damageSourceIn) {
         Entity entity = damageSourceIn.getImmediateSource();
         boolean flag = false;
         if (entity instanceof AbstractArrowEntity) {
@@ -975,7 +986,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             }
         }
 
-        if (!damageSourceIn.isUnblockable() && this.isRushing() && !flag) {
+        if (!damageSourceIn.isUnblockable() && (this.isGuard() || this.isRushing()) && !flag) {
             Vec3d vec3d2 = damageSourceIn.getDamageLocation();
             if (vec3d2 != null) {
                 Vec3d vec3d = this.getLook(1.0F);
@@ -1007,10 +1018,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         }
 
         this.updateRotationAttackTick();
-
-        if (this.rushCoolTime > 0) {
-            --this.rushCoolTime;
-        }
     }
 
     private void updateRotationAttackTick() {
@@ -1033,8 +1040,11 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
                         ((LivingEntity) entity).knockBack(this, 0.6F, (double) MathHelper.sin(this.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(this.rotationYaw * ((float) Math.PI / 180F))));
                         entity.setMotion(entity.getMotion().add(0.0D, (double) 0.2F, 0.0D));
                         this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, 1.0F, 1.0F);
-                        this.getHeldItem(Hand.OFF_HAND).damageItem(1, this, (p_213625_1_) -> {
+                        this.getHeldItem(Hand.MAIN_HAND).damageItem(1, this, (p_213625_1_) -> {
                             p_213625_1_.sendBreakAnimation(Hand.MAIN_HAND);
+                        });
+                        this.getHeldItem(Hand.OFF_HAND).damageItem(1, this, (p_213625_1_) -> {
+                            p_213625_1_.sendBreakAnimation(Hand.OFF_HAND);
                         });
                         giveExperiencePoints(4 + this.getRNG().nextInt(3));
                     }
@@ -1329,24 +1339,29 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
     public void setRushing(boolean pflag) {
         IAttributeInstance iattributeinstance = this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
-        if (!pflag || rushCoolTime <= 0) {
-            this.dataManager.set(RUSHING, pflag);
-            if (pflag) {
-                MaidPacketHandler.animationModel(this, LittleMaidBaseEntity.RUSHING_ANIMATION);
-                iattributeinstance.removeModifier(MODIFIER);
-                iattributeinstance.applyModifier(MODIFIER);
-            } else {
-                iattributeinstance.removeModifier(MODIFIER);
-            }
-            this.shadowX = (float) this.getPosX();
-            this.shadowY = (float) this.getPosY();
-            this.shadowZ = (float) this.getPosZ();
-            this.shadowX2 = (float) this.getPosX();
-            this.shadowY2 = (float) this.getPosY();
-            this.shadowZ2 = (float) this.getPosZ();
-            rushCoolTime = 600;
+        this.dataManager.set(RUSHING, pflag);
+        if (pflag) {
+            MaidPacketHandler.animationModel(this, LittleMaidBaseEntity.RUSHING_ANIMATION);
+            iattributeinstance.removeModifier(MODIFIER);
+            iattributeinstance.applyModifier(MODIFIER);
+        } else {
+            iattributeinstance.removeModifier(MODIFIER);
         }
+        this.shadowX = (float) this.getPosX();
+        this.shadowY = (float) this.getPosY();
+        this.shadowZ = (float) this.getPosZ();
+        this.shadowX2 = (float) this.getPosX();
+        this.shadowY2 = (float) this.getPosY();
+        this.shadowZ2 = (float) this.getPosZ();
 
+    }
+
+    public boolean isGuard() {
+        return this.dataManager.get(GUARD);
+    }
+
+    public void setGuard(boolean pflag) {
+        this.dataManager.set(GUARD, pflag);
     }
 
     public boolean isRotationAttack() {

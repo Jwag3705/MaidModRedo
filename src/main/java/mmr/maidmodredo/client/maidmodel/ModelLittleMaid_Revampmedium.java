@@ -388,6 +388,9 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
             this.handL.setRotateAngle(f2, 0.0F, f2);
         }
 
+        if (entity.isGuard()) {
+            this.handR.setRotateAngle(-0.95F, -0.77F, 0.0F);
+        }
 
         if (entity instanceof IMaidAnimation) {
             setAnimations(limbSwing, limbSwingAmount, ageInTicks, pHeadYaw, pHeadPitch, entity, ((IMaidAnimation) entity));

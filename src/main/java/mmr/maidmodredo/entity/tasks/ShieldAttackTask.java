@@ -137,6 +137,7 @@ public class ShieldAttackTask extends Task<LittleMaidBaseEntity> {
                     attacker.swingArm(Hand.MAIN_HAND);
                 }
                 attacker.giveExperiencePoints(1 + attacker.getRNG().nextInt(1));
+                attacker.resetActiveHand();
             }
         }
 

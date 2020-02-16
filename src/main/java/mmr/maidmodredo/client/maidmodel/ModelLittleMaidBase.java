@@ -281,6 +281,10 @@ public abstract class ModelLittleMaidBase<T extends LittleMaidBaseEntity> extend
             this.bipedLeftArm.setRotateAngle(f2, 0.0F, f2);
         }
 
+        if (entity.isGuard()) {
+            this.bipedRightArm.setRotateAngle(-0.95F, -0.77F, 0.0F);
+        }
+
         if (entity instanceof IMaidAnimation) {
             setAnimations(par1, par2, pTicksExisted, pHeadYaw, pHeadPitch, entity, ((IMaidAnimation) entity));
         }

@@ -81,8 +81,7 @@ public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
     protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         Entity entity = entityIn.getBrain().getMemory(this.field_220541_a).get();
         setWalk(entityIn, entity, this.field_220542_b);
-        this.dashTick = 90;
-        entityIn.setRushing(true);
+        entityIn.setGuard(true);
     }
 
     @Override
@@ -90,6 +89,7 @@ public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
         super.resetTask(worldIn, entityIn, gameTimeIn);
         entityIn.getNavigator().clearPath();
         entityIn.setRushing(false);
+        entityIn.setGuard(false);
         Brain<?> brain = entityIn.getBrain();
         entityIn.getBrain().removeMemory(this.field_220541_a);
         entityIn.getBrain().removeMemory(MemoryModuleType.WALK_TARGET);
@@ -133,8 +133,14 @@ public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
             }
         }
 
-        if (this.dashTick <= 0 && attacker.getHeldItem(Hand.OFF_HAND).getItem() instanceof SwordItem) {
-            this.dashTick = 90;
+        if (!attacker.isRushing()) {
+            attacker.setGuard(true);
+        } else {
+            attacker.setGuard(false);
+        }
+
+        if (attacker.rushCharge >= 4 && attacker.getHeldItem(Hand.OFF_HAND).getItem() instanceof SwordItem) {
+            attacker.rushCharge = 0;
             attacker.setRushing(true);
         }
     }

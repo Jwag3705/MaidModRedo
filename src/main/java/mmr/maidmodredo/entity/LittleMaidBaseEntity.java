@@ -148,6 +148,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     public float shadowX2, shadowY2, shadowZ2;
 
     private int rotationAttackDuration;
+    private int rushCoolTime;
 
     protected static final DataParameter<Float> dataWatch_MaidExpValue = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.FLOAT);
 
@@ -877,10 +878,13 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         f1 += (float) EnchantmentHelper.getKnockbackModifier(this);
 
         if (this.isRushing()) {
-            if (entityIn.attackEntityFrom(LittleDamageSource.causeRushingDamage(this), f * 1.4F)) {
-                ((LivingEntity) entityIn).knockBack(this, f1 * 0.5F, (double) MathHelper.sin(this.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(this.rotationYaw * ((float) Math.PI / 180F))));
-                entityIn.setMotion(entityIn.getMotion().add(0.0D, (double) 0.25F, 0.0D));
-                this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, 1.0F, 1.0F);
+            if (this.getOwner() != entityIn || !(entityIn instanceof LittleMaidBaseEntity)) {
+                if (entityIn.attackEntityFrom(LittleDamageSource.causeRushingDamage(this), f * 0.75F)) {
+                    ((LivingEntity) entityIn).knockBack(this, f1 * 0.56F, (double) MathHelper.sin(this.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(this.rotationYaw * ((float) Math.PI / 180F))));
+                    entityIn.setMotion(entityIn.getMotion().add(0.0D, (double) 0.25F, 0.0D));
+                    this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, 1.0F, 1.0F);
+                    giveExperiencePoints(3 + this.getRNG().nextInt(3));
+                }
             }
         }
         super.collideWithEntity(entityIn);
@@ -1003,6 +1007,10 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         }
 
         this.updateRotationAttackTick();
+
+        if (this.rushCoolTime > 0) {
+            --this.rushCoolTime;
+        }
     }
 
     private void updateRotationAttackTick() {
@@ -1015,7 +1023,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
     private void updateRotationAttack(AxisAlignedBB p_204801_1_, AxisAlignedBB p_204801_2_) {
         AxisAlignedBB axisalignedbb = p_204801_1_.union(p_204801_2_);
-        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, axisalignedbb.expand(1.5F, 0.0F, 1.5F));
+        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, axisalignedbb.expand(2.0F, 0.0F, 2.0F));
         if (!list.isEmpty()) {
             for (int i = 0; i < list.size(); ++i) {
                 Entity entity = list.get(i);
@@ -1028,7 +1036,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
                         this.getHeldItem(Hand.OFF_HAND).damageItem(1, this, (p_213625_1_) -> {
                             p_213625_1_.sendBreakAnimation(Hand.MAIN_HAND);
                         });
-
+                        giveExperiencePoints(4 + this.getRNG().nextInt(3));
                     }
                 }
             }
@@ -1321,20 +1329,24 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
     public void setRushing(boolean pflag) {
         IAttributeInstance iattributeinstance = this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
-        this.dataManager.set(RUSHING, pflag);
-        if (pflag) {
-            MaidPacketHandler.animationModel(this, LittleMaidBaseEntity.RUSHING_ANIMATION);
-            iattributeinstance.removeModifier(MODIFIER);
-            iattributeinstance.applyModifier(MODIFIER);
-        } else {
-            iattributeinstance.removeModifier(MODIFIER);
+        if (!pflag || rushCoolTime <= 0) {
+            this.dataManager.set(RUSHING, pflag);
+            if (pflag) {
+                MaidPacketHandler.animationModel(this, LittleMaidBaseEntity.RUSHING_ANIMATION);
+                iattributeinstance.removeModifier(MODIFIER);
+                iattributeinstance.applyModifier(MODIFIER);
+            } else {
+                iattributeinstance.removeModifier(MODIFIER);
+            }
+            this.shadowX = (float) this.getPosX();
+            this.shadowY = (float) this.getPosY();
+            this.shadowZ = (float) this.getPosZ();
+            this.shadowX2 = (float) this.getPosX();
+            this.shadowY2 = (float) this.getPosY();
+            this.shadowZ2 = (float) this.getPosZ();
+            rushCoolTime = 600;
         }
-        this.shadowX = (float) this.getPosX();
-        this.shadowY = (float) this.getPosY();
-        this.shadowZ = (float) this.getPosZ();
-        this.shadowX2 = (float) this.getPosX();
-        this.shadowY2 = (float) this.getPosY();
-        this.shadowZ2 = (float) this.getPosZ();
+
     }
 
     public boolean isRotationAttack() {

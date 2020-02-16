@@ -89,6 +89,7 @@ public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
     protected void resetTask(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         super.resetTask(worldIn, entityIn, gameTimeIn);
         entityIn.getNavigator().clearPath();
+        entityIn.setRushing(false);
         Brain<?> brain = entityIn.getBrain();
         entityIn.getBrain().removeMemory(this.field_220541_a);
         entityIn.getBrain().removeMemory(MemoryModuleType.WALK_TARGET);
@@ -122,12 +123,13 @@ public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
         double d0 = this.getAttackReachSqr(attacker, enemy);
         if (distToEnemySqr <= d0 && this.attackTick <= 0) {
             this.attackTick = 10;
-            attacker.attackEntityAsMob(enemy);
-            attacker.getHeldItem(Hand.MAIN_HAND).damageItem(1, attacker, (p_213625_1_) -> {
-                p_213625_1_.sendBreakAnimation(Hand.MAIN_HAND);
-            });
-            if (!attacker.isRushing()) {
-                attacker.swingArm(Hand.MAIN_HAND);
+            if (attacker.attackEntityAsMob(enemy)) {
+                attacker.getHeldItem(Hand.MAIN_HAND).damageItem(1, attacker, (p_213625_1_) -> {
+                    p_213625_1_.sendBreakAnimation(Hand.MAIN_HAND);
+                });
+                if (!attacker.isRushing()) {
+                    attacker.swingArm(Hand.MAIN_HAND);
+                }
             }
         }
 

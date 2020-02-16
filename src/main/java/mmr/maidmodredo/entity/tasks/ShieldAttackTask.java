@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.init.LittleDamageSource;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityPredicate;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.brain.Brain;
@@ -17,7 +19,10 @@ import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.server.ServerWorld;
 
+import java.util.List;
+
 public class ShieldAttackTask extends Task<LittleMaidBaseEntity> {
+    private final EntityPredicate predicate = (new EntityPredicate()).setDistance(8.0D).allowInvulnerable();
     private final MemoryModuleType<? extends Entity> field_220541_a;
     private final float field_220542_b;
     protected int rotationTick;
@@ -81,9 +86,8 @@ public class ShieldAttackTask extends Task<LittleMaidBaseEntity> {
 
     protected void startExecuting(ServerWorld worldIn, LittleMaidBaseEntity entityIn, long gameTimeIn) {
         Entity entity = entityIn.getBrain().getMemory(this.field_220541_a).get();
-        setWalk(entityIn, entity, this.field_220542_b);
-        this.rotationTick = 200;
-        entityIn.startRotationAttack(100);
+        setWalk(worldIn, entityIn, entity, this.field_220542_b);
+        this.attackTick = 300;
     }
 
     @Override
@@ -101,7 +105,7 @@ public class ShieldAttackTask extends Task<LittleMaidBaseEntity> {
     protected void updateTask(ServerWorld worldIn, LittleMaidBaseEntity owner, long gameTime) {
         Entity entity = owner.getBrain().getMemory(this.field_220541_a).get();
         if (entity != null) {
-            setWalk(owner, entity, this.field_220542_b);
+            setWalk(worldIn, owner, entity, this.field_220542_b);
 
             owner.getLookController().setLookPositionWithEntity(entity, 30.0F, 30.0F);
         }
@@ -109,7 +113,7 @@ public class ShieldAttackTask extends Task<LittleMaidBaseEntity> {
         this.attackTick = Math.max(this.attackTick - 1, 0);
     }
 
-    public void setWalk(LittleMaidBaseEntity p_220540_0_, Entity p_220540_1_, float p_220540_2_) {
+    public void setWalk(ServerWorld worldIn, LittleMaidBaseEntity p_220540_0_, Entity p_220540_1_, float p_220540_2_) {
         Vec3d vec3d = new Vec3d(p_220540_1_.getPosX(), p_220540_1_.getPosY(), p_220540_1_.getPosZ());
         p_220540_0_.getNavigator().tryMoveToEntityLiving(p_220540_1_, p_220540_2_);
         double d0 = p_220540_0_.getDistanceSq(p_220540_1_.getPosX(), p_220540_1_.getBoundingBox().minY, p_220540_1_.getPosZ());
@@ -117,27 +121,35 @@ public class ShieldAttackTask extends Task<LittleMaidBaseEntity> {
 
         p_220540_0_.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityPosWrapper(p_220540_1_), p_220540_2_, 30));
 
-        this.checkAndPerformAttack(p_220540_0_, p_220540_1_, d0);
+        this.checkAndPerformAttack(worldIn, p_220540_0_, p_220540_1_, d0);
     }
 
-    protected void checkAndPerformAttack(LittleMaidBaseEntity attacker, Entity enemy, double distToEnemySqr) {
+    protected void checkAndPerformAttack(ServerWorld worldIn, LittleMaidBaseEntity attacker, Entity enemy, double distToEnemySqr) {
         double d0 = this.getAttackReachSqr(attacker, enemy);
         if (distToEnemySqr <= d0 && this.attackTick <= 0) {
             this.attackTick = 10;
             double i = attacker.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue();
-            enemy.attackEntityFrom(LittleDamageSource.causeShieldBushDamage(attacker), (float) (i + 2.0F));
-            attacker.getHeldItem(Hand.MAIN_HAND).damageItem(1, attacker, (p_213625_1_) -> {
-                p_213625_1_.sendBreakAnimation(Hand.MAIN_HAND);
-            });
-            if (!attacker.isRotationAttack()) {
-                attacker.swingArm(Hand.MAIN_HAND);
+            if (enemy.attackEntityFrom(LittleDamageSource.causeShieldBushDamage(attacker), (float) (i + 2.0F))) {
+                attacker.getHeldItem(Hand.MAIN_HAND).damageItem(1, attacker, (p_213625_1_) -> {
+                    p_213625_1_.sendBreakAnimation(Hand.MAIN_HAND);
+                });
+                if (!attacker.isRotationAttack()) {
+                    attacker.swingArm(Hand.MAIN_HAND);
+                }
+                attacker.giveExperiencePoints(1 + attacker.getRNG().nextInt(1));
             }
         }
 
+        List<LivingEntity> list = worldIn.getTargettableEntitiesWithinAABB(LivingEntity.class, this.predicate, attacker, attacker.getBoundingBox().grow(8.0D, 6.0D, 8.0D));
+
         if (!attacker.isRotationAttack()) {
             setGuard(attacker);
-        } else if (this.rotationTick <= 0 && attacker.getHeldItem(Hand.OFF_HAND).getItem() instanceof ShieldItem) {
-            this.rotationTick = 280;
+        } else {
+            attacker.resetActiveHand();
+        }
+
+        if (this.rotationTick <= 0 && attacker.getHeldItem(Hand.OFF_HAND).getItem() instanceof ShieldItem && 3 < list.size()) {
+            this.rotationTick = 300;
             attacker.startRotationAttack(100);
         }
 

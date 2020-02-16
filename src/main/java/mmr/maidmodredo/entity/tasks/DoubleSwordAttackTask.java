@@ -139,8 +139,8 @@ public class DoubleSwordAttackTask extends Task<LittleMaidBaseEntity> {
             attacker.setGuard(false);
         }
 
-        if (attacker.rushCharge >= 4 && attacker.getHeldItem(Hand.OFF_HAND).getItem() instanceof SwordItem) {
-            attacker.rushCharge = 0;
+        if (attacker.ablityCharge >= 4 && attacker.getHeldItem(Hand.OFF_HAND).getItem() instanceof SwordItem) {
+            attacker.ablityCharge = 0;
             attacker.setRushing(true);
         }
     }

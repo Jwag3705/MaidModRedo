@@ -24,7 +24,6 @@ import mmr.maidmodredo.inventory.InventoryMaidEquipment;
 import mmr.maidmodredo.inventory.InventoryMaidMain;
 import mmr.maidmodredo.inventory.MaidInventoryContainer;
 import mmr.maidmodredo.network.MaidPacketHandler;
-import mmr.maidmodredo.utils.Counter;
 import mmr.maidmodredo.utils.ModelManager;
 import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
@@ -133,14 +132,9 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
     public boolean isWildSaved = false;
 
-    protected Counter maidOverDriveTime;
-    protected Counter workingCount;
-
     private int experienceLevel;
     private int experienceTotal;
     public float experience;
-
-    public int loyalty;
 
     public float prevShadowX, prevShadowY, prevShadowZ;
     public float shadowX, shadowY, shadowZ;
@@ -148,7 +142,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     public float shadowX2, shadowY2, shadowZ2;
 
     private int rotationAttackDuration;
-    public int rushCharge;
+    public int ablityCharge;
 
     protected static final DataParameter<Float> dataWatch_MaidExpValue = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.FLOAT);
 
@@ -178,7 +172,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     /**
      * モデルパーツの表示フラグ(Integer)
      */
-    protected Counter registerTick;
     protected int maidContractLimit;        // 契約期間
 
     @Nullable
@@ -192,10 +185,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         this.getNavigator().setCanSwim(true);
         this.setCanPickUpLoot(true);
         this.brain = this.createBrain(new Dynamic<>(NBTDynamicOps.INSTANCE, new CompoundNBT()));
-
-        maidOverDriveTime = new Counter(5, 300, -32);
-        workingCount = new Counter(11, 10, -10);
-        registerTick = new Counter(200, 200, -20);
 
 //		if (getEntityWorld().isRemote) {
 
@@ -308,35 +297,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         return false;
     }
 
-    public int colorMultiplier(float pLight, float pPartialTicks) {
-        // 発光処理用
-        int lbase = 0, i = 0, j = 0, k = 0, x = 0, y = 0;
-        if (maidOverDriveTime.isDelay()) {
-            j = 0x00df0000;
-            if (maidOverDriveTime.isEnable()) {
-                x = 128;
-            } else {
-                x = (int) (128 - maidOverDriveTime.getValue() * (128f / 32));
-            }
-        }
-        if (registerTick.isDelay()) {
-            k = 0x0000df00;
-            if (registerTick.isEnable()) {
-                y = 128;
-            } else {
-                y = (int) (128 - registerTick.getValue() * (128f / 20));
-            }
-        }
-        i = x == 0 ? (y >= 128 ? y : 0) : (y == 0 ? x : Math.min(x, y));
-        lbase = i << 24 | j | k;
-
-        /*if (isActiveModeClass()) {
-            lbase = lbase | getActiveModeClass().colorMultiplier(pLight, pPartialTicks);
-        }*/
-
-        return lbase;
-    }
-
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
         compound.put("MaidInventory", this.getInventoryMaidMain().writeInventoryToNBT());
@@ -347,8 +307,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         compound.putFloat("XpP", this.experience);
         compound.putInt("XpLevel", this.experienceLevel);
         compound.putInt("XpTotal", this.experienceTotal);
-
-        compound.putInt("Loyalty", this.loyalty);
 
         compound.putBoolean("Freedom", isFreedom());
         compound.putBoolean("Wait", isMaidWait());
@@ -384,8 +342,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         this.experienceLevel = compound.getInt("XpLevel");
         this.experienceTotal = compound.getInt("XpTotal");
         this.dataManager.set(dataWatch_MaidExpValue, experience);
-
-        this.loyalty = compound.getInt("Loyalty");
 
         setFreedom(compound.getBoolean("Freedom"));
         setMaidWait(compound.getBoolean("Wait"));
@@ -607,33 +563,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         textureData.setColor(index);
 
         dataManager.set(LittleMaidBaseEntity.dataWatch_Color, index);
-    }
-
-    // お仕事チュ
-
-    /**
-     * 仕事中かどうかの設定
-     */
-    public void setWorking(boolean pFlag) {
-        workingCount.setEnable(pFlag);
-    }
-
-    /**
-     * 仕事中かどうかを返す
-     */
-    public boolean isWorking() {
-        return workingCount.isEnable();
-    }
-
-    /**
-     * 仕事が終了しても余韻を含めて返す
-     */
-    public boolean isWorkingDelay() {
-        return workingCount.isDelay();
-    }
-
-    public Counter getMaidOverDriveTime() {
-        return maidOverDriveTime;
     }
 
     private void eatSweets(boolean recontract) {
@@ -864,9 +793,9 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             }
         }
 
-        if (this.rushCharge < 4) {
-            this.rushCharge = this.rushCharge + 1;
-        }
+        //Charge one by one to use the ability
+        this.ablityCharge = this.ablityCharge + 1;
+
 
         return flag;
     }
@@ -1059,13 +988,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
     @Override
     public void tick() {
-        if (registerTick.isDelay()) {
-            registerTick.onUpdate();
-
-            if (!registerTick.isEnable() && registerTick.getValue() == 0 && !getEntityWorld().isRemote) {
-                //getMaidMasterEntity().sendMessage(new TextComponentTranslation("littleMaidMob.chat.text.cancelregistration").setStyle(new Style().setColor(TextFormatting.DARK_RED)));
-            }
-        }
 
         textureData.onUpdate();
 
@@ -1320,11 +1242,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         setRevengeTarget(null);
         getNavigator().clearPath();
         if (pflag) {
-
-            //setMaidModeAITasks(null,null);
-
-            setWorking(false);
-
+            
             getNavigator().clearPath();
         }
         if (!world.isRemote()) {

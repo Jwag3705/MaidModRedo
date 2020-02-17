@@ -148,7 +148,7 @@ public class WanderMaidEntity extends AbstractVillagerEntity implements IRangedA
         return this.despawnDelay;
     }
 
-    public void func_213726_g(@Nullable BlockPos p_213726_1_) {
+    public void setWanderTarget(@Nullable BlockPos p_213726_1_) {
         this.wanderTarget = p_213726_1_;
     }
 
@@ -206,9 +206,9 @@ public class WanderMaidEntity extends AbstractVillagerEntity implements IRangedA
         VillagerTrades.ITrade[] avillagertrades$itrade1 = MaidTrades.field_221240_b.get(2);
         if (avillagertrades$itrade != null && avillagertrades$itrade1 != null) {
             MerchantOffers merchantoffers = this.getOffers();
-            this.addTrades(merchantoffers, avillagertrades$itrade, 4);
+            this.addTrades(merchantoffers, avillagertrades$itrade, 3);
             int i = this.rand.nextInt(avillagertrades$itrade1.length);
-            this.addTrades(merchantoffers, avillagertrades$itrade1, 2);
+            this.addTrades(merchantoffers, avillagertrades$itrade1, 6);
         }
     }
 
@@ -269,7 +269,7 @@ public class WanderMaidEntity extends AbstractVillagerEntity implements IRangedA
          * Reset the task's internal state. Called when this task is interrupted by another one
          */
         public void resetTask() {
-            this.field_220847_a.func_213726_g((BlockPos)null);
+            this.field_220847_a.setWanderTarget((BlockPos) null);
             WanderMaidEntity.this.navigator.clearPath();
         }
 

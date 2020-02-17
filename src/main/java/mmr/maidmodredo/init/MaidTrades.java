@@ -14,10 +14,12 @@ import net.minecraft.util.IItemProvider;
 
 import java.util.Random;
 
-public class MaidTrades extends VillagerTrades {
-    public static final Int2ObjectMap<ITrade[]> field_221240_b = func_221238_a(ImmutableMap.of(1, new VillagerTrades.ITrade[]{new SugerCoinForItemsTrade(Items.SUGAR, 48, 6, 2), new SugerCoinForItemsTrade(Items.EGG, 14, 4, 2), new ItemsForSugerCoinsTrade(Items.PUMPKIN_PIE, 1, 16, 2, 3), new ItemsForSugerCoinsTrade(Items.COOKIE, 1, 18, 2, 3), new ItemsForSugerCoinsTrade(Items.CAKE, 1, 2, 4, 4), new ItemsForSugerCoinsTrade(Items.SWEET_BERRIES, 1, 40, 3, 3)},
-            2, new VillagerTrades.ITrade[]{new SugerCoinForItemsTrade(Items.FEATHER, 16, 4, 3), new ItemsForSugerCoinsTrade(Items.ZOMBIE_HEAD, 1, 2, 1, 6), new ItemsForSugerCoinsTrade(Items.SKELETON_SKULL, 1, 2, 1, 6)
-                    , new ItemsForSugerCoinsTrade(LittleItems.SUGAR_DONUT, 1, 12, 2, 3), new ItemsForSugerCoinsTrade(LittleItems.JELLY_DONUT, 1, 10, 2, 3)}));
+public class MaidTrades {
+    public static final Int2ObjectMap<VillagerTrades.ITrade[]> field_221240_b = func_221238_a(ImmutableMap.of(1, new VillagerTrades.ITrade[]{new SugerCoinForItemsTrade(Items.SUGAR, 48, 6, 2), new SugerCoinForItemsTrade(Items.EGG, 16, 4, 2), new ItemsForSugerCoinsTrade(Items.PUMPKIN_PIE, 1, 18, 2, 3), new ItemsForSugerCoinsTrade(Items.CAKE, 1, 4, 4, 4)},
+            2, new VillagerTrades.ITrade[]{new ItemsForSugerCoinsTrade(Items.ZOMBIE_HEAD, 1, 2, 1, 6), new ItemsForSugerCoinsTrade(Items.SKELETON_SKULL, 1, 2, 1, 6)
+                    , new ItemsForSugerCoinsTrade(LittleItems.SUGAR_DONUT, 1, 15, 2, 3), new ItemsForSugerCoinsTrade(LittleItems.JELLY_DONUT, 1, 14, 2, 3), new ItemsForSugerCoinsTrade(LittleItems.COMBINED_DONUT, 1, 14, 2, 3)
+                    , new ItemsForSugerCoinsTrade(LittleItems.CARROT_CAKE, 1, 14, 2, 3), new ItemsForSugerCoinsTrade(LittleItems.CHEESE_CAKE, 1, 12, 2, 3), new ItemsForSugerCoinsTrade(LittleItems.COFFEE_CAKE, 1, 10, 2, 3), new ItemsForSugerCoinsTrade(LittleItems.STRAWBERRY_CAKE, 1, 9, 2, 3)
+                    , new ItemsForSugerCoinsTrade(LittleItems.BLUEBERRY_PIE, 1, 10, 2, 3), new ItemsForSugerCoinsTrade(LittleItems.CHEESECAKE_PIE, 1, 14, 2, 3), new ItemsForSugerCoinsTrade(LittleItems.STRAWBERRY_PIE, 1, 12, 2, 3)}));
 
     private static Int2ObjectMap<VillagerTrades.ITrade[]> func_221238_a(ImmutableMap<Integer, VillagerTrades.ITrade[]> p_221238_0_) {
         return new Int2ObjectOpenHashMap<>(p_221238_0_);

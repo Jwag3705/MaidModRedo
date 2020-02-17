@@ -8,6 +8,7 @@ import mmr.maidmodredo.utils.CommonHelper;
 import mmr.maidmodredo.utils.FileList;
 import mmr.maidmodredo.utils.ModelManager;
 import mmr.maidmodredo.utils.manager.StabilizerManager;
+import mmr.maidmodredo.world.event.WanderMaidSpawner;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
@@ -17,8 +18,10 @@ import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -43,6 +46,9 @@ public class MaidModRedo
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "maidmodredo";
+
+
+    private WanderMaidSpawner wanderMaidSpawner = new WanderMaidSpawner();
 
     public MaidModRedo() {
         MaidPacketHandler.register();
@@ -177,6 +183,15 @@ public class MaidModRedo
                     }
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onServerTick(TickEvent.WorldTickEvent event) {
+
+        if (event.world instanceof ServerWorld) {
+            ServerWorld serverWorld = (ServerWorld) event.world;
+            wanderMaidSpawner.tick(serverWorld);
         }
     }
 

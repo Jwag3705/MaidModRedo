@@ -35,17 +35,18 @@ public class MessageSetGhostModelStat {
     public static class Handler {
         public static void handle(MessageSetGhostModelStat message, Supplier<NetworkEvent.Context> ctx) {
             NetworkEvent.Context context = ctx.get();
-            ctx.get().enqueueWork(() -> {
-                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
-                    Entity entity = ClientInfo.getClientPlayerWorld().getEntityByID(message.entityID);
-                    if (entity instanceof LittleMaidBaseEntity) {
-                        LittleMaidBaseEntity littlemaid = (LittleMaidBaseEntity) entity;
 
-                        littlemaid.syncModelNames();
-                    }
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    ctx.get().enqueueWork(() -> {
+                        Entity entity = ClientInfo.getClientPlayerWorld().getEntityByID(message.entityID);
+                        if (entity instanceof LittleMaidBaseEntity) {
+                            LittleMaidBaseEntity littlemaid = (LittleMaidBaseEntity) entity;
+
+                            littlemaid.setTextureNames();
+                        }
+                    });
+                    context.setPacketHandled(true);
                 }
-            });
-            context.setPacketHandled(true);
         }
     }
 }

@@ -127,10 +127,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
     public float entityIdFactor;
 
-    protected String textureNameMain = "default_" + ModelManager.defaultModelName;
-    protected String textureNameArmor = "default_" + ModelManager.defaultModelName;
-
-    public boolean isWildSaved = false;
+    public boolean isWildSaved;
 
     private int experienceLevel;
     private int experienceTotal;
@@ -146,6 +143,8 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
     protected static final DataParameter<Float> dataWatch_MaidExpValue = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.FLOAT);
 
+    private static final DataParameter<String> TEXTURE_MAIN = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.STRING);
+    private static final DataParameter<String> TEXTURE_ARMOR = EntityDataManager.createKey(LittleMaidBaseEntity.class, DataSerializers.STRING);
 
     protected static final DataParameter<MaidData> MAID_DATA = EntityDataManager.createKey(LittleMaidBaseEntity.class, MaidDataSerializers.MAID_DATA);
 
@@ -186,10 +185,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         this.setCanPickUpLoot(true);
         this.brain = this.createBrain(new Dynamic<>(NBTDynamicOps.INSTANCE, new CompoundNBT()));
 
-//		if (getEntityWorld().isRemote) {
-
-        // 形態形成場
-
         entityIdFactor = getEntityId() * 70;
 
         this.setPathPriority(PathNodeType.LAVA, -4.0F);
@@ -214,6 +209,8 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     protected void registerData() {
         super.registerData();
         this.dataManager.register(dataWatch_MaidExpValue, Float.valueOf(0));
+        this.dataManager.register(TEXTURE_MAIN, "default_" + ModelManager.defaultModelName);
+        this.dataManager.register(TEXTURE_ARMOR, "default_" + ModelManager.defaultModelName);
         this.dataManager.register(MAID_DATA, new MaidData(MaidJob.WILD, 0));
         this.dataManager.register(FREEDOM, false);
         this.dataManager.register(WAITING, false);
@@ -318,11 +315,9 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         compound.putString("texName", textureData.getTextureName(0));
         compound.putString("texArmor", textureData.getTextureName(1));
 
-        if (textureNameMain == null) textureNameMain = "default_Orign";
-        compound.putString("textureModelNameForClient", textureNameMain);
+        compound.putString("textureModelNameForClient", getModelNameMain());
 
-        if (textureNameArmor == null) textureNameArmor = "default_Orign";
-        compound.putString("textureArmorNameForClient", textureNameArmor);
+        compound.putString("textureArmorNameForClient", getModelNameArmor());
     }
 
     /**
@@ -366,17 +361,8 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             maidContractLimit = 24000;
         }
 
-        textureNameMain = compound.getString("textureModelNameForClient");
-
-        if (textureNameMain.isEmpty()) {
-            textureNameMain = "default_" + ModelManager.defaultModelName;
-        }
-
-        textureNameArmor = compound.getString("textureArmorNameForClient");
-
-        if (textureNameArmor.isEmpty()) {
-            textureNameArmor = "default_" + ModelManager.defaultModelName;
-        }
+        setTextureNameMain(compound.getString("textureModelNameForClient"));
+        setTextureNameArmor(compound.getString("textureArmorNameForClient"));
 
         if (compound.contains("Color")) {
             setColor((byte) compound.getInt("Color"));
@@ -384,15 +370,17 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         } else {
             setColor(compound.getByte("ColorB"));
         }
-        refreshModels();
-        MaidPacketHandler.syncModelOnClient(this);
 
         isWildSaved = compound.getBoolean("isWildSaved");
+        refreshModels();
+        //
+
 
         this.setGrowingAge(Math.max(0, this.getGrowingAge()));
-
         this.setCanPickUpLoot(true);
-        this.resetBrain((ServerWorld) this.world);
+        if (this.world instanceof ServerWorld) {
+            this.resetBrain((ServerWorld) this.world);
+        }
     }
 
 
@@ -503,6 +491,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             phantomEntity.setHealth(phantomEntity.getMaxHealth());
             phantomEntity.dead = false;
             phantomEntity.setTextureNames();
+            MaidPacketHandler.syncModelOnClient(phantomEntity);
 
             if (this.hasCustomName()) {
                 phantomEntity.setCustomName(this.getCustomName());
@@ -1021,10 +1010,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             lupd |= updateMaidContract();
 
             lupd |= updateMaidColor();
-
-//			lupd |= updateTexturePack();
-
-            //updateTexturePack();
+            lupd |= updateTexturePack();
             if (lupd) {
 
                 setTextureNames();
@@ -1061,6 +1047,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             // ClientサイドにおいてthePlayerが取得できるまでに時間がかかる？ので待機
             // サーバーの方が先に起動するのでクライアント側が更新を受け取れない
 */
+
         } else {
             updateRemainsContract();
             // 拗ねる
@@ -1101,6 +1088,32 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         this.shadowX2 += (this.shadowX - this.shadowX2) * elasticity;
         this.shadowY2 += (this.shadowY - this.shadowY2) * elasticity;
         this.shadowZ2 += (this.shadowZ - this.shadowZ2) * elasticity;
+    }
+
+    /**
+     * テクスチャパックの更新を確認
+     *
+     * @return
+     */
+    public boolean updateTexturePack() {
+
+        boolean lflag = false;
+        String ltexture = dataManager.get(TEXTURE_MAIN);
+        String larmor = dataManager.get(TEXTURE_ARMOR);
+
+        TextureBoxBase mainModel = modelBoxAutoSelect(ltexture);
+
+        TextureBoxBase armorModel = modelBoxAutoSelect(larmor);
+        if (!textureData.getTextureName(0).equals(ltexture)) {
+            lflag = true;
+        }
+        if (!textureData.getTextureName(0).equals(ltexture)) {
+            lflag = true;
+        }
+        if (lflag) {
+            setTextureBox(new TextureBoxBase[]{mainModel, armorModel});
+        }
+        return lflag;
     }
 
     protected void updatePose() {
@@ -1156,12 +1169,9 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         onSpawnWithEgg();
+        refreshModels();
 
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-    }
-
-    public boolean canCombat() {
-        return this.getHeldItem(Hand.MAIN_HAND).getItem() instanceof SwordItem;
     }
 
 
@@ -1178,6 +1188,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 //		setTexturePackIndex(textureData.getColor(), textureData.textureIndex);
         setTextureNameMain(textureData.textureBox[0].textureName);
         setTextureNameArmor(textureData.textureBox[1].textureName);
+        setTextureNames();
 //		recallRenderParamTextureName(textureModelNameForClient, textureArmorNameForClient);
         if (!isContract()) {
             //setMaidMode(EntityMode_Basic.mmode_Wild);
@@ -1255,7 +1266,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         setRevengeTarget(null);
         getNavigator().clearPath();
         if (pflag) {
-            
+
             getNavigator().clearPath();
         }
         if (!world.isRemote()) {
@@ -1398,45 +1409,45 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             } else {
 
                 if (!itemstack.isEmpty() && SWEETITEM.contains(item) && this.getHealth() < this.getMaxHealth()) {
-                        if (item.isFood()) {
-                            if (!player.abilities.isCreativeMode) {
-                                itemstack.shrink(1);
-                            }
-
-                            this.addContractLimit(false);
-                            this.heal((float) item.getFood().getHealing());
-                            MaidPacketHandler.animationModel(this, EAT_ANIMATION);
-                            this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1.0F, 0.7F);
-                            getEntityWorld().setEntityState(this, (byte) 11);
-                            return true;
-                        }
-                    } else if (item instanceof DyeItem) {
-                        DyeColor dyecolor = ((DyeItem) item).getDyeColor();
-                        if (dyecolor.getId() != 15 - this.getColor()) {
-                            if (!player.abilities.isCreativeMode) {
-                                itemstack.shrink(1);
-                            }
-                            if (!getEntityWorld().isRemote) {
-                                this.setColor((byte) (dyecolor.getId()));
-                            }
-
-                            this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
-                            return true;
-                        }
-                    } else if (item.getItem() == Items.FEATHER) {
-
+                    if (item.isFood()) {
                         if (!player.abilities.isCreativeMode) {
                             itemstack.shrink(1);
                         }
-                        if (!this.world.isRemote()) {
-                            this.setFreedom(!isFreedom());
-                            this.resetBrain((ServerWorld) this.world);
+
+                        this.addContractLimit(false);
+                        this.heal((float) item.getFood().getHealing());
+                        MaidPacketHandler.animationModel(this, EAT_ANIMATION);
+                        this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1.0F, 0.7F);
+                        getEntityWorld().setEntityState(this, (byte) 11);
+                        return true;
+                    }
+                } else if (item instanceof DyeItem) {
+                    DyeColor dyecolor = ((DyeItem) item).getDyeColor();
+                    if (dyecolor.getId() != 15 - this.getColor()) {
+                        if (!player.abilities.isCreativeMode) {
+                            itemstack.shrink(1);
+                        }
+                        if (!getEntityWorld().isRemote) {
+                            this.setColor((byte) (dyecolor.getId()));
                         }
 
                         this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
-                        //getEntityWorld().setEntityState(this, (byte) 11);
                         return true;
                     }
+                } else if (item.getItem() == Items.FEATHER) {
+
+                    if (!player.abilities.isCreativeMode) {
+                        itemstack.shrink(1);
+                    }
+                    if (!this.world.isRemote()) {
+                        this.setFreedom(!isFreedom());
+                        this.resetBrain((ServerWorld) this.world);
+                    }
+
+                    this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
+                    //getEntityWorld().setEntityState(this, (byte) 11);
+                    return true;
+                }
 
 
                 if (this.isOwner(player) && item == Items.SUGAR) {
@@ -1562,11 +1573,10 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
     public void setTextureNames() {
         textureData.setTextureNames();
-        if (getEntityWorld().isRemote) {
-            textureNameMain = textureData.getTextureName(0);
 
-            textureNameArmor = textureData.getTextureName(1);
-        }
+        this.dataManager.set(TEXTURE_MAIN, textureData.getTextureName(0));
+        this.dataManager.set(TEXTURE_ARMOR, textureData.getTextureName(1));
+
     }
 
     public void setNextTexturePackege(int pTargetTexture) {
@@ -1584,43 +1594,42 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     }
 
     public String getModelNameMain() {
-        return textureNameMain;
+        return this.dataManager.get(TEXTURE_MAIN);
     }
 
     public String getModelNameArmor() {
-        return textureNameArmor;
+        return this.dataManager.get(TEXTURE_ARMOR);
     }
 
 
     public void setTextureNameMain(String modelNameMain) {
-        this.textureNameMain = modelNameMain;
+        this.dataManager.set(TEXTURE_MAIN, modelNameMain);
 
         refreshModels();
     }
 
 
     public void setTextureNameArmor(String modelNameArmor) {
-        this.textureNameArmor = modelNameArmor;
+        this.dataManager.set(TEXTURE_ARMOR, modelNameArmor);
 
         refreshModels();
     }
 
 
-    protected void refreshModels() {
+    public void refreshModels() {
         String defName = ModelManager.instance.getRandomTextureString(this, rand);
 
-        TextureBoxBase mainModel = modelBoxAutoSelect(textureNameMain);
+        TextureBoxBase mainModel = modelBoxAutoSelect(getModelNameMain());
 
         if (mainModel == null) {
             mainModel = modelBoxAutoSelect(defName);
         }
 
-        TextureBoxBase armorModel = modelBoxAutoSelect(textureNameArmor);
+        TextureBoxBase armorModel = modelBoxAutoSelect(getModelNameArmor());
 
         if (armorModel == null) {
             armorModel = modelBoxAutoSelect(defName);
         }
-
 
         setTextureBox(new TextureBoxBase[]{mainModel, armorModel});
         setTextureNames();

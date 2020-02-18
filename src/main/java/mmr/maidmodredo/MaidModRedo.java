@@ -41,8 +41,7 @@ import java.io.File;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(MaidModRedo.MODID)
-public class MaidModRedo
-{
+public class MaidModRedo {
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "maidmodredo";
@@ -70,8 +69,7 @@ public class MaidModRedo
         MaidModRedo.LOGGER.debug(s);
     }
 
-    private void setup(final FMLCommonSetupEvent event)
-    {
+    private void setup(final FMLCommonSetupEvent event) {
         MaidModels.registerModel();
 
         String classpath = System.getProperty("java.class.path");
@@ -129,13 +127,11 @@ public class MaidModRedo
         LittleContainers.registerScreenFactories();
     }
 
-    private void enqueueIMC(final InterModEnqueueEvent event)
-    {
+    private void enqueueIMC(final InterModEnqueueEvent event) {
         MaidRecipes.registerRecipe();
     }
 
-    private void processIMC(final InterModProcessEvent event)
-    {
+    private void processIMC(final InterModProcessEvent event) {
 
     }
 
@@ -145,24 +141,8 @@ public class MaidModRedo
         if (event.getEntity() instanceof AbstractIllagerEntity) {
             ((AbstractIllagerEntity) event.getEntity()).targetSelector.addGoal(1, new NearestAttackableTargetGoal(((AbstractIllagerEntity) event.getEntity()), LittleMaidBaseEntity.class, true));
         }
-
-        if (event.getEntity() instanceof LittleMaidBaseEntity) {
-            LittleMaidBaseEntity maid = (LittleMaidBaseEntity) event.getEntity();
-            if (maid.isContract() || maid.isWildSaved) return;
-            maid.onSpawnWithEgg();
-//			int c = maid.getTextureBox()[0].getWildColorBits();
-//			if(c<=0) maid.setColor(12); else for(int i=15;i>=0;i--){
-//				int x = (int) Math.pow(2, i);
-//				if((c&x)==x) maid.setColor(i);
-//			}
-            maid.isWildSaved = true;
-//			event.setResult(Result.ALLOW);
-//			NBTTagCompound t = new NBTTagCompound();
-//			maid.writeEntityToNBT(t);
-//			maid.readEntityFromNBT(t);
-            if (event.getWorld().isRemote) maid.setTextureNames();
-        }
     }
+
 
     @SubscribeEvent
     public void onEntityHurted(LivingHurtEvent event) {

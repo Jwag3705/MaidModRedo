@@ -48,12 +48,8 @@ public class MaidPacketHandler {
     }
 
     public static void syncModelOnClient(LittleMaidBaseEntity entity) {
-        if (entity.getEntityWorld().isRemote) {
-            MaidPacketHandler.CHANNEL.sendToServer(new MessageSetGhostModelStat(entity.getEntityId()));
-        }
+        MaidPacketHandler.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MessageSetGhostModelStat(entity.getEntityId()));
     }
-
-
 
     public static void animationModel(LittleMaidBaseEntity entity, MaidAnimation animation) {
         if (!entity.getEntityWorld().isRemote()) {

@@ -11,7 +11,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelLittleMaid_Revampmaid<T extends LittleMaidBaseEntity> extends ModelMultiMMMBase<T> {
+public class ModelLittleButler_Revampbutler<T extends LittleMaidBaseEntity> extends ModelMultiMMMBase<T> {
     public MaidModelRenderer head;
     public MaidModelRenderer headFace;
     public MaidModelRenderer Hair;
@@ -28,8 +28,6 @@ public class ModelLittleMaid_Revampmaid<T extends LittleMaidBaseEntity> extends 
     public MaidModelRenderer hairtail;
     public MaidModelRenderer BunB;
     public MaidModelRenderer body;
-    public MaidModelRenderer skirt;
-    public MaidModelRenderer Apron;
     public MaidModelRenderer legL;
     public MaidModelRenderer LLegoverlay;
     public MaidModelRenderer legL2;
@@ -46,15 +44,15 @@ public class ModelLittleMaid_Revampmaid<T extends LittleMaidBaseEntity> extends 
     public MaidModelRenderer handRLayer2;
 
 
-    public ModelLittleMaid_Revampmaid() {
+    public ModelLittleButler_Revampbutler() {
         this(0.0F);
     }
 
-    public ModelLittleMaid_Revampmaid(float psize) {
+    public ModelLittleButler_Revampbutler(float psize) {
         this(psize, 0.0F, 128, 128);
     }
 
-    public ModelLittleMaid_Revampmaid(float psize, float pyoffset, int pTextureWidth, int pTextureHeight) {
+    public ModelLittleButler_Revampbutler(float psize, float pyoffset, int pTextureWidth, int pTextureHeight) {
         super(psize, 0.0F, 128, 128);
     }
 
@@ -65,7 +63,6 @@ public class ModelLittleMaid_Revampmaid<T extends LittleMaidBaseEntity> extends 
 
         head = new MaidModelRenderer(this);
         head.setRotationPoint(0.0F, 7.5F, 0.0F);
-        addBox(head, 46, 0, -4.3F, -10.505F, -4.7F, 9, 3, 1, 0.0F, false);
         addBox(head, 0, 0, -4.3F, -7.12F, -4.7F, 9, 9, 9, 0.0F, false);
 
         headFace = new MaidModelRenderer(this);
@@ -148,19 +145,8 @@ public class ModelLittleMaid_Revampmaid<T extends LittleMaidBaseEntity> extends 
         body = new MaidModelRenderer(this);
         body.setRotationPoint(0.0F, 8.0F, 0.0F);
         addBox(body, 16, 42, -2.85F, 1.25F, -1.8F, 6, 4, 4, 0.0F, false);
-        addBox(body, 58, 46, -2.35F, 5.0F, -1.55F, 5, 2, 3, 0.0F, false);
-        addBox(body, 36, 9, -2.85F, 6.25F, -1.8F, 6, 2, 4, 0.0F, false);
-
-        skirt = new MaidModelRenderer(this);
-        skirt.setRotationPoint(0.0F, 14.5F, 0.25F);
-        addBox(skirt, 27, 0, -3.45F, -0.725F, -2.7F, 7, 4, 5, 0.0F, false);
-        addBox(skirt, 29, 29, -4.55F, 2.9F, -3.6F, 9, 6, 7, 0.0F, false);
-
-        Apron = new MaidModelRenderer(this);
-        Apron.setRotationPoint(0.0F, 9.0F, 0.0F);
-        setRotationAngle(Apron, -0.0873F, 0.0F, 0.0F);
-        skirt.addChild(Apron);
-        addBox(Apron, 36, 42, -2.9F, -9.6068F, -4.1181F, 6, 9, 2, 0.0F, false);
+        addBox(body, 36, 9, -2.85F, 5.25F, -1.8F, 6, 3, 4, 0.0F, false);
+        addBox(body, 75, 39, -3.1F, 1.25F, -2.05F, 6, 7, 4, 0.0F, false);
 
         legL = new MaidModelRenderer(this);
         legL.setRotationPoint(1.0F, 15.0F, 0.0F);
@@ -213,7 +199,7 @@ public class ModelLittleMaid_Revampmaid<T extends LittleMaidBaseEntity> extends 
         addBox(handLLayer2, 20, 36, -1.0244F, 3.8784F, -0.9F, 2, 4, 2, 0.5F, false);
 
         handR = new MaidModelRenderer(this);
-        handR.setRotationPoint(-3.0F, 9.25F, 0.0F);
+        handR.setRotationPoint(-3.0F, 9.5F, 0.0F);
         setRotationAngle(handR, 0.0F, 0.0F, 0.2618F);
         addBox(handR, 16, 67, -1.2926F, 0.374F, -0.9F, 2, 4, 2, 0.0F, false);
 
@@ -270,7 +256,7 @@ public class ModelLittleMaid_Revampmaid<T extends LittleMaidBaseEntity> extends 
 
     @Override
     public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        ImmutableList.of(this.handR, this.handL, this.legR, this.legL, this.head, this.skirt, this.body).forEach((p_228292_8_) -> {
+        ImmutableList.of(this.handR, this.handL, this.legR, this.legL, this.head, this.body).forEach((p_228292_8_) -> {
             p_228292_8_.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         });
     }

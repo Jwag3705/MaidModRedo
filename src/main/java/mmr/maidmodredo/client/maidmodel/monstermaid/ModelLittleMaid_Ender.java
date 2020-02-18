@@ -8,22 +8,34 @@ import mmr.maidmodredo.client.maidmodel.MaidModelRenderer;
 import mmr.maidmodredo.client.maidmodel.ModelMultiMMMBase;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.entity.monstermaid.EnderMaidEntity;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMultiMMMBase<T> {
-    public MaidModelRenderer maidCap;
-    public MaidModelRenderer handR;
-    public MaidModelRenderer legR;
+    public MaidModelRenderer root;
     public MaidModelRenderer head;
-    public MaidModelRenderer body;
-    public MaidModelRenderer handL;
-    public MaidModelRenderer legL;
     public MaidModelRenderer jaw;
-    public MaidModelRenderer hair;
+    public MaidModelRenderer MaidCap;
+    public MaidModelRenderer Hair;
+    public MaidModelRenderer BunL;
+    public MaidModelRenderer BunR;
+    public MaidModelRenderer HairbandB;
+    public MaidModelRenderer BunB;
+    public MaidModelRenderer body;
+    public MaidModelRenderer Breasts;
+    public MaidModelRenderer RBreast;
+    public MaidModelRenderer bone2;
+    public MaidModelRenderer LBreast;
+    public MaidModelRenderer legL;
+    public MaidModelRenderer legL2;
+    public MaidModelRenderer legR;
+    public MaidModelRenderer legR2;
+    public MaidModelRenderer handL;
+    public MaidModelRenderer handL2;
+    public MaidModelRenderer handR;
+    public MaidModelRenderer handR2;
 
     public ModelLittleMaid_Ender() {
         super();
@@ -43,52 +55,140 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         textureWidth = 128;
         textureHeight = 64;
 
-        mainFrame = new MaidModelRenderer(this, 0, 0);
-        mainFrame.setRotationPoint(0F, 0F + 0F, 0F);
-        this.handL = new MaidModelRenderer(this, 56, 0);
-        this.handL.setRotationPoint(4.5F, -1.6F, 0.0F);
-        this.handL.addBox(-1.0F, -2.0F, -1.0F, 2, 16, 2, 0.0F);
-        this.setRotateAngle(handL, 0.0F, 0.0F, -0.10000736613927509F);
-        this.jaw = new MaidModelRenderer(this, 0, 16);
-        this.jaw.setRotationPoint(0.0F, -4.0F, -0.0F);
-        this.jaw.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, -0.5F);
-        this.head = new MaidModelRenderer(this, 0, 0);
-        this.head.setRotationPoint(0.0F, -4.0F, -0.0F);
-        this.head.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, 0.0F);
-        this.body = new MaidModelRenderer(this, 32, 16);
-        this.body.setRotationPoint(0.0F, -4.0F, -0.0F);
-        this.body.addBox(-3.5F, 0.0F, -2.0F, 7, 11, 4, 0.0F);
-        this.hair = new MaidModelRenderer(this, 0, 32);
-        this.hair.setRotationPoint(0.0F, -4.0F, -0.0F);
-        this.hair.addBox(-4.0F, -8.0F, -4.0F, 8, 12, 8, 0.75F);
-        this.handR = new MaidModelRenderer(this, 56, 0);
-        this.handR.setRotationPoint(-4.5F, -1.6F, 0.0F);
-        this.handR.addBox(-1.0F, -2.0F, -1.0F, 2, 16, 2, 0.0F);
-        this.setRotateAngle(handR, 0.0F, 0.0F, 0.10000736613927509F);
-        this.legR = new MaidModelRenderer(this, 56, 0);
-        this.legR.setRotationPoint(-2.0F, 7.0F, 0.0F);
-        this.legR.addBox(-1.0F, 0.0F, -1.0F, 2, 17, 2, 0.0F);
-        this.legL = new MaidModelRenderer(this, 56, 0);
-        this.legL.setRotationPoint(2.0F, 7.0F, 0.0F);
-        this.legL.addBox(-1.0F, 0.0F, -1.0F, 2, 17, 2, 0.0F);
+        root = new MaidModelRenderer(this);
+        root.setRotationPoint(0.0F, 0.0F, 0.0F);
 
-        maidCap = new MaidModelRenderer(this, 35, 10);
-        maidCap.setRotationPoint(0.0F, -4.0F, 0.0F);
-        maidCap.addBox(-3.5F, -10.8F, -4.0F, 7, 2, 2, 0.0F, false);
-        this.mainFrame.addChild(head);
-        this.mainFrame.addChild(body);
-        this.mainFrame.addChild(hair);
-        this.mainFrame.addChild(jaw);
-        this.mainFrame.addChild(legR);
-        this.mainFrame.addChild(legL);
-        this.mainFrame.addChild(handR);
-        this.mainFrame.addChild(handL);
-        this.mainFrame.addChild(maidCap);
+        head = new MaidModelRenderer(this);
+        head.setRotationPoint(0.0F, -3.75F, 0.0F);
+        root.addChild(head);
+        head.setTextureOffset(64, 43).addBox(-5.0F, -10.75F, -5.0F, 10, 10, 0, 0.0F, true);
+        head.setTextureOffset(34, 44).addBox(-5.0F, -10.75F, -5.0F, 10, 10, 10, 0.0F, true);
+
+        jaw = new MaidModelRenderer(this);
+        jaw.setRotationPoint(0.0F, 0.0F, 0.0F);
+        head.addChild(jaw);
+        jaw.setTextureOffset(75, 44).addBox(-5.0F, -10.75F, -4.75F, 10, 10, 10, 0.0F, true);
+
+        MaidCap = new MaidModelRenderer(this);
+        MaidCap.setRotationPoint(0.0F, 28.0F, 0.0F);
+        head.addChild(MaidCap);
+        MaidCap.setTextureOffset(35, 10).addBox(-3.5F, -41.75F, -4.0F, 7, 3, 2, 0.0F, false);
+
+        Hair = new MaidModelRenderer(this);
+        Hair.setRotationPoint(0.0F, 0.0F, 0.0F);
+        head.addChild(Hair);
+        Hair.setTextureOffset(83, 11).addBox(-5.0F, -10.75F, -5.5F, 10, 14, 11, 0.0F, true);
+        Hair.setTextureOffset(106, 1).addBox(-5.75F, -10.0F, -2.5F, 1, 5, 5, 0.0F, false);
+        Hair.setTextureOffset(83, 10).addBox(-7.5F, -10.0F, -1.5F, 2, 9, 3, 0.0F, false);
+        Hair.setTextureOffset(106, 1).addBox(4.75F, -10.0F, -2.5F, 1, 5, 5, 0.0F, true);
+        Hair.setTextureOffset(83, 10).addBox(5.5F, -10.0F, -1.5F, 2, 9, 3, 0.0F, true);
+        Hair.setTextureOffset(33, 42).addBox(-1.5F, -10.0F, 6.0F, 3, 9, 2, 0.0F, false);
+
+        BunL = new MaidModelRenderer(this);
+        BunL.setRotationPoint(0.0F, 28.0F, 0.0F);
+        setRotationAngle(BunL, 0.0F, 0.0F, -0.0873F);
+        Hair.addChild(BunL);
+        BunL.setTextureOffset(106, 45).addBox(7.8154F, -36.7471F, -2.0F, 4, 4, 4, 0.0F, false);
+
+        BunR = new MaidModelRenderer(this);
+        BunR.setRotationPoint(0.0F, 28.0F, 0.0F);
+        setRotationAngle(BunR, 0.0F, 0.0F, 0.0873F);
+        Hair.addChild(BunR);
+        BunR.setTextureOffset(106, 45).addBox(-11.8154F, -36.7471F, -2.0F, 4, 4, 4, 0.0F, true);
+
+        HairbandB = new MaidModelRenderer(this);
+        HairbandB.setRotationPoint(0.0F, 28.0F, 0.0F);
+        setRotationAngle(HairbandB, 0.0F, -1.5708F, 0.0F);
+        Hair.addChild(HairbandB);
+        HairbandB.setTextureOffset(106, 1).addBox(5.0F, -38.0F, -2.5F, 1, 5, 5, 0.0F, true);
+
+        BunB = new MaidModelRenderer(this);
+        BunB.setRotationPoint(0.0F, 28.0F, 0.0F);
+        setRotationAngle(BunB, 0.0873F, 0.0F, 0.0F);
+        Hair.addChild(BunB);
+        BunB.setTextureOffset(106, 45).addBox(-2.0F, -36.9971F, 8.0654F, 4, 4, 4, 0.0F, true);
+
+        body = new MaidModelRenderer(this);
+        body.setRotationPoint(0.0F, -4.0F, 0.0F);
+        root.addChild(body);
+        body.setTextureOffset(32, 16).addBox(-3.5F, 0.0F, -2.0F, 7, 6, 4, 0.0F, true);
+        body.setTextureOffset(34, 35).addBox(-2.5F, 5.0F, -1.5F, 5, 3, 3, 0.0F, true);
+        body.setTextureOffset(52, 35).addBox(-3.5F, 7.75F, -2.0F, 7, 4, 4, 0.0F, true);
+        body.setTextureOffset(106, 60).addBox(-1.0F, -0.75F, -1.25F, 2, 2, 2, 0.0F, false);
+
+        Breasts = new MaidModelRenderer(this);
+        Breasts.setRotationPoint(0.0F, 28.0F, 0.0F);
+        body.addChild(Breasts);
+
+        RBreast = new MaidModelRenderer(this);
+        RBreast.setRotationPoint(0.0F, 0.0F, 0.0F);
+        setRotationAngle(RBreast, 0.0F, 0.1745F, 0.0F);
+        Breasts.addChild(RBreast);
+
+        bone2 = new MaidModelRenderer(this);
+        bone2.setRotationPoint(0.0F, 0.0F, 0.0F);
+        setRotationAngle(bone2, -0.6109F, 0.0F, 0.0F);
+        RBreast.addChild(bone2);
+        bone2.setTextureOffset(18, 0).addBox(-3.0F, -21.25F, -17.5F, 3, 3, 3, 0.0F, false);
+
+        LBreast = new MaidModelRenderer(this);
+        LBreast.setRotationPoint(0.0F, 0.0F, 0.0F);
+        setRotationAngle(LBreast, -0.6109F, -0.1745F, 0.0F);
+        Breasts.addChild(LBreast);
+        LBreast.setTextureOffset(34, 0).addBox(0.0F, -21.25F, -17.5F, 3, 3, 3, 0.0F, false);
+
+        legL = new MaidModelRenderer(this);
+        legL.setRotationPoint(-2.0F, 7.0F, 0.0F);
+        root.addChild(legL);
+        legL.setTextureOffset(56, 0).addBox(-1.5F, 0.0F, -1.0F, 3, 9, 2, 0.0F, false);
+        legL.setTextureOffset(0, 7).addBox(-2.0F, -3.25F, -3.0F, 4, 9, 6, 0.0F, false);
+
+        legL2 = new MaidModelRenderer(this);
+        legL2.setRotationPoint(0.0F, 0.0F, 0.0F);
+        legL.addChild(legL2);
+        legL2.setTextureOffset(72, 11).addBox(-1.0F, 9.0F, -1.0F, 2, 8, 2, 0.0F, false);
+
+        legR = new MaidModelRenderer(this);
+        legR.setRotationPoint(2.0F, 7.0F, 0.0F);
+        root.addChild(legR);
+        legR.setTextureOffset(56, 0).addBox(-1.5F, 0.0F, -1.0F, 3, 9, 2, 0.0F, true);
+        legR.setTextureOffset(0, 22).addBox(-2.0F, -3.25F, -3.0F, 4, 9, 6, 0.0F, false);
+
+        legR2 = new MaidModelRenderer(this);
+        legR2.setRotationPoint(0.0F, 0.0F, 0.0F);
+        legR.addChild(legR2);
+        legR2.setTextureOffset(72, 20).addBox(-1.0F, 9.0F, -1.0F, 2, 8, 2, 0.0F, true);
+
+        handL = new MaidModelRenderer(this);
+        handL.setRotationPoint(-4.5F, -1.6F, 0.0F);
+        setRotationAngle(handL, 0.0F, 0.0F, 0.2491F);
+        root.addChild(handL);
+        handL.setTextureOffset(56, 0).addBox(-1.0F, -2.0F, -1.0F, 2, 9, 2, 0.0F, false);
+        handL.setTextureOffset(92, 4).addBox(-1.75F, -2.15F, -1.5F, 3, 3, 3, 0.0F, false);
+
+        handL2 = new MaidModelRenderer(this);
+        handL2.setRotationPoint(-4.5F, -1.6F, 0.0F);
+        setRotationAngle(handL2, 0.0F, 0.0F, 0.2491F);
+        root.addChild(handL2);
+        handL2.setTextureOffset(64, 11).addBox(-1.0F, 6.75F, -1.0F, 2, 9, 2, 0.0F, false);
+
+        handR = new MaidModelRenderer(this);
+        handR.setRotationPoint(4.5F, -1.6F, 0.0F);
+        setRotationAngle(handR, 0.0F, 0.0F, -0.2491F);
+        root.addChild(handR);
+        handR.setTextureOffset(56, 0).addBox(-1.0F, -2.0F, -1.0F, 2, 9, 2, 0.0F, true);
+        handR.setTextureOffset(81, 4).addBox(-1.25F, -2.15F, -1.5F, 3, 3, 3, 0.0F, false);
+
+        handR2 = new MaidModelRenderer(this);
+        handR2.setRotationPoint(4.5F, -1.6F, 0.0F);
+        setRotationAngle(handR2, 0.0F, 0.0F, -0.2491F);
+        root.addChild(handR2);
+        handR2.setTextureOffset(64, 20).addBox(-1.0F, 6.5F, -1.0F, 2, 9, 2, 0.0F, true);
     }
 
     @Override
     public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        ImmutableList.of(this.mainFrame).forEach((p_228292_8_) -> {
+        ImmutableList.of(this.root).forEach((p_228292_8_) -> {
             p_228292_8_.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         });
         //renderStabilizer(pEntityCaps, par2, par3, ticksExisted, pheadYaw, pheadPitch, par7);
@@ -153,7 +253,7 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
 
         if (this.swingProgress > 0.0F) {
             HandSide handside = this.getMainHand(entity);
-            ModelRenderer modelrenderer = this.getArmForSide(handside);
+            MaidModelRenderer modelrenderer = this.getArmForSide(handside);
             float f1 = this.swingProgress;
             this.body.rotateAngleY = MathHelper.sin(MathHelper.sqrt(f1) * ((float) Math.PI * 2F)) * 0.2F;
             if (handside == HandSide.LEFT) {
@@ -442,22 +542,18 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         this.handL.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
         this.handR.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
         this.handL.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
-
-        this.jaw.copyModelAngles(head);
-        this.hair.copyModelAngles(head);
-        this.maidCap.copyModelAngles(head);
     }
 
     /**
      * This is a helper function from Tabula to set the rotation of model parts
      */
-    public void setRotateAngle(MaidModelRenderer modelRenderer, float x, float y, float z) {
+    public void setRotationAngle(MaidModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
 
-    protected ModelRenderer getArmForSide(HandSide side) {
+    protected MaidModelRenderer getArmForSide(HandSide side) {
         return side == HandSide.LEFT ? this.handL : this.handR;
     }
 

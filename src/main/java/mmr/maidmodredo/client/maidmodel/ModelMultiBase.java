@@ -135,6 +135,10 @@ public abstract class ModelMultiBase<T extends LivingEntity> extends ModelBase<T
 
     }
 
+    public void addBox(ModelRenderer mobRenderer, int offsetX, int offsetZ, float x, float y, float z, float width, float height, float depth, float delta, boolean mirrorIn) {
+        mobRenderer.setTextureOffset(offsetX, offsetZ).addBox(x, y, z, width, height, depth, delta, mirrorIn);
+    }
+
     public static final float mh_sqrt_float(float f) {
         return MathHelper.sqrt(f);
     }

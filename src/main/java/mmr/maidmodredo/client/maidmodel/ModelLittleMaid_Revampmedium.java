@@ -13,38 +13,41 @@ import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extends ModelMultiMMMBase<T> {
+    public MaidModelRenderer head;
+    public MaidModelRenderer headFace;
+    public MaidModelRenderer HairLayers;
+    public MaidModelRenderer ahoge;
+    public MaidModelRenderer hair;
+    public MaidModelRenderer hairheadLayer;
+    public MaidModelRenderer leftchignon;
+    public MaidModelRenderer BunL;
+    public MaidModelRenderer rightchignon;
+    public MaidModelRenderer BunR;
+    public MaidModelRenderer lefttail;
+    public MaidModelRenderer backchignon;
+    public MaidModelRenderer BunB;
+    public MaidModelRenderer hairtail;
+    public MaidModelRenderer body;
+    public MaidModelRenderer bodyLayer;
+    public MaidModelRenderer Breasts;
+    public MaidModelRenderer skirt;
+    public MaidModelRenderer Apron;
     public MaidModelRenderer handR;
     public MaidModelRenderer handRLayer;
     public MaidModelRenderer handR2;
     public MaidModelRenderer handRLayer2;
-    public MaidModelRenderer legL;
-    public MaidModelRenderer legLLayer;
-    public MaidModelRenderer legL2;
-    public MaidModelRenderer legLLayer2;
-    public MaidModelRenderer body;
-    public MaidModelRenderer bodyLayer;
-    public MaidModelRenderer boob;
-    public MaidModelRenderer head;
-    public MaidModelRenderer hair;
-    public MaidModelRenderer lefttail;
-    public MaidModelRenderer hairheadLayer;
-    public MaidModelRenderer headFace;
-    public MaidModelRenderer ahoge;
-    public MaidModelRenderer leftchignon;
-    public MaidModelRenderer backchignon;
-    public MaidModelRenderer hairtail;
-    public MaidModelRenderer righttail;
-    public MaidModelRenderer rightchignon;
-    public MaidModelRenderer skirt;
-    public MaidModelRenderer Apron;
-    public MaidModelRenderer legR;
-    public MaidModelRenderer legRLayer;
-    public MaidModelRenderer legR2;
-    public MaidModelRenderer legRLayer2;
     public MaidModelRenderer handL;
     public MaidModelRenderer handLLayer;
     public MaidModelRenderer handL2;
     public MaidModelRenderer handLLayer2;
+    public MaidModelRenderer legR;
+    public MaidModelRenderer legRLayer;
+    public MaidModelRenderer legR2;
+    public MaidModelRenderer legRLayer2;
+    public MaidModelRenderer legL;
+    public MaidModelRenderer legLLayer;
+    public MaidModelRenderer legL2;
+    public MaidModelRenderer legLLayer2;
 
     public ModelLittleMaid_Revampmedium() {
         this(0.0F);
@@ -63,163 +66,185 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
         textureWidth = 128;
         textureHeight = 128;
 
-        handR = new MaidModelRenderer(this, 72, 31);
-        handR.setRotationPoint(-3.0F, 9.0F, 0.0F);
-        handR.addBox(-2.0F, -3.5F, -1.0F, 2, 5, 2, 0.0F);
+        head = new MaidModelRenderer(this);
+        head.setRotationPoint(-0.25F, 6.0F, 0.0F);
+        addBox(head, 0, 0, -4.3F, -9.94F, -4.7F, 9, 9, 9, 0.0F, false);
+        addBox(head, 0, 47, -4.3F, -13.325F, -4.7F, 9, 3, 1, 0.0F, false);
 
-        handRLayer = new MaidModelRenderer(this, 80, 32);
-        handRLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
-        handR.addChild(handRLayer);
-        handRLayer.addBox(-2.0F, -3.25F, -1.0F, 2, 4, 2, 0.5F);
+        headFace = new MaidModelRenderer(this);
+        headFace.setRotationPoint(0.0F, 1.08F, 0.0F);
+        head.addChild(headFace);
+        addBox(headFace, 80, 0, -4.3F, -11.02F, -4.935F, 9, 9, 0, 0.0F, false);
 
-        handR2 = new MaidModelRenderer(this, 64, 40);
-        handR2.setRotationPoint(0.0F, 0.0F, 0.0F);
-        handR.addChild(handR2);
-        handR2.addBox(-2.0F, 1.5F, -1.0F, 2, 5, 2, 0.0F);
+        HairLayers = new MaidModelRenderer(this);
+        HairLayers.setRotationPoint(0.0F, 1.08F, 0.0F);
+        head.addChild(HairLayers);
 
-        handRLayer2 = new MaidModelRenderer(this, 80, 41);
-        handRLayer2.setRotationPoint(0.0F, 0.0F, 0.0F);
-        handR2.addChild(handRLayer2);
-        handRLayer2.addBox(-2.0F, 1.25F, -1.0F, 2, 5, 2, 0.5F);
+        ahoge = new MaidModelRenderer(this);
+        ahoge.setRotationPoint(0.0F, -7.52F, 0.0F);
+        setRotationAngle(ahoge, 0.0F, 2.3562F, 0.0F);
+        HairLayers.addChild(ahoge);
+        addBox(ahoge, 0, 89, -0.5065F, -8.9F, 0.0285F, 5, 5, 5, 0.0F, false);
 
-        legL = new MaidModelRenderer(this, 48, 39);
-        legL.setRotationPoint(1.0F, 15.0F, 0.0F);
-        legL.addBox(-1.0F, -2.0F, -2.0F, 3, 5, 4, 0.0F);
+        hair = new MaidModelRenderer(this);
+        hair.setRotationPoint(0.0F, 0.0F, 0.0F);
+        HairLayers.addChild(hair);
+        addBox(hair, 0, 63, -4.3F, -1.62F, 3.055F, 9, 9, 2, 0.0F, false);
 
-        legLLayer = new MaidModelRenderer(this, 48, 87);
-        legLLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
-        legL.addChild(legLLayer);
-        legLLayer.addBox(-1.0F, -2.0F, -2.0F, 3, 5, 4, 0.5F);
+        hairheadLayer = new MaidModelRenderer(this);
+        hairheadLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
+        HairLayers.addChild(hairheadLayer);
+        addBox(hairheadLayer, 40, 0, -4.3F, -11.02F, -4.7F, 9, 9, 9, 0.5F, false);
 
-        legL2 = new MaidModelRenderer(this, 48, 52);
-        legL2.setRotationPoint(0.0F, 0.0F, 0.0F);
-        legLLayer.addChild(legL2);
-        legL2.addBox(-1.0F, 3.0F, -2.0F, 3, 6, 4, 0.0F);
+        leftchignon = new MaidModelRenderer(this);
+        leftchignon.setRotationPoint(0.0F, 0.0F, 0.0F);
+        HairLayers.addChild(leftchignon);
+        addBox(leftchignon, 0, 83, 4.64F, -10.66F, -1.5F, 1, 4, 4, 0.0F, false);
 
-        legLLayer2 = new MaidModelRenderer(this, 32, 86);
-        legLLayer2.setRotationPoint(0.0F, 0.0F, 0.0F);
-        legL2.addChild(legLLayer2);
-        legLLayer2.addBox(-1.0F, 3.0F, -2.0F, 3, 6, 4, 0.5F);
+        BunL = new MaidModelRenderer(this);
+        BunL.setRotationPoint(0.25F, 16.92F, 0.0F);
+        setRotationAngle(BunL, 0.0F, 0.0F, -0.0873F);
+        HairLayers.addChild(BunL);
+        addBox(BunL, 0, 72, 7.25F, -26.42F, -1.0F, 3, 3, 3, 0.0F, false);
 
-        body = new MaidModelRenderer(this, 12, 21);
+        rightchignon = new MaidModelRenderer(this);
+        rightchignon.setRotationPoint(0.5F, 0.0F, 0.0F);
+        HairLayers.addChild(rightchignon);
+        addBox(rightchignon, 0, 83, -5.64F, -10.66F, -1.5F, 1, 4, 4, 0.0F, true);
+
+        BunR = new MaidModelRenderer(this);
+        BunR.setRotationPoint(0.25F, 16.92F, 0.0F);
+        setRotationAngle(BunR, 0.0F, 0.0F, 0.0873F);
+        HairLayers.addChild(BunR);
+        addBox(BunR, 0, 72, -10.25F, -26.42F, -1.0F, 3, 3, 3, 0.0F, true);
+
+        lefttail = new MaidModelRenderer(this);
+        lefttail.setRotationPoint(0.0F, 0.0F, 0.0F);
+        HairLayers.addChild(lefttail);
+        addBox(lefttail, 14, 102, 5.11F, -10.49F, 0.47F, 1, 8, 2, 0.0F, false);
+
+        backchignon = new MaidModelRenderer(this);
+        backchignon.setRotationPoint(0.0F, 0.0F, 0.0F);
+        HairLayers.addChild(backchignon);
+        addBox(backchignon, 14, 86, -1.87F, -10.47F, 3.95F, 4, 4, 1, 0.0F, false);
+
+        BunB = new MaidModelRenderer(this);
+        BunB.setRotationPoint(0.25F, 16.92F, 0.0F);
+        setRotationAngle(BunB, 0.0873F, 0.0F, 0.0F);
+        HairLayers.addChild(BunB);
+        addBox(BunB, 14, 72, -1.65F, -26.5F, 7.0F, 3, 3, 3, 0.0F, false);
+
+        hairtail = new MaidModelRenderer(this);
+        hairtail.setRotationPoint(0.0F, 0.0F, 0.0F);
+        HairLayers.addChild(hairtail);
+        addBox(hairtail, 0, 100, -1.59F, -9.55F, 4.7F, 3, 8, 3, 0.0F, false);
+
+        body = new MaidModelRenderer(this);
         body.setRotationPoint(0.0F, 8.0F, 0.0F);
-        body.addBox(-3.0F, -3.0F, -2.0F, 6, 7, 4, 0.0F);
+        addBox(body, 12, 21, -3.0F, -3.0F, -2.0F, 6, 5, 4, 0.0F, false);
+        addBox(body, 49, 22, -2.5F, 1.0F, -1.5F, 5, 3, 3, 0.0F, false);
+        addBox(body, 101, 87, -3.0F, 2.75F, -2.0F, 6, 3, 4, 0.0F, false);
 
-        bodyLayer = new MaidModelRenderer(this, 94, 56);
+        bodyLayer = new MaidModelRenderer(this);
         bodyLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
         body.addChild(bodyLayer);
-        bodyLayer.addBox(-3.0F, -3.25F, -2.0F, 6, 7, 4, 0.5F);
+        addBox(bodyLayer, 94, 56, -3.0F, -3.25F, -2.0F, 6, 7, 4, 0.5F, false);
 
-        boob = new MaidModelRenderer(this, 34, 22);
-        boob.setRotationPoint(-1.5F, 0.5F, -1.5F);
-        setRotationAngle(boob, -0.5236F, 0.0F, 0.0F);
-        body.addChild(boob);
-        boob.addBox(-1.5F, -2.5F, -2.0F, 6, 3, 2, 0.0F);
-
-        head = new MaidModelRenderer(this);
-        head.setRotationPoint(0.0F, 6.0F, 0.0F);
-        head.setTextureOffset(0, 0).addBox(-5.0F, -11.0F, -5.0F, 10, 10, 10, 0.0F);
-        head.setTextureOffset(0, 47).addBox(-5.0F, -14.25F, -5.0F, 10, 3, 1, 0.0F);
-
-        hair = new MaidModelRenderer(this, 0, 63);
-        hair.setRotationPoint(0.0F, 0.0F, 0.0F);
-        head.addChild(hair);
-        hair.addBox(-5.0F, -1.0F, 3.25F, 10, 10, 2, 0.0F);
-
-        lefttail = new MaidModelRenderer(this, 14, 102);
-        lefttail.setRotationPoint(0.0F, 0.0F, 0.0F);
-        head.addChild(lefttail);
-        lefttail.addBox(5.5F, -9.5F, 0.5F, 1, 8, 2, 0.0F);
-
-        hairheadLayer = new MaidModelRenderer(this, 40, 0);
-        hairheadLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
-        head.addChild(hairheadLayer);
-        hairheadLayer.addBox(-5.0F, -11.0F, -5.0F, 10, 10, 10, 0.5F);
-
-        headFace = new MaidModelRenderer(this, 80, 0);
-        headFace.setRotationPoint(0.0F, 0.0F, 0.0F);
-        head.addChild(headFace);
-        headFace.addBox(-5.0F, -11.0F, -5.25F, 10, 10, 0, 0.0F);
-
-        ahoge = new MaidModelRenderer(this, 0, 89);
-        ahoge.setRotationPoint(0.0F, -8.0F, 0.0F);
-        setRotationAngle(ahoge, 0.0F, 2.3562F, 0.0F);
-        head.addChild(ahoge);
-        ahoge.addBox(-0.2197F, -8.0F, 0.0303F, 5, 5, 5, 0.0F);
-
-        leftchignon = new MaidModelRenderer(this, 0, 83);
-        leftchignon.setRotationPoint(0.0F, 0.0F, 0.0F);
-        head.addChild(leftchignon);
-        leftchignon.addBox(5.0F, -10.0F, 0.0F, 1, 3, 3, 0.0F);
-
-        backchignon = new MaidModelRenderer(this, 0, 76);
-        backchignon.setRotationPoint(0.0F, 0.0F, 0.0F);
-        head.addChild(backchignon);
-        backchignon.addBox(-2.0F, -10.0F, 5.0F, 4, 4, 2, 0.0F);
-
-        hairtail = new MaidModelRenderer(this, 0, 100);
-        hairtail.setRotationPoint(0.0F, 0.0F, 0.0F);
-        head.addChild(hairtail);
-        hairtail.addBox(-1.5F, -9.5F, 5.0F, 3, 9, 3, 0.0F);
-
-        righttail = new MaidModelRenderer(this, 20, 102);
-        righttail.setRotationPoint(0.0F, 0.0F, 0.0F);
-        head.addChild(righttail);
-        righttail.addBox(-6.5F, -9.0F, 0.5F, 1, 8, 2, 0.0F);
-
-        rightchignon = new MaidModelRenderer(this, 8, 83);
-        rightchignon.setRotationPoint(0.0F, 0.0F, 0.0F);
-        head.addChild(rightchignon);
-        rightchignon.addBox(-6.0F, -9.5F, 0.0F, 1, 3, 3, 0.0F);
+        Breasts = new MaidModelRenderer(this);
+        Breasts.setRotationPoint(-1.5F, 0.5F, -1.5F);
+        setRotationAngle(Breasts, -0.6981F, 0.0F, 0.0F);
+        body.addChild(Breasts);
+        addBox(Breasts, 34, 27, -1.25F, -2.5F, -2.0F, 5, 3, 2, 0.0F, false);
 
         skirt = new MaidModelRenderer(this);
         skirt.setRotationPoint(0.0F, 15.0F, 0.0F);
-        skirt.setTextureOffset(64, 70).addBox(-4.0F, -4.25F, -3.0F, 8, 4, 6, 0.0F);
-        skirt.setTextureOffset(64, 81).addBox(-5.0F, -1.0F, -4.0F, 10, 7, 8, 0.0F);
+        addBox(skirt, 64, 70, -4.0F, -4.25F, -3.0F, 8, 4, 6, 0.0F, false);
+        addBox(skirt, 64, 81, -5.0F, -1.0F, -4.0F, 10, 7, 8, 0.0F, false);
 
         Apron = new MaidModelRenderer(this);
         Apron.setRotationPoint(0.0F, 9.0F, 0.0F);
+        setRotationAngle(Apron, -0.0873F, 0.0F, 0.0F);
         skirt.addChild(Apron);
-        Apron.setTextureOffset(95, 74).addBox(-3.5F, -13.25F, -4.25F, 7, 10, 2, 0.0F);
-        Apron.setTextureOffset(95, 74).addBox(0.0F, -24.5F, -4.25F, 1, 1, 0, 0.0F);
+        addBox(Apron, 95, 74, -3.5F, -13.0F, -5.0F, 7, 10, 2, 0.0F, false);
+        addBox(Apron, 95, 74, 0.0F, -24.25F, -5.0F, 1, 1, 0, 0.0F, false);
 
-        legR = new MaidModelRenderer(this, 32, 39);
-        legR.setRotationPoint(-1.0F, 15.0F, 0.0F);
-        legR.addBox(-2.0F, -2.0F, -2.0F, 3, 5, 4, 0.0F);
+        handR = new MaidModelRenderer(this);
+        handR.setRotationPoint(-3.5F, 9.25F, 0.0F);
+        setRotationAngle(handR, 0.0F, 0.0F, 0.2618F);
+        addBox(handR, 72, 31, -2.0F, -3.5F, -1.0F, 2, 5, 2, 0.0F, false);
 
-        legRLayer = new MaidModelRenderer(this, 48, 71);
-        legRLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
-        legR.addChild(legRLayer);
-        legRLayer.addBox(-2.0F, -2.0F, -2.0F, 3, 5, 4, 0.5F);
+        handRLayer = new MaidModelRenderer(this);
+        handRLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
+        handR.addChild(handRLayer);
+        addBox(handRLayer, 80, 32, -2.0F, -3.25F, -1.0F, 2, 4, 2, 0.5F, false);
 
-        legR2 = new MaidModelRenderer(this, 32, 53);
-        legR2.setRotationPoint(0.0F, 0.0F, 0.0F);
-        legR.addChild(legR2);
-        legR2.addBox(-2.0F, 3.0F, -2.0F, 3, 6, 4, 0.0F);
+        handR2 = new MaidModelRenderer(this);
+        handR2.setRotationPoint(0.0F, 0.0F, 0.0F);
+        handR.addChild(handR2);
+        addBox(handR2, 64, 40, -2.0F, 1.5F, -1.0F, 2, 5, 2, 0.0F, false);
 
-        legRLayer2 = new MaidModelRenderer(this, 32, 72);
-        legRLayer2.setRotationPoint(0.0F, 0.0F, 0.0F);
-        legR2.addChild(legRLayer2);
-        legRLayer2.addBox(-2.0F, 3.0F, -2.0F, 3, 6, 4, 0.5F);
+        handRLayer2 = new MaidModelRenderer(this);
+        handRLayer2.setRotationPoint(0.0F, 0.0F, 0.0F);
+        handR2.addChild(handRLayer2);
+        addBox(handRLayer2, 80, 41, -2.0F, 1.25F, -1.0F, 2, 5, 2, 0.5F, false);
 
-        handL = new MaidModelRenderer(this, 64, 31);
-        handL.setRotationPoint(3.0F, 9.0F, 0.0F);
-        handL.addBox(0.0F, -3.5F, -1.0F, 2, 5, 2, 0.0F);
+        handL = new MaidModelRenderer(this);
+        handL.setRotationPoint(3.5F, 9.25F, 0.0F);
+        setRotationAngle(handL, 0.0F, 0.0F, -0.2618F);
+        addBox(handL, 64, 31, 0.0F, -3.5F, -1.0F, 2, 5, 2, 0.0F, false);
 
-        handLLayer = new MaidModelRenderer(this, 89, 32);
+        handLLayer = new MaidModelRenderer(this);
         handLLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
         handL.addChild(handLLayer);
-        handLLayer.addBox(0.0F, -3.25F, -1.0F, 2, 4, 2, 0.5F);
+        addBox(handLLayer, 89, 32, 0.0F, -3.25F, -1.0F, 2, 4, 2, 0.5F, false);
 
-        handL2 = new MaidModelRenderer(this, 72, 40);
+        handL2 = new MaidModelRenderer(this);
         handL2.setRotationPoint(0.0F, 0.0F, 0.0F);
         handL.addChild(handL2);
-        handL2.addBox(0.0F, 1.5F, -1.0F, 2, 5, 2, 0.0F);
+        addBox(handL2, 72, 40, 0.0F, 1.5F, -1.0F, 2, 5, 2, 0.0F, false);
 
-        handLLayer2 = new MaidModelRenderer(this, 88, 41);
+        handLLayer2 = new MaidModelRenderer(this);
         handLLayer2.setRotationPoint(0.0F, 0.0F, 0.0F);
         handL2.addChild(handLLayer2);
-        handLLayer2.addBox(0.0F, 1.25F, -1.0F, 2, 5, 2, 0.5F);
+        addBox(handLLayer2, 88, 41, 0.0F, 1.25F, -1.0F, 2, 5, 2, 0.5F, false);
+
+        legR = new MaidModelRenderer(this);
+        legR.setRotationPoint(-1.0F, 15.0F, 0.0F);
+        addBox(legR, 32, 39, -2.0F, -2.0F, -2.0F, 3, 5, 4, 0.0F, false);
+
+        legRLayer = new MaidModelRenderer(this);
+        legRLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
+        legR.addChild(legRLayer);
+        addBox(legRLayer, 48, 71, -2.0F, -2.0F, -2.0F, 3, 5, 4, 0.5F, false);
+
+        legR2 = new MaidModelRenderer(this);
+        legR2.setRotationPoint(0.0F, 0.0F, 0.0F);
+        legR.addChild(legR2);
+        addBox(legR2, 32, 53, -1.75F, 3.0F, -1.75F, 2, 6, 3, 0.0F, false);
+
+        legRLayer2 = new MaidModelRenderer(this);
+        legRLayer2.setRotationPoint(0.0F, 0.0F, 0.0F);
+        legR2.addChild(legRLayer2);
+        addBox(legRLayer2, 32, 72, -2.0F, 3.0F, -2.0F, 3, 6, 4, 0.5F, false);
+
+        legL = new MaidModelRenderer(this);
+        legL.setRotationPoint(1.0F, 15.0F, 0.0F);
+        addBox(legL, 48, 39, -1.0F, -2.0F, -2.0F, 3, 5, 4, 0.0F, false);
+
+        legLLayer = new MaidModelRenderer(this);
+        legLLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
+        legL.addChild(legLLayer);
+        addBox(legLLayer, 48, 87, -1.0F, -2.0F, -2.0F, 3, 5, 4, 0.5F, false);
+
+        legL2 = new MaidModelRenderer(this);
+        legL2.setRotationPoint(0.0F, 0.0F, 0.0F);
+        legLLayer.addChild(legL2);
+        addBox(legL2, 48, 52, -0.75F, 3.0F, -1.75F, 2, 6, 3, 0.0F, false);
+
+        legLLayer2 = new MaidModelRenderer(this);
+        legLLayer2.setRotationPoint(0.0F, 0.0F, 0.0F);
+        legL2.addChild(legLLayer2);
+        addBox(legLLayer2, 32, 86, -1.0F, 3.0F, -2.0F, 3, 6, 4, 0.5F, false);
     }
 
     @Override

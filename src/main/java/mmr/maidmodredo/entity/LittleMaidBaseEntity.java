@@ -559,15 +559,18 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             if (itemstack.isFood()) {
                 Item itemfood = (Item) itemstack.getItem();
                 this.heal((float) itemfood.getFood().getHealing());
-                itemstack.shrink(1);
-
+                if (!this.world.isRemote) {
+                    itemstack.shrink(1);
+                }
                 addContractLimit(recontract);
                 MaidPacketHandler.animationModel(this, EAT_ANIMATION);
 
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
             } else if (itemstack.getItem() == Items.SUGAR) {
                 this.heal(1);
-                itemstack.shrink(1);
+                if (!this.world.isRemote) {
+                    itemstack.shrink(1);
+                }
                 addContractLimit(recontract);
                 MaidPacketHandler.animationModel(this, EAT_ANIMATION);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());

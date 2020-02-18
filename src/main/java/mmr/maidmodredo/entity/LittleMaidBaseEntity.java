@@ -127,7 +127,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
     public float entityIdFactor;
 
-    public boolean isWildSaved;
+    public boolean isModelSaved;
 
     private int experienceLevel;
     private int experienceTotal;
@@ -308,7 +308,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         compound.putBoolean("Freedom", isFreedom());
         compound.putBoolean("Wait", isMaidWait());
 
-        compound.putBoolean("isWildSaved", isWildSaved);
         compound.putInt("LimitCount", maidContractLimit);
 
         compound.putByte("ColorB", getColor());
@@ -371,7 +370,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             setColor(compound.getByte("ColorB"));
         }
 
-        isWildSaved = compound.getBoolean("isWildSaved");
         refreshModels();
         //
 
@@ -1008,13 +1006,11 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             boolean lupd = false;
 
             lupd |= updateMaidContract();
-
             lupd |= updateMaidColor();
             lupd |= updateTexturePack();
             if (lupd) {
 
                 setTextureNames();
-
             }
 /*
             setMaidMode(dataManager.get(EntityLittleMaid.dataWatch_Mode));
@@ -1058,6 +1054,13 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
                 if (!this.world.isRemote()) {
                     this.resetBrain((ServerWorld) this.world);
                 }
+            }
+        }
+
+        if (!isModelSaved) {
+            isModelSaved = true;
+            if (this.world.isRemote()) {
+                setTextureNames();
             }
         }
 

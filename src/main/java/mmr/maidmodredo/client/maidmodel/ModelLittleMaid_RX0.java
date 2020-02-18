@@ -48,7 +48,7 @@ public class ModelLittleMaid_RX0<T extends LittleMaidBaseEntity> extends ModelLi
     }
 
     public ModelLittleMaid_RX0(float psize, float pyoffset, int pTextureWidth, int pTextureHeight) {
-        super(psize, pyoffset, pTextureWidth, pTextureHeight);
+        super(psize, 0.0F, 128, 64);
     }
 
 

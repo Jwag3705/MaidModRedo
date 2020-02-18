@@ -167,9 +167,9 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         handL.setTextureOffset(92, 4).addBox(-1.75F, -2.15F, -1.5F, 3, 3, 3, 0.0F, false);
 
         handL2 = new MaidModelRenderer(this);
-        handL2.setRotationPoint(-4.5F, -1.6F, 0.0F);
-        setRotationAngle(handL2, 0.0F, 0.0F, 0.2491F);
-        root.addChild(handL2);
+        handL2.setRotationPoint(0.0F, 0.0F, 0.0F);
+        setRotationAngle(handL2, 0.0F, 0.0F, 0.0F);
+        handL.addChild(handL2);
         handL2.setTextureOffset(64, 11).addBox(-1.0F, 6.75F, -1.0F, 2, 9, 2, 0.0F, false);
 
         handR = new MaidModelRenderer(this);
@@ -180,9 +180,9 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         handR.setTextureOffset(81, 4).addBox(-1.25F, -2.15F, -1.5F, 3, 3, 3, 0.0F, false);
 
         handR2 = new MaidModelRenderer(this);
-        handR2.setRotationPoint(4.5F, -1.6F, 0.0F);
-        setRotationAngle(handR2, 0.0F, 0.0F, -0.2491F);
-        root.addChild(handR2);
+        handR2.setRotationPoint(0.0F, 0.0F, 0.0F);
+        setRotationAngle(handR2, 0.0F, 0.0F, 0.0F);
+        handR.addChild(handR2);
         handR2.setTextureOffset(64, 20).addBox(-1.0F, 6.5F, -1.0F, 2, 9, 2, 0.0F, true);
     }
 
@@ -217,6 +217,7 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
 
     @Override
     public void renderItems(MatrixStack stack, boolean left) {
+        stack.translate(0.0F, 0.4F, 0.0F);
         if (left) {
             this.handL.setAnglesAndRotation(stack);
         } else {
@@ -281,8 +282,8 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         if (entity.isMaidWait()) {
             //待機状態の特別表示
             float lx = mh_sin(ageInTicks * 0.067F) * 0.05F - 0.7F;
-            handR.setRotateAngle(lx, 0.0F, -0.4F);
-            handL.setRotateAngle(lx, 0.0F, 0.4F);
+            handR.setRotateAngle(lx, 0.0F, 0.45F);
+            handL.setRotateAngle(lx, 0.0F, -0.45F);
         } else {
             float la, lb, lc;
 
@@ -322,11 +323,11 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
             } else {
                 // 通常
                 la = mh_sin(ageInTicks * 0.067F) * 0.05F;
-                lc = 0.5F + mh_cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
-                handR.addRotateAngleX(la);
-                handL.addRotateAngleX(-la);
-                handR.addRotateAngleZ(lc);
-                handL.addRotateAngleZ(-lc);
+                lc = 0.25F + mh_cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
+                handR.setRotateAngleX(la);
+                handL.setRotateAngleX(-la);
+                handR.setRotateAngleZ(-lc);
+                handL.setRotateAngleZ(lc);
             }
         }
 
@@ -529,8 +530,8 @@ public class ModelLittleMaid_Ender<T extends EnderMaidEntity> extends ModelMulti
         this.legL.rotateAngleY = 0.0F;
 
         if (entity.isMaidWait()) {
-            handR.rotateAngleZ = -0.4F;
-            handL.rotateAngleZ = 0.4F;
+            handR.rotateAngleZ = -0.3F;
+            handL.rotateAngleZ = 0.3F;
             handR.rotateAngleX = -0.4F;
             handL.rotateAngleX = -0.4F;
         } else {

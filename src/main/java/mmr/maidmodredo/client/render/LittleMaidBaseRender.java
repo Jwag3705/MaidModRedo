@@ -226,7 +226,6 @@ public class LittleMaidBaseRender<T extends LittleMaidBaseEntity> extends ModelM
                     GlStateManager.translatef(0.0F, 0.2F, 0.0F);
                 }*/
 
-                matrixStackIn.translate(0.0F, 0.4F, 0.0F);
 
                 // Forge: moved this call down, fixes incorrect offset while sneaking.
                 //Force render(?)

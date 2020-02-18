@@ -508,6 +508,7 @@ public abstract class ModelLittleMaidBase<T extends LittleMaidBaseEntity> extend
 
     @Override
     public void renderItems(MatrixStack stack, boolean left) {
+        stack.translate(0.0F, 0.4F, 0.0F);
         if (left) {
             this.bipedLeftArm.setAnglesAndRotation(stack);
         } else {

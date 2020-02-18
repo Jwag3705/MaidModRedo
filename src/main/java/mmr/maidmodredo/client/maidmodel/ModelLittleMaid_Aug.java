@@ -39,44 +39,44 @@ public class ModelLittleMaid_Aug<T extends LittleMaidBaseEntity> extends ModelLi
 		//TODO
 
 		// 再構成パーツ
-        SideTailR = new MaidModelRenderer(this);
+		SideTailR = new MaidModelRenderer(this);
 		SideTailR.setTextureOffset(46, 20).addBox( -1.5F, -0.5F, -1.0F, 2, 10, 2, psize);
 		SideTailR.setRotationPoint(-5F, -7.8F, 1.9F);
-        SideTailL = new MaidModelRenderer(this);
+		SideTailL = new MaidModelRenderer(this);
 		SideTailL.setTextureOffset(54, 20).addBox( 0.5F, -0.5F, -1.0F, 2, 10, 2, psize);
 		SideTailL.setRotationPoint(4F, -7.8F, 1.9F);
-		
-		
+
+
 		// 増加パーツ
-        shaggyB = new MaidModelRenderer(this, 24, 0);
-		shaggyB.addBox( -5.0F, 0.0F, 0.0F, 10, 4, 4, psize);
+		shaggyB = new MaidModelRenderer(this, 24, 0);
+		shaggyB.addBox(-5.0F, 0.0F, 0.0F, 10, 4, 4, psize);
 		shaggyB.setRotationPoint(0.0F, -1.0F, 4.0F);
 		shaggyB.setRotateAngleX(0.4F);
-        shaggyR = new MaidModelRenderer(this, 34, 4);
-		shaggyR.addBox( 0.0F, 0.0F, -5.0F, 10, 4, 1, psize);
+		shaggyR = new MaidModelRenderer(this, 34, 4);
+		shaggyR.addBox(0.0F, 0.0F, -5.0F, 10, 4, 1, psize);
 		shaggyR.setRotationPoint(4.0F, -1.0F, 0.0F);
 		shaggyR.setRotateAngleZ(-0.4F);
-        shaggyL = new MaidModelRenderer(this, 24, 4);
-		shaggyL.addBox( 0.0F, 0.0F, -5.0F, 10, 4, 5, psize);
+		shaggyL = new MaidModelRenderer(this, 24, 4);
+		shaggyL.addBox(0.0F, 0.0F, -5.0F, 10, 4, 5, psize);
 		shaggyL.setRotationPoint(-4.0F, -1.0F, 0.0F);
 		shaggyL.setRotateAngleZ(0.4F);
 
-        sensor1 = new MaidModelRenderer(this, 0, 0);
-		sensor1.addBox( -8.0F, -4.0F, 0.0F, 8, 4, 0);
+		sensor1 = new MaidModelRenderer(this, 0, 0);
+		sensor1.addBox(-8.0F, -4.0F, 0.0F, 8, 4, 0);
 		sensor1.setRotationPoint(0.0F, -8.0F + pyoffset, 0.0F);
-        sensor2 = new MaidModelRenderer(this, 0, 4);
-		sensor2.addBox( 0.0F, -4.0F, 0.0F, 8, 4, 0);
+		sensor2 = new MaidModelRenderer(this, 0, 4);
+		sensor2.addBox(0.0F, -4.0F, 0.0F, 8, 4, 0);
 		sensor2.setRotationPoint(0.0F, -8.0F + pyoffset, 0.0F);
-        sensor3 = new MaidModelRenderer(this, 44, 0);
-		sensor3.addBox( 0.0F, -7.0F, -4.0F, 4, 8, 1);
+		sensor3 = new MaidModelRenderer(this, 44, 0);
+		sensor3.addBox(0.0F, -7.0F, -4.0F, 4, 8, 1);
 		sensor3.setRotationPoint(0.0F, -8.0F + pyoffset, 0.0F);
-        sensor4 = new MaidModelRenderer(this, 34, 0);
-		sensor4.addBox( 0.0F, -4.0F, -10.0F, 10, 4, 1);
+		sensor4 = new MaidModelRenderer(this, 34, 0);
+		sensor4.addBox(0.0F, -4.0F, -10.0F, 10, 4, 1);
 		sensor4.setRotationPoint(0.0F, -8.0F + pyoffset, 0.0F);
-		
-		
-		// 変更パーツ
 
+
+		// 変更パーツ
+		bipedHead = new MaidModelRenderer(this);
 		bipedHead.setMirror(false);
 		bipedHead.setTextureOffset( 0,  0).addBox( -4F, -8F, -4F, 8, 8, 8, psize);		// Head
 		bipedHead.setTextureOffset( 0, 18).addBox( -5F, -8.5F, 0.2F, 1, 3, 3, psize);	// ChignonR
@@ -84,7 +84,7 @@ public class ModelLittleMaid_Aug<T extends LittleMaidBaseEntity> extends ModelLi
 		bipedHead.setTextureOffset(52, 10).addBox( -7.5F, -9.5F, 0.9F, 4, 3, 2, psize);	// sidetailUpperR
 		bipedHead.setTextureOffset(52, 15).addBox( 3.5F, -9.5F, 0.9F, 4, 3, 2, psize);	// sidetailUpperL
 		bipedHead.setRotationPoint(0F, 0F, 0F);
-		
+
 		bipedHead.addChild(HeadMount);
 		bipedHead.addChild(HeadTop);
 		bipedHead.addChild(SideTailR);
@@ -98,7 +98,6 @@ public class ModelLittleMaid_Aug<T extends LittleMaidBaseEntity> extends ModelLi
 		bipedHead.addChild(sensor4);
 		bipedHead.addChild(eyeR);
 		bipedHead.addChild(eyeL);
-		
 	}
 
 	@Override

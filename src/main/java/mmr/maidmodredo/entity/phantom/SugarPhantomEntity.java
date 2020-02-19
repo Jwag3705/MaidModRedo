@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.Dynamic;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.entity.ai.PhantomFollowOwnerGoal;
+import mmr.maidmodredo.init.LittleEntitys;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -126,7 +127,7 @@ public class SugarPhantomEntity extends LittleMaidBaseEntity {
         compound.putInt("RespawnTime", this.respawnTime);
         compound.put("SugarPhantomData", this.getSugarPhantomData());
         if (this.phantomEntity != null) {
-            compound.putString("PhantomEntityType", this.phantomEntity.getRegistryName().toString());
+            compound.putString("PhantomEntityType", Registry.ENTITY_TYPE.getKey(this.phantomEntity).toString());
         }
         if (this.getOwnerId() == null) {
             compound.putString("OwnerUUID", "");
@@ -140,7 +141,9 @@ public class SugarPhantomEntity extends LittleMaidBaseEntity {
         if (compound.contains("RespawnTime", 99)) {
             this.respawnTime = compound.getInt("RespawnTime");
         }
-        this.phantomEntity = Registry.ENTITY_TYPE.getOrDefault(ResourceLocation.tryCreate(compound.getString("PhantomEntityType")));
+        if (compound.contains("PhantomEntityType", 99)) {
+            this.phantomEntity = Registry.ENTITY_TYPE.getValue(ResourceLocation.tryCreate(compound.getString("PhantomEntityType"))).orElse(LittleEntitys.LITTLEMAID);
+        }
 
         this.setSugarPhantomData(compound.getCompound("SugarPhantomData"));
 

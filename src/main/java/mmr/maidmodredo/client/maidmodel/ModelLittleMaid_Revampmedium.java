@@ -169,17 +169,17 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
         addBox(Apron, 95, 74, 0.0F, -24.25F, -5.0F, 1, 1, 0, 0.0F, false);
 
         handR = new MaidModelRenderer(this);
-        handR.setRotationPoint(-3.5F, 9.25F, 0.0F);
+        handR.setRotationPoint(-4.5F, 6.25F, 0.0F);
         setRotationAngle(handR, 0.0F, 0.0F, 0.2618F);
-        addBox(handR, 72, 31, -2.0F, -3.5F, -1.0F, 2, 5, 2, 0.0F, false);
+        addBox(handR, 72, 31, -1.0F, -0.5F, -1.0F, 2, 5, 2, 0.0F, false);
 
         handRLayer = new MaidModelRenderer(this);
-        handRLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
+        handRLayer.setRotationPoint(1.0F, 3.0F, 0.0F);
         handR.addChild(handRLayer);
         addBox(handRLayer, 80, 32, -2.0F, -3.25F, -1.0F, 2, 4, 2, 0.5F, false);
 
         handR2 = new MaidModelRenderer(this);
-        handR2.setRotationPoint(0.0F, 0.0F, 0.0F);
+        handR2.setRotationPoint(1.0F, 3.0F, 0.0F);
         handR.addChild(handR2);
         addBox(handR2, 64, 40, -2.0F, 1.5F, -1.0F, 2, 5, 2, 0.0F, false);
 
@@ -189,17 +189,17 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
         addBox(handRLayer2, 80, 41, -2.0F, 1.25F, -1.0F, 2, 5, 2, 0.5F, false);
 
         handL = new MaidModelRenderer(this);
-        handL.setRotationPoint(3.5F, 9.25F, 0.0F);
+        handL.setRotationPoint(4.5F, 6.75F, 0.0F);
         setRotationAngle(handL, 0.0F, 0.0F, -0.2618F);
-        addBox(handL, 64, 31, 0.0F, -3.5F, -1.0F, 2, 5, 2, 0.0F, false);
+        addBox(handL, 64, 31, -1.0F, -1.0F, -1.0F, 2, 5, 2, 0.0F, false);
 
         handLLayer = new MaidModelRenderer(this);
-        handLLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
+        handLLayer.setRotationPoint(-1.0F, 2.5F, 0.0F);
         handL.addChild(handLLayer);
         addBox(handLLayer, 89, 32, 0.0F, -3.25F, -1.0F, 2, 4, 2, 0.5F, false);
 
         handL2 = new MaidModelRenderer(this);
-        handL2.setRotationPoint(0.0F, 0.0F, 0.0F);
+        handL2.setRotationPoint(-1.0F, 2.5F, 0.0F);
         handL.addChild(handL2);
         addBox(handL2, 72, 40, 0.0F, 1.5F, -1.0F, 2, 5, 2, 0.0F, false);
 

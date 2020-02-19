@@ -195,6 +195,7 @@ public class SugarPhantomEntity extends LittleMaidBaseEntity {
         setOwnerId(uuid);
         this.phantomEntity = entityType;
         this.setSugarPhantomData(compoundNBT);
+        readAdditional(compoundNBT);
     }
 
     @Override

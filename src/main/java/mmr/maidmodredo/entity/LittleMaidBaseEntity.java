@@ -485,11 +485,18 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             phantomEntity.setMotion(0, 0, 0);
             phantomEntity.maidContractLimit = 24000 * 7;
             phantomEntity.setTamed(true);
-            phantomEntity.textureData = textureData;
+            phantomEntity.setMaidWait(false);
             phantomEntity.setHealth(phantomEntity.getMaxHealth());
             phantomEntity.dead = false;
-            phantomEntity.setTextureNames();
-            MaidPacketHandler.syncModelOnClient(phantomEntity);
+
+            TextureBoxBase mainModel = modelBoxAutoSelect(getModelNameMain());
+
+            TextureBoxBase armorModel = modelBoxAutoSelect(getModelNameArmor());
+
+            if (mainModel != null && armorModel != null) {
+                phantomEntity.setTextureBox(new TextureBoxBase[]{mainModel, armorModel});
+            }
+            phantomEntity.isModelSaved = false;
 
             if (this.hasCustomName()) {
                 phantomEntity.setCustomName(this.getCustomName());

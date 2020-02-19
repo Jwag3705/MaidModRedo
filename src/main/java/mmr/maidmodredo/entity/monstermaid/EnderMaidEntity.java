@@ -201,9 +201,6 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
         }
     }
 
-    public void onSpawnWithEgg() {
-    }
-
     @Override
     protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
         return sizeIn.height * 0.9F;

@@ -1,4 +1,6 @@
 {
+  "block.maidmodredo.oak_chair": "オークの椅子",
+
   "item.maidmodredo.blueberry_pie": "ブルーベリーパイ",
   "item.maidmodredo.cheesecake_pie": "チーズケーキパイ",
   "item.maidmodredo.cherry_pie": "チェリーパイ",
@@ -32,8 +34,12 @@
   "entity.maidmodredo.zombie_buttler": "ゾンビバトラー",
   "item.maidmodredo.setbed": "ベットの位置を本に記録しました: %s, %s, %s",
   "item.maidmodredo.setmaidbed": "メイドが寝るベットの位置を設定しました: %s, %s, %s",
+  "item.maidmodredo.setrest": "メイドの休み場所の位置を本に記録しました: %s, %s, %s",
+  "item.maidmodredo.setmaidrest": "メイドの休み場所の位置を設定しました: %s, %s, %s",
   "item.maidmodredo.set_jobpostion": "仕事場所を本に記録しました: %s, %s, %s",
   "item.maidmodredo.setmaid_jobpostion": "メイドの仕事場所の位置を設定しました: %s, %s, %s",
+  "item.maidmodredo.housewand.bed": "ベットの位置: %s, %s, %s",
+  "item.maidmodredo.housewand.rest": "メイドが休む場所の位置: %s, %s, %s",
   "gui.maidmodredo.maidinventory.change_job": "ジョブチェンジ",
   "gui.maidmodredo.job_select": "ジョブセレクト",
   "gui.maidmodredo.job_select.warning": "戦闘系のjobのものはレベルアップすると変更できなくなります"

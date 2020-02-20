@@ -90,8 +90,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     private static final ImmutableList<SensorType<? extends Sensor<? super LittleMaidBaseEntity>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.INTERACTABLE_DOORS, SensorType.NEAREST_BED, SensorType.HURT_BY, LittleSensorTypes.MAID_HOSTILES, LittleSensorTypes.DEFEND_OWNER);
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<LittleMaidBaseEntity, PointOfInterestType>> field_213774_bB = ImmutableMap.of(MemoryModuleType.HOME, (p_213769_0_, p_213769_1_) -> {
         return p_213769_1_ == PointOfInterestType.HOME;
-    }, MemoryModuleType.MEETING_POINT, (p_213772_0_, p_213772_1_) -> {
-        return p_213772_1_ == PointOfInterestType.MEETING;
     });
     private static final Set<Item> SWEETITEM = Sets.newHashSet(Items.SUGAR, Items.COOKIE, Items.PUMPKIN_PIE, LittleItems.CARAMEL_APPLE
             , LittleItems.STRAWBERRY_CAKE, LittleItems.REDVELVET_CAKE, LittleItems.LAVENDER_CAKE, LittleItems.ICECREAM_CAKE, LittleItems.DEVILSFOOD_CAKE, LittleItems.COFFEE_CAKE, LittleItems.CHEESE_CAKE, LittleItems.CARROT_CAKE, LittleItems.BIRTHDAY_CAKE
@@ -262,6 +260,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
 
         p_213744_1_.registerActivity(Activity.CORE, MaidTasks.core(f));
+        p_213744_1_.registerActivity(Activity.MEET, MaidTasks.meet(f), ImmutableSet.of(Pair.of(MemoryModuleType.MEETING_POINT, MemoryModuleStatus.VALUE_PRESENT)));
         p_213744_1_.registerActivity(Activity.WORK, JobTasks.work(getMaidData().getJob(), f), ImmutableSet.of(Pair.of(MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT)));
         p_213744_1_.registerActivity(Activity.REST, MaidTasks.rest(f));
         p_213744_1_.registerActivity(Activity.IDLE, MaidTasks.idle(f));

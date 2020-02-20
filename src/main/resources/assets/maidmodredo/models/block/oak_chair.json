@@ -1,0 +1,358 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "block/oak_planks",
+    "plank": "block/oak_planks"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        9,
+        2
+      ],
+      "to": [
+        14,
+        11,
+        14
+      ],
+      "color": 3,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            12,
+            2
+          ],
+          "texture": "#plank"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            12,
+            2
+          ],
+          "texture": "#plank"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            12,
+            2
+          ],
+          "texture": "#plank"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            12,
+            2
+          ],
+          "texture": "#plank"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#plank"
+        },
+        "down": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#plank"
+        }
+      }
+    },
+    {
+      "name": "leg1",
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        4,
+        9,
+        4
+      ],
+      "color": 6,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ],
+          "texture": "#plank"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ],
+          "texture": "#plank"
+        }
+      }
+    },
+    {
+      "name": "leg2",
+      "from": [
+        2,
+        0,
+        12
+      ],
+      "to": [
+        4,
+        9,
+        14
+      ],
+      "color": 6,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ],
+          "texture": "#plank"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ],
+          "texture": "#plank"
+        }
+      }
+    },
+    {
+      "name": "leg3",
+      "from": [
+        12,
+        0,
+        12
+      ],
+      "to": [
+        14,
+        9,
+        14
+      ],
+      "color": 6,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ],
+          "texture": "#plank"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ],
+          "texture": "#plank"
+        }
+      }
+    },
+    {
+      "name": "leg4",
+      "from": [
+        12,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        9,
+        4
+      ],
+      "color": 6,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2,
+            9
+          ],
+          "texture": "#plank"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ],
+          "texture": "#plank"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ],
+          "texture": "#plank"
+        }
+      }
+    }
+  ]
+}

@@ -85,15 +85,15 @@ public class MaidCafeStructure extends Structure<NoFeatureConfig> {
     }
 
     protected int getSeedModifier() {
-        return 10387313;
+        return 11286312;
     }
 
     protected int getBiomeFeatureDistance(ChunkGenerator<?> chunkGenerator) {
-        return 34;
+        return 32;
     }
 
     protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator) {
-        return 4;
+        return 3;
     }
 
     public static class Start extends StructureStart {

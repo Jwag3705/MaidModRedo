@@ -146,7 +146,7 @@ public class ModelLittleButler_Revampbutler<T extends LittleMaidBaseEntity> exte
         body.setRotationPoint(0.0F, 8.0F, 0.0F);
         addBox(body, 16, 42, -2.85F, 1.25F, -1.8F, 6, 4, 4, 0.0F, false);
         addBox(body, 36, 9, -2.85F, 5.25F, -1.8F, 6, 3, 4, 0.0F, false);
-        addBox(body, 75, 39, -3.1F, 1.25F, -2.05F, 6, 7, 4, 0.0F, false);
+        addBox(body, 75, 39, -3.1F, 1.25F, -2.05F, 6, 7, 4, 0.15F, false);
 
         legL = new MaidModelRenderer(this);
         legL.setRotationPoint(1.0F, 15.0F, 0.0F);

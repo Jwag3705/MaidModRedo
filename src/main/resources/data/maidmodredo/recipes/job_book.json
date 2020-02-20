@@ -1,12 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "S",
-    "#"
+    "##",
+    "SL"
   ],
   "key": {
     "#": {
-      "item": "minecraft:book"
+      "item": "minecraft:paper"
+    },
+    "L": {
+      "item": "minecraft:paper"
     },
     "S": {
       "item": "minecraft:sugar"

@@ -1,4 +1,6 @@
 {
+  "block.maidmodredo.oak_chair": "Oak Chair",
+
   "item.maidmodredo.blueberry_pie": "Blue Berry Pie",
   "item.maidmodredo.cheesecake_pie": "Cheese Cake Pie",
   "item.maidmodredo.cherry_pie": "Cherry Pie",
@@ -32,8 +34,12 @@
   "entity.maidmodredo.zombie_buttler": "Zombie Butler",
   "item.maidmodredo.setbed": "Selected BedPostion: %s, %s, %s",
   "item.maidmodredo.setmaidbed": "Successed Setting Maid's BedPostion: %s, %s, %s",
+  "item.maidmodredo.setrest": "Selected RestPostion: %s, %s, %s",
+  "item.maidmodredo.setmaidrest": "Successed Setting Maid's RestPostion: %s, %s, %s",
   "item.maidmodredo.set_jobpostion": "Selected JobPostion: %s, %s, %s",
   "item.maidmodredo.setmaid_jobpostion": "Successed Setting Maid's JobPostion: %s, %s, %s",
+  "item.maidmodredo.housewand.bed": "Contain Bet Postion",
+  "item.maidmodredo.housewand.rest": "Contain Maid's Rest Postion",
   "gui.maidmodredo.maidinventory.change_job": "Change Job",
   "gui.maidmodredo.job_select": "Job Select",
   "gui.maidmodredo.job_select.warning": "Once you select a combat job, it does become unchangeable when you level up the job"

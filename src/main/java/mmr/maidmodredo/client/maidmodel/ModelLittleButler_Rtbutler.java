@@ -383,7 +383,7 @@ public class ModelLittleButler_Rtbutler<T extends LittleMaidBaseEntity> extends 
             } else {
                 // 通常
                 la = mh_sin(ageInTicks * 0.067F) * 0.05F;
-                lc = 0.5F + mh_cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
+                lc = 0.25F + mh_cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
                 handR.addRotateAngleX(la);
                 handL.addRotateAngleX(-la);
                 handR.addRotateAngleZ(lc);

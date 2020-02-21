@@ -322,10 +322,7 @@ public class ModelLittleMaid_Revampmaid<T extends LittleMaidBaseEntity> extends 
                 this.body.rotateAngleY *= -1.0F;
             }
 
-            this.handR.rotationPointZ = MathHelper.sin(this.body.rotateAngleY) * 5.0F;
-            this.handR.rotationPointX = -MathHelper.cos(this.body.rotateAngleY) * 5.0F;
-            this.handL.rotationPointZ = -MathHelper.sin(this.body.rotateAngleY) * 5.0F;
-            this.handL.rotationPointX = MathHelper.cos(this.body.rotateAngleY) * 5.0F;
+
             this.handR.rotateAngleY += this.body.rotateAngleY;
             this.handL.rotateAngleY += this.body.rotateAngleY;
             this.handL.rotateAngleX += this.body.rotateAngleY;

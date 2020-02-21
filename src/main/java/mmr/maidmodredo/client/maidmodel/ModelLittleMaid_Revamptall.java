@@ -192,17 +192,17 @@ public class ModelLittleMaid_Revamptall<T extends LittleMaidBaseEntity> extends 
         ApronBottom.addBox(ApronBottom, 75, 88, -3.75F, -10.2395F, -6.4897F, 4, 8, 0, 0.0F, false);
 
         handR = new MaidModelRenderer(this);
-        handR.setRotationPoint(-4.75F, 2.0F, 0.0F);
+        handR.setRotationPoint(-3.75F, 2.0F, 0.0F);
         setRotationAngle(handR, 0.0F, 0.0F, 0.2618F);
-        handR.addBox(handR, 24, 75, -0.7118F, -1.1563F, -1.0F, 2, 6, 2, 0.0F, false);
+        handR.addBox(handR, 24, 75, -1.7118F, -1.1563F, -1.0F, 2, 6, 2, 0.0F, false);
 
         handRLayer = new MaidModelRenderer(this);
-        handRLayer.setRotationPoint(1.0F, 7.0F, 0.0F);
+        handRLayer.setRotationPoint(0.0F, 7.0F, 0.0F);
         handR.addChild(handRLayer);
         handRLayer.addBox(handRLayer, 49, 11, -1.7118F, -7.9063F, -1.0F, 2, 5, 2, 0.5F, false);
 
         handR2 = new MaidModelRenderer(this);
-        handR2.setRotationPoint(1.0F, 7.0F, 0.0F);
+        handR2.setRotationPoint(0.0F, 7.0F, 0.0F);
         handR.addChild(handR2);
         handR2.addBox(handR2, 0, 18, -1.7118F, -2.4063F, -1.0F, 2, 6, 2, 0.0F, false);
 
@@ -212,17 +212,17 @@ public class ModelLittleMaid_Revamptall<T extends LittleMaidBaseEntity> extends 
         handRLayer2.addBox(handRLayer2, 0, 0, -1.7118F, -2.6563F, -1.0F, 2, 6, 2, 0.5F, false);
 
         handL = new MaidModelRenderer(this);
-        handL.setRotationPoint(2.75F, 2.0F, 0.0F);
+        handL.setRotationPoint(3.75F, 2.0F, 0.0F);
         setRotationAngle(handL, 0.0F, 0.0F, -0.2618F);
-        handL.addBox(handL, 36, 44, 0.7118F, -1.1563F, -1.0F, 2, 6, 2, 0.0F, false);
+        handL.addBox(handL, 36, 44, -0.2882F, -1.1563F, -1.0F, 2, 6, 2, 0.0F, false);
 
         handLLayer = new MaidModelRenderer(this);
-        handLLayer.setRotationPoint(1.0F, 7.0F, 0.0F);
+        handLLayer.setRotationPoint(0.0F, 7.0F, 0.0F);
         handL.addChild(handLLayer);
         handLLayer.addBox(handLLayer, 76, 37, -0.2882F, -7.9063F, -1.0F, 2, 5, 2, 0.5F, false);
 
         handL2 = new MaidModelRenderer(this);
-        handL2.setRotationPoint(1.0F, 7.0F, 0.0F);
+        handL2.setRotationPoint(0.0F, 7.0F, 0.0F);
         handL.addChild(handL2);
         handL2.addBox(handL2, 18, 36, -0.2882F, -2.4063F, -1.0F, 2, 6, 2, 0.0F, false);
 
@@ -359,10 +359,7 @@ public class ModelLittleMaid_Revamptall<T extends LittleMaidBaseEntity> extends 
                 this.body.rotateAngleY *= -1.0F;
             }
 
-            this.handR.rotationPointZ = MathHelper.sin(this.body.rotateAngleY) * 5.0F;
-            this.handR.rotationPointX = -MathHelper.cos(this.body.rotateAngleY) * 5.0F;
-            this.handL.rotationPointZ = -MathHelper.sin(this.body.rotateAngleY) * 5.0F;
-            this.handL.rotationPointX = MathHelper.cos(this.body.rotateAngleY) * 5.0F;
+
             this.handR.rotateAngleY += this.body.rotateAngleY;
             this.handL.rotateAngleY += this.body.rotateAngleY;
             this.handL.rotateAngleX += this.body.rotateAngleY;

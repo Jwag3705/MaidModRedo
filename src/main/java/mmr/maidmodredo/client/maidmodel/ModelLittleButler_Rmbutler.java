@@ -6,13 +6,12 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import mmr.maidmodredo.api.IMaidAnimation;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extends ModelMultiMMMBase<T> {
+public class ModelLittleButler_Rmbutler<T extends LittleMaidBaseEntity> extends ModelMultiMMMBase<T> {
     public MaidModelRenderer head;
     public MaidModelRenderer headFace;
     public MaidModelRenderer HairLayers;
@@ -30,9 +29,6 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
     public MaidModelRenderer hairtail;
     public MaidModelRenderer body;
     public MaidModelRenderer bodyLayer;
-    public MaidModelRenderer Breasts;
-    public MaidModelRenderer skirt;
-    public MaidModelRenderer Apron;
     public MaidModelRenderer handR;
     public MaidModelRenderer handRLayer;
     public MaidModelRenderer handR2;
@@ -50,15 +46,16 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
     public MaidModelRenderer legL2;
     public MaidModelRenderer legLLayer2;
 
-    public ModelLittleMaid_Revampmedium() {
+
+    public ModelLittleButler_Rmbutler() {
         this(0.0F);
     }
 
-    public ModelLittleMaid_Revampmedium(float psize) {
+    public ModelLittleButler_Rmbutler(float psize) {
         this(psize, 0.0F, 128, 128);
     }
 
-    public ModelLittleMaid_Revampmedium(float psize, float pyoffset, int pTextureWidth, int pTextureHeight) {
+    public ModelLittleButler_Rmbutler(float psize, float pyoffset, int pTextureWidth, int pTextureHeight) {
         super(psize, 0.0F, 128, 128);
     }
 
@@ -70,7 +67,6 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
         head = new MaidModelRenderer(this);
         head.setRotationPoint(-0.25F, 6.0F, 0.0F);
         addBox(head, 0, 0, -4.3F, -9.94F, -4.7F, 9, 9, 9, 0.0F, false);
-        addBox(head, 27, 22, -4.3F, -13.325F, -4.7F, 9, 3, 1, 0.0F, false);
 
         headFace = new MaidModelRenderer(this);
         headFace.setRotationPoint(0.0F, 1.08F, 0.0F);
@@ -152,31 +148,13 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
         body = new MaidModelRenderer(this);
         body.setRotationPoint(0.0F, 8.0F, 0.0F);
         addBox(body, 37, 43, -3.0F, -3.0F, -2.0F, 6, 5, 4, 0.0F, false);
-        addBox(body, 55, 49, -2.5F, 1.0F, -1.5F, 5, 3, 3, 0.0F, false);
-        addBox(body, 0, 49, -3.0F, 2.75F, -2.0F, 6, 3, 4, 0.0F, false);
+        addBox(body, 55, 49, -3.0F, 1.0F, -1.5F, 6, 3, 3, 0.0F, false);
+        addBox(body, 0, 49, -3.0F, 3.0F, -2.0F, 6, 3, 4, 0.0F, false);
 
         bodyLayer = new MaidModelRenderer(this);
         bodyLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
         body.addChild(bodyLayer);
         addBox(bodyLayer, 36, 0, -3.0F, -3.25F, -2.0F, 6, 7, 4, 0.5F, false);
-
-        Breasts = new MaidModelRenderer(this);
-        Breasts.setRotationPoint(-1.5F, 0.5F, -1.5F);
-        setRotationAngle(Breasts, -0.6981F, 0.0F, 0.0F);
-        body.addChild(Breasts);
-        addBox(Breasts, 56, 0, -1.25F, -2.5F, -2.0F, 5, 3, 2, 0.0F, false);
-
-        skirt = new MaidModelRenderer(this);
-        skirt.setRotationPoint(0.0F, 15.0F, 0.0F);
-        addBox(skirt, 30, 12, -4.0F, -4.25F, -3.0F, 8, 4, 6, 0.0F, false);
-        addBox(skirt, 28, 28, -5.0F, -1.0F, -4.0F, 10, 7, 8, 0.0F, false);
-
-        Apron = new MaidModelRenderer(this);
-        Apron.setRotationPoint(0.0F, 9.0F, 0.0F);
-        setRotationAngle(Apron, -0.0873F, 0.0F, 0.0F);
-        skirt.addChild(Apron);
-        addBox(Apron, 95, 74, -3.5F, -13.0F, -5.0F, 7, 10, 2, 0.0F, false);
-        addBox(Apron, 95, 74, 0.0F, -24.25F, -5.0F, 1, 1, 0, 0.0F, false);
 
         handR = new MaidModelRenderer(this);
         handR.setRotationPoint(-4.5F, 7.25F, 0.0F);
@@ -220,7 +198,7 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
 
         legR = new MaidModelRenderer(this);
         legR.setRotationPoint(-1.0F, 15.0F, 0.0F);
-        addBox(legR, 55, 55, -2.0F, -2.0F, -2.0F, 3, 5, 4, 0.0F, false);
+        addBox(legR, 55, 55, -2.0F, -1.75F, -2.0F, 3, 5, 4, 0.0F, false);
 
         legRLayer = new MaidModelRenderer(this);
         legRLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -230,7 +208,7 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
         legR2 = new MaidModelRenderer(this);
         legR2.setRotationPoint(0.0F, 0.0F, 0.0F);
         legR.addChild(legR2);
-        addBox(legR2, 61, 40, -1.75F, 3.0F, -1.75F, 2, 6, 3, 0.0F, false);
+        addBox(legR2, 72, 66, -2.0F, 3.0F, -2.0F, 3, 6, 4, 0.0F, false);
 
         legRLayer2 = new MaidModelRenderer(this);
         legRLayer2.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -239,7 +217,7 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
 
         legL = new MaidModelRenderer(this);
         legL.setRotationPoint(1.0F, 15.0F, 0.0F);
-        addBox(legL, 0, 56, -1.0F, -2.0F, -2.0F, 3, 5, 4, 0.0F, false);
+        addBox(legL, 0, 56, -1.0F, -1.75F, -2.0F, 3, 5, 4, 0.0F, false);
 
         legLLayer = new MaidModelRenderer(this);
         legLLayer.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -249,7 +227,7 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
         legL2 = new MaidModelRenderer(this);
         legL2.setRotationPoint(0.0F, 0.0F, 0.0F);
         legLLayer.addChild(legL2);
-        addBox(legL2, 40, 61, -0.75F, 3.0F, -1.75F, 2, 6, 3, 0.0F, false);
+        addBox(legL2, 60, 77, -1.0F, 3.0F, -2.0F, 3, 6, 4, 0.0F, false);
 
         legLLayer2 = new MaidModelRenderer(this);
         legLLayer2.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -294,7 +272,7 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
 
     @Override
     public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        ImmutableList.of(this.handR, this.handL, this.legR, this.legL, this.head, this.skirt, this.body).forEach((p_228292_8_) -> {
+        ImmutableList.of(this.handR, this.handL, this.legR, this.legL, this.head, this.body).forEach((p_228292_8_) -> {
             p_228292_8_.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         });
     }
@@ -339,7 +317,7 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
 
         if (this.swingProgress > 0.0F) {
             HandSide handside = this.getMainHand(entity);
-            ModelRenderer modelrenderer = this.getArmForSide(handside);
+            MaidModelRenderer modelrenderer = this.getArmForSide(handside);
             float f1 = this.swingProgress;
             this.body.rotateAngleY = MathHelper.sin(MathHelper.sqrt(f1) * ((float) Math.PI * 2F)) * 0.2F;
             if (handside == HandSide.LEFT) {
@@ -615,13 +593,13 @@ public class ModelLittleMaid_Revampmedium<T extends LittleMaidBaseEntity> extend
     /**
      * This is a helper function from Tabula to set the rotation of model parts
      */
-    public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+    public void setRotationAngle(MaidModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
 
-    protected ModelRenderer getArmForSide(HandSide side) {
+    protected MaidModelRenderer getArmForSide(HandSide side) {
         return side == HandSide.LEFT ? this.handL : this.handR;
     }
 

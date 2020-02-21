@@ -185,5 +185,7 @@ public class MaidModelRenderer extends ModelRenderer {
         return this;
     }
 
-
+    public void addBox(ModelRenderer mobRenderer, int offsetX, int offsetZ, float x, float y, float z, float width, float height, float depth, float delta, boolean mirrorIn) {
+        mobRenderer.setTextureOffset(offsetX, offsetZ).addBox(x, y, z, width, height, depth, delta, mirrorIn);
+    }
 }

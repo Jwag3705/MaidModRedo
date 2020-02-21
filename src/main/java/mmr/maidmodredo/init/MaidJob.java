@@ -24,6 +24,7 @@ public class MaidJob {
     public static final MaidJob BARISTA = new MaidJob("barista", new ItemStack(Items.GLASS_BOTTLE));
     public static final MaidJob LUMBERJACK = new MaidJob("lumberjack", new ItemStack(Items.DIAMOND_AXE));
     public static final MaidJob MINER = new MaidJob("miner", new ItemStack(Items.DIAMOND_PICKAXE));
+    public static final MaidJob HEALER = new MaidJob("healer", new ItemStack(Items.GOLDEN_APPLE));
     public static final MaidJob TORCHER = new MaidJob("torcher", new ItemStack(Items.TORCH));
     public static final MaidJob RIPPER = new MaidJob("ripper", new ItemStack(Items.SHEARS));
 
@@ -120,6 +121,7 @@ public class MaidJob {
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "chef"), CHEF);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "lumberjack"), LUMBERJACK);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "miner"), MINER);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "healer"), HEALER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "torcher"), TORCHER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "ripper"), RIPPER);
 

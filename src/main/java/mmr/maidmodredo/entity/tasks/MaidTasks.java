@@ -37,6 +37,9 @@ public class MaidTasks {
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> follow(MaidJob p_220639_0_, float p_220641_1_) {
+        if (p_220639_0_ == MaidJob.HEALER) {
+            return ImmutableList.of(Pair.of(0, new WalkToOwner(100)), Pair.of(1, new HealingTask()), func_220646_b());
+        }
         if (p_220639_0_ == MaidJob.MINER) {
             return ImmutableList.of(Pair.of(0, new WalkToOwner(100)), Pair.of(1, new BreakOreTask()), Pair.of(4, new FindWalkTargetTask(p_220641_1_)), func_220646_b());
         } else if (p_220639_0_ == MaidJob.TORCHER) {

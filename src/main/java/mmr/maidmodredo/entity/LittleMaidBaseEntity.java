@@ -1798,4 +1798,22 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             return ItemStack.EMPTY;
         }
     }
+
+    @Override
+    protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
+        if (poseIn == Pose.STANDING) {
+            return sizeIn.height * 0.75F;
+        } else {
+            return super.getStandingEyeHeight(poseIn, sizeIn);
+        }
+    }
+
+    /*@Override
+    public EntitySize getSize(Pose poseIn) {
+        if(poseIn == Pose.STANDING && this.getTextureBox()[0] != null && this.getTextureBox()[0].getWidth() != 0 && this.getTextureBox()[0].getHeight() != 0){
+            return EntitySize.flexible(this.getTextureBox()[0].getWidth(),this.getTextureBox()[0].getHeight()).scale(this.getRenderScale());
+        }else {
+            return poseIn == Pose.SLEEPING ? SLEEPING_SIZE : super.getSize(poseIn);
+        }
+    }*/
 }

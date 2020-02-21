@@ -107,7 +107,7 @@ public class SugarPhantomEntity extends LittleMaidBaseEntity {
         maidEntity.extinguish();
         maidEntity.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 1200, 1));
         maidEntity.addPotionEffect(new EffectInstance(Effects.SLOW_FALLING, 200, 0));
-        if (this.getOwner() != null) {
+        if (this.getOwner() != null && this.getOwner().isAlive()) {
             maidEntity.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
             maidEntity.attemptTeleport(this.getOwner().getPosX(), this.getOwner().getPosY(), this.getOwner().getPosZ(), true);
         } else {

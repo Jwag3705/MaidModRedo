@@ -23,6 +23,8 @@ public class JobTasks {
             return workBarista(p_220639_0_, p_220639_1_);
         } else if (p_220639_0_ == MaidJob.LUMBERJACK) {
             return workLumberJack(p_220639_0_, p_220639_1_);
+        } else if (p_220639_0_ == MaidJob.MINER) {
+            return workMiner(p_220639_0_, p_220639_1_);
         } else if (p_220639_0_ == MaidJob.RIPPER) {
             return workRipper(p_220639_1_);
         } else {
@@ -48,6 +50,10 @@ public class JobTasks {
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> workLumberJack(MaidJob p_220639_0_, float p_220639_1_) {
         return ImmutableList.of(Pair.of(p_220639_0_ == MaidJob.LUMBERJACK ? 0 : 5, new StartCutWood()), func_220646_b(), Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new WorkTask(MemoryModuleType.JOB_SITE, 4), 2), Pair.of(new WalkTowardsPosTask(MemoryModuleType.JOB_SITE, 1, 10), 5), Pair.of(new MaidWalkTowardsRandomSecondaryPosTask(MemoryModuleType.SECONDARY_JOB_SITE, 0.4F, 1, 6, MemoryModuleType.JOB_SITE), 5)))), Pair.of(2, new MaidStayNearPointTask(MemoryModuleType.JOB_SITE, p_220639_1_, 9, 400, 12800)), Pair.of(99, new UpdateActivityTask()));
+    }
+
+    public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> workMiner(MaidJob p_220639_0_, float p_220639_1_) {
+        return ImmutableList.of(Pair.of(p_220639_0_ == MaidJob.MINER ? 0 : 5, new BreakOreTask()), func_220646_b(), Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new WorkTask(MemoryModuleType.JOB_SITE, 4), 2), Pair.of(new WalkTowardsPosTask(MemoryModuleType.JOB_SITE, 1, 10), 5), Pair.of(new MaidWalkTowardsRandomSecondaryPosTask(MemoryModuleType.SECONDARY_JOB_SITE, 0.4F, 1, 6, MemoryModuleType.JOB_SITE), 5)))), Pair.of(2, new MaidStayNearPointTask(MemoryModuleType.JOB_SITE, p_220639_1_, 9, 400, 12800)), Pair.of(99, new UpdateActivityTask()));
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> workRipper(float p_220639_1_) {

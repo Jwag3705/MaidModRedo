@@ -41,7 +41,7 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
     protected void updateAITasks() {
 
 
-        if (this.getOwner() != null && this.getOwner().getPosY() < -10 && this.getOwner().isAlive()) {
+        if (this.getOwner() != null && this.onGround && this.getOwner().getPosY() < -10 && this.getOwner().isAlive()) {
             if (!((PlayerEntity) this.getOwner()).isCreative() && !((PlayerEntity) this.getOwner()).isSpectator()) {
                 this.helpOwner(this.getOwner());
             }
@@ -51,13 +51,13 @@ public class EnderMaidEntity extends LittleMaidBaseEntity {
             this.teleportTo(this.getOwner().getPosX(), this.getOwner().getPosY(), this.getOwner().getPosZ());
         }
 
-        if (this.getOwner() != null && this.getOwner().isBurning() && this.getOwner().isInLava() && this.getOwner().getActivePotionEffect(Effects.FIRE_RESISTANCE) == null && this.onGround && this.getOwner().isAlive()) {
+        if (this.getOwner() != null && this.onGround && this.getOwner().isBurning() && this.getOwner().isInLava() && this.getOwner().getActivePotionEffect(Effects.FIRE_RESISTANCE) == null && this.onGround && this.getOwner().isAlive()) {
             if (!((PlayerEntity) this.getOwner()).isCreative() && !((PlayerEntity) this.getOwner()).isSpectator()) {
                 this.helpOwner(this.getOwner());
             }
         }
 
-        if (this.getOwner() != null && !((PlayerEntity) this.getOwner()).isCreative() && !((PlayerEntity) this.getOwner()).isSpectator()) {
+        if (this.getOwner() != null && this.onGround && !((PlayerEntity) this.getOwner()).isCreative() && !((PlayerEntity) this.getOwner()).isSpectator()) {
             this.teleportAndHelpFallOwner();
         }
 

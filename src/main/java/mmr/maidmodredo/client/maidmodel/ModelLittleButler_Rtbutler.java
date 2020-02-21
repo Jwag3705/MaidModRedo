@@ -237,12 +237,12 @@ public class ModelLittleButler_Rtbutler<T extends LittleMaidBaseEntity> extends 
 
     @Override
     public float getHeight() {
-        return 1.35F;
+        return 1.8F;
     }
 
     @Override
     public float getWidth() {
-        return 0.5F;
+        return 0.6F;
     }
 
     @Override

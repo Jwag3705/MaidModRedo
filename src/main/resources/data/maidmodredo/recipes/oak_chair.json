@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "S S"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:oak_plank"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "maidmodredo:oak_chair"
+  }
+}

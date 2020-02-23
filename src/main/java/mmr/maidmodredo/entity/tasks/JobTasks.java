@@ -13,7 +13,9 @@ import net.minecraft.entity.ai.brain.task.*;
 
 public class JobTasks {
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> work(MaidJob p_220639_0_, float p_220639_1_) {
-        if (p_220639_0_ == MaidJob.FARMER) {
+        if (p_220639_0_ == MaidJob.BUTCHER) {
+            return workButcher(p_220639_0_, p_220639_1_);
+        } else if (p_220639_0_ == MaidJob.FARMER) {
             return workFarmer(p_220639_0_, p_220639_1_);
         } else if (p_220639_0_ == MaidJob.FISHER) {
             return workFisher(p_220639_0_, p_220639_1_);
@@ -30,6 +32,10 @@ public class JobTasks {
         } else {
             return ImmutableList.of(func_220646_b(), Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new WorkTask(MemoryModuleType.JOB_SITE, 4), 2), Pair.of(new WalkTowardsPosTask(MemoryModuleType.JOB_SITE, 1, 10), 5), Pair.of(new MaidWalkTowardsRandomSecondaryPosTask(MemoryModuleType.SECONDARY_JOB_SITE, 0.4F, 1, 6, MemoryModuleType.JOB_SITE), 5)))), Pair.of(10, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)), Pair.of(2, new MaidStayNearPointTask(MemoryModuleType.JOB_SITE, p_220639_1_, 9, 100, 12800)), Pair.of(99, new UpdateActivityTask()));
         }
+    }
+
+    private static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> workButcher(MaidJob p_220639_0_, float p_220639_1_) {
+        return ImmutableList.of(Pair.of(0, new ButcherTask()), func_220646_b(), Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new WorkTask(MemoryModuleType.JOB_SITE, 4), 2), Pair.of(new WalkTowardsPosTask(MemoryModuleType.JOB_SITE, 1, 10), 5), Pair.of(new MaidWalkTowardsRandomSecondaryPosTask(MemoryModuleType.SECONDARY_JOB_SITE, 0.4F, 1, 6, MemoryModuleType.JOB_SITE), 5)))), Pair.of(2, new MaidStayNearPointTask(MemoryModuleType.JOB_SITE, p_220639_1_, 9, 100, 12800)), Pair.of(99, new UpdateActivityTask()));
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> workFarmer(MaidJob p_220639_0_, float p_220639_1_) {

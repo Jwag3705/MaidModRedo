@@ -18,6 +18,7 @@ public class MaidJob {
     });
     public static final MaidJob WILD = new MaidJob("wild", ItemStack.EMPTY).setSchedule(LittleSchedules.FREEDOM);
     public static final MaidJob NORMAL = new MaidJob("normal", ItemStack.EMPTY).setSchedule(LittleSchedules.FREEDOM);
+    public static final MaidJob BUTCHER = new MaidJob("butcher", new ItemStack(LittleItems.BUTCHER_KNIFE));
     public static final MaidJob FARMER = new MaidJob("farmer", new ItemStack(Items.DIAMOND_HOE));
     public static final MaidJob FISHER = new MaidJob("fisher", new ItemStack(Items.FISHING_ROD));
     public static final MaidJob CHEF = new MaidJob("chef", new ItemStack(Items.COAL));
@@ -115,6 +116,7 @@ public class MaidJob {
     public static void init() {
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "wild"), WILD);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "normal"), NORMAL);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "butcher"), BUTCHER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "farmer"), FARMER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "fisher"), FISHER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "barista"), BARISTA);

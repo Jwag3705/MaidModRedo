@@ -117,7 +117,7 @@ public class AttackTask extends Task<LittleMaidBaseEntity> {
         p_220540_0_.getNavigator().tryMoveToEntityLiving(p_220540_1_, p_220540_2_);
         double d0 = p_220540_0_.getDistanceSq(p_220540_1_.getPosX(), p_220540_1_.getBoundingBox().minY, p_220540_1_.getPosZ());
 
-        p_220540_0_.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityPosWrapper(p_220540_1_), p_220540_2_, 30));
+        p_220540_0_.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityPosWrapper(p_220540_1_), p_220540_2_, 5));
         this.checkAndPerformAttack(p_220540_0_, p_220540_1_, d0);
     }
 

@@ -1,6 +1,7 @@
 package mmr.maidmodredo.init;
 
 import mmr.maidmodredo.MaidModRedo;
+import mmr.maidmodredo.client.render.item.MageStuffItemRender;
 import mmr.maidmodredo.item.*;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
@@ -35,10 +36,12 @@ public class LittleItems {
     public static final Item COFFEE_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
     public static final Item STRAWBERRY_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
     public static final Item BIRTHDAY_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
-    public static final Item BAGU_HAT = new BaguHatItem(MaidArmorMaterial.BAGU_HAT, EquipmentSlotType.HEAD, (new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item BAGU_HAT = new BaguHatItem(MaidArmorMaterial.BAGU_HAT, EquipmentSlotType.HEAD, (new Item.Properties()).maxStackSize(1).group(LittleItemGroups.MISC));
+
+    public static final Item MAGE_STUFF = new Item((new Item.Properties()).maxStackSize(1).setISTER(() -> MageStuffItemRender::new).group(LittleItemGroups.COMBAT));
 
     public static final Item CARAMEL_APPLE = new Item((new Item.Properties()).food(LittleFoods.CARAMEL_APPLE).group(LittleItemGroups.FOODS));
-    public static final Item BROOM = new BroomItem((new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item BROOM = new BroomItem((new Item.Properties()).maxStackSize(1).group(LittleItemGroups.MISC));
     public static final Item BUTCHER_KNIFE = new ButcherKnifeItem((new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item SUGARCOIN = new Item((new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item HOUSEWAND = new HouseWandItem((new Item.Properties()).group(LittleItemGroups.MISC));
@@ -81,6 +84,8 @@ public class LittleItems {
         event.getRegistry().register(BIRTHDAY_CAKE.setRegistryName("birthday_cake"));
 
         event.getRegistry().register(BAGU_HAT.setRegistryName("bagu_hat"));
+
+        event.getRegistry().register(MAGE_STUFF.setRegistryName("mage_stuff"));
 
         event.getRegistry().register(CARAMEL_APPLE.setRegistryName("caramel_apple"));
         event.getRegistry().register(BROOM.setRegistryName("broom"));

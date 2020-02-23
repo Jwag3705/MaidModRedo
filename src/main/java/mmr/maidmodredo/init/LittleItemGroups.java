@@ -18,4 +18,11 @@ public class LittleItemGroups {
             return new ItemStack(LittleItems.BROOM);
         }
     };
+
+    public static final ItemGroup COMBAT = new ItemGroup("maidmodredo_combat") {
+        @OnlyIn(Dist.CLIENT)
+        public ItemStack createIcon() {
+            return new ItemStack(LittleItems.MAGE_STUFF);
+        }
+    };
 }

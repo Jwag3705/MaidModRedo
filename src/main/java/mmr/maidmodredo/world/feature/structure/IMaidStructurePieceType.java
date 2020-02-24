@@ -8,6 +8,7 @@ import java.util.Locale;
 
 public interface IMaidStructurePieceType {
     IStructurePieceType MAIDCAFE = register(MaidCafePieces.Piece::new, MaidModRedo.MODID + ".maidcafe");
+    IStructurePieceType BIGTREE = register(BigTreePieces.Piece::new, MaidModRedo.MODID + ".bigtree");
 
     static IStructurePieceType register(IStructurePieceType type, String key) {
         return Registry.register(Registry.STRUCTURE_PIECE, key.toLowerCase(Locale.ROOT), type);

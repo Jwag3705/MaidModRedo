@@ -41,9 +41,10 @@ public class LittleItems {
     public static final Item MAGE_STUFF = new Item((new Item.Properties()).maxStackSize(1).setISTER(() -> MageStuffItemRender::new).group(LittleItemGroups.COMBAT));
 
     public static final Item CARAMEL_APPLE = new Item((new Item.Properties()).food(LittleFoods.CARAMEL_APPLE).group(LittleItemGroups.FOODS));
-    public static final Item BROOM = new BroomItem((new Item.Properties()).maxStackSize(1).group(LittleItemGroups.MISC));
-    public static final Item BUTCHER_KNIFE = new ButcherKnifeItem((new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item BROOM = new BroomItem((new Item.Properties()).maxStackSize(1).group(LittleItemGroups.COMBAT));
+    public static final Item BUTCHER_KNIFE = new ButcherKnifeItem((new Item.Properties()).group(LittleItemGroups.COMBAT));
     public static final Item SUGARCOIN = new Item((new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item AMBER = new Item((new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item HOUSEWAND = new HouseWandItem((new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item JOBBOOK = new JobBookItem((new Item.Properties()).group(LittleItemGroups.MISC));
 
@@ -91,6 +92,7 @@ public class LittleItems {
         event.getRegistry().register(BROOM.setRegistryName("broom"));
         event.getRegistry().register(BUTCHER_KNIFE.setRegistryName("butcher_knife"));
         event.getRegistry().register(SUGARCOIN.setRegistryName("sugar_coin"));
+        event.getRegistry().register(AMBER.setRegistryName("amber"));
         event.getRegistry().register(HOUSEWAND.setRegistryName("housewand"));
         event.getRegistry().register(JOBBOOK.setRegistryName("job_book"));
         event.getRegistry().register(LITTLEMAID_SPAWNEGG.setRegistryName("littlemaid_spawnegg"));

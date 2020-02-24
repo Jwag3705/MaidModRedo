@@ -1,4 +1,6 @@
 {
+  "block.maidmodredo.magicaloak_log": "魔法のオークの原木",
+  "block.maidmodredo.oak_log_amber": "オークの琥珀",
   "block.maidmodredo.oak_chair": "オークの椅子",
 
   "item.maidmodredo.blueberry_pie": "ブルーベリーパイ",
@@ -19,6 +21,7 @@
   "item.maidmodredo.broom": "ほうき",
   "item.maidmodredo.butcher_knife": "肉屋のナイフ",
   "item.maidmodredo.sugar_coin": "シュガーコイン",
+  "item.maidmodredo.amber": "Amber",
   "item.maidmodredo.housewand": "ハウスワンド",
   "item.maidmodredo.job_book": "ジョブブック",
   "item.maidmodredo.littlemaid_spawnegg": "リトルメイドのスポーンエッグ",

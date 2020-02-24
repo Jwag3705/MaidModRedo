@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "maidmodredo:blocks/magicaloak_log",
+    "side": "maidmodredo:blocks/magicaloak_log"
+  }
+}

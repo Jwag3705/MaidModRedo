@@ -1,5 +1,8 @@
 {
+  "block.maidmodredo.magicaloak_log": "Magical Oak Log",
+  "block.maidmodredo.oak_log_amber": "Oak Log Amber",
   "block.maidmodredo.oak_chair": "Oak Chair",
+
   "item.maidmodredo.carrot_cake": "Carrot Cake",
   "item.maidmodredo.cheese_cake": "Cheese Cake",
   "item.maidmodredo.coffee_cake": "Coffee Cake",
@@ -27,6 +30,7 @@
   "item.maidmodredo.broom": "Broom",
   "item.maidmodredo.butcher_knife": "Butcher Knife",
   "item.maidmodredo.sugar_coin": "Sugar Coin",
+  "item.maidmodredo.amber": "Amber",
   "item.maidmodredo.housewand": "House Wand",
   "item.maidmodredo.job_book": "Job Book",
   "item.maidmodredo.littlemaid_spawnegg": "LittleMaid SpawnEgg",

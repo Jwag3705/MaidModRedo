@@ -1,7 +1,8 @@
 package mmr.maidmodredo.world.feature;
 
 import com.mojang.datafixers.Dynamic;
-import mmr.maidmodredo.world.feature.structure.MaidCafePieces;
+import mmr.maidmodredo.init.LittleFeatures;
+import mmr.maidmodredo.world.feature.structure.BigTreePieces;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SharedSeedRandom;
@@ -13,7 +14,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.OverworldGenSettings;
-import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
@@ -23,8 +23,8 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 import java.util.Random;
 import java.util.function.Function;
 
-public class MaidCafeStructure extends Structure<NoFeatureConfig> {
-    public MaidCafeStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> p_i51440_1_) {
+public class BigTreeStructure extends Structure<NoFeatureConfig> {
+    public BigTreeStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> p_i51440_1_) {
         super(p_i51440_1_);
     }
 
@@ -55,7 +55,7 @@ public class MaidCafeStructure extends Structure<NoFeatureConfig> {
 
                     for (int k = chunkPosX - 10; k <= chunkPosX + 10; ++k) {
                         for (int l = chunkPosZ - 10; l <= chunkPosZ + 10; ++l) {
-                            if (Feature.PILLAGER_OUTPOST.func_225558_a_(p_225558_1_, chunkGen, rand, k, l, p_225558_1_.getBiome(new BlockPos((k << 4) + 9, 0, (l << 4) + 9)))) {
+                            if (LittleFeatures.MAIDCAFE.func_225558_a_(p_225558_1_, chunkGen, rand, k, l, p_225558_1_.getBiome(new BlockPos((k << 4) + 9, 0, (l << 4) + 9)))) {
                                 return false;
                             }
                         }
@@ -73,27 +73,27 @@ public class MaidCafeStructure extends Structure<NoFeatureConfig> {
     }
 
     public String getStructureName() {
-        return "maidmodredo:maidcafe";
+        return "maidmodredo:bigtree";
     }
 
     public int getSize() {
         return 3;
     }
 
-    public Structure.IStartFactory getStartFactory() {
-        return MaidCafeStructure.Start::new;
+    public IStartFactory getStartFactory() {
+        return BigTreeStructure.Start::new;
     }
 
     protected int getSeedModifier() {
-        return 11286312;
+        return 12475312;
     }
 
     protected int getBiomeFeatureDistance(ChunkGenerator<?> chunkGenerator) {
-        return 32;
+        return 34;
     }
 
     protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator) {
-        return 4;
+        return 2;
     }
 
     public static class Start extends StructureStart {
@@ -106,7 +106,7 @@ public class MaidCafeStructure extends Structure<NoFeatureConfig> {
             BlockPos blockpos = new BlockPos(chunkX * 16, 90, chunkZ * 16);
 
             Rotation rotation = Rotation.values()[this.rand.nextInt(Rotation.values().length)];
-            MaidCafePieces.addStructure(templateManagerIn, blockpos, rotation, this.components, this.rand, biomeIn);
+            BigTreePieces.addStructure(templateManagerIn, blockpos, rotation, this.components, this.rand, biomeIn);
             this.recalculateStructureSize();
         }
 
@@ -134,7 +134,7 @@ public class MaidCafeStructure extends Structure<NoFeatureConfig> {
                                     break;
                                 }
 
-                                p_225565_1_.setBlockState(blockpos1, Blocks.COBBLESTONE.getDefaultState(), 2);
+                                p_225565_1_.setBlockState(blockpos1, Blocks.DIRT.getDefaultState(), 2);
                             }
                         }
                     }

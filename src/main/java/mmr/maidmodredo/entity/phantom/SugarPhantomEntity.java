@@ -93,7 +93,7 @@ public class SugarPhantomEntity extends LittleMaidBaseEntity {
 
         if (this.world.isRemote) {
             for (int i = 0; i < 2; ++i) {
-                this.world.addParticle(ParticleTypes.ENCHANT, this.getPosXRandom(0.5D), this.getPosYRandom() - 0.25D, this.getPosZRandom(0.5D), (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+                this.world.addParticle(ParticleTypes.ENCHANT, this.getPosXRandom(0.5D), this.getPosYRandom() + 0.5D, this.getPosZRandom(0.5D), (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
             }
         }
     }

@@ -1,10 +1,13 @@
 package mmr.maidmodredo.init;
 
 import mmr.maidmodredo.MaidModRedo;
+import mmr.maidmodredo.maidjob.EffectCasterMaidJob;
+import mmr.maidmodredo.maidjob.FlameCasterMaidJob;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.schedule.Schedule;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.DefaultedRegistry;
 import net.minecraft.util.registry.MutableRegistry;
@@ -34,6 +37,9 @@ public class MaidJob {
     public static final MaidJob DUAL_BLADER = new MaidJob("dual_blader", new ItemStack(Items.DIAMOND_SWORD)).setSubRequireItem(new ItemStack(Items.DIAMOND_SWORD)).setSubActivity(LittleActivitys.DUAL_BLADER).setLockJob().setNeedLevel(5);
     public static final MaidJob SHIELDER = new MaidJob("shielder", new ItemStack(Items.SHIELD)).setSubRequireItem(new ItemStack(Items.SHIELD)).setSubActivity(LittleActivitys.SHIELDER).setLockJob().setNeedLevel(15);
     public static final MaidJob ARCHER = new MaidJob("archer", new ItemStack(Items.BOW)).setSubActivity(LittleActivitys.SHOT).setLockJob().setNeedLevel(10);
+    public static final MaidJob FLAME_CASTER = new FlameCasterMaidJob("flame_caster", new ItemStack(LittleItems.MAGE_STUFF)).setLockJob().setSubActivity(LittleActivitys.SIMPLE_CASTER);
+    public static final MaidJob POWER_CASTER = new EffectCasterMaidJob("power_caster", new ItemStack(LittleItems.MAGE_STUFF), Effects.STRENGTH).setLockJob().setSubActivity(LittleActivitys.SUPORT_CASTER);
+
 
     private final String name;
     private Activity activity;
@@ -132,6 +138,9 @@ public class MaidJob {
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "dual_blader"), DUAL_BLADER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "shielder"), SHIELDER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "archer"), ARCHER);
+
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "flame_caster"), FLAME_CASTER);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(MaidModRedo.MODID, "power_caster"), POWER_CASTER);
     }
 
     private static <T> DefaultedRegistry<T> registerDefaulted(String p_222933_0_, String p_222933_1_, Supplier<T> p_222933_2_) {

@@ -2,6 +2,7 @@ package mmr.maidmodredo.init;
 
 import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.entity.*;
+import mmr.maidmodredo.entity.boss.TrinityEntity;
 import mmr.maidmodredo.entity.misc.MaidFishingBobberEntity;
 import mmr.maidmodredo.entity.monstermaid.EnderMaidEntity;
 import mmr.maidmodredo.entity.phantom.SugarPhantomEntity;
@@ -25,6 +26,9 @@ public class LittleEntitys {
     public static final EntityType<ZombieButlerEntity> ZOMBIEBUTLER = EntityType.Builder.create(ZombieButlerEntity::new, EntityClassification.MONSTER).setShouldReceiveVelocityUpdates(true).size(0.6F, 1.55F).build(prefix("zombie_butler"));
     public static final EntityType<EnderMaidEntity> ENDERMAID = EntityType.Builder.create(EnderMaidEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.55F, 1.995F).build(prefix("ender_maid"));
 
+    public static final EntityType<TrinityEntity> TRINITY = EntityType.Builder.create(TrinityEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.55F, 1.8F).build(prefix("trinity"));
+
+
     public static final EntityType<SugarPhantomEntity> SUGAR_PHANTOM = EntityType.Builder.create(SugarPhantomEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.6F, 1.55F).build(prefix("sugar_phantom"));
 
 
@@ -39,6 +43,8 @@ public class LittleEntitys {
         event.getRegistry().register(ZOMBIEMAID.setRegistryName("zombie_maid"));
         event.getRegistry().register(ZOMBIEBUTLER.setRegistryName("zombie_butler"));
         event.getRegistry().register(ENDERMAID.setRegistryName("ender_maid"));
+
+        event.getRegistry().register(TRINITY.setRegistryName("trinity"));
 
         event.getRegistry().register(SUGAR_PHANTOM.setRegistryName("sugar_phantom"));
 

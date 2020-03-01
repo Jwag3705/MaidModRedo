@@ -1,6 +1,7 @@
 package mmr.maidmodredo.init;
 
 import mmr.maidmodredo.MaidModRedo;
+import mmr.maidmodredo.client.render.item.LongSpearItemRender;
 import mmr.maidmodredo.client.render.item.MageStuffItemRender;
 import mmr.maidmodredo.item.*;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -39,6 +40,8 @@ public class LittleItems {
     public static final Item BAGU_HAT = new BaguHatItem(MaidArmorMaterial.BAGU_HAT, EquipmentSlotType.HEAD, (new Item.Properties()).maxStackSize(1).group(LittleItemGroups.MISC));
 
     public static final Item MAGE_STUFF = new Item((new Item.Properties()).maxStackSize(1).setISTER(() -> MageStuffItemRender::new).group(LittleItemGroups.COMBAT));
+
+    public static final Item LONG_SPEAR = new LongSpearItem((new Item.Properties()).maxStackSize(1).setISTER(() -> LongSpearItemRender::new).group(LittleItemGroups.COMBAT));
 
     public static final Item CARAMEL_APPLE = new Item((new Item.Properties()).food(LittleFoods.CARAMEL_APPLE).group(LittleItemGroups.FOODS));
     public static final Item BROOM = new BroomItem((new Item.Properties()).maxStackSize(1).group(LittleItemGroups.COMBAT));
@@ -87,6 +90,8 @@ public class LittleItems {
         event.getRegistry().register(BAGU_HAT.setRegistryName("bagu_hat"));
 
         event.getRegistry().register(MAGE_STUFF.setRegistryName("mage_stuff"));
+
+        event.getRegistry().register(LONG_SPEAR.setRegistryName("long_spear"));
 
         event.getRegistry().register(CARAMEL_APPLE.setRegistryName("caramel_apple"));
         event.getRegistry().register(BROOM.setRegistryName("broom"));

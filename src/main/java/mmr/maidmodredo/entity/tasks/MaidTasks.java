@@ -7,6 +7,7 @@ import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.init.LittleEntitys;
 import mmr.maidmodredo.init.MaidJob;
 import mmr.maidmodredo.init.MaidMemoryModuleType;
+import mmr.maidmodredo.maidjob.EffectCasterMaidJob;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -39,11 +40,12 @@ public class MaidTasks {
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> follow(MaidJob p_220639_0_, float p_220641_1_) {
         if (p_220639_0_ == MaidJob.HEALER) {
             return ImmutableList.of(Pair.of(0, new WalkToOwner(100)), Pair.of(1, new HealingTask()), func_220646_b());
-        }
-        if (p_220639_0_ == MaidJob.MINER) {
+        } else if (p_220639_0_ == MaidJob.MINER) {
             return ImmutableList.of(Pair.of(0, new WalkToOwner(100)), Pair.of(1, new BreakOreTask()), Pair.of(4, new FindWalkTargetTask(p_220641_1_)), func_220646_b());
         } else if (p_220639_0_ == MaidJob.TORCHER) {
             return ImmutableList.of(Pair.of(0, new WalkToOwner(100)), Pair.of(1, new TorchPlaceTask()), Pair.of(4, new FindWalkTargetTask(p_220641_1_)), func_220646_b());
+        } else if (p_220639_0_ instanceof EffectCasterMaidJob) {
+            return ImmutableList.of(Pair.of(0, new WalkToOwner(100)), Pair.of(1, new AddBuffTask()), Pair.of(4, new FindWalkTargetTask(p_220641_1_)), func_220646_b());
         } else {
             return ImmutableList.of(Pair.of(0, new WalkToOwner(100)), func_220646_b());
         }
@@ -78,6 +80,11 @@ public class MaidTasks {
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> shieldAttack(float p_220636_1_) {
         float f = p_220636_1_ * 1.15F;
         return ImmutableList.of(Pair.of(0, new StopAttackTask()), Pair.of(0, new ShieldAttackTask(MaidMemoryModuleType.TARGET_HOSTILES, f)));
+    }
+
+    public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> magicAttack(float p_220636_1_) {
+        float f = p_220636_1_ * 1.15F;
+        return ImmutableList.of(Pair.of(0, new StopAttackTask()), Pair.of(0, new ShootMagicTask(MaidMemoryModuleType.TARGET_HOSTILES, f)));
     }
 
     private static Pair<Integer, Task<LivingEntity>> lookAtMany() {

@@ -19,12 +19,12 @@ public class ClientRegistrar {
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.ENDERMAID, EnderMaidRender::new);
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.SUGAR_PHANTOM, SugarPhantomRender::new);
 
+        RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.TRINITY, TrinityRender::new);
+
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.MAID_FISHING_BOBBER, MaidFishingBobberRender::new);
     }
 
     public static void renderTileEntity() {
-        //ClientRegistry.bindTileEntityRenderer(TofuTileEntitys.TOFUCHEST, TofuChestBlockRenderer::new);
-        //ClientRegistry.bindTileEntityRenderer(TofuTileEntitys.TOFUBED, TofuBedBlockRenderer::new);
     }
 
     public static void renderBlock() {

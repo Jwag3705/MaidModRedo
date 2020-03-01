@@ -565,6 +565,7 @@ public class ModelLittleMaid_Revamptall<T extends LittleMaidBaseEntity> extends 
 
         if (animation.getAnimation() == LittleMaidBaseEntity.RUSHING_ANIMATION) {
             handR.setRotateAngle(0.0F, 0.0F, 0.0F);
+            handR2.setRotateAngle(0.0F, 0.0F, 0.0F);
             handL.setRotateAngle(0.0F, 0.0F, 0.0F);
             legR.setRotateAngle(0.0F, 0.0F, 0.0F);
             legL.setRotateAngle(0.0F, 0.0F, 0.0F);
@@ -573,12 +574,14 @@ public class ModelLittleMaid_Revamptall<T extends LittleMaidBaseEntity> extends 
             animator.startKeyframe(4);
             animator.rotate(this.handR, -0.95F, -0.77F, 0.0F);
             animator.rotate(this.handL, 1.0471975511965976F, 0.6F, -0.27314402793711257F);
+            animator.rotate(this.handR2, 0.0F, 0.0F, -0.35F);
             animator.rotate(this.legR, 0.5F, 0.0F, 0.0F);
             animator.rotate(this.legL, 0.5F, 0.0F, 0.0F);
             animator.endKeyframe();
             animator.startKeyframe(72);
             animator.rotate(this.handR, -0.95F, -0.77F, 0.0F);
             animator.rotate(this.handL, 1.0471975511965976F, 0.6F, -0.27314402793711257F);
+            animator.rotate(this.handR2, 0.0F, 0.0F, -0.35F);
             animator.rotate(this.legR, 0.5F, 0.0F, 0.0F);
             animator.rotate(this.legL, 0.5F, 0.0F, 0.0F);
             animator.endKeyframe();

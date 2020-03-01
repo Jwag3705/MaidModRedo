@@ -270,6 +270,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         p_213744_1_.registerActivity(LittleActivitys.SHOT, MaidTasks.shot(f));
         p_213744_1_.registerActivity(LittleActivitys.DUAL_BLADER, MaidTasks.doubleSwordAttack(f));
         p_213744_1_.registerActivity(LittleActivitys.SHIELDER, MaidTasks.shieldAttack(f));
+        p_213744_1_.registerActivity(LittleActivitys.SIMPLE_CASTER, MaidTasks.magicAttack(f));
         p_213744_1_.setDefaultActivities(ImmutableSet.of(Activity.CORE));
         p_213744_1_.setFallbackActivity(Activity.IDLE);
         p_213744_1_.switchTo(Activity.IDLE);

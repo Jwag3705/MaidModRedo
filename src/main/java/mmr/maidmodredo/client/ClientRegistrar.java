@@ -19,9 +19,13 @@ public class ClientRegistrar {
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.ENDERMAID, EnderMaidRender::new);
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.SUGAR_PHANTOM, SugarPhantomRender::new);
 
+        RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.PLANTER, PlanterRender::new);
+
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.TRINITY, TrinityRender::new);
 
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.MAID_FISHING_BOBBER, MaidFishingBobberRender::new);
+
+        RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.ROOT, RootRender::new);
     }
 
     public static void renderTileEntity() {

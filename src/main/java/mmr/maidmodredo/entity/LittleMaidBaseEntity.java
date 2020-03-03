@@ -1809,6 +1809,11 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         }
     }
 
+    @Override
+    public CreatureAttribute getCreatureAttribute() {
+        return LittleCreatureAttribute.MAID;
+    }
+
     /*@Override
     public EntitySize getSize(Pose poseIn) {
         if(poseIn == Pose.STANDING && this.getTextureBox()[0] != null && this.getTextureBox()[0].getWidth() != 0 && this.getTextureBox()[0].getHeight() != 0){

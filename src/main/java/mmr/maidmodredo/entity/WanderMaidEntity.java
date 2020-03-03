@@ -3,6 +3,7 @@ package mmr.maidmodredo.entity;
 import mmr.maidmodredo.entity.ai.CustomRangedBowAttackGoal;
 import mmr.maidmodredo.entity.ai.NotInvisibleTargetGoal;
 import mmr.maidmodredo.entity.ai.UseOffhandItemGoal;
+import mmr.maidmodredo.init.LittleCreatureAttribute;
 import mmr.maidmodredo.init.LittleEntitys;
 import mmr.maidmodredo.init.MaidTrades;
 import net.minecraft.entity.*;
@@ -202,8 +203,8 @@ public class WanderMaidEntity extends AbstractVillagerEntity implements IRangedA
 
     @Override
     protected void populateTradeData() {
-        VillagerTrades.ITrade[] avillagertrades$itrade = MaidTrades.field_221240_b.get(1);
-        VillagerTrades.ITrade[] avillagertrades$itrade1 = MaidTrades.field_221240_b.get(2);
+        VillagerTrades.ITrade[] avillagertrades$itrade = MaidTrades.maidTrade.get(1);
+        VillagerTrades.ITrade[] avillagertrades$itrade1 = MaidTrades.maidTrade.get(2);
         if (avillagertrades$itrade != null && avillagertrades$itrade1 != null) {
             MerchantOffers merchantoffers = this.getOffers();
             this.addTrades(merchantoffers, avillagertrades$itrade, 3);
@@ -251,6 +252,11 @@ public class WanderMaidEntity extends AbstractVillagerEntity implements IRangedA
     @Override
     public boolean canAttack(LivingEntity target) {
         return target.getType() != LittleEntitys.WANDERMAID && super.canAttack(target);
+    }
+
+    @Override
+    public CreatureAttribute getCreatureAttribute() {
+        return LittleCreatureAttribute.MAID;
     }
 
     class MoveToGoal extends Goal {

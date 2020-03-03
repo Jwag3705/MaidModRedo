@@ -16,7 +16,7 @@ public class StartRushGoal extends Goal {
         LivingEntity livingEntity = this.attacker.getAttackTarget();
         if (livingEntity != null && livingEntity.isAlive() && this.attacker.isAlive()) {
             double d0 = this.attacker.getDistanceSq(livingEntity);
-            return this.attacker.getRNG().nextInt(160) == 0 && d0 > 42.0F;
+            return this.attacker.getRNG().nextInt(220) == 0 && d0 > 42.0F;
         }
         return false;
     }

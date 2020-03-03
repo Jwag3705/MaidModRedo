@@ -17,7 +17,6 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.network.play.server.SSpawnObjectPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.SoundEvents;
@@ -28,6 +27,7 @@ import net.minecraft.world.storage.loot.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -124,7 +124,10 @@ public class MaidFishingBobberEntity extends Entity {
      * Sets a target for the client to interpolate towards over the next few ticks
      */
     @OnlyIn(Dist.CLIENT)
+    @Override
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
+        this.setPosition(x, y, z);
+        this.setRotation(yaw, pitch);
     }
 
     /**
@@ -449,9 +452,10 @@ public class MaidFishingBobberEntity extends Entity {
         return false;
     }
 
+    @Override
     public IPacket<?> createSpawnPacket() {
         Entity entity = this.getAngler();
-        return new SSpawnObjectPacket(this, entity == null ? this.getEntityId() : entity.getEntityId());
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     static enum State {

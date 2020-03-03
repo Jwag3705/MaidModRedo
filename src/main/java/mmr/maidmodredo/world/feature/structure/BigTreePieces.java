@@ -2,6 +2,8 @@ package mmr.maidmodredo.world.feature.structure;
 
 import com.google.common.collect.ImmutableMap;
 import mmr.maidmodredo.MaidModRedo;
+import mmr.maidmodredo.entity.PlanterEntity;
+import mmr.maidmodredo.init.LittleEntitys;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.BeeEntity;
@@ -81,10 +83,11 @@ public class BigTreePieces {
 
         protected void handleDataMarker(String function, BlockPos pos, IWorld world, Random rand, MutableBoundingBox box) {
             if (function.equals("maid")) {
-                /*LittleMaidEntity entityturret = LittleEntitys.LITTLEMAID.create(world.getWorld());
-                entityturret.enablePersistence();
-                entityturret.moveToBlockPosAndAngles(pos, 0.0F, 0.0F);
-                world.addEntity(entityturret);*/
+                PlanterEntity entityPlanter = LittleEntitys.PLANTER.create(world.getWorld());
+                entityPlanter.enablePersistence();
+                entityPlanter.moveToBlockPosAndAngles(pos, 0.0F, 0.0F);
+                entityPlanter.setPlanterHome(pos);
+                world.addEntity(entityPlanter);
                 world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
             } else if (function.equals("bee")) {
                 BeeEntity entityturret = EntityType.BEE.create(world.getWorld());

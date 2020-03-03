@@ -16,6 +16,8 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
+import net.minecraft.entity.monster.RavagerEntity;
+import net.minecraft.entity.monster.VexEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -78,6 +80,8 @@ public class TrinityEntity extends CreatureEntity implements IMaidAnimation {
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, AbstractIllagerEntity.class, true)));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, RavagerEntity.class, true));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, VexEntity.class, true));
     }
 
     protected void registerAttributes() {

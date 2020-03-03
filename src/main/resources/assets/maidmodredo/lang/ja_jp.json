@@ -48,5 +48,8 @@
   "item.maidmodredo.housewand.rest": "メイドが休む場所の位置: %s, %s, %s",
   "gui.maidmodredo.maidinventory.change_job": "ジョブチェンジ",
   "gui.maidmodredo.job_select": "ジョブセレクト",
-  "gui.maidmodredo.job_select.warning": "戦闘系のjobのものはレベルアップすると変更できなくなります"
+  "gui.maidmodredo.job_select.warning": "戦闘系のjobのものはレベルアップすると変更できなくなります",
+  "death.attack.rush": "%1$s は %2$s のラッシュ攻撃に突き飛ばされた",
+  "death.attack.rotation_attack": "%1$s は %2$s の竜巻に巻き込まれた",
+  "death.attack.shield_bush": "%1$s は %2$s のシールドによってノックアウトされた"
 }

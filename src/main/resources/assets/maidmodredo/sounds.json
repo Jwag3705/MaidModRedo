@@ -1,0 +1,9 @@
+{
+  "entity.root.creak": {
+    "category": "neutral",
+    "sounds": [
+      "maidmodredo:root/root_creak"
+    ],
+    "subtitle": "subtitles.entity.root.creak"
+  }
+}

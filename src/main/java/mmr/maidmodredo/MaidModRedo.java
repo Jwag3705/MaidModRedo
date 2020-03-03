@@ -12,6 +12,7 @@ import mmr.maidmodredo.world.event.WanderMaidSpawner;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
+import net.minecraft.entity.monster.RavagerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
@@ -135,6 +136,10 @@ public class MaidModRedo {
 
         if (event.getEntity() instanceof AbstractIllagerEntity) {
             ((AbstractIllagerEntity) event.getEntity()).targetSelector.addGoal(1, new NearestAttackableTargetGoal(((AbstractIllagerEntity) event.getEntity()), LittleMaidBaseEntity.class, true));
+        }
+
+        if (event.getEntity() instanceof RavagerEntity) {
+            ((RavagerEntity) event.getEntity()).targetSelector.addGoal(1, new NearestAttackableTargetGoal(((RavagerEntity) event.getEntity()), LittleMaidBaseEntity.class, true));
         }
     }
 

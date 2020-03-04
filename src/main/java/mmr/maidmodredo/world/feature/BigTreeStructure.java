@@ -93,7 +93,7 @@ public class BigTreeStructure extends Structure<NoFeatureConfig> {
     }
 
     protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator) {
-        return 2;
+        return 3;
     }
 
     public static class Start extends StructureStart {

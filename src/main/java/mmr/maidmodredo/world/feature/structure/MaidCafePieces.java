@@ -6,6 +6,8 @@ import mmr.maidmodredo.entity.LittleButlerEntity;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import mmr.maidmodredo.init.LittleEntitys;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
@@ -83,12 +85,14 @@ public class MaidCafePieces {
                 LittleMaidEntity entityturret = LittleEntitys.LITTLEMAID.create(world.getWorld());
                 entityturret.enablePersistence();
                 entityturret.moveToBlockPosAndAngles(pos, 0.0F, 0.0F);
+                entityturret.onInitialSpawn(world, world.getDifficultyForLocation(pos), SpawnReason.STRUCTURE, (ILivingEntityData) null, (CompoundNBT) null);
                 world.addEntity(entityturret);
                 world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
             } else if (function.equals("Butler")) {
                 LittleButlerEntity entityturret = LittleEntitys.LITTLEBUTLER.create(world.getWorld());
                 entityturret.enablePersistence();
                 entityturret.moveToBlockPosAndAngles(pos, 0.0F, 0.0F);
+                entityturret.onInitialSpawn(world, world.getDifficultyForLocation(pos), SpawnReason.STRUCTURE, (ILivingEntityData) null, (CompoundNBT) null);
                 world.addEntity(entityturret);
                 world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
             }

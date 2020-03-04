@@ -1,10 +1,11 @@
 package mmr.maidmodredo.network;
 
 import mmr.maidmodredo.MaidModRedo;
+import mmr.maidmodredo.api.IMaidAnimation;
 import mmr.maidmodredo.api.MaidAnimation;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
-import mmr.maidmodredo.entity.boss.TrinityEntity;
 import mmr.maidmodredo.init.MaidJob;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -59,10 +60,12 @@ public class MaidPacketHandler {
         }
     }
 
-    public static void animationModel(TrinityEntity entity, MaidAnimation animation) {
+    public static void animationModel(LivingEntity entity, MaidAnimation animation) {
         if (!entity.getEntityWorld().isRemote()) {
-            entity.setAnimation(animation);
-            MaidPacketHandler.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MessageAnimation(entity.getEntityId(), ArrayUtils.indexOf(entity.getAnimations(), animation)));
+            if (entity instanceof IMaidAnimation) {
+                ((IMaidAnimation) entity).setAnimation(animation);
+                MaidPacketHandler.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MessageAnimation(entity.getEntityId(), ArrayUtils.indexOf(((IMaidAnimation) entity).getAnimations(), animation)));
+            }
         }
     }
 }

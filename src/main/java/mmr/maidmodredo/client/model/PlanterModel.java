@@ -2,7 +2,9 @@ package mmr.maidmodredo.client.model;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import mmr.maidmodredo.api.IMaidAnimation;
 import mmr.maidmodredo.client.maidmodel.MaidModelRenderer;
+import mmr.maidmodredo.client.maidmodel.animator.MaidModelAnimator;
 import mmr.maidmodredo.entity.PlanterEntity;
 import net.minecraft.client.renderer.entity.model.IHasArm;
 import net.minecraft.client.renderer.entity.model.IHasHead;
@@ -42,6 +44,8 @@ public class PlanterModel<T extends PlanterEntity> extends SegmentedModel<T> imp
     public MaidModelRenderer handL2;
     public MaidModelRenderer handR;
     public MaidModelRenderer handR2;
+
+    public MaidModelAnimator animator = MaidModelAnimator.create();
 
     public PlanterModel() {
         textureWidth = 64;
@@ -235,10 +239,67 @@ public class PlanterModel<T extends PlanterEntity> extends SegmentedModel<T> imp
         this.handL.rotateAngleY = 0.0F;
         this.handL.rotateAngleZ = -0.2618F;
 
+        bone9.rotateAngleZ = 0.0873F;
+        bone10.rotateAngleZ = -0.0873F;
+        bone11.rotateAngleX = 0.0873F;
+        bone12.rotateAngleX = -0.0873F;
+        handR2.rotateAngleX = 0.0F;
+        handL2.rotateAngleX = 0.0F;
+
         this.handR.rotateAngleZ += MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
         this.handL.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
         this.handR.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
         this.handL.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
+
+        if (entityIn instanceof IMaidAnimation) {
+            setAnimations(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, entityIn, ((IMaidAnimation) entityIn));
+        }
+    }
+
+    public void setAnimations(float par1, float par2, float ageInTicks, float pHeadYaw, float pHeadPitch, T pEntityCaps, IMaidAnimation animation) {
+
+
+        animator.update(animation);
+        if (animation.getAnimation() == PlanterEntity.CAST_ANIMATION) {
+            handR.rotateAngleX = 0.0F;
+            handL.rotateAngleX = 0.0F;
+            handR2.rotateAngleX = 0.0F;
+            handL2.rotateAngleX = 0.0F;
+
+            animator.setAnimation(PlanterEntity.CAST_ANIMATION);
+            animator.startKeyframe(30);
+            animator.rotate(this.handR, -1.2F, 0.0F, 0.0F);
+            animator.rotate(this.handL, -1.2F, 0.0F, 0.0F);
+            animator.rotate(this.handR2, -0.6F, 0.0F, 0.0F);
+            animator.rotate(this.handL2, -0.6F, 0.0F, 0.0F);
+            animator.endKeyframe();
+            animator.startKeyframe(10);
+            animator.rotate(this.handR, -1.8F, 0.0F, 0.0F);
+            animator.rotate(this.handL, -1.8F, 0.0F, 0.0F);
+            animator.rotate(this.handR2, -0.8F, 0.0F, 0.0F);
+            animator.rotate(this.handL2, -0.8F, 0.0F, 0.0F);
+            animator.endKeyframe();
+
+            animator.resetKeyframe(5);
+        }
+
+        if (animation.getAnimation() == PlanterEntity.SPITSUP_ANIMATION) {
+            bone9.rotateAngleZ = 0.0873F;
+            bone10.rotateAngleZ = -0.0873F;
+            bone11.rotateAngleX = 0.0873F;
+            bone12.rotateAngleX = -0.0873F;
+
+            animator.setAnimation(PlanterEntity.SPITSUP_ANIMATION);
+            animator.startKeyframe(6);
+            animator.rotate(this.bone9, 0.0F, 0.0F, 0.0873F + 0.1F);
+            animator.rotate(this.bone10, 0.0F, 0.0F, -0.0873F + -0.1F);
+            animator.rotate(this.bone11, 0.0873F + 0.1F, 0.0F, 0.0F);
+            animator.rotate(this.bone12, -0.0873F + -0.1F, 0.0F, 0.0F);
+            animator.endKeyframe();
+
+            animator.resetKeyframe(5);
+        }
+
 
     }
 

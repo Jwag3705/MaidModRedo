@@ -932,7 +932,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             this.updateRotationAttack(axisalignedbb, this.getBoundingBox());
         }
 
-        if (isRushing() && Entity.horizontalMag(this.getMotion()) > 0.05D) {
+        if (isRushing() && Entity.horizontalMag(this.getMotion()) > 0.06D) {
             this.updateRushAttack(axisalignedbb, this.getBoundingBox());
         }
     }

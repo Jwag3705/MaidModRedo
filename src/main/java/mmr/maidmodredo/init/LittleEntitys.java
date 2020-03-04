@@ -6,6 +6,7 @@ import mmr.maidmodredo.entity.boss.TrinityEntity;
 import mmr.maidmodredo.entity.misc.MaidFishingBobberEntity;
 import mmr.maidmodredo.entity.monstermaid.EnderMaidEntity;
 import mmr.maidmodredo.entity.phantom.SugarPhantomEntity;
+import mmr.maidmodredo.entity.projectile.FlowerSapEntity;
 import mmr.maidmodredo.entity.projectile.RootEntity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
@@ -38,6 +39,8 @@ public class LittleEntitys {
 
     public static final EntityType<MaidFishingBobberEntity> MAID_FISHING_BOBBER = EntityType.Builder.<MaidFishingBobberEntity>create(MaidFishingBobberEntity::new, EntityClassification.MISC).setCustomClientFactory(MaidFishingBobberEntity::new).disableSerialization().disableSummoning().size(0.25F, 0.25F).build(prefix("maid_fishing_bobber"));
     public static final EntityType<RootEntity> ROOT = EntityType.Builder.<RootEntity>create(RootEntity::new, EntityClassification.MISC).setCustomClientFactory(RootEntity::new).size(0.75F, 0.4F).build(prefix("root"));
+    public static final EntityType<FlowerSapEntity> FLOWER_SAP = EntityType.Builder.<FlowerSapEntity>create(FlowerSapEntity::new, EntityClassification.MISC).setCustomClientFactory(FlowerSapEntity::new).size(0.5F, 0.5F).build(prefix("root"));
+
 
     @SubscribeEvent
     public static void registerEntity(RegistryEvent.Register<EntityType<?>> event) {
@@ -56,6 +59,7 @@ public class LittleEntitys {
 
         event.getRegistry().register(MAID_FISHING_BOBBER.setRegistryName("maid_fishing_bobber"));
         event.getRegistry().register(ROOT.setRegistryName("root"));
+        event.getRegistry().register(FLOWER_SAP.setRegistryName("flower_sap"));
 
         EntitySpawnPlacementRegistry.register(ZOMBIEMAID, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ZombieMaidEntity::spawnHandler);
         EntitySpawnPlacementRegistry.register(ZOMBIEBUTLER, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ZombieMaidEntity::spawnHandler);

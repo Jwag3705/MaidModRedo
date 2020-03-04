@@ -26,6 +26,7 @@ public class ClientRegistrar {
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.MAID_FISHING_BOBBER, MaidFishingBobberRender::new);
 
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.ROOT, RootRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.FLOWER_SAP, FlowerSapRender::new);
     }
 
     public static void renderTileEntity() {

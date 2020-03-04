@@ -2,9 +2,13 @@ package mmr.maidmodredo.entity;
 
 import com.mojang.datafixers.Dynamic;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import mmr.maidmodredo.api.IMaidAnimation;
+import mmr.maidmodredo.api.MaidAnimation;
+import mmr.maidmodredo.entity.projectile.FlowerSapEntity;
 import mmr.maidmodredo.entity.projectile.RootEntity;
 import mmr.maidmodredo.init.LittleCreatureAttribute;
 import mmr.maidmodredo.init.MaidTrades;
+import mmr.maidmodredo.network.MaidPacketHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
@@ -49,7 +53,7 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class PlanterEntity extends AbstractVillagerEntity implements IReputationTracking {
+public class PlanterEntity extends AbstractVillagerEntity implements IReputationTracking, IRangedAttackMob, IMaidAnimation {
     private static final DataParameter<Integer> LEVEL = EntityDataManager.createKey(PlanterEntity.class, DataSerializers.VARINT);
     private boolean customer;
     private int xp;
@@ -66,6 +70,17 @@ public class PlanterEntity extends AbstractVillagerEntity implements IReputation
 
     protected int spellTicks;
 
+    private int animationTick;
+    private MaidAnimation animation = NO_ANIMATION;
+
+    public static final MaidAnimation SPITSUP_ANIMATION = MaidAnimation.create(11);
+    public static final MaidAnimation CAST_ANIMATION = MaidAnimation.create(45);
+
+    private static final MaidAnimation[] ANIMATIONS = {
+            SPITSUP_ANIMATION,
+            CAST_ANIMATION
+    };
+
     public PlanterEntity(EntityType<? extends PlanterEntity> type, World worldIn) {
         super(type, worldIn);
     }
@@ -76,7 +91,8 @@ public class PlanterEntity extends AbstractVillagerEntity implements IReputation
         this.goalSelector.addGoal(1, new TradeWithPlayerGoal(this));
         this.goalSelector.addGoal(1, new LookAtCustomerGoal(this));
         this.goalSelector.addGoal(2, new AttackSpellGoal());
-        this.goalSelector.addGoal(3, new MoveToHomeGoal(this, 60.0D, 1.2D));
+        this.goalSelector.addGoal(3, new RangedAttackGoal(this, 1.05D, 50, 20.0F));
+        this.goalSelector.addGoal(4, new MoveToHomeGoal(this, 60.0D, 1.2D));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 0.9D));
         this.goalSelector.addGoal(9, new LookAtWithoutMovingGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
@@ -180,6 +196,15 @@ public class PlanterEntity extends AbstractVillagerEntity implements IReputation
     }
 
     public void tick() {
+        if (this.getAnimation() != IMaidAnimation.NO_ANIMATION) {
+            this.setAnimationTick(this.getAnimationTick() + 1);
+
+            if (this.getAnimationTick() >= this.getAnimation().getDuration()) {
+                this.onAnimationFinish(this.getAnimation());
+                this.resetPlayingAnimationToDefault();
+            }
+        }
+
         super.tick();
        /* if (this.getShakeHeadTicks() > 0) {
             this.setShakeHeadTicks(this.getShakeHeadTicks() - 1);
@@ -195,6 +220,7 @@ public class PlanterEntity extends AbstractVillagerEntity implements IReputation
             --this.timeUntilReset;
             if (this.timeUntilReset <= 0) {
                 if (this.customer) {
+                    this.restock();
                     this.populateBuyingList();
                     this.customer = false;
                 }
@@ -241,7 +267,7 @@ public class PlanterEntity extends AbstractVillagerEntity implements IReputation
         this.xp += offer.getGivenExp();
         this.previousCustomer = this.getCustomer();
 
-        if (this.canLevelUp()) {
+        if (this.canLevelUp() || this.rand.nextInt(5) == 0) {
             this.timeUntilReset = 40;
             this.customer = true;
 
@@ -395,6 +421,18 @@ public class PlanterEntity extends AbstractVillagerEntity implements IReputation
         return this.spellTicks > 0;
     }
 
+    public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor) {
+        MaidPacketHandler.animationModel(this, SPITSUP_ANIMATION);
+        FlowerSapEntity flowersupentity = new FlowerSapEntity(this.world, this);
+        double d0 = target.getPosX() - this.getPosX();
+        double d1 = target.getPosYHeight(0.3333333333333333D) - flowersupentity.getPosY();
+        double d2 = target.getPosZ() - this.getPosZ();
+        float f = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.2F;
+        flowersupentity.shoot(d0, d1 + (double) f, d2, 1.5F, 10.0F);
+        this.world.playSound((PlayerEntity) null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_LLAMA_SPIT, this.getSoundCategory(), 1.0F, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
+        this.world.addEntity(flowersupentity);
+    }
+
     public boolean isOnSameTeam(Entity entityIn) {
         if (super.isOnSameTeam(entityIn)) {
             return true;
@@ -408,6 +446,43 @@ public class PlanterEntity extends AbstractVillagerEntity implements IReputation
     @Override
     public CreatureAttribute getCreatureAttribute() {
         return LittleCreatureAttribute.MAID;
+    }
+
+    public void resetPlayingAnimationToDefault() {
+        this.setAnimation(IMaidAnimation.NO_ANIMATION);
+    }
+
+    protected void onAnimationFinish(MaidAnimation animation) {
+    }
+
+    @Override
+    public int getAnimationTick() {
+        return this.animationTick;
+    }
+
+    @Override
+    public void setAnimationTick(int tick) {
+        this.animationTick = tick;
+    }
+
+    @Override
+    public MaidAnimation getAnimation() {
+        return this.animation;
+    }
+
+    @Override
+    public void setAnimation(MaidAnimation animation) {
+        if (animation == NO_ANIMATION) {
+            onAnimationFinish(this.animation);
+        }
+        this.animation = animation;
+
+        setAnimationTick(0);
+    }
+
+    @Override
+    public MaidAnimation[] getAnimations() {
+        return ANIMATIONS;
     }
 
     class MoveToHomeGoal extends Goal {
@@ -469,6 +544,12 @@ public class PlanterEntity extends AbstractVillagerEntity implements IReputation
 
         protected int getCastingInterval() {
             return 120;
+        }
+
+        @Override
+        public void startExecuting() {
+            super.startExecuting();
+            MaidPacketHandler.animationModel(PlanterEntity.this, PlanterEntity.CAST_ANIMATION);
         }
 
         protected void castSpell() {

@@ -37,6 +37,9 @@
   "item.maidmodredo.littlebutler_spawnegg": "LittleButler SpawnEgg",
   "item.maidmodredo.wandermaid_spawnegg": "WanderMaid SpawnEgg",
   "item.maidmodredo.endermaid_spawnegg": "EnderMaid SpawnEgg",
+  "item.maidmodredo.cowgirl_spawnegg": "Cowgirl SpawnEgg",
+  "item.maidmodredo.planter_spawnegg": "Planter SpawnEgg",
+
   "item.maidmodredo.zombiemaid_spawnegg": "ZombieMaid SpawnEgg",
   "item.maidmodredo.zombiebutler_spawnegg": "ZombieButler SpawnEgg",
 
@@ -45,6 +48,9 @@
   "entity.maidmodredo.sugar_phantom": "Sugar Phantom",
   "entity.maidmodredo.wandermaid": "WanderMaid",
   "entity.maidmodredo.ender_maid": "Ender Maid",
+  "entity.maidmodredo.cowgirl": "Cowgirl",
+  "entity.maidmodredo.planter": "Planter",
+
   "entity.maidmodredo.zombie_maid": "Zombie Maid",
   "entity.maidmodredo.zombie_buttler": "Zombie Butler",
   "item.maidmodredo.setbed": "Selected BedPostion: %s, %s, %s",

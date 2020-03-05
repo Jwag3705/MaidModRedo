@@ -76,7 +76,7 @@ public class NewZipTexturesWapper implements IResourcePack {
         if (key.startsWith("/")) key = key.substring(1);
 
         //旧式用の判定処理
-        if (key.toLowerCase().startsWith("mob/endermaid")) {
+        if (key.toLowerCase().startsWith("mob/endermaid") || key.toLowerCase().startsWith("mob/cowgirl")) {
             //old type is not change
         } else {
             key = "assets/maidmodredo/" + key;

@@ -56,6 +56,9 @@ public class LittleItems {
     public static final Item LITTLEBUTLER_SPAWNEGG = new SpawnEggItem(LittleEntitys.LITTLEBUTLER, 0xe3e3e3, 0xa45131, (new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item WANDERMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.WANDERMAID, 4547222, 15377456, (new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item ENDERMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.ENDERMAID, 1447446, 0, (new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item COWGIRL_SPAWNEGG = new SpawnEggItem(LittleEntitys.COWGIRL, 0xffffff, 0, (new Item.Properties()).group(LittleItemGroups.MISC));
+
+    public static final Item PLANTER_SPAWNEGG = new SpawnEggItem(LittleEntitys.PLANTER, 0xb6ff75, 0x64a34a, (new Item.Properties()).group(LittleItemGroups.MISC));
 
     public static final Item ZOMBIEMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.ZOMBIEMAID, 7969893, 0xe3e3e3, (new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item ZOMBIEBUTLER_SPAWNEGG = new SpawnEggItem(LittleEntitys.ZOMBIEBUTLER, 7969893, 0x382929, (new Item.Properties()).group(LittleItemGroups.MISC));
@@ -100,11 +103,14 @@ public class LittleItems {
         event.getRegistry().register(AMBER.setRegistryName("amber"));
         event.getRegistry().register(HOUSEWAND.setRegistryName("housewand"));
         event.getRegistry().register(JOBBOOK.setRegistryName("job_book"));
+
         event.getRegistry().register(LITTLEMAID_SPAWNEGG.setRegistryName("littlemaid_spawnegg"));
         event.getRegistry().register(LITTLEBUTLER_SPAWNEGG.setRegistryName("littlebutler_spawnegg"));
         event.getRegistry().register(WANDERMAID_SPAWNEGG.setRegistryName("wandermaid_spawnegg"));
-
         event.getRegistry().register(ENDERMAID_SPAWNEGG.setRegistryName("endermaid_spawnegg"));
+        event.getRegistry().register(COWGIRL_SPAWNEGG.setRegistryName("cowgirl_spawnegg"));
+        event.getRegistry().register(PLANTER_SPAWNEGG.setRegistryName("planter_spawnegg"));
+
         event.getRegistry().register(ZOMBIEMAID_SPAWNEGG.setRegistryName("zombiemaid_spawnegg"));
         event.getRegistry().register(ZOMBIEBUTLER_SPAWNEGG.setRegistryName("zombiebutler_spawnegg"));
     }

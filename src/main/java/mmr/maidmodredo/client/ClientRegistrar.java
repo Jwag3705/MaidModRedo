@@ -17,6 +17,8 @@ public class ClientRegistrar {
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.ZOMBIEMAID, ZombieMaidRender::new);
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.ZOMBIEBUTLER, ZombieButlerRender::new);
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.ENDERMAID, EnderMaidRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.COWGIRL, CowGirlRender::new);
+
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.SUGAR_PHANTOM, SugarPhantomRender::new);
 
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.PLANTER, PlanterRender::new);

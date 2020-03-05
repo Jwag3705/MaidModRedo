@@ -28,6 +28,9 @@
   "item.maidmodredo.littlebutler_spawnegg": "リトルバトラーのスポーンエッグ",
   "item.maidmodredo.wandermaid_spawnegg": "商人メイドのスポーンエッグ",
   "item.maidmodredo.endermaid_spawnegg": "エンダーメイドのスポーンエッグ",
+  "item.maidmodredo.cowgirl_spawnegg": "Cowgirl SpawnEgg",
+  "item.maidmodredo.planter_spawnegg": "Planter SpawnEgg",
+
   "item.maidmodredo.zombiemaid_spawnegg": "ゾンビメイドのスポーンエッグ",
   "item.maidmodredo.zombiebutler_spawnegg": "ゾンビバトラーのスポーンエッグ",
 
@@ -36,6 +39,9 @@
   "entity.maidmodredo.sugar_phantom": "シュガーファントム",
   "entity.maidmodredo.wandermaid": "商人メイド",
   "entity.maidmodredo.ender_maid": "エンダーガール",
+  "entity.maidmodredo.cowgirl": "牛娘",
+  "entity.maidmodredo.planter": "プランター",
+
   "entity.maidmodredo.zombie_maid": "ゾンビメイド",
   "entity.maidmodredo.zombie_buttler": "ゾンビバトラー",
   "item.maidmodredo.setbed": "ベットの位置を本に記録しました: %s, %s, %s",

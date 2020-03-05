@@ -27,6 +27,7 @@ public class LittleEntitys {
     public static final EntityType<ZombieMaidEntity> ZOMBIEMAID = EntityType.Builder.create(ZombieMaidEntity::new, EntityClassification.MONSTER).setShouldReceiveVelocityUpdates(true).size(0.6F, 1.55F).build(prefix("zombie_maid"));
     public static final EntityType<ZombieButlerEntity> ZOMBIEBUTLER = EntityType.Builder.create(ZombieButlerEntity::new, EntityClassification.MONSTER).setShouldReceiveVelocityUpdates(true).size(0.6F, 1.55F).build(prefix("zombie_butler"));
     public static final EntityType<EnderMaidEntity> ENDERMAID = EntityType.Builder.create(EnderMaidEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.55F, 1.995F).build(prefix("ender_maid"));
+    public static final EntityType<CowGirlEntity> COWGIRL = EntityType.Builder.create(CowGirlEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.6F, 1.85F).build(prefix("cowgirl"));
 
     public static final EntityType<PlanterEntity> PLANTER = EntityType.Builder.create(PlanterEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.6F, 1.55F).build(prefix("planter"));
 
@@ -34,8 +35,6 @@ public class LittleEntitys {
 
 
     public static final EntityType<SugarPhantomEntity> SUGAR_PHANTOM = EntityType.Builder.create(SugarPhantomEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.6F, 1.55F).build(prefix("sugar_phantom"));
-
-
 
     public static final EntityType<MaidFishingBobberEntity> MAID_FISHING_BOBBER = EntityType.Builder.<MaidFishingBobberEntity>create(MaidFishingBobberEntity::new, EntityClassification.MISC).setCustomClientFactory(MaidFishingBobberEntity::new).disableSerialization().disableSummoning().size(0.25F, 0.25F).build(prefix("maid_fishing_bobber"));
     public static final EntityType<RootEntity> ROOT = EntityType.Builder.<RootEntity>create(RootEntity::new, EntityClassification.MISC).setCustomClientFactory(RootEntity::new).size(0.75F, 0.4F).build(prefix("root"));
@@ -50,6 +49,7 @@ public class LittleEntitys {
         event.getRegistry().register(ZOMBIEMAID.setRegistryName("zombie_maid"));
         event.getRegistry().register(ZOMBIEBUTLER.setRegistryName("zombie_butler"));
         event.getRegistry().register(ENDERMAID.setRegistryName("ender_maid"));
+        event.getRegistry().register(COWGIRL.setRegistryName("cowgirl"));
 
         event.getRegistry().register(PLANTER.setRegistryName("planter"));
 

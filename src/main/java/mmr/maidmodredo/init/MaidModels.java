@@ -1,6 +1,7 @@
 package mmr.maidmodredo.init;
 
 import com.google.common.collect.Lists;
+import mmr.maidmodredo.entity.CowGirlEntity;
 import mmr.maidmodredo.entity.LittleButlerEntity;
 import mmr.maidmodredo.entity.LittleMaidEntity;
 import mmr.maidmodredo.entity.monstermaid.EnderMaidEntity;
@@ -13,6 +14,7 @@ public class MaidModels {
     public static final MaidModels LITTLEMAID = new MaidModels("littlemaid", LittleMaidEntity.class);
     public static final MaidModels LITTLEBUTLER = new MaidModels("littlebutler", LittleButlerEntity.class);
     public static final MaidModels ENDERMAID = new MaidModels("endermaid", EnderMaidEntity.class);
+    public static final MaidModels COWGIRL = new MaidModels("cowgirl", CowGirlEntity.class);
 
     private final String modelName;
     private final Class entityClass;
@@ -34,5 +36,6 @@ public class MaidModels {
         maidModelsList.add(LITTLEMAID);
         maidModelsList.add(LITTLEBUTLER);
         maidModelsList.add(ENDERMAID);
+        maidModelsList.add(COWGIRL);
     }
 }

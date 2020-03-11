@@ -10,6 +10,7 @@ import mmr.maidmodredo.client.resource.OldZipTexturesWrapper;
 import mmr.maidmodredo.entity.CowGirlEntity;
 import mmr.maidmodredo.entity.LittleButlerEntity;
 import mmr.maidmodredo.entity.LittleMaidEntity;
+import mmr.maidmodredo.entity.SqurrielMaidEntity;
 import mmr.maidmodredo.entity.monstermaid.EnderMaidEntity;
 import mmr.maidmodredo.entity.phantom.SugarPhantomEntity;
 import mmr.maidmodredo.init.MaidModels;
@@ -77,7 +78,7 @@ public class ModelManager {
 
     //It is use for match entity and model
     protected Map<String, Class> modelEntityMap = Maps.newHashMap(ImmutableMap.of("littlemaid", LittleMaidEntity.class, "littlebutler", LittleButlerEntity.class
-            , "endermaid", EnderMaidEntity.class, "cowgirl", CowGirlEntity.class));
+            , "endermaid", EnderMaidEntity.class, "cowgirl", CowGirlEntity.class, "squrrielmaid", SqurrielMaidEntity.class));
     /**
      * ローカルで保持しているテクスチャパック
      */
@@ -111,6 +112,7 @@ public class ModelManager {
         addSearch("littleMaidMob", "/assets/minecraft/textures/entity/LittleButler/", "ModelLittleMaid_");
         addSearch("littleMaidMob", "/assets/minecraft/textures/entity/LittleButler/", "ModelLittleButler_");
         addSearch("MaidModRedo", "/assets/maidmodredo/textures/entity/CowGirl/", "ModelCowGirl_");
+        addSearch("MaidModRedo", "/assets/maidmodredo/textures/entity/SqurrielMaid/", "ModelSqurrielMaid_");
         addSearch("MaidModRedo", "/assets/maidmodredo/textures/entity/monstermaid/EnderMaid/", "EnderMaidModel_");
         addSearch("littleMaidMob", "/mob/ModelMulti/", "ModelMulti_");
         addSearch("littleMaidMob", "/mob/littleMaid/", "ModelLittleMaid_");
@@ -566,6 +568,7 @@ public class ModelManager {
                         String lt3 = "mob/LittleButler";
                         String lt4 = "mob/EnderMaid";
                         String lt5 = "mob/CowGirl";
+                        String lt6 = "mob/SqurrielMaid";
                         addTextureName(zipentry.getName(), pSearch);
                         if (FMLEnvironment.dist == Dist.CLIENT &&
                                 (zipentry.getName().startsWith(lt1)
@@ -578,6 +581,7 @@ public class ModelManager {
                         if (FMLEnvironment.dist == Dist.CLIENT &&
                                 (zipentry.getName().startsWith(lt4)
                                         || zipentry.getName().startsWith(lt5)
+                                        || zipentry.getName().startsWith(lt6)
                                         || (!zipentry.getName().equals(zipentry.getName().toLowerCase())))) {
                             NewZipTexturesWapper.keys.add(zipentry.getName());
                         }
@@ -622,6 +626,7 @@ public class ModelManager {
                             String lt3 = "mob/LittleButler";
                             String lt4 = "mob/EnderMaid";
                             String lt5 = "mob/CowGirl";
+                            String lt6 = "mob/SqurrielMaid";
                             String loc = s.substring(i);
                             if (loc.startsWith("/")) {
                                 loc = loc.substring(1);
@@ -637,6 +642,7 @@ public class ModelManager {
                             if (FMLEnvironment.dist == Dist.CLIENT &&
                                     (loc.startsWith(lt4)
                                             || loc.startsWith(lt5)
+                                            || loc.startsWith(lt6)
                                             || (!loc.equals(loc.toLowerCase())))) {
                                 NewZipTexturesWapper.keys.add(loc);
                             }

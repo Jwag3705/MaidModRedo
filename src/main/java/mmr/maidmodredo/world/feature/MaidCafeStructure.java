@@ -89,11 +89,11 @@ public class MaidCafeStructure extends Structure<NoFeatureConfig> {
     }
 
     protected int getBiomeFeatureDistance(ChunkGenerator<?> chunkGenerator) {
-        return 30;
+        return 33;
     }
 
     protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator) {
-        return 3;
+        return 4;
     }
 
     public static class Start extends StructureStart {

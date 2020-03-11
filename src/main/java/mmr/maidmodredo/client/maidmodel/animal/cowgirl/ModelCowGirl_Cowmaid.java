@@ -1,4 +1,4 @@
-package mmr.maidmodredo.client.maidmodel.cowgirl;//Made with Blockbench
+package mmr.maidmodredo.client.maidmodel.animal.cowgirl;//Made with Blockbench
 //Paste this code into your mod.
 
 import com.google.common.collect.ImmutableList;
@@ -13,15 +13,17 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelCowGirl_Wildcow<T extends LittleMaidBaseEntity> extends ModelMultiMMMBase<T> {
-    public MaidModelRenderer bipedTorso;
+public class ModelCowGirl_Cowmaid<T extends LittleMaidBaseEntity> extends ModelMultiMMMBase<T> {
+    public MaidModelRenderer CowGirl;
     public MaidModelRenderer bipedNeck;
     public MaidModelRenderer bipedHead;
+    public MaidModelRenderer bipedHair;
+    public MaidModelRenderer HornsandEars;
     public MaidModelRenderer horn1;
     public MaidModelRenderer horn2;
-    public MaidModelRenderer bipedHair;
     public MaidModelRenderer SideTailL;
     public MaidModelRenderer SideTailR;
+    public MaidModelRenderer Headress;
     public MaidModelRenderer bipedRightArm;
     public MaidModelRenderer bipedLeftArm;
     public MaidModelRenderer bipedBody;
@@ -33,15 +35,15 @@ public class ModelCowGirl_Wildcow<T extends LittleMaidBaseEntity> extends ModelM
     public MaidModelRenderer bipedRightLeg;
     public MaidModelRenderer bipedTail;
 
-    public ModelCowGirl_Wildcow() {
+    public ModelCowGirl_Cowmaid() {
         this(0.0F);
     }
 
-    public ModelCowGirl_Wildcow(float psize) {
+    public ModelCowGirl_Cowmaid(float psize) {
         this(psize, 0.0F, 128, 128);
     }
 
-    public ModelCowGirl_Wildcow(float psize, float pyoffset, int pTextureWidth, int pTextureHeight) {
+    public ModelCowGirl_Cowmaid(float psize, float pyoffset, int pTextureWidth, int pTextureHeight) {
         super(psize, 0.0F, 128, 128);
     }
 
@@ -50,72 +52,88 @@ public class ModelCowGirl_Wildcow<T extends LittleMaidBaseEntity> extends ModelM
         textureWidth = 128;
         textureHeight = 128;
 
-        bipedTorso = new MaidModelRenderer(this);
-        bipedTorso.setRotationPoint(0.0F, -10.5F, 0.0F);
+        CowGirl = new MaidModelRenderer(this);
+        CowGirl.setRotationPoint(0.0F, -10.5F, 0.0F);
 
         bipedNeck = new MaidModelRenderer(this);
-        bipedNeck.setRotationPoint(0.0F, 0.0F, 0.0F);
-        bipedTorso.addChild(bipedNeck);
-        bipedNeck.addBox(bipedNeck, 24, 25, -1.0F, 7.5F, -1.0F, 2, 1, 2, 0.5F, false);
+        bipedNeck.setRotationPoint(0.0F, 6.0F, 0.0F);
+        CowGirl.addChild(bipedNeck);
+        bipedNeck.addBox(bipedNeck, 24, 25, -1.0F, -0.5F, -1.0F, 2, 1, 2, 0.5F, false);
 
         bipedHead = new MaidModelRenderer(this);
-        bipedHead.setRotationPoint(0.0F, 9.5F, 0.0F);
+        bipedHead.setRotationPoint(0.0F, -0.5F, 0.0F);
         bipedNeck.addChild(bipedHead);
-        bipedHead.addBox(bipedHead, 0, 20, -4.0F, -9.0F, -4.0F, 8, 8, 8, 0.0F, false);
-        bipedHead.addBox(bipedHead, 0, 0, -5.0F, -10.0F, -5.0F, 10, 10, 10, -0.5F, false);
-
-        horn1 = new MaidModelRenderer(this);
-        horn1.setRotationPoint(4.5F, -7.75F, 0.2F);
-        setRotationAngle(horn1, 0.0F, 0.0F, -0.1745F);
-        bipedHead.addChild(horn1);
-        horn1.addBox(horn1, 0, 0, -1.0F, -3.0F, -1.0F, 2, 4, 2, 0.0F, false);
-
-        horn2 = new MaidModelRenderer(this);
-        horn2.setRotationPoint(-4.5F, -7.75F, 0.2F);
-        setRotationAngle(horn2, 0.0F, 0.0F, 0.1745F);
-        bipedHead.addChild(horn2);
-        horn2.addBox(horn2, 0, 20, -1.2972F, -3.0396F, -1.0F, 2, 4, 2, 0.0F, false);
+        bipedHead.addBox(bipedHead, 0, 20, -4.0F, -8.0F, -4.0F, 8, 8, 8, 0.0F, false);
+        bipedHead.addBox(bipedHead, 80, 0, -4.0F, -8.0F, -4.0F, 8, 8, 0, 0.0F, false);
 
         bipedHair = new MaidModelRenderer(this);
-        bipedHair.setRotationPoint(0.0F, -18.5F, -0.5F);
+        bipedHair.setRotationPoint(0.0F, -14.5F, -0.5F);
         bipedHead.addChild(bipedHair);
-        bipedHair.addBox(bipedHair, 32, 32, -4.0F, 8.5F, 3.5F, 8, 17, 2, 0.0F, false);
+        bipedHair.addBox(bipedHair, 32, 32, -4.0F, 6.5F, 3.5F, 8, 17, 2, 0.0F, false);
+        bipedHair.addBox(bipedHair, 0, 0, -5.0F, 5.5F, -4.5F, 10, 10, 10, -0.5F, false);
+
+        HornsandEars = new MaidModelRenderer(this);
+        HornsandEars.setRotationPoint(0.0F, 29.0F, 0.0F);
+        bipedHead.addChild(HornsandEars);
+
+        horn1 = new MaidModelRenderer(this);
+        horn1.setRotationPoint(4.5F, -42.25F, 0.2F);
+        setRotationAngle(horn1, 0.0F, 0.0F, -0.1745F);
+        HornsandEars.addChild(horn1);
+        horn1.addBox(horn1, 0, 0, -0.6061F, 4.0695F, -1.0F, 2, 4, 2, 0.0F, false);
+
+        horn2 = new MaidModelRenderer(this);
+        horn2.setRotationPoint(-4.5F, -42.25F, 0.2F);
+        setRotationAngle(horn2, 0.0F, 0.0F, 0.1745F);
+        HornsandEars.addChild(horn2);
+        horn2.addBox(horn2, 0, 20, -1.3957F, 3.9778F, -1.0F, 2, 4, 2, 0.0F, false);
 
         SideTailL = new MaidModelRenderer(this);
-        SideTailL.setRotationPoint(0.0F, -9.5F, -0.5F);
+        SideTailL.setRotationPoint(0.0F, -42.5F, -0.5F);
         setRotationAngle(SideTailL, 0.0F, 0.0F, -0.6109F);
-        bipedHead.addChild(SideTailL);
-        SideTailL.addBox(SideTailL, 48, 17, -9.0F, -0.5F, -1.5F, 5, 1, 3, 0.0F, false);
+        HornsandEars.addChild(SideTailL);
+        SideTailL.addBox(SideTailL, 48, 17, -9.0F, 5.5F, -1.5F, 5, 1, 3, 0.0F, false);
 
         SideTailR = new MaidModelRenderer(this);
-        SideTailR.setRotationPoint(0.0F, -9.5F, -0.5F);
+        SideTailR.setRotationPoint(0.0F, -43.5F, -0.5F);
         setRotationAngle(SideTailR, 0.0F, 0.0F, 0.6109F);
-        bipedHead.addChild(SideTailR);
-        SideTailR.addBox(SideTailR, 49, 26, 4.0F, -0.75F, -1.5F, 5, 1, 3, 0.0F, false);
+        HornsandEars.addChild(SideTailR);
+        SideTailR.addBox(SideTailR, 49, 26, 4.0F, 6.25F, -1.5F, 5, 1, 3, 0.0F, false);
+
+        Headress = new MaidModelRenderer(this);
+        Headress.setRotationPoint(0.0F, -5.8F, 0.0F);
+        bipedHead.addChild(Headress);
+        Headress.addBox(Headress, 78, 14, -4.5F, -5.1F, -2.1F, 9, 3, 1, 0.0F, false);
+        Headress.addBox(Headress, 0, 6, -6.1F, -2.8F, -2.6F, 2, 2, 2, 0.0F, false);
+        Headress.addBox(Headress, 0, 6, 4.1F, -2.8F, -2.6F, 2, 2, 2, 0.0F, true);
 
         bipedRightArm = new MaidModelRenderer(this);
-        bipedRightArm.setRotationPoint(-3.0F, 9.0F, 0.0F);
+        bipedRightArm.setRotationPoint(-3.0F, 3.0F, 0.0F);
         setRotationAngle(bipedRightArm, 0.0F, 0.0F, 0.1745F);
         bipedNeck.addChild(bipedRightArm);
-        bipedRightArm.addBox(bipedRightArm, 36, 51, -2.0F, -1.0F, -1.0F, 2, 13, 2, 0.0F, false);
+        bipedRightArm.addBox(bipedRightArm, 36, 51, -2.0F, -1.0F, -1.0F, 2, 8, 2, 0.0F, false);
+        bipedRightArm.addBox(bipedRightArm, 68, 20, -2.0243F, 6.9246F, -1.0F, 2, 8, 2, 0.0F, true);
+        bipedRightArm.addBox(bipedRightArm, 90, 53, -3.4615F, -3.181F, -2.0F, 4, 4, 4, 0.0F, false);
 
         bipedLeftArm = new MaidModelRenderer(this);
-        bipedLeftArm.setRotationPoint(3.0F, 9.0F, 0.0F);
+        bipedLeftArm.setRotationPoint(3.0F, 3.0F, 0.0F);
         setRotationAngle(bipedLeftArm, 0.0F, 0.0F, -0.1745F);
         bipedNeck.addChild(bipedLeftArm);
-        bipedLeftArm.addBox(bipedLeftArm, 28, 51, 0.0F, -1.0F, -1.0F, 2, 13, 2, 0.0F, false);
+        bipedLeftArm.addBox(bipedLeftArm, 28, 51, 0.0F, -1.0F, -1.0F, 2, 8, 2, 0.0F, false);
+        bipedLeftArm.addBox(bipedLeftArm, 68, 21, 0.0243F, 6.9246F, -1.0F, 2, 8, 2, 0.0F, false);
+        bipedLeftArm.addBox(bipedLeftArm, 90, 53, -0.5559F, -3.181F, -2.0F, 4, 4, 4, 0.0F, true);
 
         bipedBody = new MaidModelRenderer(this);
-        bipedBody.setRotationPoint(0.0F, 7.0F, 0.0F);
-        bipedTorso.addChild(bipedBody);
-        bipedBody.addBox(bipedBody, 32, 20, -3.0F, 1.0F, -2.0F, 6, 5, 4, 0.0F, false);
-        bipedBody.addBox(bipedBody, 49, 49, -2.0F, 5.5F, -2.0F, 4, 7, 3, 0.4F, false);
-        bipedBody.addBox(bipedBody, 30, 0, -4.0F, 10.5F, -2.0F, 8, 4, 5, 0.1F, false);
-        bipedBody.addBox(bipedBody, 40, 9, -3.0F, 9.25F, -2.0F, 6, 4, 4, 0.25F, false);
-        bipedBody.addBox(bipedBody, 0, 6, -1.0F, 1.0F, -4.0F, 2, 2, 2, 0.0F, false);
+        bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);
+        CowGirl.addChild(bipedBody);
+        bipedBody.addBox(bipedBody, 32, 20, -3.0F, 6.0F, -2.0F, 6, 5, 4, 0.0F, false);
+        bipedBody.addBox(bipedBody, 49, 49, -2.0F, 10.5F, -2.0F, 4, 7, 3, 0.4F, false);
+        bipedBody.addBox(bipedBody, 30, 0, -4.0F, 15.5F, -2.0F, 8, 4, 5, 0.1F, false);
+        bipedBody.addBox(bipedBody, 40, 9, -3.0F, 14.25F, -2.0F, 6, 4, 4, 0.25F, false);
+        bipedBody.addBox(bipedBody, 0, 6, -1.0F, 6.0F, -4.0F, 2, 2, 2, 0.0F, false);
 
         bipedChest = new MaidModelRenderer(this);
-        bipedChest.setRotationPoint(2.0F, 3.0F, -1.25F);
+        bipedChest.setRotationPoint(2.0F, 3.0F, -3.25F);
         setRotationAngle(bipedChest, -0.0873F, 0.0F, 0.0F);
         bipedBody.addChild(bipedChest);
 
@@ -123,34 +141,42 @@ public class ModelCowGirl_Wildcow<T extends LittleMaidBaseEntity> extends ModelM
         bipedboob.setRotationPoint(-3.5F, 0.5F, 0.25F);
         setRotationAngle(bipedboob, -0.9599F, 0.2618F, 0.0F);
         bipedChest.addChild(bipedboob);
-        bipedboob.addBox(bipedboob, 52, 38, -1.4575F, -0.0561F, -1.3864F, 3, 5, 3, 0.25F, false);
+        bipedboob.addBox(bipedboob, 52, 38, -1.4575F, -0.0561F, 2.6136F, 3, 5, 3, 0.25F, false);
 
         bipedboobright = new MaidModelRenderer(this);
         bipedboobright.setRotationPoint(-0.5F, 0.0F, 0.0F);
         setRotationAngle(bipedboobright, -0.9599F, -0.2618F, 0.0F);
         bipedChest.addChild(bipedboobright);
-        bipedboobright.addBox(bipedboobright, 52, 30, -1.512F, -0.011F, -0.8179F, 3, 5, 3, 0.25F, false);
+        bipedboobright.addBox(bipedboobright, 52, 30, -1.512F, -0.011F, 3.1821F, 3, 5, 3, 0.25F, false);
 
         bipedPelvic = new MaidModelRenderer(this);
         bipedPelvic.setRotationPoint(0.0F, 10.5F, 0.0F);
-        bipedTorso.addChild(bipedPelvic);
+        CowGirl.addChild(bipedPelvic);
 
         bipedLeftLeg = new MaidModelRenderer(this);
-        bipedLeftLeg.setRotationPoint(1.0F, 11.0F, 0.0F);
+        bipedLeftLeg.setRotationPoint(1.0F, 4.0F, 0.0F);
         bipedPelvic.addChild(bipedLeftLeg);
-        bipedLeftLeg.addBox(bipedLeftLeg, 0, 36, -1.0F, -3.0F, -2.0F, 3, 16, 4, 0.0F, false);
+        bipedLeftLeg.addBox(bipedLeftLeg, 0, 36, -1.0F, 2.0F, -2.0F, 3, 10, 4, 0.0F, false);
+        bipedLeftLeg.addBox(bipedLeftLeg, 0, 57, -1.0F, 12.0F, -2.0F, 3, 8, 4, 0.0F, false);
+        bipedLeftLeg.addBox(bipedLeftLeg, 68, 49, -1.0F, -0.3F, -2.6F, 4, 5, 6, 0.4F, true);
+        bipedLeftLeg.addBox(bipedLeftLeg, 66, 71, -1.0F, 4.3F, -3.6F, 5, 3, 8, 0.4F, true);
+        bipedLeftLeg.addBox(bipedLeftLeg, 66, 88, -1.6F, 12.0F, -2.0F, 4, 8, 4, 0.0F, true);
 
         bipedRightLeg = new MaidModelRenderer(this);
-        bipedRightLeg.setRotationPoint(-1.0F, 11.0F, 0.0F);
+        bipedRightLeg.setRotationPoint(-1.0F, 4.0F, 0.0F);
         bipedPelvic.addChild(bipedRightLeg);
-        bipedRightLeg.addBox(bipedRightLeg, 14, 36, -2.0F, -3.0F, -2.0F, 3, 16, 4, 0.0F, false);
+        bipedRightLeg.addBox(bipedRightLeg, 14, 36, -2.0F, 2.0F, -2.0F, 3, 10, 4, 0.0F, false);
+        bipedRightLeg.addBox(bipedRightLeg, 14, 68, -2.0F, 12.0F, -2.0F, 3, 8, 4, 0.0F, false);
+        bipedRightLeg.addBox(bipedRightLeg, 68, 34, -3.0F, -0.3F, -2.6F, 4, 5, 6, 0.4F, false);
+        bipedRightLeg.addBox(bipedRightLeg, 66, 71, -4.0F, 4.3F, -3.6F, 5, 3, 8, 0.4F, false);
+        bipedRightLeg.addBox(bipedRightLeg, 66, 88, -2.4F, 12.0F, -2.0F, 4, 8, 4, 0.0F, false);
 
         bipedTail = new MaidModelRenderer(this);
         bipedTail.setRotationPoint(0.5F, 2.75F, 0.0F);
         setRotationAngle(bipedTail, -2.0944F, 0.0F, 0.0F);
         bipedPelvic.addChild(bipedTail);
-        bipedTail.addBox(bipedTail, 28, 36, -1.0F, -12.0F, 2.0F, 1, 12, 1, 0.0F, false);
-        bipedTail.addBox(bipedTail, 24, 20, -1.5F, -13.0532F, 1.4127F, 2, 3, 2, 0.0F, false);
+        bipedTail.addBox(bipedTail, 28, 36, -1.0F, -14.0F, 2.0F, 1, 12, 1, 0.0F, false);
+        bipedTail.addBox(bipedTail, 24, 20, -1.5F, -15.0532F, 1.4127F, 2, 3, 2, 0.0F, false);
     }
 
     @Override
@@ -190,7 +216,7 @@ public class ModelCowGirl_Wildcow<T extends LittleMaidBaseEntity> extends ModelM
 
     @Override
     public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        ImmutableList.of(this.bipedTorso).forEach((p_228292_8_) -> {
+        ImmutableList.of(this.CowGirl).forEach((p_228292_8_) -> {
             p_228292_8_.render(matrixStack, iVertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         });
     }

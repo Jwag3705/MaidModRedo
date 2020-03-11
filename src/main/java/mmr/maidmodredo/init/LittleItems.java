@@ -57,6 +57,7 @@ public class LittleItems {
     public static final Item WANDERMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.WANDERMAID, 4547222, 15377456, (new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item ENDERMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.ENDERMAID, 1447446, 0, (new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item COWGIRL_SPAWNEGG = new SpawnEggItem(LittleEntitys.COWGIRL, 0xffffff, 0, (new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item SQURRIELMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.SQURRIEL_MAID, 0xc29d80, 0xa37354, (new Item.Properties()).group(LittleItemGroups.MISC));
 
     public static final Item PLANTER_SPAWNEGG = new SpawnEggItem(LittleEntitys.PLANTER, 0xb6ff75, 0x64a34a, (new Item.Properties()).group(LittleItemGroups.MISC));
 
@@ -109,6 +110,7 @@ public class LittleItems {
         event.getRegistry().register(WANDERMAID_SPAWNEGG.setRegistryName("wandermaid_spawnegg"));
         event.getRegistry().register(ENDERMAID_SPAWNEGG.setRegistryName("endermaid_spawnegg"));
         event.getRegistry().register(COWGIRL_SPAWNEGG.setRegistryName("cowgirl_spawnegg"));
+        event.getRegistry().register(SQURRIELMAID_SPAWNEGG.setRegistryName("squirrelmaid_spawnegg"));
         event.getRegistry().register(PLANTER_SPAWNEGG.setRegistryName("planter_spawnegg"));
 
         event.getRegistry().register(ZOMBIEMAID_SPAWNEGG.setRegistryName("zombiemaid_spawnegg"));

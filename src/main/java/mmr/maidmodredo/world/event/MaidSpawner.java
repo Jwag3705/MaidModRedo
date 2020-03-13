@@ -50,7 +50,7 @@ public class MaidSpawner {
                         this.field_221125_a = 24000;
                         return this.spawnToNearMeetingPoint(worldIn, blockpos, playerentity.getPosition());
                     } else {
-                        this.field_221125_a = 24000;
+                        this.field_221125_a = 12000;
                     }
 
                 }

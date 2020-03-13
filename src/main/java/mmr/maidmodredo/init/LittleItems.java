@@ -37,6 +37,11 @@ public class LittleItems {
     public static final Item COFFEE_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
     public static final Item STRAWBERRY_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
     public static final Item BIRTHDAY_CAKE = new Item((new Item.Properties()).food(LittleFoods.CAKE).group(LittleItemGroups.FOODS));
+
+    public static final Item POCKY = new Item((new Item.Properties()).food(LittleFoods.POCKY).group(LittleItemGroups.FOODS));
+    public static final Item POCKY_STRAWBERRY = new Item((new Item.Properties()).food(LittleFoods.POCKY).group(LittleItemGroups.FOODS));
+    public static final Item POCKY_GREENTEA = new Item((new Item.Properties()).food(LittleFoods.POCKY).group(LittleItemGroups.FOODS));
+
     public static final Item BAGU_HAT = new BaguHatItem(MaidArmorMaterial.BAGU_HAT, EquipmentSlotType.HEAD, (new Item.Properties()).maxStackSize(1).group(LittleItemGroups.MISC));
 
     public static final Item MAGE_STUFF = new Item((new Item.Properties()).maxStackSize(1).setISTER(() -> MageStuffItemRender::new).group(LittleItemGroups.COMBAT));
@@ -90,6 +95,10 @@ public class LittleItems {
         event.getRegistry().register(COFFEE_CAKE.setRegistryName("coffee_cake"));
         event.getRegistry().register(STRAWBERRY_CAKE.setRegistryName("strawberry_cake"));
         event.getRegistry().register(BIRTHDAY_CAKE.setRegistryName("birthday_cake"));
+
+        event.getRegistry().register(POCKY.setRegistryName("pocky"));
+        event.getRegistry().register(POCKY_STRAWBERRY.setRegistryName("pocky_strawberry"));
+        event.getRegistry().register(POCKY_GREENTEA.setRegistryName("pocky_greentea"));
 
         event.getRegistry().register(BAGU_HAT.setRegistryName("bagu_hat"));
 

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "#",
+    "W"
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:wheat"
+    },
+    "#": {
+      "item": "minecraft:cocoa_beans"
+    }
+  },
+  "result": {
+    "item": "maidmodredo:pocky"
+  }
+}

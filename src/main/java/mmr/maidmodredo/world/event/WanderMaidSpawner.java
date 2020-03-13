@@ -61,7 +61,7 @@ public class WanderMaidSpawner {
 
     private int func_221121_a(ServerWorld worldIn, BlockPos p_221121_2_, BlockPos playerPos) {
         int i = 48;
-        if (worldIn.getPointOfInterestManager().func_219145_a(PointOfInterestType.HOME.func_221045_c(), playerPos, 48, PointOfInterestManager.Status.IS_OCCUPIED) > 4L) {
+        if (worldIn.getPointOfInterestManager().func_219145_a(PointOfInterestType.HOME.func_221045_c(), playerPos, 48, PointOfInterestManager.Status.IS_OCCUPIED) > 3L) {
             List<WanderMaidEntity> list = worldIn.getEntitiesWithinAABB(WanderMaidEntity.class, (new AxisAlignedBB(playerPos)).grow(48.0D, 8.0D, 48.0D));
             if (list.size() < 2) {
                 return this.spawnWanderMaid(p_221121_2_, worldIn, playerPos);

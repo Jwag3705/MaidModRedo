@@ -236,6 +236,10 @@ public class PlanterEntity extends AbstractVillagerEntity implements IReputation
 
         //findHome(false);
 
+        if (this.getRNG().nextInt(300) == 0) {
+            this.heal(1.0F);
+        }
+
         super.updateAITasks();
 
         if (this.spellTicks > 0) {

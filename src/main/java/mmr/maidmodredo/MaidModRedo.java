@@ -8,6 +8,7 @@ import mmr.maidmodredo.utils.CommonHelper;
 import mmr.maidmodredo.utils.FileList;
 import mmr.maidmodredo.utils.ModelManager;
 import mmr.maidmodredo.utils.manager.StabilizerManager;
+import mmr.maidmodredo.world.event.MaidSpawner;
 import mmr.maidmodredo.world.event.WanderMaidSpawner;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
@@ -50,6 +51,7 @@ public class MaidModRedo {
 
 
     private WanderMaidSpawner wanderMaidSpawner = new WanderMaidSpawner();
+    private MaidSpawner maidSpawner = new MaidSpawner();
 
     public MaidModRedo() {
         MaidPacketHandler.register();
@@ -172,6 +174,7 @@ public class MaidModRedo {
         if (event.world instanceof ServerWorld) {
             ServerWorld serverWorld = (ServerWorld) event.world;
             wanderMaidSpawner.tick(serverWorld);
+            maidSpawner.tick(serverWorld);
         }
     }
 

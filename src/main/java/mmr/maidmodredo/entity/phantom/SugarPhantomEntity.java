@@ -2,9 +2,11 @@ package mmr.maidmodredo.entity.phantom;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.Dynamic;
+import mmr.maidmodredo.client.maidmodel.TextureBoxBase;
 import mmr.maidmodredo.entity.LittleMaidBaseEntity;
 import mmr.maidmodredo.entity.ai.PhantomFollowOwnerGoal;
 import mmr.maidmodredo.init.LittleEntitys;
+import mmr.maidmodredo.init.LittleItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -14,10 +16,8 @@ import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
@@ -36,9 +36,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class SugarPhantomEntity extends LittleMaidBaseEntity {
-    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.createKey(SugarPhantomEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-    protected static final DataParameter<CompoundNBT> MAID_PHANTOM_DATA = EntityDataManager.createKey(SugarPhantomEntity.class, DataSerializers.COMPOUND_NBT);
-
     protected EntityType<?> phantomEntity;
 
     private int respawnTime = 1200 + this.rand.nextInt(2400);
@@ -81,13 +78,11 @@ public class SugarPhantomEntity extends LittleMaidBaseEntity {
 
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(OWNER_UNIQUE_ID, Optional.empty());
-        this.dataManager.register(MAID_PHANTOM_DATA, new CompoundNBT());
     }
 
     public void livingTick() {
         super.livingTick();
-        if (--this.respawnTime <= 0 && getSugarPhantomData() != null && this.phantomEntity != null && !this.world.isRemote) {
+        if (--this.respawnTime <= 0 && this.phantomEntity != null && !this.world.isRemote) {
             this.handleRespawn();
         }
 
@@ -101,12 +96,31 @@ public class SugarPhantomEntity extends LittleMaidBaseEntity {
     private void handleRespawn() {
         LittleMaidBaseEntity maidEntity = (LittleMaidBaseEntity) this.phantomEntity.create(world);
         maidEntity.setNoAI(this.isAIDisabled());
-        maidEntity.read(this.getSugarPhantomData());
+
+        CompoundNBT nbt = this.writeWithoutTypeId(new CompoundNBT());
+
+        maidEntity.readAdditional(nbt);
         maidEntity.setHealth(maidEntity.getMaxHealth());
         maidEntity.fallDistance = 0F;
         maidEntity.extinguish();
-        maidEntity.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 1200, 1));
+        maidEntity.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 1200, 0));
         maidEntity.addPotionEffect(new EffectInstance(Effects.SLOW_FALLING, 200, 0));
+
+        maidEntity.setContractLimit(24000 * 7);
+        if (this.getOwner() != null) {
+            maidEntity.setTamedBy((PlayerEntity) this.getOwner());
+        }
+        this.setMaidWait(true);
+
+        TextureBoxBase mainModel = modelBoxAutoSelect(getModelNameMain());
+
+        TextureBoxBase armorModel = modelBoxAutoSelect(getModelNameArmor());
+
+        if (mainModel != null && armorModel != null) {
+            maidEntity.setTextureBox(new TextureBoxBase[]{mainModel, armorModel});
+        }
+        maidEntity.isModelSaved = false;
+
         if (this.getOwner() != null && this.getOwner().isAlive()) {
             maidEntity.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
             maidEntity.attemptTeleport(this.getOwner().getPosX(), this.getOwner().getPosY(), this.getOwner().getPosZ(), true);
@@ -125,7 +139,6 @@ public class SugarPhantomEntity extends LittleMaidBaseEntity {
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
         compound.putInt("RespawnTime", this.respawnTime);
-        compound.put("SugarPhantomData", this.getSugarPhantomData());
         if (this.phantomEntity != null) {
             compound.putString("PhantomEntityType", Registry.ENTITY_TYPE.getKey(this.phantomEntity).toString());
         }
@@ -145,8 +158,6 @@ public class SugarPhantomEntity extends LittleMaidBaseEntity {
             this.phantomEntity = Registry.ENTITY_TYPE.getValue(ResourceLocation.tryCreate(compound.getString("PhantomEntityType"))).orElse(LittleEntitys.LITTLEMAID);
         }
 
-        this.setSugarPhantomData(compound.getCompound("SugarPhantomData"));
-
         String s;
         if (compound.contains("OwnerUUID", 8)) {
             s = compound.getString("OwnerUUID");
@@ -158,6 +169,14 @@ public class SugarPhantomEntity extends LittleMaidBaseEntity {
 
     @Override
     public boolean processInteract(PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (stack.getItem() == LittleItems.SUGAR_TOTEM) {
+            if (this.phantomEntity != null && !this.world.isRemote) {
+                this.handleRespawn();
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -177,13 +196,6 @@ public class SugarPhantomEntity extends LittleMaidBaseEntity {
         }
     }
 
-    public CompoundNBT getSugarPhantomData() {
-        return this.dataManager.get(MAID_PHANTOM_DATA);
-    }
-
-    public void setSugarPhantomData(CompoundNBT compoundNBT) {
-        this.dataManager.set(MAID_PHANTOM_DATA, compoundNBT);
-    }
 
     @Nullable
     public UUID getOwnerId() {
@@ -197,7 +209,6 @@ public class SugarPhantomEntity extends LittleMaidBaseEntity {
     public void setPhantom(@Nullable UUID uuid, EntityType entityType, CompoundNBT compoundNBT) {
         setOwnerId(uuid);
         this.phantomEntity = entityType;
-        this.setSugarPhantomData(compoundNBT);
         readAdditional(compoundNBT);
     }
 

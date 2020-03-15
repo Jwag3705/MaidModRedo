@@ -94,7 +94,8 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
     private static final Set<Item> SWEETITEM = Sets.newHashSet(Items.SUGAR, Items.COOKIE, Items.PUMPKIN_PIE, LittleItems.CARAMEL_APPLE
             , LittleItems.STRAWBERRY_CAKE, LittleItems.REDVELVET_CAKE, LittleItems.LAVENDER_CAKE, LittleItems.ICECREAM_CAKE, LittleItems.DEVILSFOOD_CAKE, LittleItems.COFFEE_CAKE, LittleItems.CHEESE_CAKE, LittleItems.CARROT_CAKE, LittleItems.BIRTHDAY_CAKE
             , LittleItems.COMBINED_DONUT, LittleItems.JELLY_DONUT, LittleItems.POWDERD_DONUT, LittleItems.SUGAR_DONUT
-            , LittleItems.BLUEBERRY_PIE, LittleItems.CHEESECAKE_PIE, LittleItems.CHERRY_PIE, LittleItems.CHOCOLATE_PIE, LittleItems.STRAWBERRY_PIE, LittleItems.POCKY, LittleItems.POCKY_GREENTEA, LittleItems.POCKY_STRAWBERRY);
+            , LittleItems.BLUEBERRY_PIE, LittleItems.CHEESECAKE_PIE, LittleItems.CHERRY_PIE, LittleItems.CHOCOLATE_PIE, LittleItems.STRAWBERRY_PIE, LittleItems.POCKY, LittleItems.POCKY_GREENTEA, LittleItems.POCKY_STRAWBERRY
+            , LittleItems.COOKIE, LittleItems.FORTUNE_COOKIE, LittleItems.DOLL_COOKIE, LittleItems.JAM_COOKIE, LittleItems.MACAROON_CARAMEL, LittleItems.MACAROON_CHOCOLATE, LittleItems.MACAROON_GREENTEA, LittleItems.MACAROON_LEMON, LittleItems.MACAROON_STRAWBERRY);
 
     private InventoryMaidMain inventoryMaidMain;
     private InventoryMaidEquipment inventoryMaidEquipment;
@@ -594,6 +595,10 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
                 maidContractLimit = 168000;    // 24000 * 7
             }
         }
+    }
+
+    public void setContractLimit(int maidContractLimit) {
+        this.maidContractLimit = maidContractLimit;
     }
 
     public void clearMaidContractLimit() {
@@ -1650,7 +1655,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         getModelConfigCompound().setSize();
     }
 
-    private TextureBoxBase modelBoxAutoSelect(String pName) {
+    protected TextureBoxBase modelBoxAutoSelect(String pName) {
         return getEntityWorld().isRemote ? ModelManager.instance.getTextureBox(pName) : ModelManager.instance.getTextureBoxServer(pName);
     }
 

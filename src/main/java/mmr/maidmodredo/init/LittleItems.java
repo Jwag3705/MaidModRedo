@@ -44,8 +44,14 @@ public class LittleItems {
 
     public static final Item COOKIE = new Item((new Item.Properties()).food(LittleFoods.COOKIE).group(LittleItemGroups.FOODS));
     public static final Item FORTUNE_COOKIE = new Item((new Item.Properties()).food(LittleFoods.COOKIE).group(LittleItemGroups.FOODS));
-    public static final Item DOOL_COOKIE = new Item((new Item.Properties()).food(LittleFoods.DOOL_COOKIE).group(LittleItemGroups.FOODS));
+    public static final Item DOLL_COOKIE = new Item((new Item.Properties()).food(LittleFoods.DOLL_COOKIE).group(LittleItemGroups.FOODS));
     public static final Item JAM_COOKIE = new Item((new Item.Properties()).food(LittleFoods.COOKIE).group(LittleItemGroups.FOODS));
+
+    public static final Item MACAROON_GREENTEA = new Item((new Item.Properties()).food(LittleFoods.MACAROON).group(LittleItemGroups.FOODS));
+    public static final Item MACAROON_LEMON = new Item((new Item.Properties()).food(LittleFoods.MACAROON).group(LittleItemGroups.FOODS));
+    public static final Item MACAROON_CHOCOLATE = new Item((new Item.Properties()).food(LittleFoods.MACAROON).group(LittleItemGroups.FOODS));
+    public static final Item MACAROON_CARAMEL = new Item((new Item.Properties()).food(LittleFoods.MACAROON).group(LittleItemGroups.FOODS));
+    public static final Item MACAROON_STRAWBERRY = new Item((new Item.Properties()).food(LittleFoods.MACAROON).group(LittleItemGroups.FOODS));
 
 
     public static final Item BAGU_HAT = new BaguHatItem(MaidArmorMaterial.BAGU_HAT, EquipmentSlotType.HEAD, (new Item.Properties()).maxStackSize(1).group(LittleItemGroups.MISC));
@@ -61,7 +67,7 @@ public class LittleItems {
     public static final Item AMBER = new Item((new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item HOUSEWAND = new HouseWandItem((new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item JOBBOOK = new JobBookItem((new Item.Properties()).group(LittleItemGroups.MISC));
-
+    public static final Item SUGAR_TOTEM = new SugarTotemItem((new Item.Properties()).group(LittleItemGroups.MISC));
 
     public static final Item LITTLEMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.LITTLEMAID, 0xe3e3e3, 0xa45131, (new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item LITTLEBUTLER_SPAWNEGG = new SpawnEggItem(LittleEntitys.LITTLEBUTLER, 0xe3e3e3, 0xa45131, (new Item.Properties()).group(LittleItemGroups.MISC));
@@ -109,8 +115,14 @@ public class LittleItems {
 
         event.getRegistry().register(COOKIE.setRegistryName("cookie"));
         event.getRegistry().register(FORTUNE_COOKIE.setRegistryName("fortune_cookie"));
-        event.getRegistry().register(DOOL_COOKIE.setRegistryName("doll_cookie"));
+        event.getRegistry().register(DOLL_COOKIE.setRegistryName("doll_cookie"));
         event.getRegistry().register(JAM_COOKIE.setRegistryName("jam_cookie"));
+
+        event.getRegistry().register(MACAROON_GREENTEA.setRegistryName("macaroon_greentea"));
+        event.getRegistry().register(MACAROON_LEMON.setRegistryName("macaroon_lemon"));
+        event.getRegistry().register(MACAROON_CHOCOLATE.setRegistryName("macaroon_chocolate"));
+        event.getRegistry().register(MACAROON_CARAMEL.setRegistryName("macaroon_caramel"));
+        event.getRegistry().register(MACAROON_STRAWBERRY.setRegistryName("macaroon_strawberry"));
 
         event.getRegistry().register(BAGU_HAT.setRegistryName("bagu_hat"));
 
@@ -125,6 +137,7 @@ public class LittleItems {
         event.getRegistry().register(AMBER.setRegistryName("amber"));
         event.getRegistry().register(HOUSEWAND.setRegistryName("housewand"));
         event.getRegistry().register(JOBBOOK.setRegistryName("job_book"));
+        event.getRegistry().register(SUGAR_TOTEM.setRegistryName("sugar_totem"));
 
         event.getRegistry().register(LITTLEMAID_SPAWNEGG.setRegistryName("littlemaid_spawnegg"));
         event.getRegistry().register(LITTLEBUTLER_SPAWNEGG.setRegistryName("littlebutler_spawnegg"));

@@ -25,7 +25,7 @@ public class MaidTrades {
                     , new SugerCoinForItemsTrade(Items.BIRCH_LOG, 42, 6, 4)
                     , new SugerCoinForItemsTrade(Items.HONEYCOMB, 24, 8, 3)},
             2, new VillagerTrades.ITrade[]{new ItemsForSugerCoinsTrade(LittleBlocks.MAGICALOAK_LOG, 1, 24, 4, 6)
-                    , new ItemsForSugerCoinsTrade(LittleItems.AMBER, 1, 6, 4, 7)}));
+                    , new ItemsForSugerCoinsTrade(LittleItems.AMBER, 1, 6, 4, 7), new ItemsForSugerCoinsTrade(LittleItems.SUGAR_TOTEM, 1, 4, 4, 7)}));
 
 
     private static Int2ObjectMap<VillagerTrades.ITrade[]> func_221238_a(ImmutableMap<Integer, VillagerTrades.ITrade[]> p_221238_0_) {

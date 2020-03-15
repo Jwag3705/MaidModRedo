@@ -30,6 +30,7 @@
   "item.maidmodredo.endermaid_spawnegg": "エンダーメイドのスポーンエッグ",
   "item.maidmodredo.cowgirl_spawnegg": "牛娘のスポーンエッグ",
   "item.maidmodredo.squirrelmaid_spawnegg": "リスメイドのスポーンエッグ",
+  "item.maidmodredo.squirrelbutler_spawnegg": "リスバトラーのスポーンエッグ",
   "item.maidmodredo.planter_spawnegg": "プランターのスポーンエッグ",
 
   "item.maidmodredo.zombiemaid_spawnegg": "ゾンビメイドのスポーンエッグ",
@@ -41,6 +42,7 @@
   "entity.maidmodredo.wandermaid": "商人メイド",
   "entity.maidmodredo.ender_maid": "エンダーガール",
   "entity.maidmodredo.squirrel_maid": "リスメイド",
+  "entity.maidmodredo.squirrel_butler": "リスバトラー",
   "entity.maidmodredo.cowgirl": "牛娘",
   "entity.maidmodredo.planter": "プランター",
 

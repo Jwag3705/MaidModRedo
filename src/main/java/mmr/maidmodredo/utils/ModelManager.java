@@ -1,16 +1,12 @@
 package mmr.maidmodredo.utils;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import mmr.maidmodredo.MaidModRedo;
 import mmr.maidmodredo.api.classutil.FileClassUtil;
 import mmr.maidmodredo.client.maidmodel.*;
 import mmr.maidmodredo.client.resource.NewZipTexturesWapper;
 import mmr.maidmodredo.client.resource.OldZipTexturesWrapper;
-import mmr.maidmodredo.entity.CowGirlEntity;
 import mmr.maidmodredo.entity.LittleButlerEntity;
 import mmr.maidmodredo.entity.LittleMaidEntity;
-import mmr.maidmodredo.entity.SqurrielMaidEntity;
 import mmr.maidmodredo.entity.monstermaid.EnderMaidEntity;
 import mmr.maidmodredo.entity.phantom.SugarPhantomEntity;
 import mmr.maidmodredo.init.MaidModels;
@@ -77,8 +73,7 @@ public class ModelManager {
     protected Map<String, ModelMultiBase[]> modelMap = new TreeMap<String, ModelMultiBase[]>();
 
     //It is use for match entity and model
-    protected Map<String, Class> modelEntityMap = Maps.newHashMap(ImmutableMap.of("littlemaid", LittleMaidEntity.class, "littlebutler", LittleButlerEntity.class
-            , "endermaid", EnderMaidEntity.class, "cowgirl", CowGirlEntity.class, "squrrielmaid", SqurrielMaidEntity.class));
+
     /**
      * ローカルで保持しているテクスチャパック
      */
@@ -113,6 +108,7 @@ public class ModelManager {
         addSearch("littleMaidMob", "/assets/minecraft/textures/entity/LittleButler/", "ModelLittleButler_");
         addSearch("MaidModRedo", "/assets/maidmodredo/textures/entity/CowGirl/", "ModelCowGirl_");
         addSearch("MaidModRedo", "/assets/maidmodredo/textures/entity/SqurrielMaid/", "ModelSqurrielMaid_");
+        addSearch("MaidModRedo", "/assets/maidmodredo/textures/entity/SqurrielButler/", "ModelSqurrielButler_");
         addSearch("MaidModRedo", "/assets/maidmodredo/textures/entity/monstermaid/EnderMaid/", "EnderMaidModel_");
         addSearch("littleMaidMob", "/mob/ModelMulti/", "ModelMulti_");
         addSearch("littleMaidMob", "/mob/littleMaid/", "ModelLittleMaid_");
@@ -304,7 +300,9 @@ public class ModelManager {
     //Entityのクラスでテクスチャを分ける
     //TODO
     private void setTextureForType(TextureBox lbox) {
-        if (modelEntityMap.containsValue(lbox.modelEntity)) {
+        if (MaidModels.maidModelsList.stream().anyMatch((entity) -> {
+            return lbox.modelEntity == entity.getEntityClass();
+        })) {
             setDefaultTexture(lbox.modelEntity, lbox);
         } else {
             setDefaultTexture(LittleMaidEntity.class, lbox);

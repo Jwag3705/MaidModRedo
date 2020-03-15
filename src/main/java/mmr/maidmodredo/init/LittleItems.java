@@ -42,6 +42,12 @@ public class LittleItems {
     public static final Item POCKY_STRAWBERRY = new Item((new Item.Properties()).food(LittleFoods.POCKY).group(LittleItemGroups.FOODS));
     public static final Item POCKY_GREENTEA = new Item((new Item.Properties()).food(LittleFoods.POCKY).group(LittleItemGroups.FOODS));
 
+    public static final Item COOKIE = new Item((new Item.Properties()).food(LittleFoods.COOKIE).group(LittleItemGroups.FOODS));
+    public static final Item FORTUNE_COOKIE = new Item((new Item.Properties()).food(LittleFoods.COOKIE).group(LittleItemGroups.FOODS));
+    public static final Item DOOL_COOKIE = new Item((new Item.Properties()).food(LittleFoods.DOOL_COOKIE).group(LittleItemGroups.FOODS));
+    public static final Item JAM_COOKIE = new Item((new Item.Properties()).food(LittleFoods.COOKIE).group(LittleItemGroups.FOODS));
+
+
     public static final Item BAGU_HAT = new BaguHatItem(MaidArmorMaterial.BAGU_HAT, EquipmentSlotType.HEAD, (new Item.Properties()).maxStackSize(1).group(LittleItemGroups.MISC));
 
     public static final Item MAGE_STUFF = new Item((new Item.Properties()).maxStackSize(1).setISTER(() -> MageStuffItemRender::new).group(LittleItemGroups.COMBAT));
@@ -63,6 +69,7 @@ public class LittleItems {
     public static final Item ENDERMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.ENDERMAID, 1447446, 0, (new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item COWGIRL_SPAWNEGG = new SpawnEggItem(LittleEntitys.COWGIRL, 0xffffff, 0, (new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item SQURRIELMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.SQURRIEL_MAID, 0xc29d80, 0xa37354, (new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item SQURRIELBUTLER_SPAWNEGG = new SpawnEggItem(LittleEntitys.SQURRIEL_BUTLER, 0xc29d80, 0xa37354, (new Item.Properties()).group(LittleItemGroups.MISC));
 
     public static final Item PLANTER_SPAWNEGG = new SpawnEggItem(LittleEntitys.PLANTER, 0xb6ff75, 0x64a34a, (new Item.Properties()).group(LittleItemGroups.MISC));
 
@@ -100,6 +107,11 @@ public class LittleItems {
         event.getRegistry().register(POCKY_STRAWBERRY.setRegistryName("pocky_strawberry"));
         event.getRegistry().register(POCKY_GREENTEA.setRegistryName("pocky_greentea"));
 
+        event.getRegistry().register(COOKIE.setRegistryName("cookie"));
+        event.getRegistry().register(FORTUNE_COOKIE.setRegistryName("fortune_cookie"));
+        event.getRegistry().register(DOOL_COOKIE.setRegistryName("doll_cookie"));
+        event.getRegistry().register(JAM_COOKIE.setRegistryName("jam_cookie"));
+
         event.getRegistry().register(BAGU_HAT.setRegistryName("bagu_hat"));
 
         event.getRegistry().register(MAGE_STUFF.setRegistryName("mage_stuff"));
@@ -120,6 +132,7 @@ public class LittleItems {
         event.getRegistry().register(ENDERMAID_SPAWNEGG.setRegistryName("endermaid_spawnegg"));
         event.getRegistry().register(COWGIRL_SPAWNEGG.setRegistryName("cowgirl_spawnegg"));
         event.getRegistry().register(SQURRIELMAID_SPAWNEGG.setRegistryName("squirrelmaid_spawnegg"));
+        event.getRegistry().register(SQURRIELBUTLER_SPAWNEGG.setRegistryName("squirrelbutler_spawnegg"));
         event.getRegistry().register(PLANTER_SPAWNEGG.setRegistryName("planter_spawnegg"));
 
         event.getRegistry().register(ZOMBIEMAID_SPAWNEGG.setRegistryName("zombiemaid_spawnegg"));

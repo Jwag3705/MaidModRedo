@@ -19,6 +19,7 @@ public class ClientRegistrar {
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.ENDERMAID, EnderMaidRender::new);
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.COWGIRL, CowGirlRender::new);
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.SQURRIEL_MAID, SqurrielMaidRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.SQURRIEL_BUTLER, SqurrielButlerRender::new);
 
         RenderingRegistry.registerEntityRenderingHandler(LittleEntitys.SUGAR_PHANTOM, SugarPhantomRender::new);
 

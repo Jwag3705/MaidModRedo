@@ -28,7 +28,9 @@ public class LittleEntitys {
     public static final EntityType<ZombieButlerEntity> ZOMBIEBUTLER = EntityType.Builder.create(ZombieButlerEntity::new, EntityClassification.MONSTER).setShouldReceiveVelocityUpdates(true).size(0.6F, 1.55F).build(prefix("zombie_butler"));
     public static final EntityType<EnderMaidEntity> ENDERMAID = EntityType.Builder.create(EnderMaidEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.55F, 1.995F).build(prefix("ender_maid"));
     public static final EntityType<CowGirlEntity> COWGIRL = EntityType.Builder.create(CowGirlEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.6F, 1.85F).build(prefix("cowgirl"));
-    public static final EntityType<SqurrielMaidEntity> SQURRIEL_MAID = EntityType.Builder.create(SqurrielMaidEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.35F, 0.6F).build(prefix("squrriel_maid"));
+    public static final EntityType<SqurrielMaidEntity> SQURRIEL_MAID = EntityType.Builder.create(SqurrielMaidEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.35F, 0.65F).build(prefix("squrriel_maid"));
+    public static final EntityType<SqurrielButlerEntity> SQURRIEL_BUTLER = EntityType.Builder.create(SqurrielButlerEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.35F, 0.65F).build(prefix("squrriel_butler"));
+
 
     public static final EntityType<PlanterEntity> PLANTER = EntityType.Builder.create(PlanterEntity::new, EntityClassification.CREATURE).setShouldReceiveVelocityUpdates(true).size(0.6F, 1.55F).build(prefix("planter"));
 
@@ -52,6 +54,7 @@ public class LittleEntitys {
         event.getRegistry().register(ENDERMAID.setRegistryName("ender_maid"));
         event.getRegistry().register(COWGIRL.setRegistryName("cowgirl"));
         event.getRegistry().register(SQURRIEL_MAID.setRegistryName("squrriel_maid"));
+        event.getRegistry().register(SQURRIEL_BUTLER.setRegistryName("squrriel_butler"));
 
         event.getRegistry().register(PLANTER.setRegistryName("planter"));
 

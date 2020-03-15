@@ -39,6 +39,7 @@
   "item.maidmodredo.endermaid_spawnegg": "EnderMaid SpawnEgg",
   "item.maidmodredo.cowgirl_spawnegg": "Cowgirl SpawnEgg",
   "item.maidmodredo.squirrelmaid_spawnegg": "Squirrel Maid SpawnEgg",
+  "item.maidmodredo.squirrelbutler_spawnegg": "Squirrel Butler SpawnEgg",
   "item.maidmodredo.planter_spawnegg": "Planter SpawnEgg",
 
   "item.maidmodredo.zombiemaid_spawnegg": "ZombieMaid SpawnEgg",
@@ -49,6 +50,8 @@
   "entity.maidmodredo.sugar_phantom": "Sugar Phantom",
   "entity.maidmodredo.wandermaid": "WanderMaid",
   "entity.maidmodredo.ender_maid": "Ender Maid",
+  "entity.maidmodredo.squirrel_maid": "Squirrel Maid",
+  "entity.maidmodredo.squirrel_butler": "Squirrel Butler",
   "entity.maidmodredo.cowgirl": "Cowgirl",
   "entity.maidmodredo.planter": "Planter",
 

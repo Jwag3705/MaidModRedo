@@ -13,7 +13,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelSqurrielMaid_Squrrielmaid<T extends LittleMaidBaseEntity> extends ModelMultiMMMBase<T> {
+public class ModelSqurrielButler_Squrrielbutler<T extends LittleMaidBaseEntity> extends ModelMultiMMMBase<T> {
     public MaidModelRenderer Squirrel;
     public MaidModelRenderer head;
     public MaidModelRenderer headFace;
@@ -35,7 +35,6 @@ public class ModelSqurrielMaid_Squrrielmaid<T extends LittleMaidBaseEntity> exte
     public MaidModelRenderer bone4;
     public MaidModelRenderer bone5;
     public MaidModelRenderer bone6;
-    public MaidModelRenderer skirt;
     public MaidModelRenderer legL;
     public MaidModelRenderer legL2;
     public MaidModelRenderer LegOverlay;
@@ -50,15 +49,15 @@ public class ModelSqurrielMaid_Squrrielmaid<T extends LittleMaidBaseEntity> exte
     public MaidModelRenderer ArmOverlay3;
 
 
-    public ModelSqurrielMaid_Squrrielmaid() {
+    public ModelSqurrielButler_Squrrielbutler() {
         this(0.0F);
     }
 
-    public ModelSqurrielMaid_Squrrielmaid(float psize) {
+    public ModelSqurrielButler_Squrrielbutler(float psize) {
         this(psize, 0.0F, 64, 64);
     }
 
-    public ModelSqurrielMaid_Squrrielmaid(float psize, float pyoffset, int pTextureWidth, int pTextureHeight) {
+    public ModelSqurrielButler_Squrrielbutler(float psize, float pyoffset, int pTextureWidth, int pTextureHeight) {
         super(psize, 0.0F, 64, 64);
     }
 
@@ -74,7 +73,6 @@ public class ModelSqurrielMaid_Squrrielmaid<T extends LittleMaidBaseEntity> exte
         head.setRotationPoint(0.0F, -7.26F, 0.0F);
         Squirrel.addChild(head);
         head.addBox(head, 0, 0, -2.032F, -3.1728F, -2.068F, 4, 4, 4, 0.0F, false);
-        head.addBox(head, 0, 13, -2.25F, -4.2F, -2.1F, 4, 1, 0, 0.0F, false);
 
         headFace = new MaidModelRenderer(this);
         headFace.setRotationPoint(0.0F, 0.4224F, 0.0F);
@@ -181,12 +179,6 @@ public class ModelSqurrielMaid_Squrrielmaid<T extends LittleMaidBaseEntity> exte
         setRotationAngle(bone6, 1.309F, 0.0F, 0.0F);
         Tail.addChild(bone6);
         bone6.addBox(bone6, 12, 0, -1.0F, 1.6398F, 10.2903F, 2, 2, 1, 0.0F, false);
-
-        skirt = new MaidModelRenderer(this);
-        skirt.setRotationPoint(0.0F, -4.18F, 0.11F);
-        Squirrel.addChild(skirt);
-        skirt.addBox(skirt, 16, 0, -1.742F, -0.084F, -1.334F, 3, 2, 3, 0.0F, false);
-        skirt.addBox(skirt, 0, 8, -2.242F, 1.666F, -1.634F, 4, 2, 3, 0.0F, false);
 
         legL = new MaidModelRenderer(this);
         legL.setRotationPoint(0.44F, -3.96F, 0.0F);

@@ -14,6 +14,11 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = MaidModRedo.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class LittleItems {
     public static final Item APPLE_JUICE = new DrinkItem((new Item.Properties()).food(LittleFoods.APPLE_JUICE).group(LittleItemGroups.FOODS));
+    public static final Item BUBBLE_TEA = new DrinkItem((new Item.Properties()).food(LittleFoods.TEA).group(LittleItemGroups.FOODS));
+    public static final Item ESPRESSO = new DrinkItem((new Item.Properties()).food(LittleFoods.TEA).group(LittleItemGroups.FOODS));
+    public static final Item MOCA = new DrinkItem((new Item.Properties()).food(LittleFoods.TEA).group(LittleItemGroups.FOODS));
+    public static final Item GREEN_TEA = new DrinkItem((new Item.Properties()).food(LittleFoods.TEA).group(LittleItemGroups.FOODS));
+
 
     public static final Item BLUEBERRY_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.FOODS));
     public static final Item CHEESECAKE_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.FOODS));
@@ -53,7 +58,6 @@ public class LittleItems {
     public static final Item MACAROON_CARAMEL = new Item((new Item.Properties()).food(LittleFoods.MACAROON).group(LittleItemGroups.FOODS));
     public static final Item MACAROON_STRAWBERRY = new Item((new Item.Properties()).food(LittleFoods.MACAROON).group(LittleItemGroups.FOODS));
 
-
     public static final Item BAGU_HAT = new BaguHatItem(MaidArmorMaterial.BAGU_HAT, EquipmentSlotType.HEAD, (new Item.Properties()).maxStackSize(1).group(LittleItemGroups.MISC));
 
     public static final Item MAGE_STUFF = new Item((new Item.Properties()).maxStackSize(1).setISTER(() -> MageStuffItemRender::new).group(LittleItemGroups.COMBAT));
@@ -87,6 +91,10 @@ public class LittleItems {
     @SubscribeEvent
     public static void onItemRegistry(final RegistryEvent.Register<Item> event) {
         event.getRegistry().register(APPLE_JUICE.setRegistryName("apple_juice"));
+        event.getRegistry().register(BUBBLE_TEA.setRegistryName("bubble_tea"));
+        event.getRegistry().register(ESPRESSO.setRegistryName("espresso"));
+        event.getRegistry().register(MOCA.setRegistryName("moca"));
+        event.getRegistry().register(GREEN_TEA.setRegistryName("green_tea"));
 
         event.getRegistry().register(BLUEBERRY_PIE.setRegistryName("blueberry_pie"));
         event.getRegistry().register(CHEESECAKE_PIE.setRegistryName("cheesecake_pie"));

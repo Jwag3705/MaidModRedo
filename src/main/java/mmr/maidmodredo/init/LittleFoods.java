@@ -3,7 +3,8 @@ package mmr.maidmodredo.init;
 import net.minecraft.item.Food;
 
 public class LittleFoods {
-    public static final Food APPLE_JUICE = (new Food.Builder()).hunger(4).saturation(0.32F).setAlwaysEdible().build();
+    public static final Food APPLE_JUICE = (new Food.Builder()).hunger(1).saturation(0.32F).setAlwaysEdible().build();
+    public static final Food TEA = (new Food.Builder()).hunger(0).saturation(0.02F).setAlwaysEdible().build();
 
     public static final Food CARAMEL_APPLE = (new Food.Builder()).hunger(4).saturation(0.32F).build();
     public static final Food PIE = (new Food.Builder()).hunger(6).saturation(0.38F).build();

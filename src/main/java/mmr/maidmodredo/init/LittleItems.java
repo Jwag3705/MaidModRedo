@@ -19,7 +19,6 @@ public class LittleItems {
     public static final Item MOCA = new DrinkItem((new Item.Properties()).food(LittleFoods.TEA).group(LittleItemGroups.FOODS));
     public static final Item GREEN_TEA = new DrinkItem((new Item.Properties()).food(LittleFoods.TEA).group(LittleItemGroups.FOODS));
 
-
     public static final Item BLUEBERRY_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.FOODS));
     public static final Item CHEESECAKE_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.FOODS));
     public static final Item CHERRY_PIE = new Item((new Item.Properties()).food(LittleFoods.PIE).group(LittleItemGroups.FOODS));
@@ -57,6 +56,14 @@ public class LittleItems {
     public static final Item MACAROON_CHOCOLATE = new Item((new Item.Properties()).food(LittleFoods.MACAROON).group(LittleItemGroups.FOODS));
     public static final Item MACAROON_CARAMEL = new Item((new Item.Properties()).food(LittleFoods.MACAROON).group(LittleItemGroups.FOODS));
     public static final Item MACAROON_STRAWBERRY = new Item((new Item.Properties()).food(LittleFoods.MACAROON).group(LittleItemGroups.FOODS));
+
+    public static final Item DAIFUKU_WAG = new Item((new Item.Properties()).food(LittleFoods.DAIFUKU).group(LittleItemGroups.FOODS));
+    public static final Item SAKURA_WAG = new Item((new Item.Properties()).food(LittleFoods.DAIFUKU).group(LittleItemGroups.FOODS));
+    public static final Item MIYAGE = new Item((new Item.Properties()).food(LittleFoods.DAIFUKU).group(LittleItemGroups.FOODS));
+    public static final Item RAINDROP_CAKE = new Item((new Item.Properties()).food(LittleFoods.DAIFUKU).group(LittleItemGroups.FOODS));
+    public static final Item ICECREAM_TAIYAKI = new Item((new Item.Properties()).food(LittleFoods.ICECREAM_TAIYAKI).group(LittleItemGroups.FOODS));
+    public static final Item TAIYAKI = new Item((new Item.Properties()).food(LittleFoods.TAIYAKI).group(LittleItemGroups.FOODS));
+
 
     public static final Item BAGU_HAT = new BaguHatItem(MaidArmorMaterial.BAGU_HAT, EquipmentSlotType.HEAD, (new Item.Properties()).maxStackSize(1).group(LittleItemGroups.MISC));
 
@@ -131,6 +138,13 @@ public class LittleItems {
         event.getRegistry().register(MACAROON_CHOCOLATE.setRegistryName("macaroon_chocolate"));
         event.getRegistry().register(MACAROON_CARAMEL.setRegistryName("macaroon_caramel"));
         event.getRegistry().register(MACAROON_STRAWBERRY.setRegistryName("macaroon_strawberry"));
+
+        event.getRegistry().register(DAIFUKU_WAG.setRegistryName("daifuku_wag"));
+        event.getRegistry().register(SAKURA_WAG.setRegistryName("sakura_wag"));
+        event.getRegistry().register(MIYAGE.setRegistryName("miyage"));
+        event.getRegistry().register(RAINDROP_CAKE.setRegistryName("raindrop_cake"));
+        event.getRegistry().register(ICECREAM_TAIYAKI.setRegistryName("icecream_taiyaki"));
+        event.getRegistry().register(TAIYAKI.setRegistryName("taiyaki"));
 
         event.getRegistry().register(BAGU_HAT.setRegistryName("bagu_hat"));
 

@@ -12,6 +12,9 @@ public class LittleFoods {
     public static final Food DONUT = (new Food.Builder()).hunger(4).saturation(0.36F).build();
     public static final Food POCKY = (new Food.Builder()).hunger(3).saturation(0.275F).fastToEat().build();
     public static final Food COOKIE = (new Food.Builder()).hunger(2).saturation(0.26F).fastToEat().build();
-    public static final Food DOLL_COOKIE = (new Food.Builder()).hunger(3).saturation(0.28F).fastToEat().build();
-    public static final Food MACAROON = (new Food.Builder()).hunger(3).saturation(0.29F).fastToEat().build();
+    public static final Food DOLL_COOKIE = (new Food.Builder()).hunger(3).saturation(0.28F).build();
+    public static final Food MACAROON = (new Food.Builder()).hunger(3).saturation(0.24F).fastToEat().build();
+    public static final Food DAIFUKU = (new Food.Builder()).hunger(3).saturation(0.28F).build();
+    public static final Food TAIYAKI = (new Food.Builder()).hunger(4).saturation(0.29F).build();
+    public static final Food ICECREAM_TAIYAKI = (new Food.Builder()).hunger(4).saturation(0.29F).build();
 }

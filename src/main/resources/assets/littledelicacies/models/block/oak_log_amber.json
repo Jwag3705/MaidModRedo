@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "littledelicacies:blocks/oak_log_amber",
+    "side": "littledelicacies:blocks/oak_log_amber"
+  }
+}

@@ -24,7 +24,7 @@
                   }
                 }
               ],
-              "name": "maidmodredo:oak_log_amber"
+              "name": "littledelicacies:oak_log_amber"
             },
             {
               "type": "minecraft:item",
@@ -46,7 +46,7 @@
                   "function": "minecraft:explosion_decay"
                 }
               ],
-              "name": "maidmodredo:amber"
+              "name": "littledelicacies:amber"
             }
           ]
         }

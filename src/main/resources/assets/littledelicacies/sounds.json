@@ -1,0 +1,23 @@
+{
+  "entity.root.creak": {
+    "category": "neutral",
+    "sounds": [
+      "littledelicacies:root/root_creak"
+    ],
+    "subtitle": "subtitles.entity.root.creak"
+  },
+  "entity.littlebutler.hi": {
+    "category": "neutral",
+    "sounds": [
+      "littledelicacies:littlebutler/littlebutler_hi"
+    ],
+    "subtitle": "subtitles.entity.littlebutler.littlebutler_hi"
+  },
+  "entity.littlebutler.idle": {
+    "category": "neutral",
+    "sounds": [
+      "littledelicacies:littlebutler/littlebutler_idle1"
+    ],
+    "subtitle": "subtitles.entity.littlebutler.littlebutler_idle"
+  }
+}

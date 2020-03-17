@@ -1,7 +1,0 @@
-{
-  "parent": "block/cube_column",
-  "textures": {
-    "end": "maidmodredo:blocks/oak_log_amber",
-    "side": "maidmodredo:blocks/oak_log_amber"
-  }
-}

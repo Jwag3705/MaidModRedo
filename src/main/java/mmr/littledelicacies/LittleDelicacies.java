@@ -1,5 +1,8 @@
 package mmr.littledelicacies;
 
+import mmr.littledelicacies.api.trackmaid.ITrackMaidCapability;
+import mmr.littledelicacies.api.trackmaid.TrackMaidCapability;
+import mmr.littledelicacies.api.trackmaid.TrackMaidStorage;
 import mmr.littledelicacies.client.ClientRegistrar;
 import mmr.littledelicacies.entity.LittleMaidBaseEntity;
 import mmr.littledelicacies.init.*;
@@ -24,6 +27,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -119,6 +123,8 @@ public class LittleDelicacies {
             biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, LittleFeatures.MAIDCAFE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(Placement.NOPE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
             biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, LittleFeatures.BIGTREE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(Placement.NOPE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
         }
+
+        CapabilityManager.INSTANCE.register(ITrackMaidCapability.class, new TrackMaidStorage(), TrackMaidCapability::new);
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

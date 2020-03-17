@@ -9,6 +9,7 @@ import com.mojang.datafixers.util.Pair;
 import mmr.littledelicacies.LittleDelicacies;
 import mmr.littledelicacies.api.IMaidAnimation;
 import mmr.littledelicacies.api.MaidAnimation;
+import mmr.littledelicacies.api.trackmaid.TrackMaidProvider;
 import mmr.littledelicacies.client.maidmodel.IModelEntity;
 import mmr.littledelicacies.client.maidmodel.ModelConfigCompound;
 import mmr.littledelicacies.client.maidmodel.TextureBox;
@@ -1464,6 +1465,11 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
 
                     this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 0.7F);
                     //getEntityWorld().setEntityState(this, (byte) 11);
+                    return true;
+                } else if (item.getItem() == Items.STICK) {
+                    player.getCapability(TrackMaidProvider.TRACKMAID_CAPABILITY).ifPresent(cap -> {
+                        cap.setLinkedBodyID(this);
+                    });
                     return true;
                 }
 

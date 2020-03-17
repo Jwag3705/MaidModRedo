@@ -5,6 +5,7 @@ import mmr.littledelicacies.api.IMaidAnimation;
 import mmr.littledelicacies.api.MaidAnimation;
 import mmr.littledelicacies.entity.LittleMaidBaseEntity;
 import mmr.littledelicacies.init.MaidJob;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -35,9 +36,10 @@ public class MaidPacketHandler {
                 .encoder(MessageMaidJobSet::writePacketData).decoder(MessageMaidJobSet::readPacketData)
                 .consumer(MessageMaidJobSet.Handler::handle)
                 .add();
-        CHANNEL.messageBuilder(MessageSetGhostModelStat.class, 3)
-                .encoder(MessageSetGhostModelStat::writePacketData).decoder(MessageSetGhostModelStat::readPacketData)
-                .consumer(MessageSetGhostModelStat.Handler::handle)
+
+        CHANNEL.messageBuilder(MessageTrackMaidWalkStat.class, 3)
+                .encoder(MessageTrackMaidWalkStat::writePacketData).decoder(MessageTrackMaidWalkStat::readPacketData)
+                .consumer(MessageTrackMaidWalkStat.Handler::handle)
                 .add();
     }
 
@@ -49,9 +51,11 @@ public class MaidPacketHandler {
         MaidPacketHandler.CHANNEL.sendToServer(new MessageMaidJobSet(entity, job));
     }
 
-    public static void syncModelOnClient(LittleMaidBaseEntity entity) {
-        MaidPacketHandler.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MessageSetGhostModelStat(entity.getEntityId()));
+
+    public static void syncTrackMaidWalk(Entity entity, float forward, float strafe) {
+        MaidPacketHandler.CHANNEL.sendToServer(new MessageTrackMaidWalkStat(entity, forward, strafe));
     }
+
 
     public static void animationModel(LittleMaidBaseEntity entity, MaidAnimation animation) {
         if (!entity.getEntityWorld().isRemote()) {

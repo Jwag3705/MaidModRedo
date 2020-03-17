@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.OreBlock;
 import net.minecraft.entity.ai.brain.Brain;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.memory.WalkTarget;
 import net.minecraft.entity.ai.brain.task.Task;
@@ -34,7 +35,7 @@ public class BreakOreTask extends Task<LittleMaidBaseEntity> {
     private final List<BlockPos> field_223518_f = Lists.newArrayList();
 
     public BreakOreTask() {
-        super(ImmutableMap.of());
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.REGISTERED), Integer.MAX_VALUE);
     }
 
     @Override

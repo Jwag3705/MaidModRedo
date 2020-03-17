@@ -34,7 +34,7 @@ public class MaidFarmTask extends Task<LittleMaidBaseEntity> {
     private final List<BlockPos> field_223518_f = Lists.newArrayList();
 
     public MaidFarmTask() {
-        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.VALUE_ABSENT, MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT, MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT));
     }
 
     protected boolean shouldExecute(ServerWorld worldIn, LittleMaidBaseEntity owner) {

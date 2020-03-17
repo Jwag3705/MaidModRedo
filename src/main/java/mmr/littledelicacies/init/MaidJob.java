@@ -31,6 +31,7 @@ public class MaidJob {
     public static final MaidJob HEALER = new MaidJob("healer", new ItemStack(Items.GOLDEN_APPLE));
     public static final MaidJob TORCHER = new MaidJob("torcher", new ItemStack(Items.TORCH));
     public static final MaidJob RIPPER = new MaidJob("ripper", new ItemStack(Items.SHEARS));
+    public static final MaidJob SCIENTIST = new MaidJob("scientist", ItemStack.EMPTY);
 
     public static final MaidJob FENCER = new MaidJob("fencer", new ItemStack(Items.DIAMOND_SWORD)).setSubActivity(LittleActivitys.ATTACK).setLockJob();
     public static final MaidJob GUARD = new MaidJob("guard", new ItemStack(Items.DIAMOND_SWORD)).setSubRequireItem(new ItemStack(Items.SHIELD)).setSubActivity(LittleActivitys.ATTACK).setLockJob().setNeedLevel(10);
@@ -132,6 +133,7 @@ public class MaidJob {
         MAID_JOB_REGISTRY.register(new ResourceLocation(LittleDelicacies.MODID, "healer"), HEALER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(LittleDelicacies.MODID, "torcher"), TORCHER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(LittleDelicacies.MODID, "ripper"), RIPPER);
+        MAID_JOB_REGISTRY.register(new ResourceLocation(LittleDelicacies.MODID, "scientist"), SCIENTIST);
 
         MAID_JOB_REGISTRY.register(new ResourceLocation(LittleDelicacies.MODID, "fencer"), FENCER);
         MAID_JOB_REGISTRY.register(new ResourceLocation(LittleDelicacies.MODID, "guard"), GUARD);

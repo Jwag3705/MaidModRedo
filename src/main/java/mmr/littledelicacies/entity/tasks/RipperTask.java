@@ -52,7 +52,7 @@ public class RipperTask extends Task<LittleMaidBaseEntity> {
     private SheepEntity sheepEntity;
 
     public RipperTask() {
-        super(ImmutableMap.of(MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT), 300);
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT), 300);
     }
 
     @Override
@@ -132,6 +132,9 @@ public class RipperTask extends Task<LittleMaidBaseEntity> {
                     owner.giveExperiencePoints(2 + owner.getRNG().nextInt(1));
                 }
             }
+
+            owner.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new EntityPosWrapper(this.sheepEntity));
+            owner.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityPosWrapper(this.sheepEntity), 0.5F, 1));
         }
     }
 }

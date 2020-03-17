@@ -3,6 +3,7 @@ package mmr.littledelicacies.network;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -48,8 +49,7 @@ public class MessageTrackMaidWalkStat {
                 if (entity instanceof LivingEntity) {
                     LivingEntity livingEntity = (LivingEntity) entity;
 
-                    livingEntity.moveForward = message.forward;
-                    livingEntity.moveStrafing = message.strafe;
+                    livingEntity.travel(new Vec3d(message.forward, 0.0F, message.strafe));
                 }
             });
             context.setPacketHandled(true);

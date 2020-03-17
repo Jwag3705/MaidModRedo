@@ -39,7 +39,7 @@ public class ChefTask extends Task<LittleMaidBaseEntity> {
 
 
     public ChefTask() {
-        super(ImmutableMap.of(MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT), Integer.MAX_VALUE);
     }
 
     @Override

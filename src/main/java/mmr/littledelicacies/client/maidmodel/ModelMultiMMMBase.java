@@ -3,6 +3,7 @@ package mmr.littledelicacies.client.maidmodel;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import mmr.littledelicacies.api.IMaidAnimation;
 import net.minecraft.entity.LivingEntity;
 import org.lwjgl.opengl.GL11;
 
@@ -103,9 +104,7 @@ public abstract class ModelMultiMMMBase<T extends LivingEntity> extends ModelMul
 	/**
 	 * 初期ロード時に実行
 	 */
-	public void buildTexture() {
-		
-	}
+    public abstract void setAnimations(float par1, float par2, float ageInTicks, float pHeadYaw, float pHeadPitch, T pEntityCaps, IMaidAnimation animation);
 
 	public void setDefaultPause() {
 	}

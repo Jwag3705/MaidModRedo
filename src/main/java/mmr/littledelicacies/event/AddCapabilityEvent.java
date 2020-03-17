@@ -9,7 +9,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = LittleDelicacies.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = LittleDelicacies.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AddCapabilityEvent {
 
     private static final ResourceLocation TRACK_MAID = new ResourceLocation(LittleDelicacies.MODID, "track_maid");

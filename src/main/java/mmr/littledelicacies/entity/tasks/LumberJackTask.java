@@ -41,7 +41,7 @@ public class LumberJackTask extends Task<LittleMaidBaseEntity> {
     private final List<BlockPos> field_223518_f = Lists.newArrayList();
 
     public LumberJackTask() {
-        super(ImmutableMap.of(MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT));
     }
 
     @Override

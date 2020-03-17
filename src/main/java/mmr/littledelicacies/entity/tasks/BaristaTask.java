@@ -7,8 +7,6 @@ import mmr.littledelicacies.utils.recipes.BaristaRecipes;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.server.ServerWorld;
 
@@ -24,8 +22,6 @@ public class BaristaTask extends Task<LittleMaidBaseEntity> {
     @Override
     protected boolean shouldExecute(ServerWorld worldIn, LittleMaidBaseEntity owner) {
         if (owner.getMaidData().getJob() != MaidJob.BARISTA) {
-            return false;
-        } else if (!(owner.getHeldItem(Hand.MAIN_HAND).getItem() == Items.GLASS_BOTTLE)) {
             return false;
         } else {
             this.isFinishMaking = false;

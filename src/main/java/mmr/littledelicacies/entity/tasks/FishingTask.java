@@ -35,7 +35,7 @@ public class FishingTask extends Task<LittleMaidBaseEntity> {
     private final List<BlockPos> field_223518_f = Lists.newArrayList();
 
     public FishingTask() {
-        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.VALUE_ABSENT, MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT), 300);
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.JOB_SITE, MemoryModuleStatus.VALUE_PRESENT), 300);
     }
 
     @Override

@@ -41,6 +41,10 @@ public class MaidPacketHandler {
                 .encoder(MessageTrackMaidWalkStat::writePacketData).decoder(MessageTrackMaidWalkStat::readPacketData)
                 .consumer(MessageTrackMaidWalkStat.Handler::handle)
                 .add();
+        CHANNEL.messageBuilder(MessageMaidNameSet.class, 4)
+                .encoder(MessageMaidNameSet::writePacketData).decoder(MessageMaidNameSet::readPacketData)
+                .consumer(MessageMaidNameSet.Handler::handle)
+                .add();
     }
 
     public static void syncModel(LittleMaidBaseEntity entity, CompoundNBT compoundNBT) {
@@ -49,6 +53,10 @@ public class MaidPacketHandler {
 
     public static void syncMaidJob(LittleMaidBaseEntity entity, MaidJob job) {
         MaidPacketHandler.CHANNEL.sendToServer(new MessageMaidJobSet(entity, job));
+    }
+
+    public static void syncMaidName(LittleMaidBaseEntity entity, String name) {
+        MaidPacketHandler.CHANNEL.sendToServer(new MessageMaidNameSet(entity, name));
     }
 
 

@@ -11,7 +11,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -62,8 +61,8 @@ public class MaidInventoryScreen extends ContainerScreen<MaidInventoryContainer>
             maidinventory.getLittleMaidEntity().syncModelNames();
         }, true));
 
-        jobBotton = this.addButton(new Button(guiLeft + 110, guiTop + 48, 50, 20, I18n.format("gui.littledelicacies.maidinventory.change_job"), (p_214158_1_) -> {
-            this.getMinecraft().displayGuiScreen(new JobSelectScreen(this.maidinventory.getLittleMaidEntity(), new TranslationTextComponent("gui.littledelicacies.job_select")));
+        jobBotton = this.addButton(new Button(guiLeft + 110, guiTop + 48, 50, 20, I18n.format("gui.littledelicacies.maidinventory.change_setting"), (p_214158_1_) -> {
+            this.getMinecraft().displayGuiScreen(new MaidSettingScreen(this.maidinventory.getLittleMaidEntity()));
         }));
 
         int buttonPosX = ((this.width - this.xSize) / 2) + 102;

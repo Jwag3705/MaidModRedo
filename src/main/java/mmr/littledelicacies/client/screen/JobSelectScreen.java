@@ -11,7 +11,6 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.list.ExtendedList;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -23,8 +22,8 @@ public class JobSelectScreen extends Screen {
     protected final LittleMaidBaseEntity littleMaid;
     private Button confirmSettingsBtn;
 
-    protected JobSelectScreen(LittleMaidBaseEntity entity, ITextComponent titleIn) {
-        super(titleIn);
+    protected JobSelectScreen(LittleMaidBaseEntity entity) {
+        super(new TranslationTextComponent("gui.littledelicacies.job_select"));
         this.littleMaid = entity;
     }
 

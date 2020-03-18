@@ -366,9 +366,11 @@ public abstract class ModelLittleMaidBase<T extends LittleMaidBaseEntity> extend
         }
 
         if (animation.getAnimation() == LittleMaidBaseEntity.FARM_ANIMATION) {
+            bipedRightArm.setRotateAngle(0.0F, 0.0F, 0.0F);
+            bipedLeftArm.setRotateAngle(0.0F, 0.0F, 0.0F);
+
             animator.setAnimation(LittleMaidBaseEntity.FARM_ANIMATION);
             animator.startKeyframe(10);
-            animator.rotate(this.bipedBody, 0.4F, 0.0F, 0.0F);
             animator.rotate(this.bipedRightArm, -0.4F, 0.0F, 0.0F);
             animator.rotate(this.bipedLeftArm, -0.4F, 0.0F, 0.0F);
             animator.endKeyframe();

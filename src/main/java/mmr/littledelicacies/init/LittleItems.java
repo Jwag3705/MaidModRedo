@@ -83,7 +83,7 @@ public class LittleItems {
     public static final Item LITTLEMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.LITTLEMAID, 0xe3e3e3, 0xa45131, (new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item LITTLEBUTLER_SPAWNEGG = new SpawnEggItem(LittleEntitys.LITTLEBUTLER, 0xe3e3e3, 0xa45131, (new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item WANDERMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.WANDERMAID, 4547222, 15377456, (new Item.Properties()).group(LittleItemGroups.MISC));
-    public static final Item ENDERMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.ENDERMAID, 1447446, 0, (new Item.Properties()).group(LittleItemGroups.MISC));
+    public static final Item ENDERMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.ENDERMAID, 0xe3e3e3, 0xa45131, (new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item COWGIRL_SPAWNEGG = new SpawnEggItem(LittleEntitys.COWGIRL, 0xffffff, 0, (new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item SQURRIELMAID_SPAWNEGG = new SpawnEggItem(LittleEntitys.SQURRIEL_MAID, 0xc29d80, 0xa37354, (new Item.Properties()).group(LittleItemGroups.MISC));
     public static final Item SQURRIELBUTLER_SPAWNEGG = new SpawnEggItem(LittleEntitys.SQURRIEL_BUTLER, 0xc29d80, 0xa37354, (new Item.Properties()).group(LittleItemGroups.MISC));

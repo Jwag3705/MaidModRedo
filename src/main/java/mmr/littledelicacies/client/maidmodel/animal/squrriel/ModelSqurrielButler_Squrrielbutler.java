@@ -499,9 +499,12 @@ public class ModelSqurrielButler_Squrrielbutler<T extends LittleMaidBaseEntity> 
         }
 
         if (animation.getAnimation() == LittleMaidBaseEntity.FARM_ANIMATION) {
+
+            handR.setRotateAngle(0.0F, 0.0F, 0.0F);
+            handL.setRotateAngle(0.0F, 0.0F, 0.0F);
+
             animator.setAnimation(LittleMaidBaseEntity.FARM_ANIMATION);
             animator.startKeyframe(10);
-            animator.rotate(this.body, 0.4F, 0.0F, 0.0F);
             animator.rotate(this.handR, -0.4F, 0.0F, 0.0F);
             animator.rotate(this.handL, -0.4F, 0.0F, 0.0F);
             animator.endKeyframe();

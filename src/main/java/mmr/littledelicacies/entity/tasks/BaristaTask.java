@@ -62,12 +62,7 @@ public class BaristaTask extends Task<LittleMaidBaseEntity> {
             for (int j = 0; j < owner.getInventoryMaidMain().getSizeInventory(); ++j) {
                 ItemStack itemstack = owner.getInventoryMaidMain().getStackInSlot(j);
                 if (itemstack.getCount() < owner.getInventoryMaidMain().getInventoryStackLimit() && (itemstack.isEmpty() || itemstack.getItem() == stack.getItem())) {
-                    if (itemstack.getItem() == stack.getItem()) {
-                        stack.setCount(itemstack.getCount() + stack.getCount());
-                        owner.getInventoryMaidMain().setInventorySlotContents(j, stack);
-                    } else {
-                        owner.getInventoryMaidMain().setInventorySlotContents(j, stack);
-                    }
+                    owner.getInventoryMaidMain().addItem(stack);
 
                     owner.giveExperiencePoints(3 + worldIn.rand.nextInt(3));
                     owner.playSound(SoundEvents.ITEM_BOTTLE_FILL, 0.6F, 0.7F);

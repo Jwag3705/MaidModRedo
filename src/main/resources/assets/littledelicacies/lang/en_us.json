@@ -88,5 +88,7 @@
   "gui.littledelicacies.job_select.warning": "Once you select a combat job, it does become unchangeable when you level up the job",
   "death.attack.rush": "%1$s was smashed by %2$s",
   "death.attack.rotation_attack": "%1$s was caught in a tornado attack by %2$s",
-  "death.attack.shield_bush": "%1$s was smashed by %2$s using shield"
+  "death.attack.shield_bush": "%1$s was smashed by %2$s using shield",
+  "littledelicacies.barista.title": "Barista",
+  "littledelicacies.science.title": "Science"
 }

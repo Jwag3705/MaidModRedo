@@ -29,6 +29,8 @@ public class JobTasks {
             return workMiner(p_220639_0_, p_220639_1_);
         } else if (p_220639_0_ == MaidJob.RIPPER) {
             return workRipper(p_220639_1_);
+        } else if (p_220639_0_ == MaidJob.SCIENTIST) {
+            return workScientist(p_220639_0_, p_220639_1_);
         } else {
             return ImmutableList.of(func_220646_b(), Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new WorkTask(MemoryModuleType.JOB_SITE, 4), 2), Pair.of(new WalkTowardsPosTask(MemoryModuleType.JOB_SITE, 1, 10), 5), Pair.of(new MaidWalkTowardsRandomSecondaryPosTask(MemoryModuleType.SECONDARY_JOB_SITE, 0.4F, 1, 6, MemoryModuleType.JOB_SITE), 5)))), Pair.of(10, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)), Pair.of(2, new MaidStayNearPointTask(MemoryModuleType.JOB_SITE, p_220639_1_, 9, 19200, 25600)), Pair.of(99, new UpdateActivityTask()));
         }
@@ -65,6 +67,11 @@ public class JobTasks {
     public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> workRipper(float p_220639_1_) {
         return ImmutableList.of(Pair.of(0, new RipperTask()), func_220646_b(), Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new WorkTask(MemoryModuleType.JOB_SITE, 4), 2), Pair.of(new WalkTowardsPosTask(MemoryModuleType.JOB_SITE, 1, 10), 5), Pair.of(new MaidWalkTowardsRandomSecondaryPosTask(MemoryModuleType.SECONDARY_JOB_SITE, 0.4F, 1, 6, MemoryModuleType.JOB_SITE), 5)))), Pair.of(2, new MaidStayNearPointTask(MemoryModuleType.JOB_SITE, p_220639_1_, 9, 19200, 25600)), Pair.of(99, new UpdateActivityTask()));
     }
+
+    public static ImmutableList<Pair<Integer, ? extends Task<? super LittleMaidBaseEntity>>> workScientist(MaidJob p_220639_0_, float p_220639_1_) {
+        return ImmutableList.of(Pair.of(p_220639_0_ == MaidJob.SCIENTIST ? 0 : 5, new ScienceTask()), func_220646_b(), Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new WorkTask(MemoryModuleType.JOB_SITE, 4), 2), Pair.of(new WalkTowardsPosTask(MemoryModuleType.JOB_SITE, 1, 10), 5), Pair.of(new MaidWalkTowardsRandomSecondaryPosTask(MemoryModuleType.SECONDARY_JOB_SITE, 0.4F, 1, 6, MemoryModuleType.JOB_SITE), 5)))), Pair.of(2, new MaidStayNearPointTask(MemoryModuleType.JOB_SITE, p_220639_1_, 9, 1200, 3600)), Pair.of(99, new UpdateActivityTask()));
+    }
+
 
     private static Pair<Integer, Task<LivingEntity>> func_220643_a() {
         return Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new LookAtEntityTask(LittleEntitys.WANDERMAID, 8.0F), 2), Pair.of(new LookAtEntityTask(LittleEntitys.LITTLEMAID, 8.0F), 2), Pair.of(new LookAtEntityTask(EntityType.CAT, 8.0F), 8), Pair.of(new LookAtEntityTask(EntityType.VILLAGER, 8.0F), 2), Pair.of(new LookAtEntityTask(EntityType.PLAYER, 8.0F), 2), Pair.of(new LookAtEntityTask(EntityClassification.CREATURE, 8.0F), 1), Pair.of(new LookAtEntityTask(EntityClassification.WATER_CREATURE, 8.0F), 1), Pair.of(new LookAtEntityTask(EntityClassification.MONSTER, 8.0F), 1), Pair.of(new DummyTask(30, 60), 2))));

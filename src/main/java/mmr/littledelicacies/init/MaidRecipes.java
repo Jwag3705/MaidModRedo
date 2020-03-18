@@ -1,6 +1,7 @@
 package mmr.littledelicacies.init;
 
 import mmr.littledelicacies.utils.recipes.BaristaRecipes;
+import mmr.littledelicacies.utils.recipes.ScienceRecipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
@@ -15,5 +16,14 @@ public class MaidRecipes {
                 })
 
         );
+
+        ScienceRecipes.addRecipe(new ScienceRecipes(
+                new ItemStack[]{new ItemStack(LittleItems.SUGAR_TOTEM, 1)},
+                new ItemStack[]{
+                        new ItemStack(Items.SUGAR),
+                        new ItemStack(Items.GHAST_TEAR),
+                        new ItemStack(Items.GOLD_NUGGET)
+                }).setProbability(0.99F));
+
     }
 }

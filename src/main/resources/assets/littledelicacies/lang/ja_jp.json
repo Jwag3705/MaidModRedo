@@ -83,5 +83,7 @@
   "gui.littledelicacies.job_select.warning": "戦闘系のjobのものはレベルアップすると変更できなくなります",
   "death.attack.rush": "%1$s は %2$s のラッシュ攻撃に突き飛ばされた",
   "death.attack.rotation_attack": "%1$s は %2$s の竜巻に巻き込まれた",
-  "death.attack.shield_bush": "%1$s は %2$s のシールドによってノックアウトされた"
+  "death.attack.shield_bush": "%1$s は %2$s のシールドによってノックアウトされた",
+  "littledelicacies.barista.title": "バリスタ",
+  "littledelicacies.science.title": "サイエンス"
 }

@@ -1379,7 +1379,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     protected void func_213718_a(IParticleData particleData) {
         for (int i = 0; i < 5; ++i) {
             double d0 = this.rand.nextGaussian() * 0.02D;
@@ -1387,7 +1386,6 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             double d2 = this.rand.nextGaussian() * 0.02D;
             this.world.addParticle(particleData, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + 1.0D + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d0, d1, d2);
         }
-
     }
 
     public boolean processInteract(PlayerEntity player, Hand hand) {

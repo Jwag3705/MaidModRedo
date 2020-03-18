@@ -111,12 +111,7 @@ public class ChefTask extends Task<LittleMaidBaseEntity> {
                         for (int j = 0; j < owner.getInventoryMaidMain().getSizeInventory(); ++j) {
                             ItemStack itemstack = owner.getInventoryMaidMain().getStackInSlot(j);
                             if (itemstack.getCount() < owner.getInventoryMaidMain().getInventoryStackLimit() && (itemstack.isEmpty() || itemstack.getItem() == cookedItem.getItem())) {
-                                if (itemstack.getItem() == cookedItem.getItem()) {
-                                    cookedItem.setCount(itemstack.getCount() + cookedItem.getCount());
-                                    owner.getInventoryMaidMain().setInventorySlotContents(j, cookedItem);
-                                } else {
-                                    owner.getInventoryMaidMain().setInventorySlotContents(j, cookedItem);
-                                }
+                                owner.getInventoryMaidMain().addItem(cookedItem);
                                 ((FurnaceTileEntity) tileentity).setInventorySlotContents(2, ItemStack.EMPTY);
 
                                 owner.giveExperiencePoints(1 + worldIn.rand.nextInt(2));

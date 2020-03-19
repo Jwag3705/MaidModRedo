@@ -80,6 +80,7 @@
   "littledelicacies.item.sugar_totem.tooltip": "SugarPhantomの状態のメイドさんをすぐにリスポーンさせることができます",
   "gui.littledelicacies.maidinventory.change_setting": "設定",
   "gui.littledelicacies.edit_maidname": "メイドの名称変更",
+  "gui.littledelicacies.model_select": "モデル変更",
   "gui.littledelicacies.job_select": "ジョブセレクト",
   "gui.littledelicacies.job_select.warning": "戦闘系のjobのものはレベルアップすると変更できなくなります",
   "death.attack.rush": "%1$s は %2$s のラッシュ攻撃に突き飛ばされた",

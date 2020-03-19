@@ -254,7 +254,7 @@ public class ModelManager {
         }
         LittleDelicacies.LOGGER.debug("Loaded Texture Lists.(" + textures.size() + ")");
         for (TextureBox lbox : textures) {
-            LittleDelicacies.LOGGER.debug("texture: " + lbox.textureName + "(" + lbox.fileName + ")" + "- hasModel:" + "%b", lbox.models != null);
+            LittleDelicacies.LOGGER.debug("texture: " + lbox.textureName + "(" + lbox.fileName + ")" + "- hasModel:" + "{}", lbox.models != null);
         }
         for (int li = textures.size() - 1; li >= 0; li--) {
             if (textures.get(li).models == null) {
@@ -574,6 +574,7 @@ public class ModelManager {
                                         || zipentry.getName().startsWith(lt3)
                                         || (!zipentry.getName().equals(zipentry.getName().toLowerCase())))) {
                             OldZipTexturesWrapper.keys.add(zipentry.getName());
+                            OldZipTexturesWrapper.searchKeys = pSearch;
                         }
 
                         if (FMLEnvironment.dist == Dist.CLIENT &&
@@ -582,6 +583,7 @@ public class ModelManager {
                                         || zipentry.getName().startsWith(lt6)
                                         || (!zipentry.getName().equals(zipentry.getName().toLowerCase())))) {
                             NewZipTexturesWapper.keys.add(zipentry.getName());
+                            NewZipTexturesWapper.searchKeys = pSearch;
                         }
                     }
                 }
@@ -635,6 +637,7 @@ public class ModelManager {
                                             || loc.startsWith(lt3)
                                             || (!loc.equals(loc.toLowerCase())))) {
                                 OldZipTexturesWrapper.keys.add(loc);
+                                OldZipTexturesWrapper.searchKeys = pSearch;
                             }
 
                             if (FMLEnvironment.dist == Dist.CLIENT &&
@@ -643,6 +646,7 @@ public class ModelManager {
                                             || loc.startsWith(lt6)
                                             || (!loc.equals(loc.toLowerCase())))) {
                                 NewZipTexturesWapper.keys.add(loc);
+                                NewZipTexturesWapper.searchKeys = pSearch;
                             }
 
 //							addTextureName(s.substring(i).replace('\\', '/'));

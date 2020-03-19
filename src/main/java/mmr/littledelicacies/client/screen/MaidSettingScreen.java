@@ -11,6 +11,7 @@ public class MaidSettingScreen extends Screen {
     protected final LittleMaidBaseEntity littleMaid;
     private Button jobselect;
     private Button nameSet;
+    private Button modelSet;
     private Button confirmSettingsBtn;
 
     protected MaidSettingScreen(LittleMaidBaseEntity entity) {
@@ -25,10 +26,16 @@ public class MaidSettingScreen extends Screen {
             this.getMinecraft().displayGuiScreen(new JobSelectScreen(this.littleMaid));
         }));
 
-        this.nameSet = this.addButton(new Button(this.width / 2 - 75, this.height - 100, 150, 20, I18n.format("gui.littledelicacies.edit_maidname"), (p_213036_1_) -> {
+        this.nameSet = this.addButton(new Button(this.width / 2 - 75, this.height - 120, 150, 20, I18n.format("gui.littledelicacies.edit_maidname"), (p_213036_1_) -> {
             this.nameSet.setMessage(I18n.format("gui.littledelicacies.edit_maidname"));
 
             this.getMinecraft().displayGuiScreen(new EditMaidNameScreen(this.littleMaid));
+        }));
+
+        this.modelSet = this.addButton(new Button(this.width / 2 - 75, this.height - 100, 150, 20, I18n.format("gui.littledelicacies.model_select"), (p_213036_1_) -> {
+            this.modelSet.setMessage(I18n.format("gui.littledelicacies.model_select"));
+
+            this.getMinecraft().displayGuiScreen(new ModelSelectScreen(this.littleMaid));
         }));
 
         this.confirmSettingsBtn = this.addButton(new Button(this.width / 2 - 75, this.height - 60, 150, 20, I18n.format("gui.done"), (p_213036_1_) -> {

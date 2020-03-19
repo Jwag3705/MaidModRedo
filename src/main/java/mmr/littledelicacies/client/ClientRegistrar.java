@@ -1,11 +1,15 @@
 package mmr.littledelicacies.client;
 
 import mmr.littledelicacies.client.render.*;
+import mmr.littledelicacies.client.resource.NewZipTexturesWapper;
+import mmr.littledelicacies.client.resource.OldZipTexturesWrapper;
 import mmr.littledelicacies.init.LittleBlocks;
 import mmr.littledelicacies.init.LittleContainers;
 import mmr.littledelicacies.init.LittleEntitys;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.resources.SimpleReloadableResourceManager;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
@@ -41,6 +45,11 @@ public class ClientRegistrar {
     }
 
     public static void setup(final FMLCommonSetupEvent event) {
+        if (Minecraft.getInstance().resourceManager instanceof SimpleReloadableResourceManager) {
+            ((SimpleReloadableResourceManager) Minecraft.getInstance().resourceManager).addResourcePack(new OldZipTexturesWrapper());
+            ((SimpleReloadableResourceManager) Minecraft.getInstance().resourceManager).addResourcePack(new NewZipTexturesWapper());
+        }
+
         ClientRegistrar.renderEntity();
         ClientRegistrar.renderBlock();
 

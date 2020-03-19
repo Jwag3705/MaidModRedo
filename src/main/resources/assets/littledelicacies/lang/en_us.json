@@ -85,6 +85,7 @@
   "littledelicacies.item.sugar_totem.tooltip": "You can immediately respawn maid when SugarPhantom state",
   "gui.littledelicacies.maidinventory.change_setting": "Maid Setting",
   "gui.littledelicacies.edit_maidname": "Edit MaidName",
+  "gui.littledelicacies.model_select": "Model Select",
   "gui.littledelicacies.job_select": "Job Select",
   "gui.littledelicacies.job_select.warning": "Once you select a combat job, it does become unchangeable when you level up the job",
   "death.attack.rush": "%1$s was smashed by %2$s",

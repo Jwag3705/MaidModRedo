@@ -17,6 +17,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
@@ -32,11 +33,18 @@ import java.util.Random;
 
 public class MaidCafePieces {
     private static final ResourceLocation maidcafe = new ResourceLocation(LittleDelicacies.MODID, "maidcafe");
+    private static final ResourceLocation brich_maidcafe = new ResourceLocation(LittleDelicacies.MODID, "brich_maidcafe");
 
-    private static final Map<ResourceLocation, BlockPos> structurePos = ImmutableMap.of(maidcafe, new BlockPos(0, -3, 0));
+
+    private static final Map<ResourceLocation, BlockPos> structurePos = ImmutableMap.of(maidcafe, new BlockPos(0, -3, 0), brich_maidcafe, new BlockPos(0, -2, 0));
 
     public static void addStructure(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<StructurePiece> list, Random p_207617_4_, Biome biome) {
-        addGenerate(list, new MaidCafePieces.Piece(templateManager, maidcafe, pos, rotation, 0));
+
+        if (biome == Biomes.BIRCH_FOREST || biome == Biomes.BIRCH_FOREST_HILLS || biome == Biomes.TALL_BIRCH_FOREST || biome == Biomes.TALL_BIRCH_HILLS) {
+            addGenerate(list, new MaidCafePieces.Piece(templateManager, brich_maidcafe, pos, rotation, 0));
+        } else {
+            addGenerate(list, new MaidCafePieces.Piece(templateManager, maidcafe, pos, rotation, 0));
+        }
     }
 
     private static MaidCafePieces.Piece addGenerate(List<StructurePiece> p_189935_0_, MaidCafePieces.Piece p_189935_1_) {

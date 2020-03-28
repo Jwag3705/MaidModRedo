@@ -40,9 +40,6 @@ public class SugarPhantomEntity extends LittleMaidBaseEntity {
 
     private int respawnTime = 1200 + this.rand.nextInt(2400);
 
-    //THIS Only use to render!
-
-
     public SugarPhantomEntity(EntityType<? extends SugarPhantomEntity> type, World worldIn) {
         super(type, worldIn);
         this.moveController = new FlyingMovementController(this, 20, true);

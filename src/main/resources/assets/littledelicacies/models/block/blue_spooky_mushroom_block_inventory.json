@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "littledelicacies:blocks/blue_spooky_mushroom_block"
+  }
+}

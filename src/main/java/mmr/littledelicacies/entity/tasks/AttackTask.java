@@ -33,7 +33,7 @@ public class AttackTask extends Task<LittleMaidBaseEntity> {
         double d0 = getTargetDistance(owner);
         if (owner.getBrain().getMemory(this.field_220541_a).isPresent()) {
             Entity entity = owner.getBrain().getMemory(this.field_220541_a).get();
-            return !isYourFriend(owner) && !isYourOwner(owner) && owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof SwordItem && owner.getDistanceSq(entity) < d0 * d0 && isCanFight(owner);
+            return !isYourFriend(owner) && !isYourOwner(owner) && owner.getHeldItem(Hand.MAIN_HAND).getItem() instanceof SwordItem && owner.getDistanceSq(entity) < d0 * d0;
         } else {
             Brain<?> brain = owner.getBrain();
             owner.getBrain().removeMemory(this.field_220541_a);
@@ -42,13 +42,13 @@ public class AttackTask extends Task<LittleMaidBaseEntity> {
         }
     }
 
-    private boolean isCanFight(LittleMaidBaseEntity owner) {
+    /*private boolean isCanFight(LittleMaidBaseEntity owner) {
         if (owner.getMaidData().getJob() == MaidJob.GUARD && owner.getHeldItem(Hand.OFF_HAND).getItem() instanceof ShieldItem) {
             return true;
         } else {
             return owner.getMaidData().getJob() == MaidJob.FENCER;
         }
-    }
+    }*/
 
     private boolean isYourOwner(LittleMaidBaseEntity entityIn) {
         return entityIn.getBrain().getMemory(this.field_220541_a).isPresent() && entityIn.getOwner() == entityIn.getBrain().getMemory(this.field_220541_a).get();

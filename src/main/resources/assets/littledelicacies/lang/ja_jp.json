@@ -1,7 +1,15 @@
 {
   "block.littledelicacies.magicaloak_log": "魔法のオークの原木",
   "block.littledelicacies.oak_log_amber": "オークの琥珀",
+  "block.littledelicacies.black_awning": "黒の日よけ",
+  "block.littledelicacies.blue_awning": "青の日よけ",
+  "block.littledelicacies.red_awning": "赤の日よけ",
+
   "block.littledelicacies.oak_chair": "オークの椅子",
+  "block.littledelicacies.sugarn_portal": "Sugarn ポータル",
+  "block.littledelicacies.blue_spooky_mushroom_block": "アオキノダケブロック",
+  "block.littledelicacies.green_spooky_mushroom_block": "ミドリキノダケブロック",
+  "block.littledelicacies.spooky_mushroom_stem": "キノダケの茎",
   "item.littledelicacies.carrot_cake": "キャロットケーキ",
   "item.littledelicacies.cheese_cake": "チーズケーキ",
   "item.littledelicacies.coffee_cake": "コーヒーケーキ",

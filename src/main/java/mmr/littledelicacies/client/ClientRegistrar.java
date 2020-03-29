@@ -42,6 +42,9 @@ public class ClientRegistrar {
 
     public static void renderBlock() {
         RenderTypeLookup.setRenderLayer(LittleBlocks.SUGARN_PORTAL, RenderType.translucent());
+
+        RenderTypeLookup.setRenderLayer(LittleBlocks.PINK_AWNING, RenderType.cutoutMipped());
+        RenderTypeLookup.setRenderLayer(LittleBlocks.PURPLE_AWNING, RenderType.cutoutMipped());
     }
 
     public static void setup(final FMLCommonSetupEvent event) {

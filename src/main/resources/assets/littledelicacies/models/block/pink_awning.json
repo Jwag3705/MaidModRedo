@@ -1,0 +1,7 @@
+{
+  "parent": "littledelicacies:block/cafe_awning",
+  "textures": {
+    "base": "littledelicacies:blocks/pink_awning",
+    "particle": "littledelicacies:blocks/pink_awning"
+  }
+}

@@ -18,6 +18,19 @@ public class LittleItemGroups {
             return new ItemStack(LittleItems.BROOM);
         }
     };
+    public static final ItemGroup DECOR_FUNITURE = new ItemGroup("littledelicacies_spawnegg") {
+        @OnlyIn(Dist.CLIENT)
+        public ItemStack createIcon() {
+            return new ItemStack(LittleBlocks.PINK_AWNING);
+        }
+    };
+
+    public static final ItemGroup SPAWNEGG = new ItemGroup("littledelicacies_spawnegg") {
+        @OnlyIn(Dist.CLIENT)
+        public ItemStack createIcon() {
+            return new ItemStack(LittleItems.LITTLEMAID_SPAWNEGG);
+        }
+    };
 
     public static final ItemGroup COMBAT = new ItemGroup("littledelicacies_combat") {
         @OnlyIn(Dist.CLIENT)

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "littledelicacies:block/pink_awning"
+    },
+    "facing=south": {
+      "model": "littledelicacies:block/pink_awning",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "littledelicacies:block/pink_awning",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "littledelicacies:block/pink_awning",
+      "y": 90
+    }
+  }
+}

@@ -98,6 +98,10 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             , LittleItems.COOKIE, LittleItems.FORTUNE_COOKIE, LittleItems.DOLL_COOKIE, LittleItems.JAM_COOKIE, LittleItems.MACAROON_CARAMEL, LittleItems.MACAROON_CHOCOLATE, LittleItems.MACAROON_GREENTEA, LittleItems.MACAROON_LEMON, LittleItems.MACAROON_STRAWBERRY
             , LittleItems.DAIFUKU_WAG, LittleItems.SAKURA_WAG, LittleItems.MIYAGE, LittleItems.RAINDROP_CAKE, LittleItems.ICECREAM_TAIYAKI, LittleItems.TAIYAKI);
 
+    private static final Set<Item> SWEET_TAMEABLE_ITEM = Sets.newHashSet(LittleItems.STRAWBERRY_CAKE, LittleItems.REDVELVET_CAKE, LittleItems.LAVENDER_CAKE, LittleItems.ICECREAM_CAKE, LittleItems.DEVILSFOOD_CAKE, LittleItems.COFFEE_CAKE, LittleItems.CHEESE_CAKE, LittleItems.CARROT_CAKE, LittleItems.BIRTHDAY_CAKE
+    );
+
+
     private InventoryMaidMain inventoryMaidMain;
     private InventoryMaidEquipment inventoryMaidEquipment;
 
@@ -1516,7 +1520,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
                     return true;
                 }
             }
-        } else if (item == Items.CAKE) {
+        } else if (item == Items.CAKE || SWEET_TAMEABLE_ITEM.contains(item)) {
             if (!player.abilities.isCreativeMode) {
                 itemstack.shrink(1);
             }
@@ -1524,7 +1528,7 @@ public class LittleMaidBaseEntity extends TameableEntity implements IModelEntity
             maidContractLimit = (24000 * 7);
 
             if (!this.world.isRemote) {
-                if (!net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
+                if (SWEET_TAMEABLE_ITEM.contains(item) && rand.nextInt(2) == 0 || !SWEET_TAMEABLE_ITEM.contains(item) && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
                     this.setMaidData(this.getMaidData().withJob(MaidJob.NORMAL));
                     this.setTamedBy(player);
                     this.navigator.clearPath();

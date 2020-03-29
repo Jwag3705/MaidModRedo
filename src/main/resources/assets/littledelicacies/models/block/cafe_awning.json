@@ -6,8 +6,8 @@
     32
   ],
   "textures": {
-    "particle": "littledelicacies:block/blue_awning",
-    "base": "littledelicacies:block/blue_awning"
+    "particle": "littledelicacies:block/purple_awning",
+    "base": "littledelicacies:block/purple_awning"
   },
   "elements": [
     {

@@ -25,10 +25,8 @@ public class LittleBlocks {
     public static final Block GREEN_SPOOKYMUSHROOM_BLOCK = new HugeMushroomBlock(Block.Properties.create(Material.WOOD, MaterialColor.GREEN).hardnessAndResistance(0.2F).sound(SoundType.WOOD));
     public static final Block SPOOKYMUSHROOM_STEM = new HugeMushroomBlock(Block.Properties.create(Material.WOOD, MaterialColor.WOOL).hardnessAndResistance(0.2F).sound(SoundType.WOOD));
 
-    public static final Block BLACK_AWNING = new AwningBlock(Block.Properties.create(Material.WOOL).notSolid().doesNotBlockMovement().hardnessAndResistance(1.0F).sound(SoundType.CLOTH));
-    public static final Block BLUE_AWNING = new AwningBlock(Block.Properties.create(Material.WOOL).notSolid().doesNotBlockMovement().hardnessAndResistance(1.0F).sound(SoundType.CLOTH));
-    public static final Block RED_AWNING = new AwningBlock(Block.Properties.create(Material.WOOL).notSolid().doesNotBlockMovement().hardnessAndResistance(1.0F).sound(SoundType.CLOTH));
-
+    public static final Block PINK_AWNING = new AwningBlock(Block.Properties.create(Material.WOOL).notSolid().doesNotBlockMovement().hardnessAndResistance(1.0F).sound(SoundType.CLOTH));
+    public static final Block PURPLE_AWNING = new AwningBlock(Block.Properties.create(Material.WOOL).notSolid().doesNotBlockMovement().hardnessAndResistance(1.0F).sound(SoundType.CLOTH));
 
     public static final Block OAK_CHAIR = new ChairBlock(Block.Properties.create(Material.WOOD).notSolid().harvestTool(ToolType.AXE).hardnessAndResistance(1.0F).sound(SoundType.WOOD));
 
@@ -43,9 +41,8 @@ public class LittleBlocks {
         registry.getRegistry().register(GREEN_SPOOKYMUSHROOM_BLOCK.setRegistryName("green_spooky_mushroom_block"));
         registry.getRegistry().register(SPOOKYMUSHROOM_STEM.setRegistryName("spooky_mushroom_stem"));
 
-        registry.getRegistry().register(BLACK_AWNING.setRegistryName("black_awning"));
-        registry.getRegistry().register(BLUE_AWNING.setRegistryName("blue_awning"));
-        registry.getRegistry().register(RED_AWNING.setRegistryName("red_awning"));
+        registry.getRegistry().register(PINK_AWNING.setRegistryName("pink_awning"));
+        registry.getRegistry().register(PURPLE_AWNING.setRegistryName("purple_awning"));
         registry.getRegistry().register(OAK_CHAIR.setRegistryName("oak_chair"));
     }
 
@@ -56,11 +53,10 @@ public class LittleBlocks {
 
         registry.getRegistry().register(new BlockItem(SUGARN_PORTAL, (new Item.Properties())).setRegistryName("sugarn_portal"));
 
-        registerToItem(registry, new BlockItem(BLACK_AWNING, (new Item.Properties()).group(LittleItemGroups.MISC)));
-        registerToItem(registry, new BlockItem(BLUE_AWNING, (new Item.Properties()).group(LittleItemGroups.MISC)));
-        registerToItem(registry, new BlockItem(RED_AWNING, (new Item.Properties()).group(LittleItemGroups.MISC)));
+        registerToItem(registry, new BlockItem(PINK_AWNING, (new Item.Properties()).group(LittleItemGroups.DECOR_FUNITURE)));
+        registerToItem(registry, new BlockItem(PURPLE_AWNING, (new Item.Properties()).group(LittleItemGroups.DECOR_FUNITURE)));
 
-        registry.getRegistry().register(new BlockItem(OAK_CHAIR, (new Item.Properties()).group(LittleItemGroups.MISC)).setRegistryName("oak_chair"));
+        registry.getRegistry().register(new BlockItem(OAK_CHAIR, (new Item.Properties()).group(LittleItemGroups.DECOR_FUNITURE)).setRegistryName("oak_chair"));
 
         registerToItem(registry, new BlockItem(BLUE_SPOOKYMUSHROOM_BLOCK, (new Item.Properties()).group(LittleItemGroups.MISC)));
         registerToItem(registry, new BlockItem(GREEN_SPOOKYMUSHROOM_BLOCK, (new Item.Properties()).group(LittleItemGroups.MISC)));

@@ -1,4 +1,4 @@
-LittleMaidRedo
+Little Delicacies (Formerly LittleMaidRedo)
 ===
 
 In addition to adding a maid who will accompany you,
